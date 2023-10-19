@@ -33,7 +33,8 @@ Insgesamt ist SimpleQ eine hybride Plattform zwischen benutzergenerierten und du
      3. Premium Nutzer:
         * Fragen können von Nutzern und KI (erweiterter Zugang) beantwortet werden.
         * Anbindung: Wolfram Alpha
-        * SimpleChat-Einbindung, kommunizieren zwischen Nutzern
+        * Evtl. SimpleChat-Einbindung, kommunizieren zwischen Nutzern
+        * Evtl. Private/Eingeschränkte Sichtbarkeit von Disskussionsseiten
     
 
 * Gamification:
