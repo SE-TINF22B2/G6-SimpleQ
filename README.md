@@ -6,8 +6,7 @@ Wir bieten die Möglichkeit ohne Anmeldung am Q&A teilzunehmen. Dafür wird ein 
 Zur Förderung der Nutzerinteraktivität werden verschiedene Rollen angeboten.
 Für weitere Details wird ein Projektauftrag im Repro hinterlegt.
 
-Dokumentation im Wiki
+### Dokumentation
+Die Dokumentationen befinden sich in dem [Wiki](https://github.com/SE-TINF22B2/G6-SimpleQ/wiki)
 
-Anforderungen im project: "SimpleQ project - Anforderungen"
-
-zweiter Branch wird gelöscht
+Anforderungen im Projekt: "SimpleQ project - Anforderungen"
