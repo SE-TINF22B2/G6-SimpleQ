@@ -6,3 +6,8 @@ Wir bieten die Möglichkeit ohne Anmeldung am Q&A teilzunehmen. Dafür wird ein 
 Zur Förderung der Nutzerinteraktivität werden verschiedene Rollen angeboten.
 Für weitere Details wird ein Projektauftrag im Repro hinterlegt.
 
+Dokumentation im Wiki
+
+Anforderungen im project: "SimpleQ project - Anforderungen"
+
+zweiter Branch wird gelöscht
