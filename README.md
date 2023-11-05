@@ -6,17 +6,13 @@ Es gibt unterschiedliche Nutzer:innen-Gruppen denen verschiedenen Funktionalitä
 Wir bieten die Möglichkeit ohne Anmeldung am Q&A teilzunehmen. Dafür wird ein Spamschutz und eine Blacklist für kontroverse Themen implementiert.
 Zur Förderung der Nutzerinteraktivität werden verschiedene Rollen angeboten.
 
-### Dokumentation
-
-Die Dokumentationen befinden sich in dem [Wiki](https://github.com/SE-TINF22B2/G6-SimpleQ/wiki)
-
-Die Projektanforderungen befinden sich in dem [SimpleQ Projekt - Anforderungen](https://github.com/orgs/SE-TINF22B2/projects/11/views/6)
-
 ### Struktur des Repositories
 
 - README\.md: Dieses Dokument
 - wird entsprechend ergänzt.
 
-### Wiki
+### Dokumentation (Wiki und Projekte)
 
-Im [Wiki](https://github.com/SE-TINF22B2/G6-SimpleQ/wiki) befinden sich die Informationen zur Projektidee, die Anforderungen, das Glossar und weitere wichtige Hinweise.
+Die zusammengefassten Projektanforderungen befinden sich in dem [SimpleQ Projekt - Anforderungen](https://github.com/orgs/SE-TINF22B2/projects/11/views/6). Diese sind nach dem MoSCoW Prinzip priorisiert und nach aktuellem Status sortiert.
+
+Im [Wiki](https://github.com/SE-TINF22B2/G6-SimpleQ/wiki) befinden sich die Informationen zur Projektidee, die detaillierte Anforderungsdokumentation, das Glossar und weitere wichtige Hinweise.
