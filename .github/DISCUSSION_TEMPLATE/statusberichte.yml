@@ -1,0 +1,28 @@
+name: Wöchentlicher Projektstatus
+about: Teilen Sie den Status Ihres Projekts für die Woche mit
+title: "Statusreport für die KW [KW] ([Wochenstart] - [Wochenende])"
+labels: ["Status-Update"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: "## Was wurde diese Woche erreicht?"
+  - type: textarea
+    attributes:
+      label: "Erreichte Ziele"
+      description: "Beschreiben Sie hier, was in dieser Woche erreicht wurde"
+  - type: markdown
+    attributes:
+      value: "## Sind in dieser Woche Probleme aufgetreten?"
+  - type: textarea
+    attributes:
+      label: "Aufgetretene Probleme"
+      description: "Beschreiben Sie hier, welche Probleme in dieser Woche aufgetreten sind"
+  - type: markdown
+    attributes:
+      value: "## Was wurde aus dieser Woche gelernt?"
+  - type: textarea
+    attributes:
+      label: "Gelernte Lektionen"
+      description: "Beschreiben Sie hier, was Sie aus dieser Woche gelernt haben"

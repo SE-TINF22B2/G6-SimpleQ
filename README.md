@@ -4,7 +4,7 @@ SimpleQ ist eine revolutionäre Frageplattform, die die Kraft der KI nutzt, um s
 
 ## 👥 Nutzergruppen und Funktionen
 
-SimpleQ spricht eine vielfältige Palette von Nutzergruppen an, die jeweils Zugang zu verschiedenen Funktionen haben. Wir glauben an Inklusion, weshalb wir die Möglichkeit bieten, an Q&A ohne Registrierung teilzunehmen. Um eine sichere und respektvolle Umgebung zu gewährleisten, haben wir einen Spam-Schutz und eine Blacklist für kontroverse Themen implementiert.
+SimpleQ spricht eine vielfältige Palette von Nutzergruppen an, die jeweils Zugang zu verschiedenen Funktionen haben. Wir glauben an Anonymität, weshalb wir die Möglichkeit bieten, an Q&A ohne Registrierung teilzunehmen. Um eine sichere und respektvolle Umgebung zu gewährleisten, werden wir einen Spam-Schutz und eine Blacklist für kontroverse Themen implementieren.
 
 ### 🎉 Förderung der Nutzerinteraktivität
 
