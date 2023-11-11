@@ -1,17 +1,23 @@
-# SimpleQ
+# SimpleQ: Eine schnelle, KI-gestützte Frageplattform
 
-SimpleQ ist eine Frageplattform, die durch automatische KI-Antworten schneller Antworten liefert als bisherige Plattformen.
-Auch andere Benutzer:innen und Expert:innen können die Fragen beantworten und die KI-Antworten bewerten und über diese diskutieren.
-Es gibt unterschiedliche Nutzer:innen-Gruppen denen verschiedenen Funktionalitäten zur Verfügung stehen.
-Wir bieten die Möglichkeit ohne Anmeldung am Q&A teilzunehmen. Dafür wird ein Spamschutz und eine Blacklist für kontroverse Themen implementiert.
-Zur Förderung der Nutzerinteraktivität werden verschiedene Rollen angeboten.
+SimpleQ ist eine revolutionäre Frageplattform, die die Kraft der KI nutzt, um schnellere Antworten als traditionelle Plattformen zu liefern. Es geht aber nicht nur um KI. Sowohl Nutzer als auch Experten können Fragen beantworten, KI-Antworten bewerten und sich an bedeutungsvollen Diskussionen beteiligen.
 
-### Struktur des Repositories
+## 👥 Nutzergruppen und Funktionen
 
-- README\.md: Dieses Dokument
-- wird entsprechend ergänzt.
+SimpleQ spricht eine vielfältige Palette von Nutzergruppen an, die jeweils Zugang zu verschiedenen Funktionen haben. Wir glauben an Anonymität, weshalb wir die Möglichkeit bieten, an Q&A ohne Registrierung teilzunehmen. Um eine sichere und respektvolle Umgebung zu gewährleisten, werden wir einen Spam-Schutz und eine Blacklist für kontroverse Themen implementieren.
 
-### Dokumentation (Wiki und Projekte)
+### 🎉 Förderung der Nutzerinteraktivität
+
+Um die Nutzerinteraktivität zu fördern, bieten wir verschiedene Rollen an. Dies verbessert nicht nur das Nutzererlebnis, sondern trägt auch zur dynamischen Umgebung der Plattform bei.
+
+---
+
+## 📂 Repository-Struktur
+
+- `README.md`: Dieses Dokument.
+- Weitere Dateien werden hinzugefügt, während das Projekt fortschreitet.
+
+## 📚 Dokumentation (Wiki und Projects)
 
 Die zusammengefassten Projektanforderungen befinden sich in dem [SimpleQ Projekt - Anforderungen](https://github.com/orgs/SE-TINF22B2/projects/11/views/6). Diese sind nach dem MoSCoW Prinzip priorisiert und nach aktuellem Status sortiert.
 
