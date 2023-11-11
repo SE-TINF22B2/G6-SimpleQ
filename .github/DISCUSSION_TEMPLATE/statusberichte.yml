@@ -1,9 +1,5 @@
-name: Wöchentlicher Projektstatus
-about: Teilen Sie den Status Ihres Projekts für die Woche mit
 title: "Statusreport für die KW [KW] ([Wochenstart] - [Wochenende])"
 labels: ["Status-Update"]
-assignees: []
-
 body:
   - type: markdown
     attributes:
