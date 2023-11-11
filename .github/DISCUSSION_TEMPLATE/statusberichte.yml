@@ -1,24 +1,37 @@
 title: "Statusreport für die KW [KW] ([Wochenstart] - [Wochenende])"
-labels: ["Status-Update"]
+
 body:
-  - type: markdown
+  - type: dropdown
     attributes:
-      value: "## Was wurde diese Woche erreicht?"
+      label: "Aktueller Status:"
+      options:
+        - 🟩
+        - 🟨
+        - 🟧
+        - 🟥
+    validations:
+      required: true
   - type: textarea
     attributes:
-      label: "Erreichte Ziele"
+      label: "Was wurde diese Woche erreicht?"
       description: "Beschreiben Sie hier, was in dieser Woche erreicht wurde"
-  - type: markdown
-    attributes:
-      value: "## Sind in dieser Woche Probleme aufgetreten?"
+    validations:
+      required: true
   - type: textarea
     attributes:
-      label: "Aufgetretene Probleme"
+      label: "Was sind die nächsten Schritte?"
+      description: "Beschreiben Sie hier, was die nächsten Schritte sind"
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: "Sind in dieser Woche Probleme aufgetreten?"
       description: "Beschreiben Sie hier, welche Probleme in dieser Woche aufgetreten sind"
-  - type: markdown
-    attributes:
-      value: "## Was wurde aus dieser Woche gelernt?"
+    validations:
+      required: true
   - type: textarea
     attributes:
-      label: "Gelernte Lektionen"
+      label: "Was wurde aus dieser Woche gelernt?"
       description: "Beschreiben Sie hier, was Sie aus dieser Woche gelernt haben"
+    validations:
+      required: true
