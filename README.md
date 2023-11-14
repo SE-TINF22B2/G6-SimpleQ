@@ -12,13 +12,15 @@ Um die Nutzerinteraktivität zu fördern, bieten wir verschiedene Rollen an. Die
 
 ---
 
+## 📚 Dokumentation ([Wiki](../../wiki) und Projects)
+
+Die zusammengefassten Projektanforderungen befinden sich in dem [SimpleQ Projekt - Anforderungen](https://github.com/orgs/SE-TINF22B2/projects/11/views/6). Diese sind nach dem MoSCoW Prinzip priorisiert und nach aktuellem Status sortiert.
+
+Im **[Wiki 📕](https://github.com/SE-TINF22B2/G6-SimpleQ/wiki)** befinden sich die Informationen zur Projektidee, die detaillierte Anforderungsdokumentation, das Glossar und weitere wichtige Hinweise.
+
+---
+
 ## 📂 Repository-Struktur
 
 - `README.md`: Dieses Dokument.
 - Weitere Dateien werden hinzugefügt, während das Projekt fortschreitet.
-
-## 📚 Dokumentation (Wiki und Projects)
-
-Die zusammengefassten Projektanforderungen befinden sich in dem [SimpleQ Projekt - Anforderungen](https://github.com/orgs/SE-TINF22B2/projects/11/views/6). Diese sind nach dem MoSCoW Prinzip priorisiert und nach aktuellem Status sortiert.
-
-Im [Wiki](https://github.com/SE-TINF22B2/G6-SimpleQ/wiki) befinden sich die Informationen zur Projektidee, die detaillierte Anforderungsdokumentation, das Glossar und weitere wichtige Hinweise.
