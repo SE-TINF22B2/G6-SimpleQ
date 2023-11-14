@@ -12,11 +12,13 @@ Um die Nutzerinteraktivität zu fördern, bieten wir verschiedene Rollen an. Die
 
 ---
 
-## 📚 Dokumentation ([Wiki](../../wiki) und Projects)
+## 📚 Dokumentation ([Wiki](../../wiki) und [Projects](https://github.com/orgs/SE-TINF22B2/projects/11/views/1))
 
-Die zusammengefassten Projektanforderungen befinden sich in dem [SimpleQ Projekt - Anforderungen](https://github.com/orgs/SE-TINF22B2/projects/11/views/6). Diese sind nach dem MoSCoW Prinzip priorisiert und nach aktuellem Status sortiert.
+🗃️ Die zusammengefassten Projektanforderungen befinden sich in dem [SimpleQ project - Anforderungen](https://github.com/orgs/SE-TINF22B2/projects/11/views/1). Diese sind nach dem MoSCoW Prinzip priorisiert und nach aktuellem Status sortiert.
 
-Im **[Wiki 📕](https://github.com/SE-TINF22B2/G6-SimpleQ/wiki)** befinden sich die Informationen zur Projektidee, die detaillierte Anforderungsdokumentation, das Glossar und weitere wichtige Hinweise.
+📦 Die Arbeitspakete befinden sich in [SimpleQ project](https://github.com/orgs/SE-TINF22B2/projects/18/views/1).
+
+📕 Im **[Wiki](https://github.com/SE-TINF22B2/G6-SimpleQ/wiki)** befinden sich die Informationen zur Projektidee, die detaillierte Anforderungsdokumentation, das Glossar und weitere wichtige Hinweise.
 
 ---
 
