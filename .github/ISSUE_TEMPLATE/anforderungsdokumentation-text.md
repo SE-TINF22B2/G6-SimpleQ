@@ -1,10 +1,9 @@
 ---
-name: Anforderungsdokumentation
-about: Erstellen eines Issues für die Anforderungsdokumentation
+name: Anforderungsdokumentation-text
+about: Erstellen eines Issues für die Anforderungsdokumentation in Textform
 title: "[Anforderung]"
 labels: anforderung
-assignees: ''
-project: 'SimpleQ project - Anforderungen'
+assignees: Integraluminium
 
 ---
 
