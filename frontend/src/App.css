@@ -43,13 +43,39 @@ main {
     flex-direction: column;
     justify-content: flex-start;
     height: 100vh;
-    margin-left: 200px;
+    margin-left: 250px;
     background: var(--background-color-secondary);
 }
 
-main div.container {
+main > div.container {
     width: 90%;
     max-width: 1200px;
-    margin: auto;
+    margin: var(--spacing) auto;
+    border-radius: var(--border-radius);
     background: var(--background-color-primary);
+    padding-inline: var(--spacing);
+}
+
+main > div.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    margin-top: 0;
+    background: none;
+    gap: var(--spacing);
+    padding-inline: var(--spacing);
+}
+
+main > div.top-bar > * {
+    display: flex;
+    align-items: center;
+    height: inherit;
+}
+
+main > div.top-bar > .search-bar {
+    flex: 1;
+    border-radius: var(--border-radius);
+    background: var(--background-color-primary);
+    padding-inline: var(--spacing);
 }

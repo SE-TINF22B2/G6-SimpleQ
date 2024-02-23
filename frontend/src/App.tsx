@@ -16,6 +16,17 @@ function App() {
         </nav>
         
         <main>
+            <div className={ "container top-bar" }>
+                <p className={ "search-bar" }><i className={ "fas fa-magnifying-glass" }/>Search..</p>
+                
+                <div style={ { display: "flex", flexDirection: "column" } }>
+                    <p>Welcome back,</p>
+                    <p>Benni</p>
+                </div>
+                
+                <i className={ "fas fa-user-circle" }/>
+            </div>
+            
             <Routes>
                 <Route path="/" element={ <div className={ "container" }><h1>Home</h1></div> }/>
                 <Route path="/about" element={ <h1>About</h1> }/>
