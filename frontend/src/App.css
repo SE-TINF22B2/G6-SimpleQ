@@ -12,12 +12,13 @@ nav > :first-child {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 60px;
+    height: var(--header-height);
     background: var(--primary-color);
+    color: var(--primary-color-contrast);
 }
 
 nav a {
-    font-size: 0.8em;
+    font-size: 0.9em;
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -28,18 +29,20 @@ nav a {
     color: inherit;
     border-radius: var(--border-radius) 0 0 var(--border-radius);
     padding-inline: 1em;
+    position: relative;
 }
 
-nav a.active {
+nav a.active,
+nav a:hover {
     position: relative;
     background: var(--background-color-secondary);
-    view-transition-name: activeNavTab;
 }
 
 nav a.active::before,
-nav a.active::after {
+nav a.active::after,
+nav a:hover::before,
+nav a:hover::after {
     position: absolute;
-
     right: 0;
     width: var(--border-radius);
     height: var(--border-radius);
@@ -47,13 +50,15 @@ nav a.active::after {
     background: var(--background-color-primary);
 }
 
-nav a.active::before {
+nav a.active::before,
+nav a:hover::before {
     top: calc(var(--border-radius) * -1);
     border-radius: 0 0 100vw 0;
     box-shadow: 2px 2px 0 2px var(--background-color-secondary);
 }
 
-nav a.active::after {
+nav a.active::after,
+nav a:hover::after {
     bottom: calc(var(--border-radius) * -1);
     border-radius: 0 100vw 0 0;
     box-shadow: 2px -2px 0 2px var(--background-color-secondary);
@@ -65,8 +70,9 @@ nav a i {
     text-align: center;
 }
 
-nav a:hover {
-    background-color: var(--background-color-secondary);
+nav a .badge {
+    position: absolute;
+    right: var(--spacing);
 }
 
 main {
@@ -75,12 +81,14 @@ main {
     flex-direction: column;
     justify-content: flex-start;
     background: var(--background-color-secondary);
+    padding-inline: var(--spacing);
+    gap: var(--spacing);
 }
 
 main > div.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: var(--spacing) auto;
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 0 auto;
     border-radius: var(--border-radius);
     background: var(--background-color-primary);
     padding-inline: var(--spacing);
@@ -90,11 +98,11 @@ main > div.top-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 60px;
-    margin-top: 0;
+    height: calc(var(--header-height) - var(--spacing));
+    padding-inline: 0;
     background: none;
     gap: var(--spacing);
-    padding-inline: var(--spacing);
+    margin-top: var(--spacing);
 }
 
 main > div.top-bar > * {
@@ -108,4 +116,11 @@ main > div.top-bar > .search-bar {
     border-radius: var(--border-radius);
     background: var(--background-color-primary);
     padding-inline: var(--spacing);
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing);
+}
+
+main > div.top-bar > .search-bar > * {
+    opacity: 0.5;
 }
