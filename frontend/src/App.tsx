@@ -9,10 +9,10 @@ function App() {
                 <p>simpleQ</p>
             </div>
             <NavLink to="/"><i className={ "fas fa-question" }/>Trending Questions</NavLink>
-            <NavLink to="/about"><i className={ "fas fa-fire" }/>My Activity</NavLink>
-            <NavLink to="/about"><i className={ "fas fa-star" }/>My Favorites</NavLink>
-            <NavLink to="/about"><i className={ "fas fa-toolbox" }/>Daily Quests</NavLink>
-            <NavLink to="/about"><i className={ "fas fa-bell" }/>Inbox</NavLink>
+            <NavLink to="/a"><i className={ "fas fa-fire" }/>My Activity</NavLink>
+            <NavLink to="/b"><i className={ "fas fa-star" }/>My Favorites</NavLink>
+            <NavLink to="/c"><i className={ "fas fa-toolbox" }/>Daily Quests</NavLink>
+            <NavLink to="/d"><i className={ "fas fa-bell" }/>Inbox</NavLink>
         </nav>
         
         <main>
