@@ -1,0 +1,125 @@
+:root {
+	--primary-color: #109E63;
+	--primary-color-contrast: #fff;
+	--background-color-primary: white;
+	--background-color-secondary: #f5f5f5;
+	--background-color-glass: rgba(255, 255, 255, .6);
+	--background-color-glass-simp: rgba(255, 225, 255, .6);
+	--border-color: #e0e0e0;
+	--border-radius: 10px;
+	--spacing: 1em;
+	--transition: 0.2s ease-in-out;
+	--header-height: 60px;
+	--max-width: 1200px;
+	--outline-width: 2px;
+}
+
+body {
+	font-family: "Poppins", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+	'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+	sans-serif;
+	margin: 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+* {
+	box-sizing: border-box;
+	outline-color: var(--primary-color);
+	outline-width: 2px;
+}
+
+#root {
+	display: grid;
+	min-height: 100dvh;
+	grid-template-columns: 20rem 1fr;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+	monospace;
+}
+
+.badge {
+	padding: calc(var(--spacing) / 4) calc(var(--spacing) / 1.5);
+	background: var(--primary-color);
+	color: var(--primary-color-contrast);
+	border-radius: var(--border-radius);
+	font-size: 0.8em;
+}
+
+.avatar {
+	width: 40px !important;
+	height: 40px !important;
+	border-radius: 50%;
+	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+	object-fit: cover;
+	pointer-events: none;
+}
+
+::selection {
+	background-color: var(--primary-color);
+	color: var(--primary-color-contrast);
+}
+
+input[type="checkbox"] {
+	accent-color: var(--primary-color);
+}
+
+*:focus {
+	outline-style: solid;
+}
+
+.btn {
+	padding: calc(var(--spacing) / 1.5) calc(var(--spacing) * 1.5);
+	border-radius: var(--border-radius);
+	border: none;
+	cursor: pointer;
+	user-select: none;
+	font-size: 0.9em;
+	transition: background-color var(--transition);
+	height: 40px;
+	display: flex;
+	align-items: center;
+	white-space: nowrap;
+
+	i {
+		margin-inline-end: var(--spacing);
+	}
+
+	&.btn-primary {
+		background: var(--primary-color);
+		color: var(--primary-color-contrast);
+		outline-offset: var(--outline-width);
+		font-weight: 600;
+	}
+
+	&.btn-glass {
+		background: var(--background-color-glass);
+		box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+
+		&:focus-within {
+			background: var(--background-color-secondary);
+		}
+	}
+}
+
+.caption {
+	font-size: 0.8em;
+	text-transform: uppercase;
+	opacity: 0.8;
+}
+
+i.primary-icon {
+	background: var(--primary-color);
+	color: var(--primary-color-contrast);
+	border-radius: var(--border-radius);
+	height: 28px;
+	aspect-ratio: 1/1;
+	display: grid;
+	place-items: center;
+}
+
+button, input {
+	font-family: inherit;
+}

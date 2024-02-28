@@ -1,0 +1,37 @@
+.questions-question {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--spacing);
+	
+	transition: outline-color 0s !important;
+	cursor: pointer;
+	user-select: none;
+
+	.question-wrapper {
+		display: flex;
+		align-items: center;
+
+		.question {
+			h2 {
+				margin-top: 6px !important;
+			}
+
+			.tags {
+				display: flex;
+				margin-block: 0;
+				gap: calc(var(--spacing) / 2);
+			}
+		}
+	}
+
+	h2 {
+		margin-bottom: 0 !important;
+	}
+
+	.author {
+		display: flex;
+		align-items: center;
+		gap: calc(var(--spacing) / 2);
+	}
+}
