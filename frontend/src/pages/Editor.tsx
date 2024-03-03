@@ -2,7 +2,22 @@ import React from "react";
 import "./Editor.scss";
 import LiveInput from "../components/LiveInput";
 
-export default class Editor extends React.Component<any, any> {
+interface State {
+    title: string;
+    tags: string[];
+    description: string;
+}
+
+export default class Editor extends React.Component<any, State> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            title: "New Question",
+            tags: [],
+            description: "Describe your question in more detail."
+        }
+    }
+
     render() {
         return <>
             <div className={ "container editor-container transparent focus-indicator" }>
@@ -16,21 +31,23 @@ export default class Editor extends React.Component<any, any> {
                         <i className={ "far fa-question" }/>
                         <span id={ "editor-question-title" }
                               contentEditable={ "plaintext-only" }
-                              onChange={ (e) => {
-                                  // only plain text, thanks to Firefox <3
-                                  setTimeout(() => {
-                                      // @ts-ignore
-                                      const text = e.target.innerText;
-                                      // @ts-ignore
-                                      e.target.innerText = text;
-                                  }, 10);
+                              onInput={ (e) => {
+                                  let title = (e.target as HTMLSpanElement).innerText.trim();
+                                  while (title.includes("  ")) title = title.replace("  ", " ");
+                                  this.setState({ title });
                               } }
+                              onBlur={ (e) => {
+                                  let elem = document.getElementById("editor-question-title");
+                                  if (elem) elem.innerText = this.state.title;
+                              } }
+                              defaultValue={ "New Question" }
                               style={ {
                                   borderRadius: "var(--border-radius)",
                                   outlineOffset: "var(--outline-width)"
                               } }>
-                        New Question
+                            New Question
                     </span>
+                        ?
                     </h2>
                     <p style={ { marginBottom: "calc(var(--spacing) / 2)" } }>What's your programming question? Be
                                                                               specific.</p>
@@ -50,7 +67,32 @@ export default class Editor extends React.Component<any, any> {
                     </h2>
                     <p>Add up to 5 tags to describe what your question is about.</p>
                     <hr style={ { marginBottom: "var(--spacing)" } }/>
-                    <LiveInput placeholder={ "Add a tag" }/>
+
+                    <div style={ { display: "flex", gap: "var(--spacing)" } }>
+                        <LiveInput placeholder={ "Add a tag" }
+                                   onSuggestionSelected={ (s) => this.setState({ tags: [...this.state.tags, s] }) }
+                                   disabled={ this.state.tags.length >= 5 }/>
+                        <div style={ {
+                            display: "flex",
+                            flexWrap: "wrap",
+                            alignItems: "center",
+                            gap: "var(--spacing)"
+                        } }>
+                            { this.state.tags.map((tag, index) => (
+                                <span key={ index }
+                                      className={ "badge" }
+                                      style={ { cursor: "pointer", outlineOffset: "var(--outline-width)" } }
+                                      tabIndex={ 0 }
+                                      onClick={ () => {
+                                          this.setState({ tags: this.state.tags.filter(t => t !== tag) });
+                                      } }
+                                      onKeyDown={ (e) => {
+                                          if (e.key === "Enter")
+                                              this.setState({ tags: this.state.tags.filter(t => t !== tag) });
+                                      } }>{ tag }</span>
+                            )) }
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -102,16 +144,13 @@ export default class Editor extends React.Component<any, any> {
                             <i className={ "fas fa-undo" }/></button>
                         <button onClick={ () => document.execCommand("redo", false) }>
                             <i className={ "fas fa-redo" }/></button>
+
                     </div>
                     <p id={ "question-editor" }
-                       style={ {
-                           width: "100%",
-                           height: "240px",
-                           marginBottom: "var(--spacing)",
-                           borderRadius: "var(--border-radius)",
-                           outlineOffset: "calc(var(--spacing) / 2)"
-                       } }
-                       contentEditable>
+                       contentEditable
+                       onInput={ (e) => {
+                           this.setState({ description: (e.target as HTMLSpanElement).innerHTML });
+                       } }>
                         Describe your question in more detail.
                     </p>
                     <hr/>
@@ -142,15 +181,18 @@ export default class Editor extends React.Component<any, any> {
                     <table>
                         <tbody>
                         <tr>
-                            <td><i className={ "fas fa-check" } style={ { width: "40px", textAlign: "center" } }/></td>
+                            <td><i className={ "fas fa-" + (this.isTitleValid() ? "check" : "x") }
+                                   style={ { width: "40px", textAlign: "center" } }/></td>
                             <td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>A valid title</td>
                         </tr>
                         <tr>
-                            <td><i className={ "fas fa-x" } style={ { width: "40px", textAlign: "center" } }/></td>
+                            <td><i className={ "fas fa-" + (this.isTagsValid() ? "check" : "x") }
+                                   style={ { width: "40px", textAlign: "center" } }/></td>
                             <td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>At least one tag</td>
                         </tr>
                         <tr>
-                            <td><i className={ "fas fa-x" } style={ { width: "40px", textAlign: "center" } }/></td>
+                            <td><i className={ "fas fa-" + (this.isDescriptionValid() ? "check" : "x") }
+                                   style={ { width: "40px", textAlign: "center" } }/></td>
                             <td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>A detailed description of at least
                                                                                       20
                                                                                       words
@@ -169,5 +211,17 @@ export default class Editor extends React.Component<any, any> {
                 </button>
             </div>
         </>;
+    }
+
+    private isTitleValid() {
+        return this.state.title.length > 5;
+    }
+
+    private isTagsValid() {
+        return this.state.tags.length > 0 && this.state.tags.length <= 5;
+    }
+
+    private isDescriptionValid() {
+        return (document.getElementById("question-editor")?.innerText.split(" ").length ?? 0) >= 20;
     }
 }
