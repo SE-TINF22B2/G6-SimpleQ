@@ -223,6 +223,15 @@ main > div.container,
 	transition: var(--transition);
 
 	background-color: var(--background-color-glass);
+
+	&.glass-hover {
+		transition: background-color var(--transition) !important;
+
+		&:hover {
+			background-color: var(--background-color-primary);
+		}
+	}
+
 	// backdrop-filter: blur(5px);
 }
 
