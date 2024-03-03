@@ -67,10 +67,16 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
     componentDidMount() {
         this.updateThemeVariables();
 
+        window.matchMedia('(prefers-color-scheme: dark)')
+            .addEventListener('change', ({ matches }) => this.updateThemePreference(matches));
+
         document.addEventListener("keydown", this.onKeyDown());
     }
 
     componentWillUnmount() {
+        window.matchMedia('(prefers-color-scheme: dark)')
+            .removeEventListener('change', ({ matches }) => this.updateThemePreference(matches));
+
         document.removeEventListener("keydown", this.onKeyDown());
     }
 
@@ -170,7 +176,10 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
                        tabIndex={ 0 }
                        onClick={ () => this.toggleSearch() }>
                         <i className={ "fas fa-magnifying-glass" }/>
-                        <span>Search..</span>
+                        <span style={ {
+                            display: "flex",
+                            alignItems: "center"
+                        } }>Search.. { this.getSearchShortcut() }</span>
                     </p>
 
                     <Dropdown button={ <div className={ "glass" }
@@ -308,6 +317,11 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
         </SkeletonTheme>;
     }
 
+    private updateThemePreference(matches: boolean) {
+        if (localStorage.getItem("theme") === null)
+            this.setState({ theme: matches ? "dark" : "light" });
+    }
+
     private capitalizeFirstLetter(string: string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
@@ -368,5 +382,20 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
                 if (input) input.focus();
             }
         }
+    }
+
+    private getSearchShortcut() {
+        let isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        let isLinux = navigator.platform.toUpperCase().indexOf('LINUX') >= 0;
+
+        return <span className={ "caption" } style={ {
+            marginLeft: "var(--spacing)",
+            background: "var(--font-color)",
+            color: "var(--background-color-primary)",
+            borderRadius: "var(--border-radius)",
+            paddingInline: "calc(var(--spacing) / 2)"
+        } }>
+            { isMac ? "⌘K" : isLinux ? "Alt + K" : "Ctrl + K" }
+        </span>;
     }
 }
