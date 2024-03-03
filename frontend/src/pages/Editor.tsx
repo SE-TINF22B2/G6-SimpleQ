@@ -7,7 +7,7 @@ export default class Editor extends React.Component<any, any> {
         return <>
             <div className={ "container editor-container transparent focus-indicator" }>
                 <div className={ "editor-hints" }>
-                    <span className={ "hint-number" }>1</span>
+                    <span className={ "hint-number" }>1.</span>
                     <span className={ "caption" }>Title</span>
                 </div>
 
@@ -39,7 +39,7 @@ export default class Editor extends React.Component<any, any> {
 
             <div className={ "container editor-container transparent focus-indicator" }>
                 <div className={ "editor-hints" }>
-                    <span className={ "hint-number" }>2</span>
+                    <span className={ "hint-number" }>2.</span>
                     <span className={ "caption" }>Tags</span>
                 </div>
 
@@ -56,11 +56,18 @@ export default class Editor extends React.Component<any, any> {
 
             <div className={ "container editor-container transparent focus-indicator" }>
                 <div className={ "editor-hints" }>
-                    <span className={ "hint-number" }>3</span>
+                    <span className={ "hint-number" }>3.</span>
                     <span className={ "caption" }>Description</span>
                 </div>
 
                 <div className={ "glass" }>
+                    <h2>
+                        <i className={ "fas fa-align-left" }/>
+                        Description
+                    </h2>
+                    <p>Describe your question in more detail.</p>
+                    <hr style={ { marginBottom: "var(--spacing)" } }/>
+
                     <div className={ "rich-text-buttons" }>
                         <button onClick={ () => document.execCommand("bold", false) }>
                             <i className={ "fas fa-bold" }/></button>
@@ -115,6 +122,42 @@ export default class Editor extends React.Component<any, any> {
                         document.getElementById("question-editor")?.innerText.length
                     } characters)
                 </span>
+                </div>
+            </div>
+
+            <div className={ "container editor-container transparent" }>
+                <div className={ "editor-hints" }>
+                    <span className={ "hint-number" }>4.</span>
+                    <span className={ "caption" }>Validate</span>
+                </div>
+
+                <div className={ "glass" }>
+                    <h2>
+                        <i className={ "fas fa-check" }/>
+                        Check Your Question
+                    </h2>
+                    <p>Verify that you have created your question correctly.</p>
+                    <hr style={ { marginBottom: "var(--spacing)" } }/>
+
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td><i className={ "fas fa-check" } style={ { width: "40px", textAlign: "center" } }/></td>
+                            <td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>A valid title</td>
+                        </tr>
+                        <tr>
+                            <td><i className={ "fas fa-x" } style={ { width: "40px", textAlign: "center" } }/></td>
+                            <td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>At least one tag</td>
+                        </tr>
+                        <tr>
+                            <td><i className={ "fas fa-x" } style={ { width: "40px", textAlign: "center" } }/></td>
+                            <td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>A detailed description of at least
+                                                                                      20
+                                                                                      words
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
