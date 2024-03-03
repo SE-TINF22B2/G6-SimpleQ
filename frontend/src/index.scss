@@ -20,7 +20,7 @@
 
 	--background-color-glass-simp: rgba(255, 225, 255, .6);
 	--background-color-glass-simp-light: rgba(255, 225, 255, .6);
-	--background-color-glass-simp-dark: rgba(30, 0, 30, .6);
+	--background-color-glass-simp-dark: rgba(60, 0, 60, .6);
 
 	--border-color: #e0e0e0;
 	--border-color-light: #e0e0e0;
@@ -58,6 +58,7 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	color: var(--font-color);
+	background: var(--background-color-primary);
 }
 
 * {
