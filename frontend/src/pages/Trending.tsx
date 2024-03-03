@@ -4,6 +4,7 @@ import Dropdown from "../components/Dropdown";
 import Skeleton from "react-loading-skeleton";
 import { NavigateFunction } from "react-router-dom";
 import thinking from "../illustrations/thinking.svg";
+import LiveInput from "../components/LiveInput";
 
 interface State {
     questions?: QuestionElem[];
@@ -106,7 +107,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
 
     render() {
         return <>
-            <div className={ "container" }>
+            <div className={ "container trending-header" }>
                 <div style={ { display: "flex" } }>
                     <div style={ { flex: 1 } }>
                         <h1>
@@ -115,52 +116,63 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                         </h1>
                         <p>See what's trending on our platform.</p>
 
-                        <Dropdown button={ <p className={ "btn btn-glass" } tabIndex={ 0 }>
-                            <i className={ "fas fa-filter" }/>
-                            Adjust questions
-                        </p> } items={ [
-                            {
-                                icon: "fas fa-sort",
-                                label: "Sort by",
-                                items: [
-                                    {
-                                        icon: "fas fa-clock-rotate-left",
-                                        label: "Timestamp",
-                                        shortcut: this.state.sortBy === "timestamp" ?
-                                            <i className={ "fas fa-check" }/> : undefined,
-                                        onClick: () => this.setState({ sortBy: "timestamp" })
-                                    }
-                                ],
-                                shortcut: <i className={ "fas fa-clock-rotate-left" }/>
-                            },
-                            {
-                                icon: "fas fa-sort-amount-down",
-                                label: "Direction",
-                                items: [
-                                    {
-                                        icon: "fas fa-arrow-trend-up",
-                                        label: "Ascending",
-                                        shortcut: this.state.sortDirection === "asc" ?
-                                            <i className={ "fas fa-check" }/> : undefined,
-                                        onClick: () => this.setState({ sortDirection: "asc" })
-                                    },
-                                    {
-                                        icon: "fas fa-arrow-trend-down",
-                                        label: "Descending",
-                                        shortcut: this.state.sortDirection === "desc" ?
-                                            <i className={ "fas fa-check" }/> : undefined,
-                                        onClick: () => this.setState({ sortDirection: "desc" })
-                                    }
-                                ],
-                                shortcut: <i
-                                    className={ "fas fa-arrow-trend-" + (this.state.sortDirection === "asc" ? "up" : "down") }/>
-                            }
-                        ] } direction={ "right" }/>
+                        <div style={ { display: "flex", gap: "var(--spacing)", alignItems: "center" } }>
+                            <Dropdown button={ <p className={ "btn btn-glass" } tabIndex={ 0 }>
+                                <i className={ "fas fa-filter" }/>
+                                Adjust questions
+                            </p> } items={ [
+                                {
+                                    icon: "fas fa-sort",
+                                    label: "Sort by",
+                                    items: [
+                                        {
+                                            icon: "fas fa-clock-rotate-left",
+                                            label: "Timestamp",
+                                            shortcut: this.state.sortBy === "timestamp" ?
+                                                <i className={ "fas fa-check" }/> : undefined,
+                                            onClick: () => this.setState({ sortBy: "timestamp" })
+                                        }
+                                    ],
+                                    shortcut: <i className={ "fas fa-clock-rotate-left" }/>
+                                },
+                                {
+                                    icon: "fas fa-sort-amount-down",
+                                    label: "Direction",
+                                    items: [
+                                        {
+                                            icon: "fas fa-arrow-trend-up",
+                                            label: "Ascending",
+                                            shortcut: this.state.sortDirection === "asc" ?
+                                                <i className={ "fas fa-check" }/> : undefined,
+                                            onClick: () => this.setState({ sortDirection: "asc" })
+                                        },
+                                        {
+                                            icon: "fas fa-arrow-trend-down",
+                                            label: "Descending",
+                                            shortcut: this.state.sortDirection === "desc" ?
+                                                <i className={ "fas fa-check" }/> : undefined,
+                                            onClick: () => this.setState({ sortDirection: "desc" })
+                                        }
+                                    ],
+                                    shortcut: <i
+                                        className={ "fas fa-arrow-trend-" + (this.state.sortDirection === "asc" ? "up" : "down") }/>
+                                }
+                            ] } direction={ "right" }/>
+
+                            <LiveInput placeholder={ "Filter tags" }/>
+                        </div>
                     </div>
 
                     <img src={ thinking } alt={ "Trending" }
                          style={ { height: "120px", alignSelf: "center", userSelect: "none", pointerEvents: "none" } }/>
                 </div>
+
+                <hr style={ { marginTop: "var(--spacing)" } }/>
+                <p className={ "tags" }>
+                    <span className={ "badge" } tabIndex={ 0 }>Smartphone</span>
+                    <span className={ "badge" } tabIndex={ 0 }>iPhone</span>
+                    <span className={ "badge" } tabIndex={ 0 }>Tag 1</span>
+                </p>
             </div>
 
             { this.state.questions ? this.state.questions.map((question, index) =>
@@ -174,7 +186,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
 
     private renderQuestion(question: QuestionElem, index: number) {
         return <div key={ index }
-                    className={ "container questions-question focus-indicator" }
+                    className={ "container questions-question focus-indicator glass-hover" }
                     tabIndex={ 0 }
                     style={ { order: index } }
                     onClick={ () => {

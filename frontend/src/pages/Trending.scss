@@ -1,9 +1,23 @@
+.trending-header {
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: calc(var(--spacing) / 2);
+		margin-bottom: 0;
+
+		.badge {
+			cursor: pointer;
+			outline-offset: var(--outline-width);
+		}
+	}
+}
+
 .questions-question {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--spacing);
-	
+
 	transition: outline-color 0s !important;
 	cursor: pointer;
 	user-select: none;
