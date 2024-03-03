@@ -33,7 +33,8 @@
 		flex: 1;
 	}
 
-	&:focus-within {
+	&:focus-within,
+	&:hover {
 		.editor-hints {
 			.caption {
 				margin-top: calc(var(--spacing) / 2);
