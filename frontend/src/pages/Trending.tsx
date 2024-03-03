@@ -245,21 +245,21 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
             </div>
 
             <div className={ "question-stats" }>
-                <div className={ "question-stat" + ("") }>
+                <div className={ "question-stat" }>
                     <Skeleton width={ 100 } height={ 24 }/>
                 </div>
 
-                <div className={ "question-stat" + ("") }>
+                <div className={ "question-stat" }>
                     <Skeleton width={ 100 } height={ 24 }/>
                 </div>
             </div>
 
             <div className={ "question-stats" }>
-                <div className={ "question-stat" + ("") }>
+                <div className={ "question-stat" }>
                     <Skeleton width={ 100 } height={ 24 }/>
                 </div>
 
-                <div className={ "question-stat" + ("") }>
+                <div className={ "question-stat" }>
                     <Skeleton width={ 100 } height={ 24 }/>
                 </div>
             </div>
