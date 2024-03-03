@@ -61,7 +61,7 @@ class AppComp extends React.Component<{ t: TFunction<"translation", undefined>, 
                 <NavLink to="/question/new"><i className={ "far fa-edit" }/>Ask Something</NavLink>
                 <NavLink to="/a"><i className={ "fas fa-fire" }/>My Activity</NavLink>
                 <NavLink to="/b"><i className={ "fas fa-star" }/>My Favorites</NavLink>
-                <NavLink to="/c"><i className={ "fas fa-toolbox" }/>Daily Quests</NavLink>
+                <NavLink to="/c"><i className={ "fas fa-gift" }/>Daily Quests</NavLink>
                 <NavLink to="/d"><i className={ "fas fa-bell" }/>Inbox<span className={ "badge" }>3</span></NavLink>
 
                 { window.location.pathname.startsWith("/question") && <>
