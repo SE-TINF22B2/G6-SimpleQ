@@ -359,11 +359,10 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                         let res = this.compareAnswers(b, a);
                         return this.state.sortDirection === "desc" ? res : -res;
                     })
-                    .map((answer, index) =>
-                        <Answer key={ index } answer={ answer }/>)
+                    .map((answer, index) => this.renderAnswer(answer, index))
                 : <>
-                    <SkeletonAnswer/>
-                    <SkeletonAnswer/>
+                    { this.renderAnswerSkeleton() }
+                    { this.renderAnswerSkeleton() }
                 </> }
         </>
     }
@@ -380,96 +379,96 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                 return Date.parse(b.answerDate) - Date.parse(a.answerDate);
         }
     }
-}
 
-function SkeletonAnswer() {
-    return <div className={ "container transparent question-answer" }>
-        <div className={ "question-answer-author" }>
-            <Skeleton height={ 40 } width={ 40 }/>
+    private renderAnswer(answer: Answer, index: number) {
+        return <div key={ index } className={ "container transparent question-answer" }>
+            <div className={ "question-answer-author" }
+                 style={ {
+                     paddingTop: answer.author === "simp" ? "var(--spacing)" : 0,
+                     paddingInline: answer.author === "simp" ? "var(--spacing)" : 0
+                 } }>
+                { answer.author === "simp" ? <>
+                    <i className={ "fas fa-brain fa-2xl" }
+                       style={ {
+                           height: "auto",
+                           color: "var(--primary-color)",
+                           filter: "drop-shadow(0 0 5px rgba(0, 0, 0, 0.2))"
+                       } }/>
 
-            <p>
-                <Skeleton height={ 20 } width={ 100 }/>
-            </p>
+                    <p style={ { paddingTop: "calc(var(--spacing) / 2)" } }>
+                        <span>Simp</span>
+                    </p>
+                </> : <div className={ "question-answer-author-user" } tabIndex={ 0 }>
+                    <img className={ "avatar" } src={ answer.author.avatar } alt={ "Avatar" }/>
 
-            <span className={ "caption" }><Skeleton width={ 60 }/></span>
-        </div>
+                    <p>
+                        <span>{ answer.author.name }</span>
+                        <span className={ "badge" }>{ answer.author.plan }</span>
+                    </p>
+                </div> }
 
-        <div className={ "question-answer-text" }>
-            <div className={ "glass" }>
-                <p>
-                    <Skeleton count={ 3 }/>
-                </p>
+                <span className={ "caption" }>replied { answer.answerDate }</span>
             </div>
 
-            <div className={ "question-answer-actions" }>
-                <Skeleton height={ 20 } width={ 100 }/>
-                <Skeleton height={ 20 } width={ 100 }/>
-
-                <div style={ { flex: 1 } }/>
-
-                <Skeleton height={ 20 } width={ 200 }/>
-            </div>
-        </div>
-    </div>
-}
-
-function Answer(props: { answer: Answer }) {
-    return <div className={ "container transparent question-answer" }>
-        <div className={ "question-answer-author" }
-             style={ {
-                 paddingTop: props.answer.author === "simp" ? "var(--spacing)" : 0,
-                 paddingInline: props.answer.author === "simp" ? "var(--spacing)" : 0
-             } }>
-            { props.answer.author === "simp" ? <>
-                <i className={ "fas fa-brain fa-2xl" }
-                   style={ {
-                       height: "auto",
-                       color: "var(--primary-color)",
-                       filter: "drop-shadow(0 0 5px rgba(0, 0, 0, 0.2))"
-                   } }/>
-
-                <p style={ { paddingTop: "calc(var(--spacing) / 2)" } }>
-                    <span>Simp</span>
-                </p>
-            </> : <div className={ "question-answer-author-user" } tabIndex={ 0 }>
-                <img className={ "avatar" } src={ props.answer.author.avatar } alt={ "Avatar" }/>
-
-                <p>
-                    <span>{ props.answer.author.name }</span>
-                    <span className={ "badge" }>{ props.answer.author.plan }</span>
-                </p>
-            </div> }
-
-            <span className={ "caption" }>replied { props.answer.answerDate }</span>
-        </div>
-
-        <div className={ "question-answer-text" }>
-            <div className={ "glass" + (props.answer.author === "simp" ? " glass-simp" : "") }>
-                <p>{ props.answer.content }</p>
-            </div>
-
-            <div className={ "question-answer-actions" }>
-                <div
-                    className={ "question-answer-actions-rate" + (props.answer.stats.rating === "like" ? " rating" : "") }>
-                    <i className={ "fas fa-thumbs-up primary-icon" } tabIndex={ 0 }/>
-                    <span className={ "question-figure" }>{ props.answer.stats.likes }</span>
-                    <span className={ "question-unit" }>likes</span>
+            <div className={ "question-answer-text" }>
+                <div className={ "glass" + (answer.author === "simp" ? " glass-simp" : "") }>
+                    <p>{ answer.content }</p>
                 </div>
 
-                <div
-                    className={ "question-answer-actions-rate" + (props.answer.stats.rating === "dislike" ? " rating" : "") }>
-                    <i className={ "fas fa-thumbs-down primary-icon" } tabIndex={ 0 }/>
-                    <span className={ "question-figure" }>{ props.answer.stats.dislikes }</span>
-                    <span className={ "question-unit" }>dislikes</span>
+                <div className={ "question-answer-actions" }>
+                    <div
+                        className={ "question-answer-actions-rate" + (answer.stats.rating === "like" ? " rating" : "") }>
+                        <i className={ "fas fa-thumbs-up primary-icon" } tabIndex={ 0 }/>
+                        <span className={ "question-figure" }>{ answer.stats.likes }</span>
+                        <span className={ "question-unit" }>likes</span>
+                    </div>
+
+                    <div
+                        className={ "question-answer-actions-rate" + (answer.stats.rating === "dislike" ? " rating" : "") }>
+                        <i className={ "fas fa-thumbs-down primary-icon" } tabIndex={ 0 }/>
+                        <span className={ "question-figure" }>{ answer.stats.dislikes }</span>
+                        <span className={ "question-unit" }>dislikes</span>
+                    </div>
+
+                    <div style={ { flex: 1 } }/>
+
+                    <button className={ "question-report" }>
+                        <i className={ "fas fa-flag" }/>
+                        Report this answer
+                    </button>
                 </div>
-
-                <div style={ { flex: 1 } }/>
-
-                <button className={ "question-report" }>
-                    <i className={ "fas fa-flag" }/>
-                    Report this answer
-                </button>
             </div>
         </div>
-    </div>
+    }
+
+    private renderAnswerSkeleton() {
+        return <div className={ "container transparent question-answer" }>
+            <div className={ "question-answer-author" }>
+                <Skeleton height={ 40 } width={ 40 }/>
+
+                <p>
+                    <Skeleton height={ 20 } width={ 100 }/>
+                </p>
+
+                <span className={ "caption" }><Skeleton width={ 60 }/></span>
+            </div>
+
+            <div className={ "question-answer-text" }>
+                <div className={ "glass" }>
+                    <p>
+                        <Skeleton count={ 3 }/>
+                    </p>
+                </div>
+
+                <div className={ "question-answer-actions" }>
+                    <Skeleton height={ 20 } width={ 100 }/>
+                    <Skeleton height={ 20 } width={ 100 }/>
+
+                    <div style={ { flex: 1 } }/>
+
+                    <Skeleton height={ 20 } width={ 200 }/>
+                </div>
+            </div>
+        </div>
+    }
 }
