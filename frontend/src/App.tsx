@@ -268,6 +268,8 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
                               ] }/>
                 </div>
 
+                <hr style={ { width: "100%", maxWidth: "var(--max-width)", marginBlock: "0" } }/>
+
                 <Routes>
                     <Route path={ "/" } element={ <Suspense><Navigate to={ "/trending" }/></Suspense> }/>
                     <Route path={ "/trending" }
