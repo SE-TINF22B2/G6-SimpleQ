@@ -188,7 +188,7 @@ main {
 
 		> * {
 			border-radius: var(--border-radius);
-			box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+			box-shadow: var(--box-shadow);
 		}
 
 		> *,
@@ -219,7 +219,7 @@ main > div.container,
 .glass {
 	border-radius: var(--border-radius);
 	padding: var(--spacing);
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+	box-shadow: var(--box-shadow);
 	transition: var(--transition);
 
 	background-color: var(--background-color-glass);

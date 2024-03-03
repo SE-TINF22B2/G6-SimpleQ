@@ -6,7 +6,7 @@
 
 	.glass {
 		border-radius: var(--border-radius);
-		box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+		box-shadow: var(--box-shadow);
 		padding: var(--spacing);
 
 		position: relative;
@@ -75,7 +75,7 @@
 
 #add-answer {
 	transition: var(--transition);
-	
+
 	display: block;
 
 	#add-answer-header {
@@ -157,7 +157,7 @@
 
 		.glass {
 			border-radius: var(--border-radius);
-			box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+			box-shadow: var(--box-shadow);
 			padding: var(--spacing);
 
 			&.glass-simp {

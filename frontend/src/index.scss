@@ -12,6 +12,7 @@
 	--header-height: 60px;
 	--max-width: 1200px;
 	--outline-width: 2px;
+	--box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 body {
@@ -97,7 +98,7 @@ input[type="checkbox"] {
 
 	&.btn-glass {
 		background: var(--background-color-glass);
-		box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+		box-shadow: var(--box-shadow);
 
 		&:focus-within {
 			background: var(--background-color-secondary);
