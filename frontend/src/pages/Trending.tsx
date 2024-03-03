@@ -80,6 +80,25 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                         name: "John Doe",
                         avatar: "https://www.w3schools.com/w3images/avatar2.png"
                     }
+                },
+                {
+                    id: 3,
+                    title: "How can I improve my CSS skills?",
+                    originalLanguage: "ENGLISH",
+                    creationDate: "20.10.2023",
+                    updateDate: "TODAY",
+                    tags: ["Tag 1", "Tag 2", "Tag 3"],
+                    stats: {
+                        likes: 124231,
+                        dislikes: 123,
+                        views: 12161353,
+                        answers: 12412,
+                        rating: "dislike"
+                    },
+                    author: {
+                        name: "John Doe",
+                        avatar: "https://www.w3schools.com/w3images/avatar2.png"
+                    }
                 }
             ]
         }), 1000);
@@ -139,7 +158,8 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                         ] } direction={ "right" }/>
                     </div>
 
-                    <img src={ thinking } alt={ "Trending" } style={ { height: "120px", alignSelf: "center" } }/>
+                    <img src={ thinking } alt={ "Trending" }
+                         style={ { height: "120px", alignSelf: "center", userSelect: "none", pointerEvents: "none" } }/>
                 </div>
             </div>
 
