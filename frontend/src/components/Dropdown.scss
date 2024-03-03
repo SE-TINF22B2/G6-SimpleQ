@@ -5,7 +5,11 @@
 	z-index: 200;
 
 	&.active {
-		filter: drop-shadow(0 0 60px var(--primary-color));
+		filter: var(--bleed-shadow);
+
+		> .dropdown-button > * {
+			background: var(--background-color-secondary);
+		}
 	}
 
 	> .dropdown-button {

@@ -1,18 +1,49 @@
 :root {
 	--primary-color: #109E63;
 	--primary-color-contrast: #fff;
+
 	--background-color-primary: white;
+	--background-color-primary-light: white;
+	--background-color-primary-dark: black;
+
 	--background-color-secondary: #f5f5f5;
+	--background-color-secondary-light: #f5f5f5;
+	--background-color-secondary-dark: #0e0e0e;
+
+	--font-color: black;
+	--font-color-light: black;
+	--font-color-dark: white;
+
 	--background-color-glass: rgba(255, 255, 255, .6);
+	--background-color-glass-light: rgba(255, 255, 255, .6);
+	--background-color-glass-dark: rgba(0, 0, 0, .6);
+
 	--background-color-glass-simp: rgba(255, 225, 255, .6);
+	--background-color-glass-simp-light: rgba(255, 225, 255, .6);
+	--background-color-glass-simp-dark: rgba(30, 0, 30, .6);
+
 	--border-color: #e0e0e0;
+	--border-color-light: #e0e0e0;
+	--border-color-dark: #1f1f1f;
+
+	--box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+	--box-shadow-light: 0 0 5px rgba(0, 0, 0, 0.1);
+	--box-shadow-dark: 0 0 5px rgba(125, 125, 125, 0.1);
+
+	--bleed-shadow: drop-shadow(0 0 60px var(--primary-color));
+	--bleed-shadow-light: drop-shadow(0 0 60px var(--primary-color));
+	--bleed-shadow-dark: drop-shadow(0 0 30px var(--primary-color));
+
+	--background-bleed-opacity: 0.4;
+	--background-bleed-opacity-light: 0.4;
+	--background-bleed-opacity-dark: 0.2;
+
 	--border-radius: 10px;
 	--spacing: 1em;
 	--transition: 0.2s ease-in-out;
 	--header-height: 60px;
 	--max-width: 1200px;
 	--outline-width: 2px;
-	--box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 body {
@@ -22,6 +53,7 @@ body {
 	margin: 0;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	color: var(--font-color);
 }
 
 * {
@@ -99,6 +131,7 @@ input[type="checkbox"] {
 	&.btn-glass {
 		background: var(--background-color-glass);
 		box-shadow: var(--box-shadow);
+		border: 1px solid var(--border-color);
 
 		&:focus-within {
 			background: var(--background-color-secondary);
@@ -124,4 +157,5 @@ i.primary-icon {
 
 button, input {
 	font-family: inherit;
+	color: var(--font-color);
 }

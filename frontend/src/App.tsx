@@ -9,6 +9,8 @@ import BarChart from "./components/BarChart";
 import Question from "./pages/Question";
 import Trending from "./pages/Trending";
 import Editor from "./pages/Editor";
+import { useMediaQuery } from "@react-hook/media-query";
+import { SkeletonTheme } from "react-loading-skeleton";
 
 // {t('Welcome to React')}
 i18n
@@ -38,11 +40,33 @@ export default function App() {
 function AppRouter({ t }: { t: TFunction<"translation", undefined> }) {
     const navigate = useNavigate();
 
-    return <AppComp t={ t } navigate={ navigate }/>;
+    const prefersDarkTheme = useMediaQuery('(prefers-color-scheme: dark)');
+    const prefersLightTheme = useMediaQuery('(prefers-color-scheme: light)');
+
+    let themePreference: "dark" | "light" | undefined = undefined;
+    if (prefersDarkTheme) themePreference = "dark";
+    else if (prefersLightTheme) themePreference = "light";
+
+    return <AppComp t={ t } navigate={ navigate } themePreference={ themePreference }/>;
 }
 
-class AppComp extends React.Component<{ t: TFunction<"translation", undefined>, navigate: NavigateFunction }, any> {
+interface Props {
+    t: TFunction<"translation", undefined>;
+    navigate: NavigateFunction;
+    themePreference?: "dark" | "light";
+}
+
+class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            theme: (localStorage.getItem("theme") as "dark" | "light" || props.themePreference) ?? "light"
+        };
+    }
+
     componentDidMount() {
+        this.updateThemeVariables();
+
         document.addEventListener("keydown", this.onKeyDown());
     }
 
@@ -50,8 +74,38 @@ class AppComp extends React.Component<{ t: TFunction<"translation", undefined>, 
         document.removeEventListener("keydown", this.onKeyDown());
     }
 
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<{ theme: "dark" | "light" }>, snapshot?: any) {
+        if (prevState.theme !== this.state.theme) {
+            this.updateThemeVariables();
+        }
+    }
+
+    updateThemeVariables() {
+        let root = document.documentElement.style;
+
+        let variables = [
+            "--background-color-primary",
+            "--background-color-secondary",
+            "--font-color",
+            "--background-color-glass",
+            "--background-color-glass-simp",
+            "--border-color",
+            "--box-shadow",
+            "--bleed-shadow",
+            "--background-bleed-opacity"
+        ];
+
+        variables.forEach(variable => {
+            let value = this.state.theme === "dark"
+                ? getComputedStyle(document.documentElement).getPropertyValue(`${ variable }-dark`)
+                : getComputedStyle(document.documentElement).getPropertyValue(`${ variable }-light`);
+            root.setProperty(variable, value);
+        });
+    }
+
     render() {
-        return <>
+        return <SkeletonTheme baseColor={ this.state.theme === "light" ? "#dadada" : "#333" }
+                              highlightColor={ this.state.theme === "light" ? "#f5f5f5" : "#101010" }>
             <nav>
                 <div>
                     <p>simpleQ</p>
@@ -154,29 +208,51 @@ class AppComp extends React.Component<{ t: TFunction<"translation", undefined>, 
                                           {
                                               icon: "fas fa-globe",
                                               label: "English",
-                                              onClick: () => i18n.changeLanguage("en")
+                                              onClick: () => i18n.changeLanguage("en"),
+                                              shortcut: i18n.language === "en" ? <i className={ "fas fa-check" }/> : ""
                                           },
                                           {
                                               icon: "fas fa-globe",
                                               label: "German",
-                                              onClick: () => i18n.changeLanguage("de")
+                                              onClick: () => i18n.changeLanguage("de"),
+                                              shortcut: i18n.language === "de" ? <i className={ "fas fa-check" }/> : ""
                                           }
                                       ]
                                   },
                                   {
                                       icon: "fas fa-brush",
                                       label: "Theme",
-                                      shortcut: "F9",
+                                      shortcut: this.capitalizeFirstLetter(localStorage.getItem("theme") || "system"),
                                       items: [
+                                          {
+                                              icon: "fas fa-adjust",
+                                              label: "System",
+                                              onClick: () => {
+                                                  localStorage.removeItem("theme");
+                                                  this.setState({ theme: this.props.themePreference ?? "light" });
+                                              },
+                                              shortcut: !localStorage.getItem("theme") ?
+                                                  <i className={ "fas fa-check" }/> : ""
+                                          },
                                           {
                                               icon: "fas fa-moon",
                                               label: "Dark",
-                                              onClick: () => document.body.classList.add("dark")
+                                              onClick: () => {
+                                                  localStorage.setItem("theme", "dark");
+                                                  this.setState({ theme: "dark" });
+                                              },
+                                              shortcut: localStorage.getItem("theme") === "dark" ?
+                                                  <i className={ "fas fa-check" }/> : ""
                                           },
                                           {
                                               icon: "fas fa-sun",
                                               label: "Light",
-                                              onClick: () => document.body.classList.remove("dark")
+                                              onClick: () => {
+                                                  localStorage.setItem("theme", "light");
+                                                  this.setState({ theme: "light" });
+                                              },
+                                              shortcut: localStorage.getItem("theme") === "light" ?
+                                                  <i className={ "fas fa-check" }/> : ""
                                           }
                                       ]
                                   },
@@ -219,14 +295,18 @@ class AppComp extends React.Component<{ t: TFunction<"translation", undefined>, 
                         <i className={ "far fa-question badge" }/>
                         <span>How to use React?</span>
                         <div>
-                            <i className={ "fas fa-user" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+                            <i className={ "far fa-user" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
                             <span>Benni Loidl</span>
                         </div>
                         <span>Yesterday</span>
                     </p>
                 </div>
             </div>
-        </>;
+        </SkeletonTheme>;
+    }
+
+    private capitalizeFirstLetter(string: string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     private onKeyDown() {
