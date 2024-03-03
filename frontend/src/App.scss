@@ -364,16 +364,16 @@ hr {
 				border: 2px solid var(--primary-color);
 			}
 		}
-
-		.question-figure {
-			font-weight: 500;
-		}
-
-		.question-unit {
-			font-size: 0.8em;
-			margin-left: 4px;
-			opacity: 0.8;
-			transform: translateY(1px);
-		}
 	}
+}
+
+.question-figure {
+	font-weight: 500;
+}
+
+.question-unit {
+	font-size: 0.8em;
+	margin-left: 4px;
+	opacity: 0.8;
+	transform: translateY(1px);
 }
