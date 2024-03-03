@@ -46,7 +46,7 @@ export default class Editor extends React.Component<any, any> {
                     </h2>
                     <p>Add up to 5 tags to describe what your question is about.</p>
                     <hr/>
-                    <LiveInput/>
+                    <LiveInput placeholder={ "Add a tag" }/>
                 </div>
             </div>
 
