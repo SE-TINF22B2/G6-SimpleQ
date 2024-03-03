@@ -91,6 +91,7 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
             "--background-color-glass-simp",
             "--border-color",
             "--box-shadow",
+            "--box-shadow-elevated",
             "--bleed-shadow",
             "--background-bleed-opacity"
         ];
