@@ -24,6 +24,10 @@ export default class Editor extends React.Component<any, any> {
                                       // @ts-ignore
                                       e.target.innerText = text;
                                   }, 10);
+                              } }
+                              style={ {
+                                  borderRadius: "var(--border-radius)",
+                                  outlineOffset: "var(--outline-width)"
                               } }>
                         New Question
                     </span>
@@ -93,10 +97,17 @@ export default class Editor extends React.Component<any, any> {
                             <i className={ "fas fa-redo" }/></button>
                     </div>
                     <p id={ "question-editor" }
-                       style={ { width: "100%", height: "auto", marginBottom: "var(--spacing)" } }
+                       style={ {
+                           width: "100%",
+                           height: "240px",
+                           marginBottom: "var(--spacing)",
+                           borderRadius: "var(--border-radius)",
+                           outlineOffset: "calc(var(--spacing) / 2)"
+                       } }
                        contentEditable>
                         Describe your question in more detail.
                     </p>
+                    <hr/>
                     <span className={ "caption" }>
                     You have written {
                         document.getElementById("question-editor")?.innerText.split(" ").length
