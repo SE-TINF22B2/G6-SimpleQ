@@ -102,6 +102,7 @@ main {
 	justify-content: flex-start;
 	background: linear-gradient(90deg, var(--background-color-secondary) 0%, var(--background-color-primary) 100%);
 	padding-inline: var(--spacing);
+	padding-bottom: calc(var(--spacing) * 4);
 	gap: var(--spacing);
 	position: relative;
 
@@ -109,8 +110,8 @@ main {
 		content: '';
 		position: absolute;
 		top: 0;
-		left: 0;
-		width: 100%;
+		right: 0;
+		width: min(100%, 100vh);
 		aspect-ratio: 1/1;
 		background: radial-gradient(circle at 100% 0%, var(--primary-color) 10%, var(--background-color-secondary) 70%);
 		opacity: var(--background-bleed-opacity);
