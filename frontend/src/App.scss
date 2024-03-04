@@ -366,6 +366,29 @@ main > div.container,
 
 	main {
 		width: 100vw !important;
+
+		:has(> .question-figure) {
+			display: grid !important;
+			grid-template-columns: auto 1fr;
+			grid-template-rows: auto auto;
+			column-gap: 0;
+
+			> :first-child {
+				grid-row: span 2;
+			}
+
+			> :nth-child(2) {
+				grid-column: 2;
+				transform: translateY(3px);
+			}
+
+			> :nth-child(3) {
+				grid-row: 2;
+				grid-column: 2;
+				transform: translateY(-3px);
+				margin-left: 0;
+			}
+		}
 	}
 }
 
