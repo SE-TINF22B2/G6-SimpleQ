@@ -114,8 +114,30 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
         return <SkeletonTheme baseColor={ this.state.theme === "light" ? "#dadada" : "#333" }
                               highlightColor={ this.state.theme === "light" ? "#f5f5f5" : "#101010" }>
             <nav>
-                <div>
+                <div style={ { position: "relative" } }>
                     <p>simpleQ</p>
+                    <i className={ "fas fa-x toggle-nav" }
+                       style={ {
+                           fontSize: "1.5em",
+                           cursor: "pointer",
+                           position: "absolute",
+                           right: "var(--spacing)",
+                           outlineColor: "var(--primary-color-contrast)",
+                           borderRadius: "var(--border-radius)",
+                           outlineOffset: "calc(var(--spacing) / 2)"
+                       } }
+                       tabIndex={ 0 }
+                       onClick={ (e) => {
+                           let elem = document.querySelector("#toggle-nav-close-ref");
+                           if (elem) (elem as HTMLElement).focus();
+                       } }
+                       onKeyDown={ (e) => {
+                           if (e.key === "Enter") {
+                               let elem = document.querySelector("#toggle-nav-close-ref");
+                               if (elem) (elem as HTMLElement).focus();
+                           }
+                       } }
+                    />
                 </div>
 
                 <NavLink to="/trending"><i className={ "fas fa-chart-line" }/>Trending Questions</NavLink>
@@ -166,6 +188,26 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
 
             <main>
                 <div className={ "container transparent top-bar" }>
+                    <i className={ "fas fa-bars glass toggle-nav" }
+                       id={ "toggle-nav-close-ref" }
+                       style={ { fontSize: "1.5em", cursor: "pointer" } }
+                       tabIndex={ 0 }
+                       onClick={ () => {
+                           let elem = document.querySelector("nav a.active");
+                           if (elem) (elem as HTMLElement).focus();
+                           else elem = document.querySelector("nav a");
+                           if (elem) (elem as HTMLElement).focus();
+                       } }
+                       onKeyDown={ (e) => {
+                           if (e.key === "Enter") {
+                               let elem = document.querySelector("nav a.active");
+                               if (elem) (elem as HTMLElement).focus();
+                               else elem = document.querySelector("nav a");
+                               if (elem) (elem as HTMLElement).focus();
+                           }
+                       } }
+                    />
+
                     <p className={ "glass" }
                        onKeyDown={ (e) => {
                            if (e.key === "Enter") {
@@ -198,10 +240,9 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
                              src={ "https://benniloidl.de/static/media/me.6c5597f7d72f68a1e83c.jpeg" }
                              alt={ "Benni Loidl" }/>
 
-                        <p>
+                        <p style={ { display: "flex", flexDirection: "column", alignItems: "flex-start" } }>
                             Benni
-                            <span className={ "badge badge-sm" }
-                                  style={ { marginInline: "calc(var(--spacing) / 2) var(--spacing)" } }>PRO</span>
+                            <span className={ "badge badge-sm" }>PRO</span>
                         </p>
                     </div> }
                               items={ [
