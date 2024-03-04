@@ -93,3 +93,11 @@
 		}
 	}
 }
+
+@media (max-width: 768px) {
+	.editor-container {
+		.editor-hints {
+			width: 60px;
+		}
+	}
+}
