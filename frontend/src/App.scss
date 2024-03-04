@@ -339,7 +339,7 @@ main > div.container,
 }
 
 .toggle-nav {
-	display: none;
+	display: none !important;
 }
 
 @media (max-width: 768px) {
@@ -348,7 +348,7 @@ main > div.container,
 	}
 
 	.toggle-nav {
-		display: block;
+		display: flex !important;
 	}
 
 	nav {
