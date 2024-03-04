@@ -55,6 +55,7 @@
 			outline-offset: calc(var(--spacing) / 2);
 			user-select: none;
 			cursor: pointer;
+			white-space: nowrap;
 
 			.question-author-info {
 				display: flex;
@@ -214,5 +215,35 @@
 
 	&:hover {
 		opacity: 1;
+	}
+}
+
+@media (max-width: 768px) {
+	.question-main {
+		flex-direction: column !important;
+
+		> :last-child {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+
+			.question-stats {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				column-gap: var(--spacing);
+
+				.question-stat:nth-child(2) {
+					grid-row: 1;
+				}
+			}
+
+			> .caption {
+				display: none;
+			}
+
+			hr {
+				display: none;
+			}
+		}
 	}
 }
