@@ -195,114 +195,106 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                     onKeyDown={ (e: any) => {
                         if (e.key === "Enter") this.props.navigate("/question/" + question.id);
                     } }>
-            <div className={ "question-wrapper" }>
-                <h2>
-                    <i className={ "far fa-question" }/>
-                </h2>
-
-                <div className={ "question" }>
-                    <p className={ "tags" }>
-                        { question.tags.map((tag, index) =>
-                            <span key={ index } className={ "badge" }>{ tag }</span>) }
-                    </p>
-
-                    <h2>{ question.title }</h2>
-
-                    <span
-                        className={ "caption" }>{ question.originalLanguage } (Original) · Created: { question.creationDate } · Last Updated: { question.updateDate }</span>
-                </div>
-            </div>
-
-            <div className={ "question-stats" }>
-                <div
-                    className={ "question-stat" + (question.stats.rating === "like" ? " rating" : "") }>
-                    <i className={ "fas fa-thumbs-up primary-icon" }/>
-                    <span
-                        className={ "question-figure" }>{ question.stats.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-                    <span className={ "question-unit" }>likes</span>
-                </div>
-
-                <div
-                    className={ "question-stat" + (question.stats.rating === "dislike" ? " rating" : "") }>
-                    <i className={ "fas fa-thumbs-down primary-icon" }/>
-                    <span
-                        className={ "question-figure" }>{ question.stats.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-                    <span className={ "question-unit" }>dislikes</span>
-                </div>
-            </div>
-
-            <div className={ "question-stats" }>
-                <div className={ "question-stat" }>
-                    <i className={ "fas fa-eye primary-icon" }/>
-                    <span
-                        className={ "question-figure" }>{ question.stats.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-                    <span className={ "question-unit" }>views</span>
-                </div>
-
-                <div className={ "question-stat" }>
-                    <i className={ "fas fa-comment-dots primary-icon" }/>
-                    <span
-                        className={ "question-figure" }>{ question.stats.answers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-                    <span className={ "question-unit" }>answers</span>
-                </div>
-            </div>
-
-            <div className={ "author" }>
-                <img className={ "avatar" } src={ question.author.avatar }
-                     alt={ "Avatar" }/>
-                <p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
-                    <span className={ "caption" }>Asked by</span>
-                    <span>{ question.author.name }</span>
+            <div className={ "question" }>
+                <p className={ "tags" }>
+                    { question.tags.map((tag, index) =>
+                        <span key={ index } className={ "badge" }>{ tag }</span>) }
                 </p>
+
+                <h2 className={ "question-title" }>{ question.title }</h2>
+
+                <span
+                    className={ "caption" }>{ question.originalLanguage } (Original) · Created: { question.creationDate } · Last Updated: { question.updateDate }</span>
+            </div>
+
+            <div className={ "question-details-wrapper" }>
+                <div className={ "question-stats" }>
+                    <div
+                        className={ "question-stat" + (question.stats.rating === "like" ? " rating" : "") }>
+                        <i className={ "fas fa-thumbs-up primary-icon" }/>
+                        <span
+                            className={ "question-figure" }>{ question.stats.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
+                        <span className={ "question-unit" }>likes</span>
+                    </div>
+
+                    <div
+                        className={ "question-stat" + (question.stats.rating === "dislike" ? " rating" : "") }>
+                        <i className={ "fas fa-thumbs-down primary-icon" }/>
+                        <span
+                            className={ "question-figure" }>{ question.stats.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
+                        <span className={ "question-unit" }>dislikes</span>
+                    </div>
+                </div>
+
+                <div className={ "question-stats" }>
+                    <div className={ "question-stat" }>
+                        <i className={ "fas fa-eye primary-icon" }/>
+                        <span
+                            className={ "question-figure" }>{ question.stats.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
+                        <span className={ "question-unit" }>views</span>
+                    </div>
+
+                    <div className={ "question-stat" }>
+                        <i className={ "fas fa-comment-dots primary-icon" }/>
+                        <span
+                            className={ "question-figure" }>{ question.stats.answers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
+                        <span className={ "question-unit" }>answers</span>
+                    </div>
+                </div>
+
+                <div className={ "author" }>
+                    <img className={ "avatar" } src={ question.author.avatar }
+                         alt={ "Avatar" }/>
+                    <p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
+                        <span className={ "caption" }>Asked by</span>
+                        <span>{ question.author.name }</span>
+                    </p>
+                </div>
             </div>
         </div>
     }
 
     private renderQuestionSkeleton() {
         return <div className={ "container questions-question" } style={ { cursor: "auto" } }>
-            <div className={ "question-wrapper" }>
+            <div className={ "question" }>
+                <Skeleton containerClassName={ "tags" }/>
+
                 <h2>
-                    <Skeleton width={ 40 } style={ { marginRight: "var(--spacing)" } }/>
+                    <Skeleton/>
                 </h2>
 
-                <div className={ "question" }>
-                    <Skeleton containerClassName={ "tags" }/>
-
-                    <h2>
-                        <Skeleton/>
-                    </h2>
-
-                    <Skeleton containerClassName={ "caption" } width={ 400 }/>
-                </div>
+                <Skeleton containerClassName={ "caption" } width={ 300 }/>
             </div>
 
-            <div className={ "question-stats" }>
-                <div className={ "question-stat" }>
-                    <Skeleton width={ 100 } height={ 24 }/>
+            <div className={ "question-details-wrapper" }>
+                <div className={ "question-stats" }>
+                    <div className={ "question-stat" }>
+                        <Skeleton width={ 80 } height={ 24 }/>
+                    </div>
+
+                    <div className={ "question-stat" }>
+                        <Skeleton width={ 80 } height={ 24 }/>
+                    </div>
                 </div>
 
-                <div className={ "question-stat" }>
-                    <Skeleton width={ 100 } height={ 24 }/>
+                <div className={ "question-stats" }>
+                    <div className={ "question-stat" }>
+                        <Skeleton width={ 80 } height={ 24 }/>
+                    </div>
+
+                    <div className={ "question-stat" }>
+                        <Skeleton width={ 80 } height={ 24 }/>
+                    </div>
                 </div>
-            </div>
 
-            <div className={ "question-stats" }>
-                <div className={ "question-stat" }>
-                    <Skeleton width={ 100 } height={ 24 }/>
+                <div className={ "author" }>
+                    <Skeleton circle width={ 40 } height={ 40 }/>
+
+                    <p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
+                        <Skeleton width={ 80 } height={ 12 }/>
+                        <Skeleton width={ 80 } height={ 20 }/>
+                    </p>
                 </div>
-
-                <div className={ "question-stat" }>
-                    <Skeleton width={ 100 } height={ 24 }/>
-                </div>
-            </div>
-
-            <div className={ "author" }>
-                <Skeleton circle width={ 40 } height={ 40 }/>
-
-                <p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
-                    <Skeleton width={ 100 } height={ 12 }/>
-                    <Skeleton width={ 100 } height={ 20 }/>
-                </p>
             </div>
         </div>
     }
