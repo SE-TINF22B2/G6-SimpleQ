@@ -146,7 +146,7 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                         { this.state.question.originalLanguage } (original) · created: { this.state.question.creationDate } · last updated: { this.state.question.updateDate }
                     </span> : <Skeleton/> }
 
-                    <i className={ "far fa-star add-favorite" } tabIndex={ 0 }/>
+                    { this.state.question && <i className={ "far fa-star add-favorite" } tabIndex={ 0 }/> }
                 </div>
 
                 <div className={ "glass" }>
@@ -202,10 +202,10 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                                 <span className={ "question-unit" }>answers</span>
                             </div>
                         </> : <>
-                            <Skeleton containerClassName={ "question-stat" }/>
-                            <Skeleton containerClassName={ "question-stat" }/>
-                            <Skeleton containerClassName={ "question-stat" }/>
-                            <Skeleton containerClassName={ "question-stat" }/>
+                            <Skeleton containerClassName={ "question-stat" } width={ 80 }/>
+                            <Skeleton containerClassName={ "question-stat" } width={ 80 }/>
+                            <Skeleton containerClassName={ "question-stat" } width={ 80 }/>
+                            <Skeleton containerClassName={ "question-stat" } width={ 80 }/>
                         </> }
                     </div>
 
