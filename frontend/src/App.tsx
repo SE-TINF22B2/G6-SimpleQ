@@ -108,6 +108,10 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
                 : getComputedStyle(document.documentElement).getPropertyValue(`${ variable }-light`);
             root.setProperty(variable, value);
         });
+
+        // update meta theme
+        let meta = document.querySelector("meta[name=theme-color]") as HTMLMetaElement;
+        if (meta) meta.content = getComputedStyle(document.documentElement).getPropertyValue("--background-color-primary");
     }
 
     render() {
