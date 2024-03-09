@@ -190,10 +190,10 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                     tabIndex={ 0 }
                     style={ { order: index } }
                     onClick={ () => {
-                        this.props.navigate("/question/" + question.id);
+                        this.props.navigate("/dashboard/question/" + question.id);
                     } }
                     onKeyDown={ (e: any) => {
-                        if (e.key === "Enter") this.props.navigate("/question/" + question.id);
+                        if (e.key === "Enter") this.props.navigate("/dashboard/question/" + question.id);
                     } }>
             <div className={ "question" }>
                 <p className={ "tags" }>
@@ -203,8 +203,9 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
 
                 <h2 className={ "question-title" }>{ question.title }</h2>
 
-                <span
-                    className={ "caption" }>{ question.originalLanguage } (Original) · Created: { question.creationDate } · Last Updated: { question.updateDate }</span>
+                <span className={ "caption" }>
+                    { question.originalLanguage } (Original) · Created: { question.creationDate } · Last Updated: { question.updateDate }
+                </span>
             </div>
 
             <div className={ "question-details-wrapper" }>
