@@ -1,4 +1,5 @@
 import React from "react";
+import "./Dashboard.scss";
 import { NavigateFunction, NavLink, Outlet } from "react-router-dom";
 import BarChart from "./components/BarChart";
 import Dropdown from "./components/Dropdown";
@@ -19,7 +20,7 @@ export class Dashboard extends React.Component<Props, {}> {
     }
 
     render() {
-        return <>
+        return <div className={ "dashboard" }>
             <nav>
                 <div style={ { position: "relative" } }>
                     <button className={ "btn btn-primary" }
@@ -247,7 +248,7 @@ export class Dashboard extends React.Component<Props, {}> {
                     </p>
                 </div>
             </div>
-        </>
+        </div>
     }
 
     private capitalizeFirstLetter(string: string) {
