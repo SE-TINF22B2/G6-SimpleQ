@@ -134,31 +134,25 @@ export class Dashboard extends React.Component<Props, {}> {
                         } }>Search.. { this.getSearchShortcut() }</span>
                     </p>
 
-                    <Dropdown button={ <div className={ "glass" }
-                                            style={ {
-                                                borderRadius: "var(--border-radius)",
-                                                display: "flex",
-                                                justifyContent: "space-between",
-                                                alignItems: "center",
-                                                paddingInline: "var(--spacing)",
-                                                gap: "var(--spacing)",
-                                                userSelect: "none",
-                                                cursor: "pointer"
-                                            } }
+                    <Dropdown button={ <div style={ {
+                        aspectRatio: "1",
+                        display: "grid",
+                        placeItems: "center",
+                        userSelect: "none",
+                        cursor: "pointer",
+                        borderRadius: "50%",
+                        boxShadow: "var(--box-shadow)"
+                    } }
                                             tabIndex={ 0 }>
                         <img className={ "avatar" }
                              src={ "https://benniloidl.de/static/media/me.6c5597f7d72f68a1e83c.jpeg" }
                              alt={ "Benni Loidl" }/>
-
-                        <p style={ { display: "flex", flexDirection: "column", alignItems: "flex-start" } }>
-                            Benni
-                            <span className={ "badge badge-sm" }>PRO</span>
-                        </p>
                     </div> }
                               items={ [
                                   {
-                                      icon: "fas fa-user",
-                                      label: "My Profile",
+                                      icon: "far fa-user",
+                                      label: "Benni Loidl",
+                                      shortcut: <span className={ "badge" }>Pro</span>,
                                       onClick: () => this.props.navigate("/dashboard/profile")
                                   },
                                   {

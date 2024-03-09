@@ -198,11 +198,6 @@
 			gap: var(--spacing);
 			margin-top: var(--spacing);
 
-			> * {
-				border-radius: var(--border-radius);
-				box-shadow: var(--box-shadow);
-			}
-
 			> *,
 			div {
 				display: flex;
@@ -219,6 +214,7 @@
 				gap: var(--spacing);
 				user-select: none;
 				cursor: pointer;
+				box-shadow: var(--box-shadow);
 
 				> * {
 					opacity: 0.5;
