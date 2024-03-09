@@ -207,7 +207,7 @@ export default class Editor extends React.Component<any, State> {
                 <div style={ { flex: 1 } }/>
                 <button className={ "btn btn-primary" }>
                     <i className={ "fas fa-paper-plane" }/>
-                    Post Your Question
+                    <span>Post Your Question</span>
                 </button>
             </div>
         </>;

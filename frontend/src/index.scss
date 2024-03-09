@@ -131,6 +131,48 @@ input[type="checkbox"] {
 		color: var(--primary-color-contrast);
 		outline-offset: var(--outline-width);
 		font-weight: 600;
+
+		position: relative;
+		overflow: hidden;
+
+		* {
+			z-index: 10;
+		}
+
+		&::before {
+			content: "";
+			position: absolute;
+			height: 50%;
+			width: calc(200%);
+			left: -50%;
+			animation: rotate 2s infinite linear;
+			background-color: transparent;
+			transition: background-color var(--transition);
+		}
+
+		@keyframes rotate {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+
+		&::after {
+			content: "";
+			background-color: inherit;
+			position: absolute;
+			inset: var(--outline-width);
+			border-radius: inherit;
+		}
+
+		&:focus,
+		&:hover {
+			&::before {
+				background-color: var(--primary-color-contrast);
+			}
+		}
 	}
 
 	&.btn-glass {

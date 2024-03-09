@@ -51,7 +51,7 @@ interface State {
 export default function Question() {
     const { id } = useParams();
     let isIdValid = id && !isNaN(Number(id));
-    return isIdValid ? <QuestionComp id={ Number(id) }/> : <Navigate to={ "/" }/>;
+    return isIdValid ? <QuestionComp id={ Number(id) }/> : <Navigate to={ "" }/>;
 }
 
 class QuestionComp extends React.Component<{ id: number }, State> {
@@ -299,7 +299,7 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                     <button className={ "btn btn-glass" }
                             style={ { background: "var(--background-color-glass-simp)" } }>
                         <i className={ "fas fa-brain" }/>
-                        Ask Simp
+                        <span>Ask Simp</span>
                     </button>
 
                     <button className={ "btn btn-primary" } onClick={ () => {
@@ -331,7 +331,7 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                         };
                     } }>
                         <i className={ "fas fa-plus" }/>
-                        Add Answer
+                        <span>Add Answer</span>
                     </button>
                 </div>
 
