@@ -124,7 +124,7 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
         return <SkeletonTheme baseColor={ this.state.theme === "light" ? "#dadada" : "#333" }
                               highlightColor={ this.state.theme === "light" ? "#f5f5f5" : "#101010" }>
             <Routes>
-                <Route index element={ <Home/> }/>
+                <Route index element={ <Home navigate={ this.props.navigate }/> }/>
                 <Route path={ "dashboard" }
                        element={ <Dashboard navigate={ this.props.navigate }
                                             updateTheme={ this.updateTheme.bind(this) }/> }>
