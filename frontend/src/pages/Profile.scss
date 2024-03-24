@@ -1,3 +1,16 @@
+.profile-main {
+	table {
+		tr:not(:last-child):has(input) {
+			td {
+				padding-bottom: calc(var(--spacing) / 2);
+			}
+		}
+	}
+}
+
+.profile-expert-topics {
+}
+
 .profile-memberships {
 	table {
 		tr td {
