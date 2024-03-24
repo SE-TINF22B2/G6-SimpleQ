@@ -12,12 +12,6 @@
 		}
 	}
 
-	> .dropdown-button {
-		> * {
-			margin: 0;
-		}
-	}
-
 	> .dropdown-menu {
 		min-width: 100%;
 
@@ -66,8 +60,6 @@
 		gap: 1px;
 
 		top: calc(100% + var(--outline-width));
-
-		margin: 0;
 
 		> .dropdown-menu-item {
 			display: flex;
