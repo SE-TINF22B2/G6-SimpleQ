@@ -72,7 +72,9 @@ export class Dashboard extends React.Component<Props, {}> {
                 <div style={ { flex: 1 } }/>
                 <div style={ { paddingInline: "var(--spacing)" } }>
                     <hr/>
-                    <p className={ "caption" } style={ { textAlign: "center" } }>My Stats</p>
+                    <p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
+                        My Stats
+                    </p>
                     <div className={ "stats" }>
                         <div className={ "stats-column" }>
                             <i className={ "fas fa-fire primary-icon" }/>
@@ -89,7 +91,9 @@ export class Dashboard extends React.Component<Props, {}> {
                     </div>
 
                     <hr/>
-                    <p className={ "caption" } style={ { textAlign: "center" } }>Recent Activity</p>
+                    <p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
+                        Recent Activity
+                    </p>
                     <BarChart data={
                         Array.from({ length: 30 }, () => Math.floor(Math.random() * 100))
                     }/>
@@ -213,7 +217,7 @@ export class Dashboard extends React.Component<Props, {}> {
                               ] }/>
                 </div>
 
-                <hr style={ { width: "100%", maxWidth: "var(--max-width)", marginBlock: "0" } }/>
+                <hr style={ { marginBlock: "0" } }/>
 
                 <Outlet/>
             </main>

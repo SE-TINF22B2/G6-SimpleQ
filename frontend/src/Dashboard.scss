@@ -11,6 +11,7 @@
 		max-height: 100svh;
 		background-color: var(--background-color-primary);
 		gap: var(--spacing);
+		padding-bottom: var(--spacing);
 
 		> :first-child {
 			display: flex;
@@ -152,14 +153,16 @@
 
 			h1,
 			h2 {
-				margin-top: 0;
-				margin-bottom: -0.5em;
 
 				i {
 					width: 40px;
 					text-align: center;
 					margin-inline-end: calc(var(--spacing) / 2);
 				}
+			}
+
+			h3 {
+				margin-bottom: calc(var(--spacing) / 2);
 			}
 
 			&::before {
@@ -301,14 +304,12 @@
 			}
 
 			.search-info {
-				margin: 0;
 				padding: 0.2em var(--spacing);
 				background: var(--background-color-secondary);
 				font-size: 0.8em;
 			}
 
 			.search-result {
-				margin: 0;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
@@ -390,9 +391,12 @@
 	}
 
 	hr {
-		border: none;
 		height: 1px;
+		width: 100%;
+		max-width: var(--max-width);
 		background: var(--border-color);
+		border: none;
+		margin: var(--spacing) auto;
 	}
 
 	.question-stats {

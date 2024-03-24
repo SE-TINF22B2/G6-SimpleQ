@@ -108,7 +108,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
     render() {
         return <>
             <div className={ "container trending-header" }>
-                <div style={ { display: "flex" } }>
+                <div style={ { display: "flex", gap: "var(--spacing)" } }>
                     <div style={ { flex: 1 } }>
                         <h1>
                             <i className={ "fas fa-chart-line" }/>
@@ -116,7 +116,12 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                         </h1>
                         <p>See what's trending on our platform.</p>
 
-                        <div style={ { display: "flex", gap: "var(--spacing)", alignItems: "center" } }>
+                        <div style={ {
+                            display: "flex",
+                            gap: "var(--spacing)",
+                            alignItems: "center",
+                            marginTop: "var(--spacing)"
+                        } }>
                             <Dropdown button={ <p className={ "btn btn-glass" } tabIndex={ 0 }>
                                 <i className={ "fas fa-filter" }/>
                                 Adjust questions
@@ -167,7 +172,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                          style={ { height: "120px", alignSelf: "center", userSelect: "none", pointerEvents: "none" } }/>
                 </div>
 
-                <hr style={ { marginTop: "var(--spacing)" } }/>
+                <hr/>
                 <p className={ "tags" }>
                     <span className={ "badge" } tabIndex={ 0 }>Smartphone</span>
                     <span className={ "badge" } tabIndex={ 0 }>iPhone</span>

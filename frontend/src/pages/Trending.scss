@@ -3,7 +3,6 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: calc(var(--spacing) / 2);
-		margin-bottom: 0;
 
 		.badge {
 			cursor: pointer;
@@ -30,7 +29,6 @@
 
 		.tags {
 			display: flex;
-			margin-block: 0;
 			gap: calc(var(--spacing) / 2);
 		}
 	}

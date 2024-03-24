@@ -167,7 +167,7 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                         </div>
                     </div>
 
-                    <hr/>
+                    <hr style={ { marginBlock: "calc(var(--spacing) / 2)" } }/>
 
                     <span className={ "caption" }>Question Stats</span>
                     <div className={ "question-stats" }>
@@ -209,7 +209,7 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                         </> }
                     </div>
 
-                    <hr/>
+                    <hr style={ { marginBottom: "calc(var(--spacing) / 2)" } }/>
 
                     <button className={ "question-report" }>
                         <i className={ "fas fa-flag" }/>
