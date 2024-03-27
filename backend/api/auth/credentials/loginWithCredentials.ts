@@ -8,7 +8,6 @@ const prisma = new PrismaClient()
 
 export default async function LoginWithCredentials(req: Request, res: Response){
     const { email, password, image, username } = req.body;
-    console.log(req.body)
     let registered_user = await prisma.user.findFirst({ where: { email: email, authVariant: 'salt' } });
 
     if (!registered_user){
