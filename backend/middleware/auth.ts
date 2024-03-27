@@ -1,3 +1,5 @@
+import { use } from "passport";
+
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 var GitHubStrategy = require('passport-github').Strategy;
@@ -22,7 +24,6 @@ async function(request: Express.Request, accessToken: string, refreshToken: stri
           name: username,
           email: email ? email : null,
           provider: 'google',
-          providerAccountId: id,
           authVariant: 'jwt',
           image: profile.photos ? profile.photos[0].value : null,
         }
@@ -55,7 +56,6 @@ passport.use(new GitHubStrategy({
           name: username,
           email: email ? email : null,
           provider: 'github',
-          providerAccountId: id,
           authVariant: 'jwt',
           image: profile.photos ? profile.photos[0].value : null,
         }

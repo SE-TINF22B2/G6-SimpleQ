@@ -15,14 +15,15 @@ datasource db {
 
 //Auth Models
 model User {
-  id                 String  @id @default(cuid())
-  name               String?
-  email              String?  @unique
-  emailVerified      DateTime?
-  image              String?
-  provider           String
-  authVariant        String
-  providerAccountId  String
+  id             String  @id @default(cuid())
+  name           String?
+  email          String?  @unique
+  hashedPassword String?
+  emailVerified  DateTime?
+  image          String?
+  provider       String
+  authVariant    String
+  password       String? @db.Text
 }
 
 model Session {

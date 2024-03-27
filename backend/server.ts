@@ -3,6 +3,7 @@ import session, { SessionOptions } from 'express-session';
 import passport from 'passport';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import { PrismaClient } from '@prisma/client';
+import bodyParser from 'body-parser';
 
 require('dotenv').config()
 
@@ -10,6 +11,7 @@ require('dotenv').config()
 require('./middleware/auth.ts');
 import isLoggedIn from './middleware/isLoggedin';
 import configSession from './middleware/configSession';
+import LoginWithCredentials from './api/auth/credentials/loginWithCredentials';
 
 //routes
 import HelloWorld from './api/test/route';
@@ -18,6 +20,8 @@ const app = express();
 const port = 7070;
 configSession(app)
   
+
+app.use(bodyParser.json());
 const sessionOptions: SessionOptions = {
     secret: 'cats', 
     resave: false, 
@@ -39,6 +43,8 @@ app.get('/api/auth/google', passport.authenticate( 'google', {
 app.get('/api/auth/github', passport.authenticate( 'github'), (req, res)=>{
     res.send("you are logged in")
 });
+
+app.post('/api/auth/credentials', LoginWithCredentials);
 
 app.get('/api/test', isLoggedIn, HelloWorld);
 
