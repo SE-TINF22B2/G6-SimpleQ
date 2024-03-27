@@ -9,13 +9,14 @@ require('dotenv').config()
 //middlewares
 require('./middleware/auth.ts');
 import isLoggedIn from './middleware/isLoggedin';
-import GooglePassport from './middleware/passport';
+import configSession from './middleware/configSession';
 
 //routes
 import HelloWorld from './api/test/route';
 
 const app = express();
 const port = 7070;
+configSession(app)
   
 const sessionOptions: SessionOptions = {
     secret: 'cats', 
