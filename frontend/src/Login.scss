@@ -6,14 +6,16 @@
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
+	max-height: 100vh;
 
 	> :first-child {
 		flex: 1 1 var(--login-form-width);
 		min-width: var(--login-form-width);
 
 		img {
-			width: 100%;
-			height: 100%;
+			width: 90%;
+			height: 90%;
+			max-height: 90vh;
 			object-fit: contain;
 		}
 	}
