@@ -66,7 +66,7 @@ export default class Editor extends React.Component<any, State> {
                         Tags
                     </h2>
                     <p>Add up to 5 tags to describe what your question is about.</p>
-                    <hr style={ { marginBottom: "var(--spacing)" } }/>
+                    <hr/>
 
                     <div style={ { display: "flex", gap: "var(--spacing)" } }>
                         <LiveInput placeholder={ "Add a tag" }
@@ -108,7 +108,7 @@ export default class Editor extends React.Component<any, State> {
                         Description
                     </h2>
                     <p>Describe your question in more detail.</p>
-                    <hr style={ { marginBottom: "var(--spacing)" } }/>
+                    <hr/>
 
                     <div className={ "rich-text-buttons" }>
                         <button onClick={ () => document.execCommand("bold", false) }>
@@ -176,7 +176,7 @@ export default class Editor extends React.Component<any, State> {
                         Check Your Question
                     </h2>
                     <p>Verify that you have created your question correctly.</p>
-                    <hr style={ { marginBottom: "var(--spacing)" } }/>
+                    <hr/>
 
                     <table>
                         <tbody>
@@ -207,7 +207,7 @@ export default class Editor extends React.Component<any, State> {
                 <div style={ { flex: 1 } }/>
                 <button className={ "btn btn-primary" }>
                     <i className={ "fas fa-paper-plane" }/>
-                    Post Your Question
+                    <span>Post Your Question</span>
                 </button>
             </div>
         </>;
