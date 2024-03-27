@@ -11,6 +11,7 @@ import Trending from "./pages/Trending";
 import Question from "./pages/Question";
 import Profile from "./pages/Profile";
 import Editor from "./pages/Editor";
+import Login from "./Login";
 
 // {t('Welcome to React')}
 i18n
@@ -125,6 +126,7 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
                               highlightColor={ this.state.theme === "light" ? "#f5f5f5" : "#101010" }>
             <Routes>
                 <Route index element={ <Home navigate={ this.props.navigate }/> }/>
+                <Route path={ "login" } element={ <Login/> }/>
                 <Route path={ "dashboard" }
                        element={ <Dashboard navigate={ this.props.navigate }
                                             updateTheme={ this.updateTheme.bind(this) }/> }>
