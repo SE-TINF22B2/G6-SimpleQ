@@ -41,7 +41,6 @@ export default async function LoginWithCredentials(req: Request, res: Response){
         else{
             res.send({status: 'account is broken'})
         }
-        
         req.logIn(registered_user, function(err) {
             if (err) {
                 return res.status(500).send("There was an error logging the user in"); 
