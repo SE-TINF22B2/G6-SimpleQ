@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import * as jwt from 'jsonwebtoken'
-import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient()
@@ -24,14 +22,11 @@ export default async function LoginWithCredentials(req: Request, res: Response){
             }
         });
 
-        const payload = { email: user.email, username: user.name };
-        const secretKey = crypto.randomBytes(32).toString('hex');
-        const token = jwt.sign(payload, secretKey, { expiresIn: '24h' });
         req.logIn(user, function(err) {
             if (err) {
                 return res.status(500).send("There was an error logging the user in"); 
             }
-            return res.send({ status: 'Authenticated', token: token });
+            return res.send({ status: 'Authenticated'});
         });
     }
     else {
@@ -47,15 +42,11 @@ export default async function LoginWithCredentials(req: Request, res: Response){
             res.send({status: 'account is broken'})
         }
         
-        const payload = { email: registered_user.email, username: registered_user.name };
-        const secretKey = crypto.randomBytes(32).toString('hex');
-        const token = jwt.sign(payload, secretKey, { expiresIn: '24h' });
-
         req.logIn(registered_user, function(err) {
             if (err) {
                 return res.status(500).send("There was an error logging the user in"); 
             }
-            return res.send({ status: 'Authenticated', token: token });
+            return res.send({ status: 'Authenticated'});
         });
     }
 }
