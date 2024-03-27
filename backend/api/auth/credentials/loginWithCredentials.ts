@@ -27,8 +27,12 @@ export default async function LoginWithCredentials(req: Request, res: Response){
         const payload = { email: user.email, username: user.name };
         const secretKey = crypto.randomBytes(32).toString('hex');
         const token = jwt.sign(payload, secretKey, { expiresIn: '24h' });
-
-        res.send({ status: 'Authenticated', token: token });
+        req.logIn(user, function(err) {
+            if (err) {
+                return res.status(500).send("There was an error logging the user in"); 
+            }
+            return res.send({ status: 'Authenticated', token: token });
+        });
     }
     else {
         const enteredPassword = password;
@@ -47,6 +51,11 @@ export default async function LoginWithCredentials(req: Request, res: Response){
         const secretKey = crypto.randomBytes(32).toString('hex');
         const token = jwt.sign(payload, secretKey, { expiresIn: '24h' });
 
-        res.send({ status: 'Authenticated', token: token });
+        req.logIn(registered_user, function(err) {
+            if (err) {
+                return res.status(500).send("There was an error logging the user in"); 
+            }
+            return res.send({ status: 'Authenticated', token: token });
+        });
     }
 }
