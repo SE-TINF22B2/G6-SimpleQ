@@ -1,8 +1,5 @@
 import express, { NextFunction, Request, Response } from 'express';
-import session, { SessionOptions } from 'express-session';
 import passport from 'passport';
-import { PrismaSessionStore } from '@quixo3/prisma-session-store';
-import { PrismaClient } from '@prisma/client';
 import bodyParser from 'body-parser';
 require('dotenv').config()
 
