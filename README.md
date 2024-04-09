@@ -1,3 +1,7 @@
+<div style="background-color:green; border: solid black 1px align:center">
+  <img src="https://github.com/SE-TINF22B2/G6-SimpleQ/assets/95375836/0987421f-3f65-4b8e-bf48-c3aede201a47" alt="SimpleQ Logo" style="display: block; margin-left: auto; margin-right: auto;"> 
+</div>
+
 # SimpleQ: Eine schnelle, KI-gestützte Frageplattform
 
 SimpleQ ist eine revolutionäre Frageplattform, die die Kraft der KI nutzt, um schnellere Antworten als traditionelle Plattformen zu liefern. Es geht aber nicht nur um KI. Sowohl Nutzer als auch Experten können Fragen beantworten, KI-Antworten bewerten und sich an bedeutungsvollen Diskussionen beteiligen.
