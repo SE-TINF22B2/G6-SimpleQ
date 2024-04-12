@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
 import bodyParser from 'body-parser';
+import swaggerUi from 'swagger-ui-express';
 require('dotenv').config()
 
 //import middlewares
@@ -16,8 +17,25 @@ const app = express();
 const port = 7070;
 configSession(app)
 app.use(bodyParser.json());
-  
 
+
+//swager api doku
+import swaggerSpec from './swagger';
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+//endpoints
+
+
+/**
+ * @swagger
+ *
+ * /api/auth/google:
+ *   get:
+ *     summary: Authentication with Google
+ *     responses:
+ *       200:
+ *         description: Successful authentication
+ */
 app.get('/api/auth/google', passport.authenticate( 'google', {
     scope: ['openid', 'email', 'profile']
 }));
