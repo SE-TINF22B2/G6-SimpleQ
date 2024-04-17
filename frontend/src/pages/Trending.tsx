@@ -6,6 +6,7 @@ import thinking from "../illustrations/thinking.svg";
 import LiveInput from "../components/LiveInput";
 import QuestionPreview from "../structs/QuestionPreview";
 import QuestionPreviewSkeleton from "../structs/QuestionPreviewSkeleton";
+import Section from "../components/Section";
 
 interface State {
     questions?: QuestionElem[];
@@ -108,7 +109,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
     
     render() {
         return <>
-            <div className={ "container trending-header" }>
+            <Section className={ "trending-header" }>
                 <div style={ { display: "flex", gap: "var(--spacing)" } }>
                     <div style={ { flex: 1 } }>
                         <h1>
@@ -179,7 +180,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                     <span className={ "badge" } tabIndex={ 0 }>iPhone</span>
                     <span className={ "badge" } tabIndex={ 0 }>Tag 1</span>
                 </p>
-            </div>
+            </Section>
             
             { this.state.questions
                 ? this.state.questions.map((question, index) =>
