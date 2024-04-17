@@ -1,10 +1,11 @@
 import React from "react";
 import "./Trending.scss";
 import Dropdown from "../components/Dropdown";
-import Skeleton from "react-loading-skeleton";
 import { NavigateFunction } from "react-router-dom";
 import thinking from "../illustrations/thinking.svg";
 import LiveInput from "../components/LiveInput";
+import QuestionPreview from "../structs/QuestionPreview";
+import QuestionPreviewSkeleton from "../structs/QuestionPreviewSkeleton";
 
 interface State {
     questions?: QuestionElem[];
@@ -12,7 +13,7 @@ interface State {
     sortDirection: "asc" | "desc";
 }
 
-interface QuestionElem {
+export interface QuestionElem {
     id: number;
     title: string;
     originalLanguage: string;
@@ -40,7 +41,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
             sortDirection: "desc"
         };
     }
-
+    
     componentDidMount() {
         setTimeout(() => this.setState({
             questions: [
@@ -104,7 +105,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
             ]
         }), 1000);
     }
-
+    
     render() {
         return <>
             <div className={ "container trending-header" }>
@@ -115,7 +116,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                             Trending
                         </h1>
                         <p>See what's trending on our platform.</p>
-
+                        
                         <div style={ {
                             display: "flex",
                             gap: "var(--spacing)",
@@ -163,15 +164,15 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                                         className={ "fas fa-arrow-trend-" + (this.state.sortDirection === "asc" ? "up" : "down") }/>
                                 }
                             ] } direction={ "right" }/>
-
+                            
                             <LiveInput placeholder={ "Filter tags" }/>
                         </div>
                     </div>
-
+                    
                     <img src={ thinking } alt={ "Trending" }
                          style={ { height: "120px", alignSelf: "center", userSelect: "none", pointerEvents: "none" } }/>
                 </div>
-
+                
                 <hr/>
                 <p className={ "tags" }>
                     <span className={ "badge" } tabIndex={ 0 }>Smartphone</span>
@@ -179,129 +180,16 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                     <span className={ "badge" } tabIndex={ 0 }>Tag 1</span>
                 </p>
             </div>
-
-            { this.state.questions ? this.state.questions.map((question, index) =>
-                this.renderQuestion(question, index)) : <>
-                { this.renderQuestionSkeleton() }
-                { this.renderQuestionSkeleton() }
-                { this.renderQuestionSkeleton() }
-            </> }
+            
+            { this.state.questions
+                ? this.state.questions.map((question, index) =>
+                    <QuestionPreview question={ question } index={ index }/>)
+                : <>
+                    <QuestionPreviewSkeleton/>
+                    <QuestionPreviewSkeleton/>
+                    <QuestionPreviewSkeleton/>
+                </>
+            }
         </>;
-    }
-
-    private renderQuestion(question: QuestionElem, index: number) {
-        return <div key={ index }
-                    className={ "container questions-question focus-indicator glass-hover" }
-                    tabIndex={ 0 }
-                    style={ { order: index } }
-                    onClick={ () => {
-                        this.props.navigate("/dashboard/question/" + question.id);
-                    } }
-                    onKeyDown={ (e: any) => {
-                        if (e.key === "Enter") this.props.navigate("/dashboard/question/" + question.id);
-                    } }>
-            <div className={ "question" }>
-                <p className={ "tags" }>
-                    { question.tags.map((tag, index) =>
-                        <span key={ index } className={ "badge" }>{ tag }</span>) }
-                </p>
-
-                <h2 className={ "question-title" }>{ question.title }</h2>
-
-                <span className={ "caption" }>
-                    { question.originalLanguage } (Original) · Created: { question.creationDate } · Last Updated: { question.updateDate }
-                </span>
-            </div>
-
-            <div className={ "question-details-wrapper" }>
-                <div className={ "question-stats" }>
-                    <div
-                        className={ "question-stat" + (question.stats.rating === "like" ? " rating" : "") }>
-                        <i className={ "fas fa-thumbs-up primary-icon" }/>
-                        <span
-                            className={ "question-figure" }>{ question.stats.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-                        <span className={ "question-unit" }>likes</span>
-                    </div>
-
-                    <div
-                        className={ "question-stat" + (question.stats.rating === "dislike" ? " rating" : "") }>
-                        <i className={ "fas fa-thumbs-down primary-icon" }/>
-                        <span
-                            className={ "question-figure" }>{ question.stats.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-                        <span className={ "question-unit" }>dislikes</span>
-                    </div>
-                </div>
-
-                <div className={ "question-stats" }>
-                    <div className={ "question-stat" }>
-                        <i className={ "fas fa-eye primary-icon" }/>
-                        <span
-                            className={ "question-figure" }>{ question.stats.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-                        <span className={ "question-unit" }>views</span>
-                    </div>
-
-                    <div className={ "question-stat" }>
-                        <i className={ "fas fa-comment-dots primary-icon" }/>
-                        <span
-                            className={ "question-figure" }>{ question.stats.answers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-                        <span className={ "question-unit" }>answers</span>
-                    </div>
-                </div>
-
-                <div className={ "author" }>
-                    <img className={ "avatar" } src={ question.author.avatar }
-                         alt={ "Avatar" }/>
-                    <p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
-                        <span className={ "caption" }>Asked by</span>
-                        <span>{ question.author.name }</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-    }
-
-    private renderQuestionSkeleton() {
-        return <div className={ "container questions-question" } style={ { cursor: "auto" } }>
-            <div className={ "question" }>
-                <Skeleton containerClassName={ "tags" }/>
-
-                <h2>
-                    <Skeleton/>
-                </h2>
-
-                <Skeleton containerClassName={ "caption" } width={ 300 }/>
-            </div>
-
-            <div className={ "question-details-wrapper" }>
-                <div className={ "question-stats" }>
-                    <div className={ "question-stat" }>
-                        <Skeleton width={ 80 } height={ 24 }/>
-                    </div>
-
-                    <div className={ "question-stat" }>
-                        <Skeleton width={ 80 } height={ 24 }/>
-                    </div>
-                </div>
-
-                <div className={ "question-stats" }>
-                    <div className={ "question-stat" }>
-                        <Skeleton width={ 80 } height={ 24 }/>
-                    </div>
-
-                    <div className={ "question-stat" }>
-                        <Skeleton width={ 80 } height={ 24 }/>
-                    </div>
-                </div>
-
-                <div className={ "author" }>
-                    <Skeleton circle width={ 40 } height={ 40 }/>
-
-                    <p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
-                        <Skeleton width={ 80 } height={ 12 }/>
-                        <Skeleton width={ 80 } height={ 20 }/>
-                    </p>
-                </div>
-            </div>
-        </div>
     }
 }
