@@ -14,11 +14,11 @@ export class Dashboard extends React.Component<Props, {}> {
     componentDidMount() {
         document.addEventListener("keydown", this.onKeyDown());
     }
-
+    
     componentWillUnmount() {
         document.removeEventListener("keydown", this.onKeyDown());
     }
-
+    
     render() {
         return <div className={ "dashboard" }>
             <nav>
@@ -49,26 +49,26 @@ export class Dashboard extends React.Component<Props, {}> {
                        } }
                     />
                 </div>
-
+                
                 <NavLink to={ "trending" }><i className={ "fas fa-chart-line" }/>Trending Questions</NavLink>
                 <NavLink to={ "question/new" }><i className={ "far fa-edit" }/>Ask Something</NavLink>
-                <NavLink to={ "a" }><i className={ "fas fa-fire" }/>My Activity</NavLink>
+                <NavLink to={ "activity" }><i className={ "fas fa-fire" }/>My Activity</NavLink>
                 <NavLink to={ "b" }><i className={ "fas fa-star" }/>My Favorites</NavLink>
                 <NavLink to={ "c" }><i className={ "fas fa-gift" }/>Daily Quests</NavLink>
                 <NavLink to={ "d" }><i className={ "fas fa-bell" }/>Inbox<span className={ "badge" }>3</span></NavLink>
-
+                
                 { window.location.pathname.startsWith("/question") && <>
                     <div style={ { paddingInline: "var(--spacing)" } }>
                         <hr/>
                     </div>
-
+                    
                     <NavLink to="question/1"><i className={ "far fa-question" }/><p
                         style={ { display: "flex", flexDirection: "column" } }>
                         <span className={ "caption" }>Browsing Question</span>
                         <span>How to execute..</span>
                     </p></NavLink>
                 </> }
-
+                
                 <div style={ { flex: 1 } }/>
                 <div style={ { paddingInline: "var(--spacing)" } }>
                     <hr/>
@@ -89,7 +89,7 @@ export class Dashboard extends React.Component<Props, {}> {
                             <span>1.1k</span>
                         </div>
                     </div>
-
+                    
                     <hr/>
                     <p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
                         Recent Activity
@@ -99,7 +99,7 @@ export class Dashboard extends React.Component<Props, {}> {
                     }/>
                 </div>
             </nav>
-
+            
             <main>
                 <div className={ "container transparent top-bar" }>
                     <i className={ "fas fa-bars glass toggle-nav" }
@@ -121,7 +121,7 @@ export class Dashboard extends React.Component<Props, {}> {
                            }
                        } }
                     />
-
+                    
                     <p className={ "glass" }
                        onKeyDown={ (e) => {
                            if (e.key === "Enter") {
@@ -137,7 +137,7 @@ export class Dashboard extends React.Component<Props, {}> {
                             alignItems: "center"
                         } }>Search.. { this.getSearchShortcut() }</span>
                     </p>
-
+                    
                     <Dropdown button={ <div style={ {
                         aspectRatio: "1",
                         display: "grid",
@@ -216,12 +216,12 @@ export class Dashboard extends React.Component<Props, {}> {
                                   }
                               ] }/>
                 </div>
-
+                
                 <hr style={ { marginBlock: "0" } }/>
-
+                
                 <Outlet/>
             </main>
-
+            
             <div className={ "search glass" }
                  onClick={ () => this.toggleSearch() }>
                 <div className={ "search-container" }>
@@ -229,12 +229,12 @@ export class Dashboard extends React.Component<Props, {}> {
                         <i className={ "fas fa-magnifying-glass" }/>
                         <input type={ "text" } placeholder={ "Search.." }/>
                     </div>
-
+                    
                     <p className={ "search-info" }>
                         Navigate using <span>↑</span> and <span>↓</span> or <span>{ "\u21B9" }</span>. Select
                         using <span>↵</span>.
                     </p>
-
+                    
                     <p className={ "search-result" } tabIndex={ 0 }>
                         <i className={ "far fa-question badge" }/>
                         <span>How to use React?</span>
@@ -248,25 +248,25 @@ export class Dashboard extends React.Component<Props, {}> {
             </div>
         </div>
     }
-
+    
     private capitalizeFirstLetter(string: string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
-
+    
     private toggleSearch() {
         const search = document.querySelector(".search");
         if (search) {
             let isActive = search.classList.contains("active");
             search.classList.toggle("active");
-
+            
             let keyframes = [
                 { transform: "scale(125%)" },
                 { transform: "scale(100%)" }
             ]
-
+            
             let duration = 200;
             let easing = "ease-in-out";
-
+            
             if (isActive) {
                 search.querySelector("div.search-container")!.animate(keyframes.reverse(), {
                     duration,
@@ -276,29 +276,29 @@ export class Dashboard extends React.Component<Props, {}> {
                     // @ts-ignore
                     search.style.display = "none"
                 };
-
+                
                 const searchBar = document.getElementById("search-bar");
                 if (searchBar) searchBar.focus();
             } else {
                 // @ts-ignore
                 search.style.display = "flex";
-
+                
                 search.querySelector("div.search-container")!.animate(keyframes, {
                     duration,
                     easing,
                     fill: "both"
                 });
-
+                
                 const input = search.querySelector("input");
                 if (input) input.focus();
             }
         }
     }
-
+    
     private getSearchShortcut() {
         let isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
         let isLinux = navigator.platform.toUpperCase().indexOf('LINUX') >= 0;
-
+        
         return <span className={ "caption" } style={ {
             marginLeft: "var(--spacing)",
             background: "var(--font-color)",
@@ -309,14 +309,14 @@ export class Dashboard extends React.Component<Props, {}> {
             { isMac ? "⌘K" : isLinux ? "Alt + K" : "Ctrl + K" }
         </span>;
     }
-
+    
     private onKeyDown() {
         return (e: any) => {
             if ((e.ctrlKey || e.metaKey) && e.key === "k") {
                 this.toggleSearch();
                 e.preventDefault();
             }
-
+            
             if (e.key === "Escape") {
                 const search = document.querySelector(".search");
                 if (search && search.classList.contains("active")) {
