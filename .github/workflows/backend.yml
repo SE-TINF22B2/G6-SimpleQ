@@ -18,10 +18,17 @@ jobs:
         node-version: '20'
 
     - name: Install dependencies
-      run: cd backend && yarn install
+      run: |
+        cd backend
+        yarn install
+        ls -la
 
     - name: Test application
-      run: yarn test
+      run: | 
+        cd backend
+        yarn test
     
     - name: Lint application
-      run: yarn lint
+      run: | 
+        cd backend
+        yarn lint
