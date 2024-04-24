@@ -18,15 +18,31 @@ export default function QuestionPreview(props: Props) {
                     navigate("/dashboard/question/" + props.question.id);
                 } }
                 onKeyDown={ (e: any) => {
-                    if (e.key === "Enter") navigate("/dashboard/question/" + props.question.id);
+                    if (e.key === "Enter")
+                        navigate("/dashboard/question/" + props.question.id);
                 } }>
         <div className={ "question" }>
             <p className={ "tags" }>
+                { props.question.isDiscussion
+                    ? <span className={ "badge badge-outline" }><i className={ "far fa-comment" }
+                                                                   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>Discussion</span>
+                    : <span className={ "badge badge-outline" }><i className={ "far fa-question" }
+                                                                   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>Question</span>
+                }
+                
+                <span style={ {
+                    background: "var(--border-color)",
+                    width: "var(--outline-width)",
+                    borderRadius: "var(--border-radius)"
+                } }/>
+                
                 { props.question.tags.map((tag, index) =>
                     <span key={ index } className={ "badge" }>{ tag }</span>) }
             </p>
             
-            <h2 className={ "question-title" }>{ props.question.title }</h2>
+            <h2 className={ "question-title" }>
+                { props.question.title }
+            </h2>
             
             <span className={ "caption" }>
                     { props.question.originalLanguage } (Original) · Created: { props.question.creationDate } · Last Updated: { props.question.updateDate }
