@@ -3,7 +3,7 @@ name: Backend Workflow
 on:
   pull_request_target:
     branches:
-      - dev-simpleQ
+      - dev
 jobs:
   verify:
     runs-on: ubuntu-latest
