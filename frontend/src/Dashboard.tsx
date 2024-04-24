@@ -57,7 +57,7 @@ export class Dashboard extends React.Component<Props, {}> {
                 <NavLink to={ "c" }><i className={ "fas fa-gift" }/>Daily Quests</NavLink>
                 <NavLink to={ "d" }><i className={ "fas fa-bell" }/>Inbox<span className={ "badge" }>3</span></NavLink>
                 
-                { window.location.pathname.startsWith("/question") && <>
+                { window.location.pathname.includes("/question") && <>
                     <div style={ { paddingInline: "var(--spacing)" } }>
                         <hr/>
                     </div>
