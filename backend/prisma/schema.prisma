@@ -12,3 +12,13 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  userID String @id @default(uuid())
+  username String @unique
+  isPro Boolean
+  isAdmin Boolean
+  timeOfRegistration DateTime @default(now())
+  activityPoints Int
+  email String?
+}
