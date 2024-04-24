@@ -1,2 +1,4 @@
 
 .idea/watcherTasks.xml
+*.css
+*.css.map
