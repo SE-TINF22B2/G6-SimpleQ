@@ -16,6 +16,7 @@ interface State {
 
 export interface QuestionElem {
     id: number;
+    isDiscussion: boolean;
     title: string;
     originalLanguage: string;
     creationDate: string;
@@ -48,6 +49,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
             questions: [
                 {
                     id: 1,
+                    isDiscussion: false,
                     title: "How to rescue water damaged iPhone 12?",
                     originalLanguage: "English",
                     creationDate: "20.10.2023",
@@ -67,6 +69,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                 },
                 {
                     id: 2,
+                    isDiscussion: true,
                     title: "What is the best way to learn React?",
                     originalLanguage: "ENGLISH",
                     creationDate: "20.10.2023",
@@ -86,6 +89,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
                 },
                 {
                     id: 3,
+                    isDiscussion: false,
                     title: "How can I improve my CSS skills?",
                     originalLanguage: "ENGLISH",
                     creationDate: "20.10.2023",
