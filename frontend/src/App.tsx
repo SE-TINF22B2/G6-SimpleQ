@@ -6,7 +6,7 @@ import { initReactI18next, useTranslation } from "react-i18next";
 import { useMediaQuery } from "@react-hook/media-query";
 import { SkeletonTheme } from "react-loading-skeleton";
 import Home from "./Home";
-import { Dashboard } from "./Dashboard";
+import Dashboard from "./Dashboard";
 import Trending from "./pages/Trending";
 import Question from "./pages/Question";
 import Profile from "./pages/Profile";
@@ -120,11 +120,14 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
         return <SkeletonTheme baseColor={ this.state.theme === "light" ? "#dadada" : "#333" }
                               highlightColor={ this.state.theme === "light" ? "#f5f5f5" : "#101010" }>
             <Routes>
+                { /* Todo: All Suspense Fallback */ }
+                
                 <Route index element={ <Home navigate={ this.props.navigate }/> }/>
                 <Route path={ "login" } element={ <Login/> }/>
                 <Route path={ "dashboard" }
-                       element={ <Dashboard navigate={ this.props.navigate }
-                                            updateTheme={ this.updateTheme.bind(this) }/> }>
+                       element={ <Suspense fallback={ <p>Loading Dashboard..</p> }>
+                           <Dashboard updateTheme={ this.updateTheme.bind(this) }/>
+                       </Suspense> }>
                     <Route index element={ <Suspense><Navigate to={ "trending" }/></Suspense> }/>
                     <Route path={ "trending" }
                            element={ <Suspense><Trending navigate={ this.props.navigate }/></Suspense> }/>
