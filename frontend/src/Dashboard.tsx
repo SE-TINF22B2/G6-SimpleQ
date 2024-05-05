@@ -7,7 +7,7 @@ import i18n from "i18next";
 
 import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
 
-const basePath = "http://localhost:4000" // process.env.REACT_APP_ORY_URL
+const basePath = "http://localhost:4000"
 const ory = new FrontendApi(
     new Configuration({
         basePath,
