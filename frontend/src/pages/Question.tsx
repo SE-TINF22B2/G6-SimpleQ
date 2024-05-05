@@ -401,7 +401,7 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                            filter: "drop-shadow(0 0 5px rgba(0, 0, 0, 0.2))"
                        } }/>
                     
-                    <p style={ { paddingTop: "calc(var(--spacing) / 2)" } }>
+                    <p style={ { paddingTop: "calc(var(--spacing) * 1.5)" } }>
                         <span>Simp</span>
                     </p>
                 </> : <div className={ "question-answer-author-user" } tabIndex={ 0 }>
