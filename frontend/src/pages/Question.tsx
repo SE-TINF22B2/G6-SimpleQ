@@ -58,7 +58,12 @@ export default function Question() {
 class QuestionComp extends React.Component<{ id: number }, State> {
     constructor(props: any) {
         super(props);
-        this.state = { question: undefined, sortBy: "ldr", sortDirection: "desc", enableAI: true };
+        this.state = {
+            question: undefined,
+            sortBy: "ldr",
+            sortDirection: "desc",
+            enableAI: true
+        };
     }
     
     componentDidMount() {
