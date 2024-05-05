@@ -214,7 +214,7 @@
 	.question-main {
 		flex-direction: column !important;
 
-		> :last-child {
+		.glass:last-child {
 			display: flex;
 			flex-direction: row;
 			justify-content: space-around;
