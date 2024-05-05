@@ -1,6 +1,6 @@
 .dropdown {
-	position: relative;
 	display: inline-block;
+	position: relative;
 	transition: var(--transition);
 	z-index: 200;
 
@@ -49,26 +49,26 @@
 	}
 
 	.dropdown-menu {
-		position: absolute;
 		background: var(--background-color-primary);
-		list-style-type: none;
-		white-space: nowrap;
 		border-radius: var(--border-radius);
 		display: flex;
 		flex-direction: column;
-		padding: 0;
 		gap: 1px;
-
+		list-style-type: none;
+		padding: 0;
+		position: absolute;
 		top: calc(100% + var(--outline-width));
 
+		white-space: nowrap;
+
 		> .dropdown-menu-item {
-			display: flex;
 			align-items: center;
 			background: transparent;
 			border: none;
+			cursor: pointer;
+			display: flex;
 			padding: var(--spacing);
 			text-align: left;
-			cursor: pointer;
 
 			.fa-angle-down {
 				transition: var(--transition);
@@ -79,15 +79,15 @@
 			}
 
 			> i:first-child {
-				width: 20px;
-				text-align: center;
 				margin-inline-end: var(--spacing);
+				text-align: center;
+				width: 20px;
 			}
 
 			> i:last-child {
 				margin-inline-start: var(--spacing);
 			}
-
+            
 			> span:first-of-type {
 				flex: 1;
 				padding-inline-end: calc(var(--spacing) * 2);
