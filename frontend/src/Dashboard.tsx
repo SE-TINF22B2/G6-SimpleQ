@@ -7,7 +7,7 @@ import i18n from "i18next";
 
 import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
 
-const basePath = process.env.REACT_APP_ORY_URL
+const basePath = "http://localhost:4000" // process.env.REACT_APP_ORY_URL
 const ory = new FrontendApi(
     new Configuration({
         basePath,
@@ -32,15 +32,17 @@ export default function Dashboard(props: Props) {
     useEffect(() => {
         ory.toSession()
            .then(({ data }) => {
+               console.log("logged in", data);
+               
                setSession(data);
                ory.createBrowserLogoutFlow().then(({ data }) => {
                    setLogoutUrl(data.logout_url);
-               })
+               });
            })
            .catch((err) => {
                console.error(err);
                // window.location.replace(`${ basePath }/ui/login`);
-           })
+           });
         
         document.addEventListener("keydown", onKeyDown);
         return () => document.removeEventListener("keydown", onKeyDown);
@@ -244,7 +246,12 @@ export default function Dashboard(props: Props) {
                 <hr/>
             </div>
             
-            <NavLink to={ "c" }><i className={ "fas fa-gift" }/>{ getUserName(session?.identity) }</NavLink>
+            <NavLink to={
+                logoutUrl
+                    ? (logoutUrl + (logoutUrl.includes("?") ? "&" : "?") + "return_to=" + encodeURIComponent(window.location.href))
+                    : "/"
+            }><i className={ "fas fa-gift" }/>{ getUserName(session?.identity) }
+            </NavLink>
             
             { window.location.pathname.includes("/question") && <>
                 <div style={ { paddingInline: "var(--spacing)" } }>
@@ -328,7 +335,7 @@ export default function Dashboard(props: Props) {
                 { session !== undefined
                     ? loggedInDropdown()
                     : <button className={ "btn btn-primary" }
-                              onClick={ () => window.location.replace(`${ basePath }/ui/login`) }>
+                              onClick={ () => window.location.replace(`${ basePath }/ui/login?return_to=` + encodeURIComponent(window.location.href)) }>
                         <i className={ "fas fa-sign-in-alt" }/>
                         <span>Login</span>
                     </button> }
