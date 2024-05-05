@@ -80,6 +80,12 @@ code {
 	font-size: 0.8em;
 	padding: calc(var(--spacing) / 4) calc(var(--spacing) / 1.5);
 	white-space: nowrap;
+
+	&.badge-outline {
+		background: transparent;
+		color: var(--primary-color);
+		outline: 1px solid var(--primary-color);
+	}
 }
 
 .avatar {
