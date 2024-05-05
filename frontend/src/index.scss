@@ -130,25 +130,25 @@ input[type="checkbox"] {
 		&.btn-primary {
 			background: var(--primary-color);
 			color: var(--primary-color-contrast);
-			outline-offset: var(--outline-width);
 			font-weight: 600;
+			outline-offset: var(--outline-width);
 
-			position: relative;
 			overflow: hidden;
+			position: relative;
 
 			* {
 				z-index: 10;
 			}
 
 			&::before {
-				content: "";
-				position: absolute;
-				height: 50%;
-				width: calc(200%);
-				left: -50%;
 				animation: rotate 2s infinite linear;
 				background-color: transparent;
+				content: "";
+				height: 50%;
+				left: -50%;
+				position: absolute;
 				transition: background-color var(--transition);
+				width: calc(200%);
 			}
 
 			@keyframes rotate {
@@ -161,11 +161,11 @@ input[type="checkbox"] {
 			}
 
 			&::after {
-				content: "";
 				background-color: inherit;
-				position: absolute;
-				inset: var(--outline-width);
 				border-radius: inherit;
+				content: "";
+				inset: var(--outline-width);
+				position: absolute;
 			}
 
 			&:focus,
@@ -178,8 +178,8 @@ input[type="checkbox"] {
 
 		&.btn-glass {
 			background: var(--background-color-glass);
-			box-shadow: var(--box-shadow);
 			border: 1px solid var(--border-color);
+			box-shadow: var(--box-shadow);
 
 			&:focus-within {
 				background: var(--background-color-secondary);
@@ -190,29 +190,29 @@ input[type="checkbox"] {
 	&.form-input {
 		background: transparent;
 		border: var(--outline-width) solid var(--border-color);
-		padding: var(--spacing);
-
 		outline-offset: calc(var(--outline-width) * -1);
+
+		padding: var(--spacing);
 	}
 }
 
 .caption {
 	font-size: 0.8em;
-	text-transform: uppercase;
 	opacity: 0.8;
+	text-transform: uppercase;
 }
 
 i.primary-icon {
-	background: var(--primary-color);
-	color: var(--primary-color-contrast);
-	border-radius: var(--border-radius);
-	height: 28px;
 	aspect-ratio: 1/1;
+	background: var(--primary-color);
+	border-radius: var(--border-radius);
+	color: var(--primary-color-contrast);
 	display: grid;
+	height: 28px;
 	place-items: center;
 }
 
 button, input {
-	font-family: inherit;
 	color: var(--font-color);
+	font-family: inherit;
 }
