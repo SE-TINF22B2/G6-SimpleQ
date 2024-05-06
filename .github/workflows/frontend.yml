@@ -29,4 +29,4 @@ jobs:
       - name: Lint application
         run: |
           cd frontend
-          npm lint
+          npm run lint
