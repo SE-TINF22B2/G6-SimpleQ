@@ -5,6 +5,9 @@ import BarChart from "./components/BarChart";
 import Dropdown from "./components/Dropdown";
 import i18n from "i18next";
 
+/* Todo: Make Logo Static */
+import logoTodoMakeStatic from "./images/logo-TODO-MAKE-STATIC.png";
+
 import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
 
 const basePath = "http://localhost:4000"
@@ -210,7 +213,10 @@ export default function Dashboard(props: Props) {
             <div style={ { position: "relative" } }>
                 <button className={ "btn btn-primary" }
                         style={ { outlineColor: "var(--primary-color-contrast)" } }
-                        onClick={ () => navigate("/") }><span>simpleQ</span></button>
+                        onClick={ () => navigate("/") }>
+                    <img src={ logoTodoMakeStatic } height={ "100%" } width={ "100%" }
+                         style={ { objectFit: "contain" } }/>
+                </button>
                 <i className={ "fas fa-x toggle-nav" }
                    style={ {
                        fontSize: "1.5em",
