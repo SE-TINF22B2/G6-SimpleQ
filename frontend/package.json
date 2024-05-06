@@ -29,6 +29,7 @@
     "start-server": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "lint": "eslint .",
     "eject": "react-scripts eject",
     "ory-auth": "npx @ory/cli auth",
     "tunnel": "npx @ory/cli --project objective-ramanujan-9xyl1ro5qe tunnel --dev http://localhost:3000"
