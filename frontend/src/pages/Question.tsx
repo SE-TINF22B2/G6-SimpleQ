@@ -4,6 +4,7 @@ import Dropdown from "../components/Dropdown";
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Navigate, useParams } from "react-router-dom";
+import SplitSection from "../components/SplitSection";
 
 interface QuestionElemFull {
     id: number;
@@ -57,9 +58,14 @@ export default function Question() {
 class QuestionComp extends React.Component<{ id: number }, State> {
     constructor(props: any) {
         super(props);
-        this.state = { question: undefined, sortBy: "ldr", sortDirection: "desc", enableAI: true };
+        this.state = {
+            question: undefined,
+            sortBy: "ldr",
+            sortDirection: "desc",
+            enableAI: true
+        };
     }
-
+    
     componentDidMount() {
         setTimeout(() => {
             this.setState({
@@ -113,7 +119,7 @@ class QuestionComp extends React.Component<{ id: number }, State> {
             });
         }, 1000);
     }
-
+    
     getSortByIcon() {
         switch (this.state.sortBy) {
             case "ldr":
@@ -126,38 +132,38 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                 return "fas fa-clock-rotate-left";
         }
     }
-
+    
     render() {
         return <>
-            <div className={ "container transparent question-main" }>
-                <div className={ "glass" }>
+            <SplitSection className={ "question-main" }>
+                <section className={ "glass" }>
                     { this.state.question ? <p className={ "tags" }>
                         { this.state.question.tags.map((tag, index) =>
                             <span key={ index } className={ "badge" }>{ tag }</span>) }
                     </p> : <Skeleton className={ "tags" }/> }
-
+                    
                     <h2 className={ "question-title" }>{ this.state.question?.title ?? <Skeleton/> }</h2>
-
+                    
                     <p>{ this.state.question?.content ?? <Skeleton count={ 5 }/> }</p>
-
+                    
                     <hr/>
-
+                    
                     { this.state.question ? <span className={ "caption" }>
                         { this.state.question.originalLanguage } (original) · created: { this.state.question.creationDate } · last updated: { this.state.question.updateDate }
                     </span> : <Skeleton/> }
-
+                    
                     { this.state.question && <i className={ "far fa-star add-favorite" } tabIndex={ 0 }/> }
-                </div>
-
-                <div className={ "glass" }>
+                </section>
+                
+                <section className={ "glass" }>
                     <div className={ "question-author" } tabIndex={ 0 }>
                         { this.state.question
                             ? <img className={ "avatar" } src={ this.state.question.author.avatar } alt={ "Avatar" }/>
                             : <Skeleton height={ 40 } width={ 40 }/> }
-
+                        
                         <div className={ "question-author-info" }>
                             <span className={ "caption" }>asked by</span>
-
+                            
                             <p>
                                 { this.state.question ? <>
                                     <span>{ this.state.question.author.name }</span>
@@ -166,9 +172,9 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                             </p>
                         </div>
                     </div>
-
+                    
                     <hr style={ { marginBlock: "calc(var(--spacing) / 2)" } }/>
-
+                    
                     <span className={ "caption" }>Question Stats</span>
                     <div className={ "question-stats" }>
                         { this.state.question ? <>
@@ -178,7 +184,7 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                                     className={ "question-figure" }>{ this.state.question.stats.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
                                 <span className={ "question-unit" }>views</span>
                             </div>
-
+                            
                             <div
                                 className={ "question-stat" + (this.state.question.stats.rating === "like" ? " rating" : "") }>
                                 <i className={ "fas fa-thumbs-up primary-icon" } tabIndex={ 0 }/>
@@ -186,7 +192,7 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                                     className={ "question-figure" }>{ this.state.question.stats.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
                                 <span className={ "question-unit" }>likes</span>
                             </div>
-
+                            
                             <div
                                 className={ "question-stat" + (this.state.question.stats.rating === "dislike" ? " rating" : "") }>
                                 <i className={ "fas fa-thumbs-down primary-icon" } tabIndex={ 0 }/>
@@ -194,7 +200,7 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                                     className={ "question-figure" }>{ this.state.question.stats.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
                                 <span className={ "question-unit" }>dislikes</span>
                             </div>
-
+                            
                             <div className={ "question-stat" }>
                                 <i className={ "fas fa-comment-dots primary-icon" }/>
                                 <span
@@ -208,23 +214,23 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                             <Skeleton containerClassName={ "question-stat" } width={ 80 }/>
                         </> }
                     </div>
-
+                    
                     <hr style={ { marginBottom: "calc(var(--spacing) / 2)" } }/>
-
+                    
                     <button className={ "question-report" }>
                         <i className={ "fas fa-flag" }/>
                         Report this question
                     </button>
-                </div>
-            </div>
-
+                </section>
+            </SplitSection>
+            
             <div className={ "container transparent" } id={ "add-answer" }>
                 <div id={ "add-answer-header" }>
                     <h2>
                         <i className={ "far fa-comments" }/>
                         Answers
                     </h2>
-
+                    
                     <Dropdown button={ <p className={ "btn btn-glass" } tabIndex={ 0 }>
                         <i className={ "fas fa-filter" }/>
                         Adjust answers
@@ -295,29 +301,29 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                             onClick: () => this.setState({ enableAI: !this.state.enableAI })
                         }
                     ] }/>
-
+                    
                     <button className={ "btn btn-glass" }
                             style={ { background: "var(--background-color-glass-simp)" } }>
                         <i className={ "fas fa-brain" }/>
                         <span>Ask Simp</span>
                     </button>
-
+                    
                     <button className={ "btn btn-primary" } onClick={ () => {
                         let addAnswerElem = document.getElementById("add-answer");
                         if (!addAnswerElem) return;
-
+                        
                         let isTransparent = !addAnswerElem.classList.contains("transparent");
                         addAnswerElem.classList.toggle("transparent");
                         addAnswerElem.classList.toggle("focus-indicator");
-
+                        
                         let answerEditorElem = document.getElementById("answer-editor");
                         if (!answerEditorElem) return;
-
+                        
                         if (!isTransparent) {
                             answerEditorElem.style.display = "block";
                             answerEditorElem.focus();
                         }
-
+                        
                         answerEditorElem.animate([
                             { height: (isTransparent ? "100px" : "0"), opacity: (isTransparent ? "1" : "0") },
                             { height: (isTransparent ? "0" : "100px"), opacity: (isTransparent ? "0" : "1") }
@@ -334,9 +340,9 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                         <span>Add Answer</span>
                     </button>
                 </div>
-
+                
                 <hr/>
-
+                
                 <p id={ "answer-editor" }
                    contentEditable={ "plaintext-only" }
                    onChange={ (e) => {
@@ -351,22 +357,22 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                     New Question
                 </p>
             </div>
-
+            
             { this.state.question
                 ? this.state.question.answers
-                    .filter(answer => this.state.enableAI || answer.author !== "simp")
-                    .sort((a, b) => {
-                        let res = this.compareAnswers(b, a);
-                        return this.state.sortDirection === "desc" ? res : -res;
-                    })
-                    .map((answer, index) => this.renderAnswer(answer, index))
+                      .filter(answer => this.state.enableAI || answer.author !== "simp")
+                      .sort((a, b) => {
+                          let res = this.compareAnswers(b, a);
+                          return this.state.sortDirection === "desc" ? res : -res;
+                      })
+                      .map((answer, index) => this.renderAnswer(answer, index))
                 : <>
                     { this.renderAnswerSkeleton() }
                     { this.renderAnswerSkeleton() }
                 </> }
         </>
     }
-
+    
     private compareAnswers(b: Answer, a: Answer) {
         switch (this.state.sortBy) {
             case "ldr":
@@ -379,7 +385,7 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                 return Date.parse(b.answerDate) - Date.parse(a.answerDate);
         }
     }
-
+    
     private renderAnswer(answer: Answer, index: number) {
         return <div key={ index } className={ "container transparent question-answer" }>
             <div className={ "question-answer-author" }
@@ -394,27 +400,27 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                            color: "var(--primary-color)",
                            filter: "drop-shadow(0 0 5px rgba(0, 0, 0, 0.2))"
                        } }/>
-
-                    <p style={ { paddingTop: "calc(var(--spacing) / 2)" } }>
+                    
+                    <p style={ { paddingTop: "calc(var(--spacing) * 1.5)" } }>
                         <span>Simp</span>
                     </p>
                 </> : <div className={ "question-answer-author-user" } tabIndex={ 0 }>
                     <img className={ "avatar" } src={ answer.author.avatar } alt={ "Avatar" }/>
-
+                    
                     <p>
                         <span>{ answer.author.name }</span>
                         <span className={ "badge" }>{ answer.author.plan }</span>
                     </p>
                 </div> }
-
+                
                 <span className={ "caption" }>replied { answer.answerDate }</span>
             </div>
-
+            
             <div className={ "question-answer-text" }>
                 <div className={ "glass" + (answer.author === "simp" ? " glass-simp" : "") }>
                     <p>{ answer.content }</p>
                 </div>
-
+                
                 <div className={ "question-answer-actions" }>
                     <div
                         className={ "question-answer-actions-rate" + (answer.stats.rating === "like" ? " rating" : "") }>
@@ -422,16 +428,16 @@ class QuestionComp extends React.Component<{ id: number }, State> {
                         <span className={ "question-figure" }>{ answer.stats.likes }</span>
                         <span className={ "question-unit" }>likes</span>
                     </div>
-
+                    
                     <div
                         className={ "question-answer-actions-rate" + (answer.stats.rating === "dislike" ? " rating" : "") }>
                         <i className={ "fas fa-thumbs-down primary-icon" } tabIndex={ 0 }/>
                         <span className={ "question-figure" }>{ answer.stats.dislikes }</span>
                         <span className={ "question-unit" }>dislikes</span>
                     </div>
-
+                    
                     <div style={ { flex: 1 } }/>
-
+                    
                     <button className={ "question-report" }>
                         <i className={ "fas fa-flag" }/>
                         Report this answer
@@ -440,32 +446,32 @@ class QuestionComp extends React.Component<{ id: number }, State> {
             </div>
         </div>
     }
-
+    
     private renderAnswerSkeleton() {
         return <div className={ "container transparent question-answer" }>
             <div className={ "question-answer-author" }>
                 <Skeleton height={ 40 } width={ 40 }/>
-
+                
                 <p>
                     <Skeleton height={ 20 } width={ 100 }/>
                 </p>
-
+                
                 <span className={ "caption" }><Skeleton width={ 60 }/></span>
             </div>
-
+            
             <div className={ "question-answer-text" }>
                 <div className={ "glass" }>
                     <p>
                         <Skeleton count={ 3 }/>
                     </p>
                 </div>
-
+                
                 <div className={ "question-answer-actions" }>
                     <Skeleton height={ 20 } width={ 100 }/>
                     <Skeleton height={ 20 } width={ 100 }/>
-
+                    
                     <div style={ { flex: 1 } }/>
-
+                    
                     <Skeleton height={ 20 } width={ 200 }/>
                 </div>
             </div>
