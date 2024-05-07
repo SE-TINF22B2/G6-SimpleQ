@@ -1,26 +1,26 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
-import { AxiosResponse } from "axios";
-import { Observable } from "rxjs";
 import OpenAI from 'openai';
+import { firstValueFrom } from "rxjs";
 
 @Injectable()
 export class ExternalAPIService {
   constructor(private readonly httpService: HttpService) {}
 
-  requestWolfram(prompt: string): Observable<AxiosResponse<String>> {
+  async requestWolfram(prompt: string): Promise<string> {
     if(prompt === '') {
-      return null
+      return null;
     }
 
-    let question = decodeURIComponent(prompt);
-
-    try {
-      let output = this.httpService.get(process.env['WOLFRAM_APP_ID']+question);
-      return output;
+    const { data } = await firstValueFrom(
+      this.httpService.get(process.env.WOLFRAM_APP_ID+encodeURIComponent(prompt)).pipe()
+    );
+    try{
+      let imageBase64 = Buffer.from(data, 'binary').toString('base64');
+      return imageBase64;
     }
     catch(error){
-      console.log("cannot send wolfram alpha request\n"+error)
+      console.log("Unable to convert response to base64\n\n"+error)
       return null;
     }
   }
