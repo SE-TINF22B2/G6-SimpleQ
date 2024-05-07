@@ -1,71 +1,71 @@
 :root {
-	--primary-color: #109E63;
-	--primary-color-contrast: #fff;
+	--spacing: 1em;
+	--transition: 0.2s ease-in-out;
 
-	--background-color-primary: white;
-	--background-color-primary-light: white;
-	--background-color-primary-dark: black;
+	--background-bleed-opacity: 0.4;
+	--background-bleed-opacity-dark: 0.2;
+	--background-bleed-opacity-light: 0.4;
 
-	--background-color-secondary: #f5f5f5;
-	--background-color-secondary-light: #f5f5f5;
-	--background-color-secondary-dark: #0e0e0e;
-
+	--border-color: #e0e0e0;
 	--font-color: black;
-	--font-color-light: black;
+	--primary-color: #109E63;
+
+	--primary-color-contrast: #fff;
+	--border-color-dark: #1f1f1f;
 	--font-color-dark: white;
 
 	--background-color-glass: rgba(255, 255, 255, .6);
-	--background-color-glass-light: rgba(255, 255, 255, .6);
 	--background-color-glass-dark: rgba(0, 0, 0, .6);
+	--background-color-glass-light: rgba(255, 255, 255, .6);
 
 	--background-color-glass-simp: rgba(255, 225, 255, .6);
-	--background-color-glass-simp-light: rgba(255, 225, 255, .6);
 	--background-color-glass-simp-dark: rgba(60, 0, 60, .6);
+	--background-color-glass-simp-light: rgba(255, 225, 255, .6);
 
-	--border-color: #e0e0e0;
 	--border-color-light: #e0e0e0;
-	--border-color-dark: #1f1f1f;
+	--font-color-light: black;
+	--background-color-primary: white;
 
-	--box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-	--box-shadow-light: 0 0 5px rgba(0, 0, 0, 0.1);
-	--box-shadow-dark: 0 0 5px rgba(255, 255, 255, 0.1);
+	--background-color-primary-dark: black;
+	--background-color-primary-light: white;
+	--background-color-secondary: #f5f5f5;
 
-	--box-shadow-elevated: 0 0 10px rgba(0, 0, 0, 0.2);
-	--box-shadow-elevated-light: 0 0 10px rgba(0, 0, 0, 0.2);
-	--box-shadow-elevated-dark: 0 0 10px rgba(255, 255, 255, 0.2);
-
-	--bleed-shadow: drop-shadow(0 0 60px var(--primary-color));
-	--bleed-shadow-light: drop-shadow(0 0 60px var(--primary-color));
-	--bleed-shadow-dark: drop-shadow(0 0 100px var(--primary-color));
-
-	--background-bleed-opacity: 0.4;
-	--background-bleed-opacity-light: 0.4;
-	--background-bleed-opacity-dark: 0.2;
+	--background-color-secondary-dark: #0e0e0e;
+	--background-color-secondary-light: #f5f5f5;
+	--header-height: 60px;
 
 	--border-radius: 10px;
-	--spacing: 1em;
-	--transition: 0.2s ease-in-out;
-	--header-height: 60px;
+	--bleed-shadow: drop-shadow(0 0 60px var(--primary-color));
+	--box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+
+	--bleed-shadow-dark: drop-shadow(0 0 100px var(--primary-color));
+	--box-shadow-dark: 0 0 5px rgba(255, 255, 255, 0.1);
+	--box-shadow-elevated: 0 0 10px rgba(0, 0, 0, 0.2);
+
+	--box-shadow-elevated-dark: 0 0 10px rgba(255, 255, 255, 0.2);
+	--box-shadow-elevated-light: 0 0 10px rgba(0, 0, 0, 0.2);
+	--bleed-shadow-light: drop-shadow(0 0 60px var(--primary-color));
+	--box-shadow-light: 0 0 5px rgba(0, 0, 0, 0.1);
 	--max-width: 1200px;
 	--outline-width: 2px;
 }
 
 * {
-	margin: 0;
-	padding: 0;
 	box-sizing: border-box;
+	margin: 0;
 	outline-color: var(--primary-color);
 	outline-width: 2px;
+	padding: 0;
 }
 
 body {
+	background: var(--background-color-primary);
+	color: var(--font-color);
 	font-family: "Poppins", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
 	'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
 	sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	color: var(--font-color);
-	background: var(--background-color-primary);
 }
 
 code {
@@ -74,21 +74,27 @@ code {
 }
 
 .badge {
-	padding: calc(var(--spacing) / 4) calc(var(--spacing) / 1.5);
 	background: var(--primary-color);
-	color: var(--primary-color-contrast);
 	border-radius: var(--border-radius);
+	color: var(--primary-color-contrast);
 	font-size: 0.8em;
+	padding: calc(var(--spacing) / 4) calc(var(--spacing) / 1.5);
 	white-space: nowrap;
+
+	&.badge-outline {
+		background: transparent;
+		color: var(--primary-color);
+		outline: 1px solid var(--primary-color);
+	}
 }
 
 .avatar {
-	width: 40px !important;
-	height: 40px !important;
 	border-radius: 50%;
 	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+	height: 40px !important;
 	object-fit: cover;
 	pointer-events: none;
+	width: 40px !important;
 }
 
 ::selection {
@@ -106,22 +112,22 @@ input[type="checkbox"] {
 
 .btn,
 .form-input {
-	--form-element-height: 40px;
-
-	font-size: 0.9em;
 	border-radius: var(--border-radius);
+
+	--form-element-height: 40px;
+	font-size: 0.9em;
 	height: var(--form-element-height);
 
 	&.btn {
-		padding: calc(var(--spacing) / 1.5) calc(var(--spacing) * 1.5);
+		align-items: center;
 		border: none;
 		cursor: pointer;
-		user-select: none;
-		transition: background-color var(--transition);
 		display: flex;
-		align-items: center;
-		white-space: nowrap;
+		padding: calc(var(--spacing) / 1.5) calc(var(--spacing) * 1.5);
 		text-decoration: none;
+		transition: background-color var(--transition);
+		user-select: none;
+		white-space: nowrap;
 
 		i {
 			margin-inline-end: var(--spacing);
@@ -130,25 +136,25 @@ input[type="checkbox"] {
 		&.btn-primary {
 			background: var(--primary-color);
 			color: var(--primary-color-contrast);
-			outline-offset: var(--outline-width);
 			font-weight: 600;
+			outline-offset: var(--outline-width);
 
-			position: relative;
 			overflow: hidden;
+			position: relative;
 
 			* {
 				z-index: 10;
 			}
 
 			&::before {
-				content: "";
-				position: absolute;
-				height: 50%;
-				width: calc(200%);
-				left: -50%;
 				animation: rotate 2s infinite linear;
 				background-color: transparent;
+				content: "";
+				height: 50%;
+				left: -50%;
+				position: absolute;
 				transition: background-color var(--transition);
+				width: calc(200%);
 			}
 
 			@keyframes rotate {
@@ -161,11 +167,11 @@ input[type="checkbox"] {
 			}
 
 			&::after {
-				content: "";
 				background-color: inherit;
-				position: absolute;
-				inset: var(--outline-width);
 				border-radius: inherit;
+				content: "";
+				inset: var(--outline-width);
+				position: absolute;
 			}
 
 			&:focus,
@@ -178,8 +184,8 @@ input[type="checkbox"] {
 
 		&.btn-glass {
 			background: var(--background-color-glass);
-			box-shadow: var(--box-shadow);
 			border: 1px solid var(--border-color);
+			box-shadow: var(--box-shadow);
 
 			&:focus-within {
 				background: var(--background-color-secondary);
@@ -190,29 +196,29 @@ input[type="checkbox"] {
 	&.form-input {
 		background: transparent;
 		border: var(--outline-width) solid var(--border-color);
-		padding: var(--spacing);
-
 		outline-offset: calc(var(--outline-width) * -1);
+
+		padding: var(--spacing);
 	}
 }
 
 .caption {
 	font-size: 0.8em;
-	text-transform: uppercase;
 	opacity: 0.8;
+	text-transform: uppercase;
 }
 
 i.primary-icon {
-	background: var(--primary-color);
-	color: var(--primary-color-contrast);
-	border-radius: var(--border-radius);
-	height: 28px;
 	aspect-ratio: 1/1;
+	background: var(--primary-color);
+	border-radius: var(--border-radius);
+	color: var(--primary-color-contrast);
 	display: grid;
+	height: 28px;
 	place-items: center;
 }
 
 button, input {
-	font-family: inherit;
 	color: var(--font-color);
+	font-family: inherit;
 }

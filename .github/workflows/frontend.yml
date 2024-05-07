@@ -1,4 +1,4 @@
-name: Backend Workflow
+name: Frontend Workflow
 
 on:
   pull_request_target:
@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - dev
-      - backend/**
+      - frontend/**
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -23,16 +23,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd backend
-          yarn install
-          ls -la
-
-      - name: Test application
-        run: |
-          cd backend
-          yarn test
+          cd frontend
+          npm install
 
       - name: Lint application
         run: |
-          cd backend
-          yarn lint
+          cd frontend
+          npm run lint
