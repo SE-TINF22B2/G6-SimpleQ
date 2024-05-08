@@ -31,7 +31,7 @@ export default function Dropdown(props: {
 	React.useEffect(() => {
 		document.addEventListener("click", onClick);
 		return () => document.removeEventListener("click", onClick);
-	}, []);
+	}, [isOpen]);
 	
 	const onClick = (e: any) => {
 		// close dropdown when clicking outside and dropdown is open
@@ -123,8 +123,6 @@ export default function Dropdown(props: {
 			{ props.button }
 		</div>
 		
-		{ isOpen && <>
-			{ renderItems(items, 0) }
-        </> }
+		{ isOpen && renderItems(items, 0) }
 	</div>;
 }
