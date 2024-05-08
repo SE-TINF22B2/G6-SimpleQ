@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthService } from './auth/auth.service';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -8,7 +9,7 @@ describe('AppController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
+      providers: [AppService, AuthService],
     }).compile();
 
     appController = app.get<AppController>(AppController);
@@ -16,7 +17,9 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should return "You are successfully logged in!"', () => {
-      expect(appController.getHello()).toBe('You are successfully logged in!');
+      expect(appController.getHello()).toBe(
+        JSON.stringify('You are successfully logged in!'),
+      );
     });
   });
 });
