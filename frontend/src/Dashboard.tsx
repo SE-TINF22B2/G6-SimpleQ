@@ -138,15 +138,36 @@ export default function Dashboard(props: Props) {
 		} }
 									   tabIndex={ 0 }>
 			<img className={ "avatar" }
-				 src={ "https://benniloidl.de/static/media/me.6c5597f7d72f68a1e83c.jpeg" }
-				 alt={ "Benni Loidl" }/>
+				 src={ session !== undefined ? "https://benniloidl.de/static/media/me.6c5597f7d72f68a1e83c.jpeg" : "" }
+				 onError={ ({ currentTarget }) => {
+					 currentTarget.onerror = null; // prevents looping
+					 currentTarget.src = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50";
+				 } }
+				 alt={ "Profile Picture" }/>
 		</div> }
 						 items={ [
 							 {
 								 icon: "far fa-user",
-								 label: "Benni Loidl",
+								 label: getUserName(session?.identity),
 								 shortcut: <span className={ "badge" }>Pro</span>,
-								 onClick: () => navigate("/dashboard/profile")
+								 onClick: () => navigate("/dashboard/profile"),
+								 hidden: session?.identity === undefined
+							 },
+							 {
+								 icon: "fas fa-sign-in-alt",
+								 label: "Login",
+								 onClick: () => window.location.replace(`${ basePath }/ui/login?return_to=` + encodeURIComponent(window.location.href)),
+								 hidden: session?.identity !== undefined
+							 },
+							 {
+								 icon: "fas fa-sign-out-alt",
+								 label: "Logout",
+								 onClick: () => window.location.href = (
+									 logoutUrl
+										 ? (logoutUrl + (logoutUrl.includes("?") ? "&" : "?") + "return_to=" + encodeURIComponent(window.location.href))
+										 : "/"
+								 ),
+								 hidden: session?.identity === undefined
 							 },
 							 {
 								 icon: "fas fa-language",
@@ -167,7 +188,9 @@ export default function Dashboard(props: Props) {
 										 shortcut: i18n.language === "de" ?
 											 <i className={ "fas fa-check" }/> : ""
 									 }
-								 ]
+								 ],
+								 divider: "top",
+								 header: "Appearance"
 							 },
 							 {
 								 icon: "fas fa-brush",
@@ -179,7 +202,8 @@ export default function Dashboard(props: Props) {
 										 label: "System",
 										 onClick: () => props.updateTheme("system"),
 										 shortcut: !localStorage.getItem("theme") ?
-											 <i className={ "fas fa-check" }/> : ""
+											 <i className={ "fas fa-check" }/> : "",
+										 divider: "bottom"
 									 },
 									 {
 										 icon: "fas fa-moon",
@@ -195,11 +219,8 @@ export default function Dashboard(props: Props) {
 										 shortcut: localStorage.getItem("theme") === "light" ?
 											 <i className={ "fas fa-check" }/> : ""
 									 }
-								 ]
-							 },
-							 {
-								 icon: "fas fa-cog",
-								 label: "Settings"
+								 ],
+								 divider: "bottom"
 							 },
 							 {
 								 icon: "fas fa-sign-out-alt",
@@ -247,17 +268,6 @@ export default function Dashboard(props: Props) {
 			<NavLink to={ "b" }><i className={ "fas fa-star" }/>My Favorites</NavLink>
 			<NavLink to={ "c" }><i className={ "fas fa-gift" }/>Daily Quests</NavLink>
 			<NavLink to={ "d" }><i className={ "fas fa-bell" }/>Inbox<span className={ "badge" }>3</span></NavLink>
-			
-			<div style={ { paddingInline: "var(--spacing)" } }>
-				<hr/>
-			</div>
-			
-			<NavLink to={
-				logoutUrl
-					? (logoutUrl + (logoutUrl.includes("?") ? "&" : "?") + "return_to=" + encodeURIComponent(window.location.href))
-					: "/"
-			}><i className={ "fas fa-gift" }/>{ getUserName(session?.identity) }
-			</NavLink>
 			
 			{ window.location.pathname.includes("/question") && <>
                 <div style={ { paddingInline: "var(--spacing)" } }>
@@ -338,13 +348,7 @@ export default function Dashboard(props: Props) {
 					} }>Search.. { getSearchShortcut() }</span>
 				</p>
 				
-				{ session !== undefined
-					? loggedInDropdown()
-					: <button className={ "btn btn-primary" }
-							  onClick={ () => window.location.replace(`${ basePath }/ui/login?return_to=` + encodeURIComponent(window.location.href)) }>
-						<i className={ "fas fa-sign-in-alt" }/>
-						<span>Login</span>
-					</button> }
+				{ loggedInDropdown() }
 			</div>
 			
 			<hr style={ { marginBlock: "0" } }/>
