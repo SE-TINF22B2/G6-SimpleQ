@@ -16,66 +16,33 @@ interface LocalItem extends Item {
 	expanded?: boolean
 }
 
-export default class Dropdown extends React.Component<{
+export default function Dropdown(props: {
 	button: JSX.Element,
 	items: Item[],
 	direction?: "left" | "right"
-}, { isOpen: boolean, items: LocalItem[] }> {
-	constructor(props: any) {
-		super(props);
-		this.state = { isOpen: false, items: this.props.items };
-	}
+}) {
+	const [isOpen, setIsOpen] = React.useState(false);
+	const [items, setItems] = React.useState<LocalItem[]>(props.items);
 	
-	componentDidUpdate(prevProps: any) {
-		if (this.props.items !== prevProps.items) {
-			this.setState({ items: this.props.items });
+	React.useEffect(() => {
+		setItems(props.items);
+	}, [props.items]);
+	
+	React.useEffect(() => {
+		document.addEventListener("click", onClick);
+		return () => document.removeEventListener("click", onClick);
+	}, []);
+	
+	const onClick = (e: any) => {
+		// close dropdown when clicking outside and dropdown is open
+		if (isOpen && !e.target.closest(".dropdown") && !e.target.closest(".dropdown-menu")) {
+			setIsOpen(false);
 		}
 	}
 	
-	componentDidMount() {
-		document.addEventListener("click", this.onClick());
-	}
-	
-	componentWillUnmount() {
-		document.removeEventListener("click", this.onClick());
-	}
-	
-	onClick() {
-		return (e: any) => {
-			// close dropdown when clicking outside and dropdown is open
-			if (this.state.isOpen && !e.target.closest(".dropdown") && !e.target.closest(".dropdown-menu")) {
-				this.setState({ isOpen: false });
-			}
-		}
-	}
-	
-	buttonAction() {
-		let items = this.state.items;
-		items.forEach((item) => {
-			item.expanded = false;
-		});
-		this.setState({ isOpen: !this.state.isOpen, items });
-	}
-	
-	render() {
-		return <div className={ "dropdown" + (this.state.isOpen ? " active" : "") }>
-			<div className={ "dropdown-button" }
-				 onClick={ () => this.buttonAction() }
-				 onKeyDown={ (e: any) => {
-					 if (e.key === "Enter") this.buttonAction();
-				 } }>
-				{ this.props.button }
-			</div>
-			
-			{ this.state.isOpen && <>
-				{ this.renderItems(this.state.items, 0) }
-            </> }
-		</div>;
-	}
-	
-	private renderItems(items: LocalItem[], level: number, topDistance?: string): JSX.Element {
+	const renderItems = (items: LocalItem[], level: number, topDistance?: string): JSX.Element => {
 		let classNameAddon = "";
-		if (level === 0) classNameAddon = " " + (this.props.direction ?? "left");
+		if (level === 0) classNameAddon = " " + (props.direction ?? "left");
 		
 		return <ul className={ "dropdown-menu" + classNameAddon } style={ { top: topDistance } }>
 			{ items.filter(i => i.hidden !== true).map((item, index) => <>
@@ -93,14 +60,17 @@ export default class Dropdown extends React.Component<{
 									}
 								});
 								item.expanded = !item.expanded;
-								this.setState({ items: this.state.items });
+								
+								// Todo: Use items from state??
+								// this.setState({ items: this.state.items });
+								
+								setItems(items);
 								return;
 							}
 							
 							if (item.onClick) {
-								item.onClick(() => this.setState({ isOpen: false }));
+								item.onClick(() => setIsOpen(false));
 							}
-							// this.setState({ isOpen: false });
 						} }>
 					<i className={ item.icon }/>
 					
@@ -112,8 +82,8 @@ export default class Dropdown extends React.Component<{
                         <i className={ "fas fa-angle-down" + (item.expanded ? " expanded" : "") }/> }
 				</button>
 				
-				{ item.expanded && item.items && item.items.length > 0 && this.renderItems(item.items, level + 1,
-					"calc(46px * " + (index + (this.countPriorDropdownChildrenThatAreNotDropdownItems(items, index) / 2)) + ")"
+				{ item.expanded && item.items && item.items.length > 0 && renderItems(item.items, level + 1,
+					"calc(46px * " + (index + (countPriorDropdownChildrenThatAreNotDropdownItems(items, index) / 2)) + ")"
 				) }
 				
 				{ (item.divider === "bottom" || item.divider === "both") && <div className={ "divider" }/> }
@@ -121,7 +91,7 @@ export default class Dropdown extends React.Component<{
 		</ul>;
 	}
 	
-	private countPriorDropdownChildrenThatAreNotDropdownItems(items: Item[], index: number): number {
+	const countPriorDropdownChildrenThatAreNotDropdownItems = (items: Item[], index: number): number => {
 		let shownItems = items.filter(i => i.hidden !== true);
 		let count = 0;
 		for (let i = 0; i < index; i++) {
@@ -134,4 +104,27 @@ export default class Dropdown extends React.Component<{
 		
 		return count;
 	}
+	
+	const buttonAction = () => {
+		let items2 = items;
+		items2.forEach((item) => {
+			item.expanded = false;
+		});
+		setIsOpen(!isOpen);
+		setItems(items2);
+	}
+	
+	return <div className={ "dropdown" + (isOpen ? " active" : "") }>
+		<div className={ "dropdown-button" }
+			 onClick={ () => buttonAction() }
+			 onKeyDown={ (e: any) => {
+				 if (e.key === "Enter") buttonAction();
+			 } }>
+			{ props.button }
+		</div>
+		
+		{ isOpen && <>
+			{ renderItems(items, 0) }
+        </> }
+	</div>;
 }
