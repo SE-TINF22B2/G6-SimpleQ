@@ -5,7 +5,7 @@ interface Item {
 	label: string,
 	icon: string,
 	shortcut?: string | JSX.Element,
-	onClick?: () => void,
+	onClick?: (closeDropdown: () => void) => void,
 	items?: Item[],
 	hidden?: boolean,
 	divider?: "top" | "bottom" | "both",
@@ -98,7 +98,7 @@ export default class Dropdown extends React.Component<{
 							}
 							
 							if (item.onClick) {
-								item.onClick();
+								item.onClick(() => this.setState({ isOpen: false }));
 							}
 							// this.setState({ isOpen: false });
 						} }>

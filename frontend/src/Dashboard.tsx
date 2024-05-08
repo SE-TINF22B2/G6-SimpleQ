@@ -150,7 +150,10 @@ export default function Dashboard(props: Props) {
 								 icon: "far fa-user",
 								 label: getUserName(session?.identity),
 								 shortcut: <span className={ "badge" }>Pro</span>,
-								 onClick: () => navigate("/dashboard/profile"),
+								 onClick: (closeDropdown) => {
+									 navigate("/dashboard/profile");
+									 closeDropdown();
+								 },
 								 hidden: session?.identity === undefined
 							 },
 							 {
