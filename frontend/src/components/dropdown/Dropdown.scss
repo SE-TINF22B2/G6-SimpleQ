@@ -1,7 +1,7 @@
 .dropdown {
-	--dropdown-menu-item-height: 46px;
-
 	display: inline-block;
+
+	--dropdown-menu-item-height: 46px;
 	position: relative;
 	transition: var(--transition);
 	z-index: 200;
@@ -56,9 +56,9 @@
 		display: flex;
 		flex-direction: column;
 		list-style-type: none;
-		padding: 0;
+		padding: calc(var(--spacing) / 2);
 		position: absolute;
-		top: calc(100% + var(--outline-width));
+		top: calc(100% + var(--spacing) / 2);
 
 		white-space: nowrap;
 
@@ -87,7 +87,12 @@
 		}
 
 		.dropdown-menu-item {
+			border-radius: var(--border-radius);
+
+			/* duplicate!! */
 			height: var(--dropdown-menu-item-height);
+
+			outline-offset: calc(var(--outline-width) * -1);
 		}
 
 		> .dropdown-menu-item {

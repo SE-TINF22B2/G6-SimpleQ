@@ -44,7 +44,11 @@ export default function Dropdown(props: {
 		let classNameAddon = "";
 		if (level === 0) classNameAddon = " " + (props.direction ?? "left");
 		
-		return <ul className={ "dropdown-menu" + classNameAddon } style={ { top: topDistance } }>
+		return <ul className={ "dropdown-menu" + classNameAddon }
+				   style={ {
+					   top: topDistance,
+					   transform: level === 0 ? "" : "translateX(calc(var(--spacing) * -0.5))"
+				   } }>
 			{ localItems.filter(i => i.hidden !== true).map((item, index) => <>
 				{ (item.divider === "top" || item.divider === "both") && <div className={ "divider" }/> }
 				
