@@ -1,16 +1,3 @@
-.trending-header {
-	.tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: calc(var(--spacing) / 2);
-
-		.badge {
-			cursor: pointer;
-			outline-offset: var(--outline-width);
-		}
-	}
-}
-
 .questions-question {
 	display: flex;
 	flex-direction: row;
@@ -25,11 +12,6 @@
 	.question {
 		h2 {
 			margin-top: 6px !important;
-		}
-
-		.tags {
-			display: flex;
-			gap: calc(var(--spacing) / 2);
 		}
 	}
 

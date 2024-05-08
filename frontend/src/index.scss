@@ -184,7 +184,7 @@ input[type="checkbox"] {
 
 		&.btn-glass {
 			background: var(--background-color-glass);
-			border: 1px solid var(--border-color);
+			border: var(--outline-width) solid var(--border-color);
 			box-shadow: var(--box-shadow);
 
 			&:focus-within {
@@ -221,4 +221,41 @@ i.primary-icon {
 button, input {
 	color: var(--font-color);
 	font-family: inherit;
+}
+
+p.tags {
+	display: inline-flex;
+	gap: calc(var(--spacing) / 2);
+
+	.tags-divider {
+		border-radius: var(--border-radius);
+		border-right: var(--outline-width) solid var(--border-color);
+		margin-inline: calc(var(--spacing) / 2);
+	}
+
+	&.tags-deletable span.badge {
+		position: relative;
+
+		&::after {
+			color: transparent;
+			content: "×";
+			font-size: 1.8em;
+			left: calc(var(--spacing) * -1);
+			margin-inline-start: var(--spacing);
+			position: absolute;
+			text-align: center;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 100%;
+		}
+
+		&:hover {
+			color: transparent;
+			cursor: pointer;
+
+			&::after {
+				color: var(--primary-color-contrast);
+			}
+		}
+	}
 }

@@ -30,11 +30,7 @@ export default function QuestionPreview(props: Props) {
 																   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>Question</span>
 				}
 				
-				<span style={ {
-					background: "var(--border-color)",
-					width: "var(--outline-width)",
-					borderRadius: "var(--border-radius)"
-				} }/>
+				<span className={ "tags-divider" }/>
 				
 				{ props.question.tags.map((tag, index) =>
 					<span key={ index } className={ "badge" }>{ tag }</span>) }

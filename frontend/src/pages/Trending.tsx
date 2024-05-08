@@ -179,7 +179,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
 				</div>
 				
 				<hr/>
-				<p className={ "tags" }>
+				<p className={ "tags tags-deletable" }>
 					<span className={ "badge" } tabIndex={ 0 }>Smartphone</span>
 					<span className={ "badge" } tabIndex={ 0 }>iPhone</span>
 					<span className={ "badge" } tabIndex={ 0 }>Tag 1</span>

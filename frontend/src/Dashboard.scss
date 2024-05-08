@@ -399,10 +399,11 @@
     hr {
         background: var(--border-color);
         border: none;
-        height: 1px;
+        height: var(--outline-width);
         margin: var(--spacing) auto;
         max-width: var(--max-width);
         width: 100%;
+        border-radius: var(--border-radius);
     }
 
     .question-stats {

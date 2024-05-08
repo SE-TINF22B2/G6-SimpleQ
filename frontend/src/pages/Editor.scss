@@ -1,30 +1,30 @@
 .editor-container {
 	.editor-hints {
-		padding: var(--spacing);
-		width: 100px;
+		align-items: center;
 		display: flex;
 		flex-direction: column;
-		align-items: center;
+		padding: var(--spacing);
+		width: 100px;
 
 		.hint-number {
+			background: var(--primary-color);
+			border-radius: var(--border-radius);
+			color: var(--primary-color-contrast);
+			display: grid;
 			font-size: 1.5em;
 			font-weight: bold;
-			background: var(--primary-color);
-			color: var(--primary-color-contrast);
-			border-radius: var(--border-radius);
-			width: 1.8em;
 			height: 1.8em;
-			display: grid;
 			place-items: center;
+			width: 1.8em;
 		}
 
 		.caption {
-			overflow: hidden;
-			max-height: 0;
-			transition: all var(--transition);
-			text-align: center;
 			line-height: 0.9em;
+			max-height: 0;
 			opacity: 0;
+			overflow: hidden;
+			text-align: center;
+			transition: all var(--transition);
 		}
 	}
 
@@ -44,18 +44,18 @@
 	}
 
 	.rich-text-buttons {
-		display: flex;
 		align-items: center;
-		gap: calc(var(--spacing) / 2);
-		border-radius: var(--border-radius);
 		background: var(--background-color-secondary);
+		border-radius: var(--border-radius);
+		display: flex;
+		gap: calc(var(--spacing) / 2);
 
 		button {
-			padding: 0.5rem 1rem;
-			border: none;
-			cursor: pointer;
-			border-radius: inherit;
 			background: transparent;
+			border: none;
+			border-radius: inherit;
+			cursor: pointer;
+			padding: 0.5rem 1rem;
 
 			&:hover {
 				background: var(--primary-color);
@@ -64,10 +64,11 @@
 		}
 
 		span {
-			width: 1px;
+			background: var(--border-color);
+			border-radius: var(--border-radius);
 			height: 1em;
-			background: var(--primary-color);
 			margin-inline: var(--spacing);
+			width: var(--outline-width);
 		}
 
 		.active {
@@ -76,19 +77,20 @@
 	}
 
 	#question-editor {
-		width: 100%;
+		border: var(--outline-width) solid var(--border-color);
+		border-radius: var(--border-radius);
 		height: 240px;
 		margin-block: var(--spacing);
-		border-radius: var(--border-radius);
-		outline-offset: calc(var(--spacing) / 2);
+		padding: calc(var(--spacing) / 2);
+		width: 100%;
 
 		img {
-			min-height: 50px;
-			max-height: 100px;
-			min-width: 50px;
-			max-width: 100px;
-			object-fit: cover;
 			border-radius: var(--border-radius);
+			max-height: 100px;
+			max-width: 100px;
+			min-height: 50px;
+			min-width: 50px;
+			object-fit: cover;
 		}
 	}
 }

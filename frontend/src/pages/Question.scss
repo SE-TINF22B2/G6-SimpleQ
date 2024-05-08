@@ -19,13 +19,6 @@
 			justify-content: space-evenly;
 		}
 
-		.tags {
-			display: flex;
-			flex-wrap: wrap;
-			gap: calc(var(--spacing) / 2);
-			padding-right: calc(var(--spacing) * 2);
-		}
-
 		.add-favorite {
 			border-radius: var(--border-radius);
 			cursor: pointer;
