@@ -40,12 +40,12 @@ export default function Dropdown(props: {
 		}
 	}
 	
-	const renderItems = (items: LocalItem[], level: number, topDistance?: string): JSX.Element => {
+	const renderItems = (localItems: LocalItem[], level: number, topDistance?: string): JSX.Element => {
 		let classNameAddon = "";
 		if (level === 0) classNameAddon = " " + (props.direction ?? "left");
 		
 		return <ul className={ "dropdown-menu" + classNameAddon } style={ { top: topDistance } }>
-			{ items.filter(i => i.hidden !== true).map((item, index) => <>
+			{ localItems.filter(i => i.hidden !== true).map((item, index) => <>
 				{ (item.divider === "top" || item.divider === "both") && <div className={ "divider" }/> }
 				
 				{ item.header && <div className={ "dropdown-menu-header" }>{ item.header }</div> }
@@ -53,24 +53,15 @@ export default function Dropdown(props: {
 				<button key={ index }
 						className={ "dropdown-menu-item" }
 						onClick={ () => {
-							if (item.items && item.items.length > 0) {
-								items.forEach((i) => {
-									if (i !== item) {
-										i.expanded = false;
-									}
-								});
-								item.expanded = !item.expanded;
-								
-								// Todo: Use items from state??
-								// this.setState({ items: this.state.items });
-								
-								setItems(items);
-								return;
-							}
+							setItems(localItems.map(i => {
+								return {
+									...i,
+									...{ expanded: i === item ? !i.expanded : false }
+								}
+							}))
 							
-							if (item.onClick) {
+							if (item.onClick)
 								item.onClick(() => setIsOpen(false));
-							}
 						} }>
 					<i className={ item.icon }/>
 					
@@ -83,7 +74,7 @@ export default function Dropdown(props: {
 				</button>
 				
 				{ item.expanded && item.items && item.items.length > 0 && renderItems(item.items, level + 1,
-					"calc(46px * " + (index + (countPriorDropdownChildrenThatAreNotDropdownItems(items, index) / 2)) + ")"
+					"calc(46px * " + (index + (countPriorDropdownChildrenThatAreNotDropdownItems(localItems, index) / 2)) + ")"
 				) }
 				
 				{ (item.divider === "bottom" || item.divider === "both") && <div className={ "divider" }/> }
