@@ -53,13 +53,31 @@
 		border-radius: var(--border-radius);
 		display: flex;
 		flex-direction: column;
-		gap: 1px;
 		list-style-type: none;
 		padding: 0;
 		position: absolute;
 		top: calc(100% + var(--outline-width));
 
 		white-space: nowrap;
+
+		> .divider {
+			height: calc(46px / 2);
+			position: relative;
+
+			&::before {
+				background: var(--border-color);
+				content: '';
+				height: var(--outline-width);
+				left: 0;
+				position: absolute;
+				top: 50%;
+				width: 100%;
+			}
+		}
+
+		.dropdown-menu-item {
+			height: 46px;
+		}
 
 		> .dropdown-menu-item {
 			align-items: center;
@@ -68,6 +86,7 @@
 			cursor: pointer;
 			display: flex;
 			padding: var(--spacing);
+
 			text-align: left;
 
 			.fa-angle-down {
@@ -87,7 +106,7 @@
 			> i:last-child {
 				margin-inline-start: var(--spacing);
 			}
-            
+
 			> span:first-of-type {
 				flex: 1;
 				padding-inline-end: calc(var(--spacing) * 2);
