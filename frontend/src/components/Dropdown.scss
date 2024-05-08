@@ -75,6 +75,15 @@
 			}
 		}
 
+		.dropdown-menu-header {
+			font-size: 0.8em;
+			font-weight: 600;
+			height: calc(46px / 2);
+			opacity: 0.8;
+			padding-inline: var(--spacing);
+			text-transform: uppercase;
+		}
+
 		.dropdown-menu-item {
 			height: 46px;
 		}

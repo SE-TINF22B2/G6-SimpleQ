@@ -8,7 +8,8 @@ interface Item {
 	onClick?: () => void,
 	items?: Item[],
 	hidden?: boolean,
-	divider?: "top" | "bottom" | "both"
+	divider?: "top" | "bottom" | "both",
+	header?: string
 }
 
 interface LocalItem extends Item {
@@ -80,6 +81,8 @@ export default class Dropdown extends React.Component<{
 			{ items.filter(i => i.hidden !== true).map((item, index) => <>
 				{ (item.divider === "top" || item.divider === "both") && <div className={ "divider" }/> }
 				
+				{ item.header && <div className={ "dropdown-menu-header" }>{ item.header }</div> }
+				
 				<button key={ index }
 						className={ "dropdown-menu-item" }
 						onClick={ () => {
@@ -110,7 +113,7 @@ export default class Dropdown extends React.Component<{
 				</button>
 				
 				{ item.expanded && item.items && item.items.length > 0 && this.renderItems(item.items, level + 1,
-					"calc(46px * " + (index + (this.countPriorDropdownChildren(items, index) / 2)) + ")"
+					"calc(46px * " + (index + (this.countPriorDropdownChildrenThatAreNotDropdownItems(items, index) / 2)) + ")"
 				) }
 				
 				{ (item.divider === "bottom" || item.divider === "both") && <div className={ "divider" }/> }
@@ -118,14 +121,16 @@ export default class Dropdown extends React.Component<{
 		</ul>;
 	}
 	
-	private countPriorDropdownChildren(items: Item[], index: number): number {
+	private countPriorDropdownChildrenThatAreNotDropdownItems(items: Item[], index: number): number {
 		let shownItems = items.filter(i => i.hidden !== true);
 		let count = 0;
 		for (let i = 0; i < index; i++) {
 			if (shownItems[i].divider !== undefined) count++;
 			if (shownItems[i].divider === "both") count++;
+			if (shownItems[i].header) count++;
 		}
 		if (shownItems[index].divider === "top" || shownItems[index].divider === "both") count++;
+		if (shownItems[index].header) count++;
 		
 		return count;
 	}
