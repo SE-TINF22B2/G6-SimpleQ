@@ -20,7 +20,7 @@ export default class Editor extends React.Component<any, State> {
 	
 	render() {
 		return <>
-			<div className={ "container editor-container transparent focus-indicator" }>
+			<section className={ "container editor-container transparent focus-indicator" }>
 				<div className={ "editor-hints" }>
 					<span className={ "hint-number" }>1.</span>
 					<span className={ "caption" }>Title</span>
@@ -52,9 +52,9 @@ export default class Editor extends React.Component<any, State> {
 					<p style={ { marginBottom: "calc(var(--spacing) / 2)" } }>What's your programming question? Be
 						specific.</p>
 				</div>
-			</div>
+			</section>
 			
-			<div className={ "container editor-container transparent focus-indicator" }>
+			<section className={ "container editor-container transparent focus-indicator" }>
 				<div className={ "editor-hints" }>
 					<span className={ "hint-number" }>2.</span>
 					<span className={ "caption" }>Tags</span>
@@ -89,9 +89,9 @@ export default class Editor extends React.Component<any, State> {
 						</p>
 					</div>
 				</div>
-			</div>
+			</section>
 			
-			<div className={ "container editor-container transparent focus-indicator" }>
+			<section className={ "container editor-container transparent focus-indicator" }>
 				<div className={ "editor-hints" }>
 					<span className={ "hint-number" }>3.</span>
 					<span className={ "caption" }>Description</span>
@@ -156,9 +156,9 @@ export default class Editor extends React.Component<any, State> {
 					} characters)
                 </span>
 				</div>
-			</div>
+			</section>
 			
-			<div className={ "container editor-container transparent" }>
+			<section className={ "container editor-container transparent" }>
 				<div className={ "editor-hints" }>
 					<span className={ "hint-number" }>4.</span>
 					<span className={ "caption" }>Validate</span>
@@ -195,7 +195,7 @@ export default class Editor extends React.Component<any, State> {
 						</tbody>
 					</table>
 				</div>
-			</div>
+			</section>
 			
 			<div className={ "container editor-container transparent" } style={ { display: "flex" } }>
 				<div style={ { flex: 1 } }/>
