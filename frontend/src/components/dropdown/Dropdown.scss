@@ -1,4 +1,6 @@
 .dropdown {
+	--dropdown-menu-item-height: 46px;
+
 	display: inline-block;
 	position: relative;
 	transition: var(--transition);
@@ -61,7 +63,7 @@
 		white-space: nowrap;
 
 		> .divider {
-			height: calc(46px / 2);
+			height: calc(var(--dropdown-menu-item-height) / 2);
 			position: relative;
 
 			&::before {
@@ -78,14 +80,14 @@
 		.dropdown-menu-header {
 			font-size: 0.8em;
 			font-weight: 600;
-			height: calc(46px / 2);
+			height: calc(var(--dropdown-menu-item-height) / 2);
 			opacity: 0.8;
 			padding-inline: var(--spacing);
 			text-transform: uppercase;
 		}
 
 		.dropdown-menu-item {
-			height: 46px;
+			height: var(--dropdown-menu-item-height);
 		}
 
 		> .dropdown-menu-item {
