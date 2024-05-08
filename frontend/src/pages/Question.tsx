@@ -1,6 +1,6 @@
 import React from "react";
 import "./Question.scss";
-import Dropdown from "../components/Dropdown";
+import Dropdown from "../components/dropdown/Dropdown";
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Navigate, useParams } from "react-router-dom";

@@ -1,6 +1,6 @@
 import React from "react";
 import "./Trending.scss";
-import Dropdown from "../components/Dropdown";
+import Dropdown from "../components/dropdown/Dropdown";
 import { NavigateFunction } from "react-router-dom";
 import thinking from "../illustrations/thinking.svg";
 import LiveInput from "../components/LiveInput";
