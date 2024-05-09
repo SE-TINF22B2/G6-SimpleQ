@@ -109,7 +109,11 @@ export default function Dropdown(props: {
 		setItems(items2);
 	}
 	
-	return <div className={ "dropdown" + (isOpen ? " active" : "") }>
+	return <div className={ "dropdown" + (isOpen ? " active" : "") }
+				onBlur={ (e: any) => {
+					let isFocusWithin = e.currentTarget.contains(e.relatedTarget);
+					if (!isFocusWithin) setIsOpen(false);
+				} }>
 		<div className={ "dropdown-button" }
 			 onClick={ () => buttonAction() }
 			 onKeyDown={ (e: any) => {
