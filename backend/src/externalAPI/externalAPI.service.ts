@@ -1,5 +1,7 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
+import { rejects } from "assert";
+import { resolve } from "path";
 import { firstValueFrom } from "rxjs";
 
 @Injectable()
@@ -9,6 +11,12 @@ export class ExternalAPIService {
   async requestWolfram(prompt: string): Promise<string> {
     if(prompt === '') {
       return null;
+    }
+
+    if(process.env.NODE_ENV === "dev"){
+      return new Promise((resolve, rejects) => {
+        resolve("Das ist nur eine default Antwort um Tokens zu sparen.")
+      })
     }
 
     const { data } = await firstValueFrom(
@@ -27,6 +35,12 @@ export class ExternalAPIService {
   async requestGPT(prompt: string): Promise<string> {
     if(prompt === '') {
       return null
+    }
+
+    if(process.env.NODE_ENV === "dev"){
+      return new Promise((resolve, rejects) => {
+        resolve("Das ist nur eine default Antwort um Tokens zu sparen.")
+      })
     }
 
     let body = {
