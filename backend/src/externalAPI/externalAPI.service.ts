@@ -1,6 +1,5 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
-import OpenAI from 'openai';
 import { firstValueFrom } from "rxjs";
 
 @Injectable()
@@ -30,22 +29,25 @@ export class ExternalAPIService {
       return null
     }
 
-    let question = decodeURIComponent(prompt);
-
-    const openai = new OpenAI({
-      apiKey: process.env['GPT_APP_ID'],
-    });
-
-    try{
-      const chatCompletion = await openai.chat.completions.create({
-        messages: [{ role: 'user', content: question }],
-        model: 'gpt-3.5-turbo',
-      });
-      return chatCompletion[0];
+    let body = {
+      "prompt": prompt
     }
-    catch(error){
-      console.log("cannot send AI request\n"+error)
-      return null;
+
+    let header = {
+      "headers":{
+        "Authorization": process.env.GPT_APP_TOKEN
+      }
+    }
+
+    const { data } = await firstValueFrom(
+      this.httpService.post(process.env.GPT_APP_URL, body, header).pipe()
+    );
+
+    if(data.output != null){
+      return data.output
+    }
+    else{
+      return null
     }
   }
 }
