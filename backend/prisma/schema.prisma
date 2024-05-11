@@ -1,0 +1,171 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userID             String         @id @default(uuid())
+  username           String         @unique
+  isPro              Boolean        @default(false)
+  isAdmin            Boolean        @default(false)
+  timeOfRegistration DateTime       @default(now())
+  activityPoints     Int            @default(0)
+  email              String?
+  createdContent     UserContent[]
+  vote               Vote[]
+  favorite           Favorite[]
+  expert             Expert[]
+  userTimeout        UserTimeout[]
+  moderation         Moderation[]
+  loginAttempt       LoginAttempt[]
+  userQuest          UserQuest[]
+}
+
+model UserContent {
+  userContentID  String          @id @default(uuid())
+  owner          User            @relation(fields: [ownerID], references: [userID])
+  ownerID        String
+  groupID        String          @default(uuid())
+  content        String?
+  timeOfCreation DateTime        @default(now())
+  type           UserContentType
+  question       Question?
+  answer         Answer?
+  discussion     Discussion?
+  vote           Vote[]
+  favorite       Favorite[]
+  tag            Tag[]
+}
+
+model Question {
+  userContent   UserContent @relation(fields: [userContentID], references: [userContentID])
+  userContentID String      @id
+  title         String
+}
+
+model Answer {
+  userContent   UserContent @relation(fields: [userContentID], references: [userContentID])
+  userContentID String      @id
+  typeOfAI      String?
+}
+
+model Discussion {
+  userContent   UserContent   @relation(fields: [userContentID], references: [userContentID])
+  userContentID String        @id
+  title         String
+  isPrivate     Boolean       @default(false)
+  userTimeout   UserTimeout[]
+  moderation    Moderation[]
+}
+
+enum UserContentType {
+  Question
+  Answer
+  Discussion
+}
+
+model UserTimeout {
+  timeoutedUser   User       @relation(fields: [timeoutedUserID], references: [userID])
+  timeoutedUserID String
+  moderation      Moderation @relation(fields: [moderationID], references: [moderationID])
+  moderationID    String
+  content         Discussion @relation(fields: [contentID], references: [userContentID])
+  contentID       String
+  timeout         DateTime
+
+  @@id([timeoutedUserID, contentID])
+}
+
+model Moderation {
+  moderationID String        @id @default(uuid())
+  moderator    User          @relation(fields: [moderatorID], references: [userID])
+  moderatorID  String
+  content      Discussion    @relation(fields: [contentID], references: [userContentID])
+  contentID    String
+  userTimeout  UserTimeout[]
+}
+
+model Vote {
+  content      UserContent @relation(fields: [contentID], references: [userContentID])
+  contentID    String
+  votingUser   User        @relation(fields: [votingUserID], references: [userID])
+  votingUserID String
+  isPositive   Boolean     @default(true)
+
+  @@id([contentID, votingUserID])
+}
+
+model Favorite {
+  content        UserContent @relation(fields: [contentID], references: [userContentID])
+  contentID      String
+  favoriteUser   User        @relation(fields: [favoriteUserID], references: [userID])
+  favoriteUserID String
+
+  @@id([contentID, favoriteUserID])
+}
+
+model Tag {
+  tagname String        @id @unique
+  expert  Expert[]
+  content UserContent[]
+}
+
+model Expert {
+  expertUser   User   @relation(fields: [expertUserID], references: [userID])
+  expertUserID String
+  tag          Tag    @relation(fields: [tagname], references: [tagname])
+  tagname      String
+  expertPoints Int    @default(0)
+
+  @@id([expertUserID, tagname])
+}
+
+model LoginAttempt {
+  loginUser     User     @relation(fields: [loginUserID], references: [userID])
+  loginUserID   String
+  timeOfLogin   DateTime @default(now())
+  wasSuccessful Boolean
+
+  @@id([loginUserID, timeOfLogin])
+}
+
+model Quest {
+  questID     String      @id @default(uuid())
+  name        String
+  description String?
+  type        QuestType
+  points      Int
+  isSelected  Boolean
+  userQuest   UserQuest[]
+}
+
+enum QuestType {
+  QuestionQuest
+  AnswerQuest
+  DiscussionQuest
+  AcivityQuest
+}
+
+model UserQuest {
+  quest       Quest   @relation(fields: [questID], references: [questID])
+  questID     String
+  questUser   User    @relation(fields: [questUserID], references: [userID])
+  questUserID String
+  done        Boolean
+
+  @@id([questID, questUserID])
+}
+
+model Blacklist {
+  name String @id @unique
+}
