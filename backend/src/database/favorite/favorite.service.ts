@@ -4,19 +4,19 @@ import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class FavoriteService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-    async createFavorite(data: Prisma.FavoriteCreateInput): Promise<Favorite> {
-        return this.prisma.favorite.create({
-            data,
-        })
-    }
+  async createFavorite(data: Prisma.FavoriteCreateInput): Promise<Favorite> {
+    return this.prisma.favorite.create({
+      data,
+    });
+  }
 
-    async getFavorite(
-        favoriteWhereUniqueInput: Prisma.FavoriteWhereUniqueInput,
-    ): Promise<Favorite | null> {
-        return this.prisma.favorite.findUnique({
-            where: favoriteWhereUniqueInput,
-        });
-    }
+  async getFavorite(
+    favoriteWhereUniqueInput: Prisma.FavoriteWhereUniqueInput,
+  ): Promise<Favorite | null> {
+    return this.prisma.favorite.findUnique({
+      where: favoriteWhereUniqueInput,
+    });
+  }
 }

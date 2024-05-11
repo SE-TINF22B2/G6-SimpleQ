@@ -22,7 +22,7 @@ import { AuthMiddleware } from './middleware/auth/auth.middleware';
   imports: [ConfigModule.forRoot()],
   controllers: [AppController],
   providers: [
-    AppService, 
+    AppService,
     AuthService,
     PrismaService,
     UserService,

@@ -4,23 +4,25 @@ import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class BlacklistService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-    async createBlacklistItem(data: Prisma.BlacklistCreateInput): Promise<Blacklist> {
-        return this.prisma.blacklist.create({
-            data,
-        })
-    }
+  async createBlacklistItem(
+    data: Prisma.BlacklistCreateInput,
+  ): Promise<Blacklist> {
+    return this.prisma.blacklist.create({
+      data,
+    });
+  }
 
-    async getBlacklistItem(
-        blacklistWhereUniqueInput: Prisma.BlacklistWhereUniqueInput,
-    ): Promise<Blacklist | null> {
-        return this.prisma.blacklist.findUnique({
-            where: blacklistWhereUniqueInput,
-        });
-    }
+  async getBlacklistItem(
+    blacklistWhereUniqueInput: Prisma.BlacklistWhereUniqueInput,
+  ): Promise<Blacklist | null> {
+    return this.prisma.blacklist.findUnique({
+      where: blacklistWhereUniqueInput,
+    });
+  }
 
-    async getAllBlacklistItems(): Promise<Blacklist[]> {
-        return this.prisma.blacklist.findMany();
-    }
+  async getAllBlacklistItems(): Promise<Blacklist[]> {
+    return this.prisma.blacklist.findMany();
+  }
 }

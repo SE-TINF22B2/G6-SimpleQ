@@ -4,19 +4,19 @@ import { Prisma, Quest } from '@prisma/client';
 
 @Injectable()
 export class QuestService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
-    async createQuest(data: Prisma.QuestCreateInput): Promise<Quest> {
-        return this.prisma.quest.create({
-            data,
-        })
-    }
+  async createQuest(data: Prisma.QuestCreateInput): Promise<Quest> {
+    return this.prisma.quest.create({
+      data,
+    });
+  }
 
-    async getQuest(
-        questWhereUniqueInput: Prisma.QuestWhereUniqueInput,
-    ): Promise<Quest | null> {
-        return this.prisma.quest.findUnique({
-            where: questWhereUniqueInput,
-        });
-    }
+  async getQuest(
+    questWhereUniqueInput: Prisma.QuestWhereUniqueInput,
+  ): Promise<Quest | null> {
+    return this.prisma.quest.findUnique({
+      where: questWhereUniqueInput,
+    });
+  }
 }
