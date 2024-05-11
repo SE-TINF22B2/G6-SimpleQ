@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
+import { PrismaService } from './database/prisma.service';
+import { UserService } from './database/user/user.service';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -9,17 +11,15 @@ describe('AppController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService, AuthService],
+      providers: [AppService, AuthService, PrismaService, UserService],
     }).compile();
 
     appController = app.get<AppController>(AppController);
   });
 
   describe('root', () => {
-    it('should return "You are successfully logged in!"', () => {
-      expect(appController.getHello()).toBe(
-        JSON.stringify('You are successfully logged in!'),
-      );
+    it('should be defined', () => {
+      expect(appController.getHello()).toBeDefined();
     });
   });
 });

@@ -1,13 +1,12 @@
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Prisma, User } from '@prisma/client';
 import { AuthService } from './auth/auth.service';
+import { UserService } from './database/user/user.service';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-    private authService: AuthService,
-  ) {}
+  constructor(private readonly appService: AppService, private readonly userService: UserService) { }
 
   @Get()
   getHello(): string {
@@ -22,5 +21,15 @@ export class AppController {
   @Get('/cookie')
   async getCookie(@Req() req, @Res() res): Promise<any> {
     return await this.authService.getCookie(req, res);
+  }
+
+  @Post('user')
+  async createUser(@Body() user: Prisma.UserCreateInput): Promise<User> {
+    return this.userService.createUser(user); 
+  }
+
+  @Get('user')
+  getUser(@Req() ID: Prisma.UserWhereUniqueInput): Promise<User> {
+    return this.userService.getUser(ID);
   }
 }

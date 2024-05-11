@@ -1,8 +1,10 @@
+
 import {
   Injectable,
   NestMiddleware,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
