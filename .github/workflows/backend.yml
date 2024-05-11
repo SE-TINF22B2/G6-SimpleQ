@@ -3,10 +3,10 @@ name: Backend Workflow
 on:
   pull_request_target:
     branches:
-      - dev
+      - main
   push:
     branches:
-      - dev
+      - main
       - backend/**
 jobs:
   verify:
