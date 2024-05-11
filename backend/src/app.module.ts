@@ -2,6 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthService } from './auth/auth.service';
 import { BlacklistService } from './database/blacklist/blacklist.service';
 import { ExpertService } from './database/expert/expert.service';
 import { FavoriteService } from './database/favorite/favorite.service';
@@ -21,7 +22,8 @@ import { AuthMiddleware } from './middleware/auth/auth.middleware';
   imports: [ConfigModule.forRoot()],
   controllers: [AppController],
   providers: [
-    AppService,
+    AppService, 
+    AuthService,
     PrismaService,
     UserService,
     FavoriteService,
@@ -39,6 +41,6 @@ import { AuthMiddleware } from './middleware/auth/auth.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes('*');
+    consumer.apply(AuthMiddleware).exclude('/cookie').forRoutes('*');
   }
 }

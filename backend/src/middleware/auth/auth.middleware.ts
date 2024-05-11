@@ -1,4 +1,9 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+
+import {
+  Injectable,
+  NestMiddleware,
+  UnauthorizedException,
+} from '@nestjs/common';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
@@ -9,12 +14,12 @@ export class AuthMiddleware implements NestMiddleware {
         cookie: req.header('cookie'),
       });
     } catch (e) {
-      res.redirect(`${process.env.ORY_URL}/ui/login`);
+      throw new UnauthorizedException('You are not logged in!');
     }
     if (result) {
       next();
     } else {
-      res.redirect(`${process.env.ORY_URL}/ui/login`);
+      throw new UnauthorizedException('You are not logged in');
     }
   }
 }
