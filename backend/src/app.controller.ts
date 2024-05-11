@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res} from '@nestjs/common';
 import { AppService } from './app.service';
 import { Prisma, User } from '@prisma/client';
 import { AuthService } from './auth/auth.service';
@@ -6,7 +6,7 @@ import { UserService } from './database/user/user.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService, private readonly userService: UserService) { }
+  constructor(private readonly appService: AppService, private readonly userService: UserService, private readonly authService: AuthService) { }
 
   @Get()
   getHello(): string {
