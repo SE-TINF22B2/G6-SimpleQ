@@ -5,6 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Navigate, useParams } from "react-router-dom";
 import SplitSection from "../components/SplitSection";
+import TextEditor from "../components/TextEditor";
 
 interface QuestionElemFull {
 	id: string;
@@ -209,7 +210,7 @@ export default function Question() {
 	
 	return <>
 		<SplitSection className={ "question-main" }>
-			<div style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)" } }>
+			<div style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)", flexGrow: 1 } }>
 				<section className={ "glass question-content" }>
 					{ question ? <p className={ "tags" }>
 						{ question.tags.map((tag, index) =>
@@ -233,7 +234,9 @@ export default function Question() {
 				
 				<section className={ "glass focus-indicator" }>
 					<h3>Answer this question</h3>
-					<p contentEditable={ true } className={ "answer-input" }>Write your answer here...</p>
+					<TextEditor>
+						Write your answer here...
+					</TextEditor>
 				</section>
 				
 				<hr style={ { margin: 0 } }/>

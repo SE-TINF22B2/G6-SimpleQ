@@ -43,58 +43,6 @@
 		}
 	}
 
-	.rich-text-buttons {
-		align-items: center;
-		background: var(--background-color-secondary);
-		border-radius: var(--border-radius);
-		display: flex;
-		gap: calc(var(--spacing) / 2);
-
-		button {
-			background: transparent;
-			border: none;
-			border-radius: inherit;
-			cursor: pointer;
-			padding: 0.5rem 1rem;
-
-			&:hover {
-				background: var(--primary-color);
-				color: var(--primary-color-contrast);
-			}
-		}
-
-		span {
-			background: var(--border-color);
-			border-radius: var(--border-radius);
-			height: 1em;
-			margin-inline: var(--spacing);
-			width: var(--outline-width);
-		}
-
-		.active {
-			background-color: #f4f4f4;
-		}
-	}
-
-	#question-editor {
-		border: var(--outline-width) solid var(--border-color);
-		border-radius: var(--border-radius);
-		height: 240px;
-		margin-block: var(--spacing);
-		overflow-y: scroll;
-		padding: calc(var(--spacing) / 2);
-		width: 100%;
-
-		img {
-			border-radius: var(--border-radius);
-			max-height: 100px;
-			max-width: 100px;
-			min-height: 50px;
-			min-width: 50px;
-			object-fit: cover;
-		}
-	}
-
 	.editor-question-type-select {
 		align-items: center;
 		align-self: stretch;

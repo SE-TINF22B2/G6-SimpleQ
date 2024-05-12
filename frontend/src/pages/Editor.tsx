@@ -2,6 +2,7 @@ import React from "react";
 import "./Editor.scss";
 import LiveInput from "../components/LiveInput";
 import Button from "../components/Button";
+import TextEditor from "../components/TextEditor";
 
 export default function Editor(props: {}) {
 	const [title, setTitle] = React.useState("New Question");
@@ -13,7 +14,7 @@ export default function Editor(props: {}) {
 	
 	const isTitleValid = title.length > 5;
 	const isTagsValid = tags.length > 0 && tags.length <= 5;
-	const isDescriptionValid = (document.getElementById("question-editor")?.innerText.split(" ").length ?? 0) >= 20;
+	const isDescriptionValid = description.split(" ").length >= 20;
 	
 	return <>
 		<section className={ "container editor-container transparent focus-indicator" }>
@@ -101,56 +102,9 @@ export default function Editor(props: {}) {
 				<p>Describe your question in more detail.</p>
 				<hr/>
 				
-				<div className={ "rich-text-buttons" }>
-					<button onClick={ () => document.execCommand("bold", false) }>
-						<i className={ "fas fa-bold" }/></button>
-					<button onClick={ () => document.execCommand("italic", false) }>
-						<i className={ "fas fa-italic" }/></button>
-					<button onClick={ () => document.execCommand("underline", false) }>
-						<i className={ "fas fa-underline" }/></button>
-					<button onClick={ () => document.execCommand("strikeThrough", false) }>
-						<i className={ "fas fa-strikethrough" }/></button>
-					
-					<span/>
-					
-					<button onClick={ () => document.execCommand("insertOrderedList", false) }>
-						<i className={ "fas fa-list-ol" }/></button>
-					<button onClick={ () => document.execCommand("insertUnorderedList", false) }>
-						<i className={ "fas fa-list-ul" }/></button>
-					
-					<span/>
-					
-					<button onClick={ () => document.execCommand("justifyLeft", false) }>
-						<i className={ "fas fa-align-left" }/></button>
-					<button onClick={ () => document.execCommand("justifyCenter", false) }>
-						<i className={ "fas fa-align-center" }/></button>
-					<button onClick={ () => document.execCommand("justifyRight", false) }>
-						<i className={ "fas fa-align-right" }/></button>
-					<button onClick={ () => document.execCommand("justifyFull", false) }>
-						<i className={ "fas fa-align-justify" }/></button>
-					
-					<span/>
-					
-					<button onClick={ () => document.execCommand("undo", false) }>
-						<i className={ "fas fa-undo" }/></button>
-					<button onClick={ () => document.execCommand("redo", false) }>
-						<i className={ "fas fa-redo" }/></button>
-				
-				</div>
-				<p id={ "question-editor" }
-				   contentEditable={ !hasBeenSubmitted }
-				   onInput={ (e) => {
-					   setDescription((e.target as HTMLSpanElement).innerHTML);
-				   } }>
+				<TextEditor height={ "240px" } disabled={ hasBeenSubmitted } onInput={ setDescription }>
 					Describe your question in more detail.
-				</p>
-				<span className={ "caption" }>
-                    You have written {
-					document.getElementById("question-editor")?.innerText.split(" ").length
-				} words ({
-					document.getElementById("question-editor")?.innerText.length
-				} characters)
-                </span>
+				</TextEditor>
 			</div>
 		</section>
 		
