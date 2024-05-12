@@ -165,7 +165,8 @@
 				margin-bottom: calc(var(--spacing) / 2);
 			}
 
-			&::before {
+			.focus-indicator::before,
+			&.focus-indicator::before {
 				background: transparent;
 				border-radius: var(--border-radius);
 				content: '';
@@ -178,6 +179,7 @@
 				width: var(--bar-width);
 			}
 
+			.focus-indicator:focus-within,
 			&.focus-indicator:focus-within {
 				&,
 				.glass {
