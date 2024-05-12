@@ -1,6 +1,7 @@
 import React from "react";
 import "./Editor.scss";
 import LiveInput from "../components/LiveInput";
+import Button from "../components/Button";
 
 export default function Editor(props: {}) {
 	const [title, setTitle] = React.useState("New Question");
@@ -8,17 +9,11 @@ export default function Editor(props: {}) {
 	const [description, setDescription] = React.useState("Describe your question in more detail.");
 	const [questionType, setQuestionType] = React.useState<"simp" | "users">("simp");
 	
-	const isTitleValid = () => {
-		return title.length > 5;
-	}
+	const [hasBeenSubmitted, setHasBeenSubmitted] = React.useState(false);
 	
-	const isTagsValid = () => {
-		return tags.length > 0 && tags.length <= 5;
-	}
-	
-	const isDescriptionValid = () => {
-		return (document.getElementById("question-editor")?.innerText.split(" ").length ?? 0) >= 20;
-	}
+	const isTitleValid = title.length > 5;
+	const isTagsValid = tags.length > 0 && tags.length <= 5;
+	const isDescriptionValid = (document.getElementById("question-editor")?.innerText.split(" ").length ?? 0) >= 20;
 	
 	return <>
 		<section className={ "container editor-container transparent focus-indicator" }>
@@ -31,7 +26,7 @@ export default function Editor(props: {}) {
 				<h2>
 					<i className={ "far fa-question" }/>
 					<span id={ "editor-question-title" }
-						  contentEditable={ "plaintext-only" }
+						  contentEditable={ hasBeenSubmitted ? false : "plaintext-only" }
 						  onInput={ (e) => {
 							  let title = (e.target as HTMLSpanElement).innerText.trim();
 							  while (title.includes("  ")) title = title.replace("  ", " ");
@@ -72,7 +67,7 @@ export default function Editor(props: {}) {
 				<div style={ { display: "flex", gap: "var(--spacing)" } }>
 					<LiveInput placeholder={ "Add a tag" }
 							   onSuggestionSelected={ (s) => setTags([...tags, s]) }
-							   disabled={ tags.length >= 5 }/>
+							   disabled={ hasBeenSubmitted || tags.length >= 5 }/>
 					<p className={ "tags tags-deletable" } style={ { alignSelf: "center" } }>
 						{ tags.map((tag, index) => (
 							<span key={ index }
@@ -143,7 +138,7 @@ export default function Editor(props: {}) {
 				
 				</div>
 				<p id={ "question-editor" }
-				   contentEditable
+				   contentEditable={ !hasBeenSubmitted }
 				   onInput={ (e) => {
 					   setDescription((e.target as HTMLSpanElement).innerHTML);
 				   } }>
@@ -166,7 +161,10 @@ export default function Editor(props: {}) {
 			</div>
 			
 			<div className={ "glass editor-question-type-select" + (questionType === "simp" ? " selected" : "") }
-				 onClick={ () => setQuestionType("simp") }>
+				 onClick={ () => {
+					 if (hasBeenSubmitted) return;
+					 setQuestionType("simp");
+				 } }>
 				<i className={ "fas fa-2xl fa-brain icon-test" }/>
 				<h3>Enable Simp</h3>
 				<p>Users, as well as our in-house AI chatbot will be able to reply to your question to help provide
@@ -174,7 +172,10 @@ export default function Editor(props: {}) {
 			</div>
 			
 			<div className={ "glass editor-question-type-select" + (questionType === "users" ? " selected" : "") }
-				 onClick={ () => setQuestionType("users") }>
+				 onClick={ () => {
+					 if (hasBeenSubmitted) return;
+					 setQuestionType("users");
+				 } }>
 				<i className={ "far fa-2xl fa-user icon-test" }/>
 				<h3>Only Users</h3>
 				<p>Only Users will be able to upload answers to your question.</p>
@@ -198,17 +199,17 @@ export default function Editor(props: {}) {
 				<table>
 					<tbody>
 					<tr>
-						<td><i className={ "fas fa-" + (isTitleValid() ? "check" : "x") }
+						<td><i className={ "fas fa-" + (isTitleValid ? "check" : "x") }
 							   style={ { width: "40px", textAlign: "center" } }/></td>
 						<td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>A valid title</td>
 					</tr>
 					<tr>
-						<td><i className={ "fas fa-" + (isTagsValid() ? "check" : "x") }
+						<td><i className={ "fas fa-" + (isTagsValid ? "check" : "x") }
 							   style={ { width: "40px", textAlign: "center" } }/></td>
 						<td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>At least one tag</td>
 					</tr>
 					<tr>
-						<td><i className={ "fas fa-" + (isDescriptionValid() ? "check" : "x") }
+						<td><i className={ "fas fa-" + (isDescriptionValid ? "check" : "x") }
 							   style={ { width: "40px", textAlign: "center" } }/></td>
 						<td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>A detailed description of at least
 							20
@@ -222,10 +223,16 @@ export default function Editor(props: {}) {
 		
 		<div className={ "container editor-container transparent" } style={ { display: "flex" } }>
 			<div style={ { flex: 1 } }/>
-			<button className={ "btn btn-primary" }>
-				<i className={ "fas fa-paper-plane" }/>
-				<span>Post Your Question</span>
-			</button>
+			<Button style={ "primary" } icon={ "fas fa-paper-plane" }
+					onClick={ () => {
+						setHasBeenSubmitted(true);
+						
+						// Todo: Remove this timeout
+						setTimeout(() => setHasBeenSubmitted(false), 1000);
+					} }
+					disabled={ !isTitleValid || !isTagsValid || !isDescriptionValid }>
+				Post Your Question
+			</Button>
 		</div>
 	</>;
 }
