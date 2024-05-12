@@ -10,6 +10,13 @@ export default class Login extends Component<{}, {}> {
 			</div>
 			
 			<main>
+				{ document.referrer !== window.location.href &&
+                    <a href={ document.referrer } className={ "back" }>
+                        <i className={ "fas fa-arrow-left" }/>
+                        <span>Go back</span>
+                    </a>
+				}
+				
 				<div>
 					<h1 className={ "login-title" }>Log in with your<br/>email address</h1>
 					<p className={ "login-subtitle" }>Enter the email address you used to create your account. If you do
