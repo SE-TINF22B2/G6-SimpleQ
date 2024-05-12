@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "ory-auth": "npx @ory/cli auth",
     "tunnel": "npx @ory/cli --project objective-ramanujan-9xyl1ro5qe tunnel --dev http://localhost:3000",
+    "proxy": "npx @ory/cli --project objective-ramanujan-9xyl1ro5qe proxy --port 4001 http://localhost:3000 http://localhost:4001",
     "prisma": "npx prisma migrate dev --name db"
   },
   "dependencies": {
