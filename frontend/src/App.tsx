@@ -9,7 +9,7 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import Home from "./Home";
 import Dashboard from "./Dashboard";
 import Trending from "./pages/Trending";
-import Question from "./pages/Question";
+import QuestionView from "./pages/QuestionView";
 import Profile from "./pages/Profile";
 import Editor from "./pages/Editor";
 import Login from "./Login";
@@ -112,7 +112,7 @@ export default function App() {
 				<Route index element={ <Suspense><Navigate to={ "trending" }/></Suspense> }/>
 				<Route path={ "trending" }
 					   element={ <Suspense><Trending/></Suspense> }/>
-				<Route path={ "question/:id" } element={ <Suspense><Question/></Suspense> }/>
+				<Route path={ "question/:id" } element={ <Suspense><QuestionView/></Suspense> }/>
 				<Route path={ "profile" } element={ <Suspense><Profile/></Suspense> }/>
 				<Route path={ "question/new" } element={ <Suspense><Editor/></Suspense> }/>
 				<Route path={ "activity" } element={ <Suspense><Activity/></Suspense> }/>

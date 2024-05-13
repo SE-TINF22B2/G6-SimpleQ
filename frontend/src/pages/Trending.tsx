@@ -6,93 +6,64 @@ import LiveInput from "../components/LiveInput";
 import QuestionPreview from "../structs/QuestionPreview";
 import QuestionPreviewSkeleton from "../structs/QuestionPreviewSkeleton";
 import Section from "../components/Section";
-
-export interface QuestionElem {
-	id: number;
-	isDiscussion: boolean;
-	title: string;
-	originalLanguage: string;
-	creationDate: string;
-	updateDate: string;
-	tags: string[];
-	stats: {
-		likes: number;
-		dislikes: number;
-		views: number;
-		answers: number;
-		rating: "like" | "dislike" | "none";
-	}
-	author: {
-		name: string;
-		avatar: string;
-	};
-}
+import { Question } from "../def/Question";
 
 export default function Trending(props: {}) {
 	const [sortBy, setSortBy] = React.useState<"timestamp" | "likes" | "dislikes" | "views" | "answers">("timestamp");
 	const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">("desc");
-	const [questions, setQuestions] = React.useState<QuestionElem[] | null>(null);
+	const [questions, setQuestions] = React.useState<Question[] | null>(null);
 	
 	useEffect(() => {
 		setTimeout(() => setQuestions([
 			{
-				id: 1,
+				id: "1",
 				isDiscussion: false,
 				title: "How to rescue water damaged iPhone 12?",
-				originalLanguage: "English",
-				creationDate: "20.10.2023",
-				updateDate: "today",
+				created: "20.10.2023",
+				updated: "today",
 				tags: ["Smartphone", "Technical Support", "iPhone"],
-				stats: {
-					views: 51,
-					likes: 7,
-					dislikes: 3,
-					answers: 2,
-					rating: "like"
-				},
+				likes: 7,
+				dislikes: 3,
+				answers: 2,
+				rating: "like",
 				author: {
+					id: "1",
 					name: "John Doe",
-					avatar: "https://www.w3schools.com/w3images/avatar2.png"
+					type: "user"
 				}
 			},
 			{
-				id: 2,
+				id: "2",
 				isDiscussion: true,
 				title: "What is the best way to learn React?",
-				originalLanguage: "ENGLISH",
-				creationDate: "20.10.2023",
-				updateDate: "TODAY",
+				created: "20.10.2023",
+				updated: "TODAY",
 				tags: ["Tag 1", "Tag 2", "Tag 3"],
-				stats: {
-					likes: 123,
-					dislikes: 5122,
-					views: 13412,
-					answers: 202,
-					rating: "none"
-				},
+				likes: 123,
+				dislikes: 5122,
+				answers: 202,
+				rating: "none",
 				author: {
+					id: "1",
 					name: "John Doe",
-					avatar: "https://www.w3schools.com/w3images/avatar2.png"
+					type: "pro"
 				}
 			},
 			{
-				id: 3,
+				id: "3",
 				isDiscussion: false,
 				title: "How can I improve my CSS skills?",
-				originalLanguage: "ENGLISH",
-				creationDate: "20.10.2023",
-				updateDate: "TODAY",
+				created: "20.10.2023",
+				updated: "TODAY",
 				tags: ["Tag 1", "Tag 2", "Tag 3"],
-				stats: {
-					likes: 124231,
-					dislikes: 123,
-					views: 12161353,
-					answers: 12412,
-					rating: "dislike"
-				},
+				likes: 124231,
+				dislikes: 123,
+				answers: 12412,
+				rating: "dislike",
 				author: {
+					id: "1",
 					name: "John Doe",
-					avatar: "https://www.w3schools.com/w3images/avatar2.png"
+					type: "user"
 				}
 			}
 		]), 1000);

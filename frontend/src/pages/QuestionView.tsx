@@ -7,62 +7,28 @@ import { Navigate, useParams } from "react-router-dom";
 import SplitSection from "../components/SplitSection";
 import TextEditor from "../components/TextEditor";
 import Button from "../components/Button";
+import { Answer, Question } from "../def/Question";
 
-interface QuestionElemFull {
-	id: string;
-	title: string;
-	content: string;
-	tags: string[];
-	likes: number;
-	dislikes: number;
-	answers: number;
-	created: string;
-	updated: string;
-	author: Author;
-}
-
-interface Author {
-	id: string;
-	name: string;
-	type: "user" | "pro" | "ai";
-}
-
-interface Answer {
-	content: string;
-	created: string;
-	author: Author;
-	stats: {
-		likes: number;
-		dislikes: number;
-		rating: "like" | "dislike" | "none";
-	};
-}
-
-interface State {
-	question?: QuestionElemFull;
-	sortBy: "ldr" | "likes" | "dislikes" | "timestamp";
-	sortDirection: "asc" | "desc";
-	enableAI: boolean;
-}
-
-export default function Question() {
+export default function QuestionView() {
 	const { id } = useParams();
 	
-	const [question, setQuestion] = React.useState<QuestionElemFull | undefined>(undefined);
+	const [question, setQuestion] = React.useState<Question | undefined>(undefined);
 	const [answers, setAnswers] = React.useState<Answer[]>([]);
-	const [sortBy, setSortBy] = React.useState<State["sortBy"]>("ldr");
-	const [sortDirection, setSortDirection] = React.useState<State["sortDirection"]>("desc");
+	const [sortBy, setSortBy] = React.useState<"ldr" | "likes" | "dislikes" | "timestamp">("ldr");
+	const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">("desc");
 	const [enableAI, setEnableAI] = React.useState(true);
 	
 	useEffect(() => {
 		setTimeout(() => {
 			setQuestion({
 				id: id ?? "",
+				isDiscussion: false,
 				title: "How to rescue water damaged iPhone 12?",
 				content: "Hi there, I have just dropped my brand new iPhone 12 into the toilet by accident. As expected, the screen turned dark right away and I did not find a way to get any possible sign of life of it. Would any of you happen to know what I could try to rescue the iPhone? ",
 				tags: ["Smartphone", "Technical Support", "iPhone"],
 				likes: 7,
 				dislikes: 3,
+				rating: "like",
 				answers: 2,
 				created: "20.10.2023",
 				updated: "today",
@@ -74,31 +40,29 @@ export default function Question() {
 			});
 			setAnswers([
 				{
+					id: "1",
 					content: "Back in 2020, the same thing happened to me as well. I tried putting it in an enclosed bag with loads of rice, which actually brought the iPhone 12 back to life after a couple of hours. Try that and you might be an iPhone 12 owner again later. You can tell me how it went.",
 					author: {
 						id: "https://www.w3schools.com/w3images/avatar2.png",
 						name: "John Doe",
 						type: "pro"
 					},
-					stats: {
-						likes: 7,
-						dislikes: 3,
-						rating: "none"
-					},
+					likes: 7,
+					dislikes: 3,
+					rating: "none",
 					created: "today"
 				},
 				{
+					id: "2",
 					content: "I am in the same situation as you. I tried the rice method and it worked for me as well. I hope it works for you too. Good luck!",
 					author: {
 						id: "2131",
 						name: "Simp",
 						type: "ai"
 					},
-					stats: {
-						likes: 2,
-						dislikes: 0,
-						rating: "dislike"
-					},
+					likes: 2,
+					dislikes: 0,
+					rating: "dislike",
 					created: "today"
 				}
 			]);
@@ -158,16 +122,16 @@ export default function Question() {
 				
 				<div className={ "question-answer-actions" }>
 					<div
-						className={ "question-answer-actions-rate" + (answer.stats.rating === "like" ? " rating" : "") }>
+						className={ "question-answer-actions-rate" + (answer.rating === "like" ? " rating" : "") }>
 						<i className={ "fas fa-thumbs-up primary-icon" } tabIndex={ 0 }/>
-						<span className={ "question-figure" }>{ answer.stats.likes }</span>
+						<span className={ "question-figure" }>{ answer.likes }</span>
 						<span className={ "question-unit" }>likes</span>
 					</div>
 					
 					<div
-						className={ "question-answer-actions-rate" + (answer.stats.rating === "dislike" ? " rating" : "") }>
+						className={ "question-answer-actions-rate" + (answer.rating === "dislike" ? " rating" : "") }>
 						<i className={ "fas fa-thumbs-down primary-icon" } tabIndex={ 0 }/>
-						<span className={ "question-figure" }>{ answer.stats.dislikes }</span>
+						<span className={ "question-figure" }>{ answer.dislikes }</span>
 						<span className={ "question-unit" }>dislikes</span>
 					</div>
 					
@@ -218,7 +182,7 @@ export default function Question() {
 			<div style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)", flexGrow: 1 } }>
 				<section className={ "glass question-content" }>
 					{ question ? <p className={ "tags" }>
-						{ question.tags.map((tag, index) =>
+						{ question.tags.map((tag: string, index: number) =>
 							<span key={ index } className={ "badge" }>{ tag }</span>) }
 					</p> : <Skeleton className={ "tags" }/> }
 					

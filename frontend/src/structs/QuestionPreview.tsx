@@ -1,9 +1,9 @@
 import React from "react";
-import { QuestionElem } from "../pages/Trending";
 import { useNavigate } from "react-router-dom";
+import { Question } from "../def/Question";
 
 interface Props {
-	question: QuestionElem;
+	question: Question;
 	index: number;
 }
 
@@ -41,25 +41,25 @@ export default function QuestionPreview(props: Props) {
 			</h2>
 			
 			<span className={ "caption" }>
-                    { props.question.originalLanguage } (Original) · Created: { props.question.creationDate } · Last Updated: { props.question.updateDate }
+                    created: { props.question.created } · last updated: { props.question.updated }
                 </span>
 		</div>
 		
 		<div className={ "question-details-wrapper" }>
 			<div className={ "question-stats" }>
 				<div
-					className={ "question-stat" + (props.question.stats.rating === "like" ? " rating" : "") }>
+					className={ "question-stat" + (props.question.rating === "like" ? " rating" : "") }>
 					<i className={ "fas fa-thumbs-up primary-icon" }/>
 					<span
-						className={ "question-figure" }>{ props.question.stats.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
+						className={ "question-figure" }>{ props.question.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 					<span className={ "question-unit" }>likes</span>
 				</div>
 				
 				<div
-					className={ "question-stat" + (props.question.stats.rating === "dislike" ? " rating" : "") }>
+					className={ "question-stat" + (props.question.rating === "dislike" ? " rating" : "") }>
 					<i className={ "fas fa-thumbs-down primary-icon" }/>
 					<span
-						className={ "question-figure" }>{ props.question.stats.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
+						className={ "question-figure" }>{ props.question.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 					<span className={ "question-unit" }>dislikes</span>
 				</div>
 			</div>
@@ -68,20 +68,20 @@ export default function QuestionPreview(props: Props) {
 				<div className={ "question-stat" }>
 					<i className={ "fas fa-eye primary-icon" }/>
 					<span
-						className={ "question-figure" }>{ props.question.stats.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
+						className={ "question-figure" }>{ "0".replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 					<span className={ "question-unit" }>views</span>
 				</div>
 				
 				<div className={ "question-stat" }>
 					<i className={ "fas fa-comment-dots primary-icon" }/>
 					<span
-						className={ "question-figure" }>{ props.question.stats.answers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
+						className={ "question-figure" }>{ props.question.answers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 					<span className={ "question-unit" }>answers</span>
 				</div>
 			</div>
 			
 			<div className={ "author" }>
-				<img className={ "avatar" } src={ props.question.author.avatar }/>
+				<img className={ "avatar" } src={ "https://www.w3schools.com/w3images/avatar2.png" }/>
 				<p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
 					<span className={ "caption" }>Asked by</span>
 					<span>{ props.question.author.name }</span>
