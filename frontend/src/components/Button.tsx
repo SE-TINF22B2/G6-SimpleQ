@@ -3,9 +3,9 @@ import "./Button.scss";
 
 interface Props {
 	style?: "primary" | "glass",
-	icon: string,
+	icon?: string,
 	onClick?: () => void,
-	children: React.ReactNode,
+	children?: React.ReactNode,
 	disabled?: boolean,
 	placeIconRight?: boolean
 }
@@ -23,14 +23,13 @@ export default function Button(props: Props) {
 					setIsLoading(true);
 					props.onClick();
 					
-					// Todo: Remove this timeout
-					setTimeout(() => setIsLoading(false), 1000);
+					setIsLoading(false);
 				} }>
-			{ !props.placeIconRight && <i className={ isLoading ? "fas fa-spinner" : props.icon }
-                                          style={ { marginRight: "var(--spacing)" } }/> }
+			{ props.icon && !props.placeIconRight && <i className={ isLoading ? "fas fa-spinner" : props.icon }
+                                                        style={ { marginRight: "var(--spacing)" } }/> }
 			<span>{ props.children }</span>
-			{ props.placeIconRight && <i className={ isLoading ? "fas fa-spinner" : props.icon }
-                                         style={ { marginLeft: "var(--spacing)" } }/> }
+			{ props.icon && props.placeIconRight && <i className={ isLoading ? "fas fa-spinner" : props.icon }
+                                                       style={ { marginLeft: "var(--spacing)" } }/> }
 		</button>
 	);
 }

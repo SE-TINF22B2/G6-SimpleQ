@@ -103,7 +103,7 @@ export default function App() {
 		<Routes>
 			{ /* Todo: All Suspense Fallback */ }
 			
-			<Route index element={ <Home/> }/>
+			<Route index element={ <Home updateTheme={ updateTheme }/> }/>
 			<Route path={ "login" } element={ <Login/> }/>
 			<Route path={ "dashboard" }
 				   element={ <Suspense fallback={ <p>Loading Dashboard..</p> }>
