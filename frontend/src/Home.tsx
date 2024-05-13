@@ -9,6 +9,12 @@ import mockup from "./images/macbook-mockup.png";
 import logoTodoMakeStatic from "./images/logo-TODO-MAKE-STATIC.png";
 import Button from "./components/Button";
 
+import benni from "./images/benni.png";
+import joshua from "./images/joshua.png";
+import leonard from "./images/leonard.png";
+import manuel from "./images/manuel.png";
+import tom from "./images/tom.png";
+
 export default function Home(props: { updateTheme: (theme: "system" | "dark" | "light") => void }) {
 	const navigate = useNavigate();
 	const [currentThemeOnlyDisplay, setCurrentThemeOnlyDisplay] =
@@ -182,9 +188,9 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					
 					<div className={ "members" }>
 						<div className={ "member fade-in" }>
-							<img src={ "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" }/>
+							<img src={ benni }/>
 							<div className={ "member-details" }>
-								<h1>Benni L.</h1>
+								<h1>Benni</h1>
 								<div className={ "member-socials" }>
 									<a href={ "" }>
 										<i className={ "fa-brands fa-github" }/>
@@ -197,9 +203,9 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 						
 						<div className={ "member fade-in" }>
-							<img src={ "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" }/>
+							<img src={ joshua }/>
 							<div className={ "member-details" }>
-								<h1>Benni L.</h1>
+								<h1>Joshua</h1>
 								<div className={ "member-socials" }>
 									<a href={ "" }>
 										<i className={ "fa-brands fa-github" }/>
@@ -212,9 +218,9 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 						
 						<div className={ "member fade-in" }>
-							<img src={ "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" }/>
+							<img src={ leonard }/>
 							<div className={ "member-details" }>
-								<h1>Benni L.</h1>
+								<h1>Leonard</h1>
 								<div className={ "member-socials" }>
 									<a href={ "" }>
 										<i className={ "fa-brands fa-github" }/>
@@ -227,9 +233,9 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 						
 						<div className={ "member fade-in" }>
-							<img src={ "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" }/>
+							<img src={ manuel }/>
 							<div className={ "member-details" }>
-								<h1>Benni L.</h1>
+								<h1>Manuel</h1>
 								<div className={ "member-socials" }>
 									<a href={ "" }>
 										<i className={ "fa-brands fa-github" }/>
@@ -242,9 +248,9 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 						
 						<div className={ "member fade-in" }>
-							<img src={ "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" }/>
+							<img src={ tom }/>
 							<div className={ "member-details" }>
-								<h1>Benni L.</h1>
+								<h1>Tom</h1>
 								<div className={ "member-socials" }>
 									<a href={ "" }>
 										<i className={ "fa-brands fa-github" }/>
