@@ -1,4 +1,4 @@
-import { Answer, Blacklist, Discussion, Expert, Favorite, LoginAttempt, Moderation, Prisma, Quest, Question, QuestType, Tag, User, UserContent, UserContentType, UserQuest, UserTimeout, Vote } from "@prisma/client";
+import { Answer, Blacklist, Discussion, Expert, Favorite, LoginAttempt, Moderation, Quest, Question, QuestType, Tag, User, UserContent, UserContentType, UserQuest, UserTimeout, Vote } from "@prisma/client";
 
 export const testBlacklistItem: Blacklist = { name: 'test' };
 export const testBlacklist: Blacklist[] = [{ name: 'test1' }, { name: 'test2' }]
