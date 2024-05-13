@@ -244,10 +244,11 @@
 		transition: var(--transition);
 
 		&.glass-hover {
-			transition: background-color var(--transition) !important;
+			transition: all var(--transition) !important;
 
 			&:hover {
 				background-color: var(--background-color-primary);
+				box-shadow: var(--box-shadow-elevated);
 			}
 		}
 
