@@ -3,32 +3,36 @@ name: Backend Workflow
 on:
   pull_request_target:
     branches:
-      - dev
+      - main
+  push:
+    branches:
+      - main
+      - backend/**
 jobs:
   verify:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Install Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '20'
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
 
-    - name: Install dependencies
-      run: |
-        cd backend
-        yarn install
-        ls -la
+      - name: Install dependencies
+        run: |
+          cd backend
+          yarn install
+          ls -la
 
-    - name: Test application
-      run: | 
-        cd backend
-        yarn test
-    
-    - name: Lint application
-      run: | 
-        cd backend
-        yarn lint
+      - name: Test application
+        run: |
+          cd backend
+          yarn test
+
+      - name: Lint application
+        run: |
+          cd backend
+          yarn lint

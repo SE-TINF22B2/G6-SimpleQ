@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/backend/server.ts",
+            "program": "${workspaceFolder}/backend/src/main.ts",
             "outFiles": [
                 "${workspaceFolder}/backend/**/*.ts"
             ]
