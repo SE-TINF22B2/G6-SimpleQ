@@ -13,12 +13,11 @@ export default class Profile extends React.Component<any, any> {
                             Profile
                         </h1>
                         <p>View and edit your profile.</p>
-
+                        
                         <hr/>
                         <h3>Profile Picture</h3>
                         <div style={ { display: "flex", gap: "var(--spacing)" } }>
                             <img src={ "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" }
-                                 alt={ "Profile Picture" }
                                  style={ {
                                      height: "100px",
                                      width: "100px",
@@ -31,11 +30,11 @@ export default class Profile extends React.Component<any, any> {
                             </button>
                         </div>
                     </div>
-
-                    <img src={ completing } alt={ "Trending" }
+                    
+                    <img src={ completing }
                          style={ { height: "180px", alignSelf: "center", userSelect: "none", pointerEvents: "none" } }/>
                 </div>
-
+                
                 <hr/>
                 <h3>Basic Information</h3>
                 <table style={ { width: "100%" } }>
@@ -72,38 +71,38 @@ export default class Profile extends React.Component<any, any> {
                     </tbody>
                 </table>
             </div>
-
+            
             <div className={ "container profile-expert-topics" }>
                 <h2>
                     <i className={ "fas fa-brain" }/>
                     Expert Topics
                 </h2>
                 <p>Choose your expert topics to help others find you.</p>
-
+                
                 <hr/>
-
+                
                 <div style={ { display: "flex", gap: "var(--spacing)" } }>
                     <div style={ { flex: 1 } }>
                         <h3>My Expert Topics</h3>
                         <p>Choose your expert topics to help others find you.</p>
                     </div>
-
+                    
                     <div style={ { flex: 1 } }>
                         <h3>Choose Expert Topics</h3>
                         <p>Choose your expert topics to help others find you.</p>
                     </div>
                 </div>
             </div>
-
+            
             <div className={ "container profile-memberships" }>
                 <h2>
                     <i className={ "fas fa-ranking-star" }/>
                     My Membership
                 </h2>
                 <p>Upgrade your membership to unlock more features.</p>
-
+                
                 <hr/>
-
+                
                 <table style={ { width: "100%", textAlign: "center" } }>
                     <tbody>
                     <tr>

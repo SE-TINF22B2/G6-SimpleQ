@@ -135,7 +135,7 @@ export default function Question() {
 						<span>Simp</span>
 					</p>
 				</> : <div className={ "question-answer-author-user" } tabIndex={ 0 }>
-					<img className={ "avatar" } src={ answer.author.id } alt={ "Avatar" }/>
+					<img className={ "avatar" } src={ answer.author.id }/>
 					
 					<p>
 						<span>{ answer.author.name }</span>
@@ -253,7 +253,7 @@ export default function Question() {
 				<section className={ "glass" }>
 					<div className={ "question-author" } tabIndex={ 0 }>
 						{ question
-							? <img className={ "avatar" } src={ question.author.id } alt={ "Avatar" }/>
+							? <img className={ "avatar" } src={ question.author.id }/>
 							: <Skeleton height={ 40 } width={ 40 }/> }
 						
 						<div className={ "question-author-info" }>

@@ -142,8 +142,7 @@ export default function Dashboard(props: Props) {
 				 onError={ ({ currentTarget }) => {
 					 currentTarget.onerror = null; // prevents looping
 					 currentTarget.src = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50";
-				 } }
-				 alt={ "Profile Picture" }/>
+				 } }/>
 		</div> }
 						 items={ [
 							 {

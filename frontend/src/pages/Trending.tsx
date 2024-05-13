@@ -174,7 +174,7 @@ export default class Trending extends React.Component<{ navigate: NavigateFuncti
 						</div>
 					</div>
 					
-					<img src={ thinking } alt={ "Trending" }
+					<img src={ thinking }
 						 style={ { height: "120px", alignSelf: "center", userSelect: "none", pointerEvents: "none" } }/>
 				</div>
 				

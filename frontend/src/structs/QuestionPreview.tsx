@@ -81,8 +81,7 @@ export default function QuestionPreview(props: Props) {
 			</div>
 			
 			<div className={ "author" }>
-				<img className={ "avatar" } src={ props.question.author.avatar }
-					 alt={ "Avatar" }/>
+				<img className={ "avatar" } src={ props.question.author.avatar }/>
 				<p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
 					<span className={ "caption" }>Asked by</span>
 					<span>{ props.question.author.name }</span>
