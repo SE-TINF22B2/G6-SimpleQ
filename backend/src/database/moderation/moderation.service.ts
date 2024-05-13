@@ -4,7 +4,7 @@ import { Moderation } from '@prisma/client';
 
 @Injectable()
 export class ModerationService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
     async createModeration(moderatorUserID: string, discussionContentID: string): Promise<Moderation> {
         return this.prisma.moderation.create({

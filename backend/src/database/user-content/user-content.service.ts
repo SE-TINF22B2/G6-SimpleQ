@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class UserContentService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
     // Question
     async createQuestion(ownerID: string, groupID: string, content: string | null, title: string): Promise<{ userContent: UserContent, question: Question }> {

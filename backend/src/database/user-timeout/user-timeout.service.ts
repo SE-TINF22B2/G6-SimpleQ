@@ -4,7 +4,7 @@ import { UserTimeout } from '@prisma/client';
 
 @Injectable()
 export class UserTimeoutService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
     async createUserTimeout(timeoutedUserID: string, moderationID: string, contentID: string, timeout: Date): Promise<UserTimeout> {
         return this.prisma.userTimeout.create({

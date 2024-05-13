@@ -4,7 +4,7 @@ import { UserQuest } from '@prisma/client';
 
 @Injectable()
 export class UserQuestService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
     async createUserQuest(questID: string, questUserID: string, done: boolean): Promise<UserQuest> {
         return this.prisma.userQuest.create({

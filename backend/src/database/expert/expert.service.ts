@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class ExpertService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
     async createExpert(expertUserID: string, tagname: string, expertPoints: number): Promise<Expert> {
         return this.prisma.expert.create({

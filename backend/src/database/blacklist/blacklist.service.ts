@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class BlacklistService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
     async createBlacklistItem(name: string): Promise<Blacklist> {
         return this.prisma.blacklist.create({
@@ -19,7 +19,7 @@ export class BlacklistService {
         });
     }
 
-    async getAllBlacklistItems(): Promise<Blacklist[]> {
-        return this.prisma.blacklist.findMany();
-    }
+  async getAllBlacklistItems(): Promise<Blacklist[]> {
+    return this.prisma.blacklist.findMany();
+  }
 }

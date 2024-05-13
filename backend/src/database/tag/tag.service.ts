@@ -4,7 +4,7 @@ import { Tag } from '@prisma/client';
 
 @Injectable()
 export class TagService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
     async createTag(tagname: string): Promise<Tag> {
         return this.prisma.tag.create({

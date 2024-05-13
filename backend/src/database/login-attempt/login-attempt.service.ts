@@ -4,7 +4,7 @@ import { LoginAttempt } from '@prisma/client';
 
 @Injectable()
 export class LoginAttemptService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
     async createLoginAttempt(loginUserID: string, wasSuccessful: boolean): Promise<LoginAttempt> {
         return this.prisma.loginAttempt.create({

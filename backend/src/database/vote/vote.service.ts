@@ -4,7 +4,7 @@ import { Vote } from '@prisma/client';
 
 @Injectable()
 export class VoteService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
     async createVote(contentID: string, votingUserID: string, isPositive: boolean): Promise<Vote> {
         return this.prisma.vote.create({
