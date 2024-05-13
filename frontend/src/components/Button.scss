@@ -14,10 +14,6 @@
 	user-select: none;
 	white-space: nowrap;
 
-	i {
-		margin-inline-end: var(--spacing);
-	}
-
 	&.btn-primary {
 		background: var(--primary-color);
 		color: var(--primary-color-contrast);
