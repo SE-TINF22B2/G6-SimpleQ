@@ -6,17 +6,19 @@ import { Prisma, Tag } from '@prisma/client';
 export class TagService {
     constructor(private prisma: PrismaService) { }
 
-    async createTag(data: Prisma.TagCreateInput): Promise<Tag> {
+    async createTag(tagname: string): Promise<Tag> {
         return this.prisma.tag.create({
-            data,
+            data: {
+                tagname: tagname
+            },
         })
     }
 
     async getTag(
-        tagWhereUniqueInput: Prisma.TagWhereUniqueInput,
+        tagname: string
     ): Promise<Tag | null> {
         return this.prisma.tag.findUnique({
-            where: tagWhereUniqueInput,
+            where: { tagname: tagname },
         });
     }
 }

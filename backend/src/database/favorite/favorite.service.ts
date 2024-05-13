@@ -1,22 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Favorite } from '@prisma/client';
+import { Favorite } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class FavoriteService {
     constructor(private prisma: PrismaService) { }
 
-    async createFavorite(data: Prisma.FavoriteCreateInput): Promise<Favorite> {
+    async createFavorite(favoriteUserID: string, contentID: string): Promise<Favorite> {
         return this.prisma.favorite.create({
-            data,
+            data: {
+                content: {
+                    connect: { userContentID: contentID }
+                },
+                favoriteUser: {
+                    connect: { userID: favoriteUserID }
+                }
+            }
         })
     }
 
-    async getFavorite(
-        favoriteWhereUniqueInput: Prisma.FavoriteWhereUniqueInput,
+    async getFavorite(favoriteUserID: string, contentID: string
     ): Promise<Favorite | null> {
         return this.prisma.favorite.findUnique({
-            where: favoriteWhereUniqueInput,
+            where: {
+                contentID_favoriteUserID: {
+                    contentID: contentID,
+                    favoriteUserID: favoriteUserID
+                }
+            }
         });
     }
 }

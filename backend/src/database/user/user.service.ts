@@ -4,19 +4,26 @@ import { User, Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) { }
 
-    async createUser(data: Prisma.UserCreateInput): Promise<User> {
-        return this.prisma.user.create({
-            data,
-        });
-    }
+  async createUser(username: string, isPro: boolean, isAdmin: boolean, timeOfRegistration: Date, activityPoints: number, email: string | null): Promise<User> {
+    return this.prisma.user.create({
+      data: {
+        username: username,
+        isPro: isPro,
+        isAdmin: isAdmin,
+        timeOfRegistration: timeOfRegistration,
+        activityPoints: activityPoints,
+        email: email
+      },
+    });
+  }
 
-    async getUser(
-        userWhereUniqueInput: Prisma.UserWhereUniqueInput,
-      ): Promise<User | null> {
-        return this.prisma.user.findUnique({
-          where: userWhereUniqueInput,
-        });
-      }
+  async getUser(
+    userID: string
+  ): Promise<User | null> {
+    return this.prisma.user.findUnique({
+      where: { userID: userID },
+    });
+  }
 }

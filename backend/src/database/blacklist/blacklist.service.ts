@@ -1,22 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { Blacklist, Prisma } from '@prisma/client';
+import { Blacklist } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class BlacklistService {
     constructor(private prisma: PrismaService) { }
 
-    async createBlacklistItem(data: Prisma.BlacklistCreateInput): Promise<Blacklist> {
+    async createBlacklistItem(name: string): Promise<Blacklist> {
         return this.prisma.blacklist.create({
-            data,
+            data: { name: name },
         })
     }
 
-    async getBlacklistItem(
-        blacklistWhereUniqueInput: Prisma.BlacklistWhereUniqueInput,
+    async getBlacklistItem(name: string
     ): Promise<Blacklist | null> {
         return this.prisma.blacklist.findUnique({
-            where: blacklistWhereUniqueInput,
+            where: { name: name },
         });
     }
 

@@ -6,17 +6,24 @@ import { Moderation, Prisma } from '@prisma/client';
 export class ModerationService {
     constructor(private prisma: PrismaService) { }
 
-    async createModeration(data: Prisma.ModerationCreateInput): Promise<Moderation> {
+    async createModeration(moderatorUserID: string, discussionContentID: string): Promise<Moderation> {
         return this.prisma.moderation.create({
-            data,
+            data: {
+                moderator: {
+                    connect: { userID: moderatorUserID }
+                },
+                discussion: {
+                    connect: { userContentID: discussionContentID }
+                }
+            }
         })
     }
 
     async getModeration(
-        moderationWhereUniqueInput: Prisma.ModerationWhereUniqueInput,
+        moderationID: string
     ): Promise<Moderation | null> {
         return this.prisma.moderation.findUnique({
-            where: moderationWhereUniqueInput,
+            where: { moderationID: moderationID },
         });
     }
 }

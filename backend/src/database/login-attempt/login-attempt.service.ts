@@ -6,17 +6,27 @@ import { LoginAttempt, Prisma } from '@prisma/client';
 export class LoginAttemptService {
     constructor(private prisma: PrismaService) { }
 
-    async createLoginAttempt(data: Prisma.LoginAttemptCreateInput): Promise<LoginAttempt> {
+    async createLoginAttempt(loginUserID: string, wasSuccessful: boolean): Promise<LoginAttempt> {
         return this.prisma.loginAttempt.create({
-            data,
+            data: {
+                loginUser: {
+                    connect: { userID: loginUserID }
+                },
+                wasSuccessful: wasSuccessful
+            }
         })
     }
 
     async getLoginAttempt(
-        loginAttemptWhereUniqueInput: Prisma.LoginAttemptWhereUniqueInput,
+        loginUserID: string, timeOfLogin: Date
     ): Promise<LoginAttempt | null> {
         return this.prisma.loginAttempt.findUnique({
-            where: loginAttemptWhereUniqueInput,
+            where: {
+                loginUserID_timeOfLogin: {
+                    loginUserID: loginUserID,
+                    timeOfLogin: timeOfLogin
+                }
+            },
         });
     }
 }

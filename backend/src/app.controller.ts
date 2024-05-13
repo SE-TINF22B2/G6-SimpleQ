@@ -13,12 +13,12 @@ export class AppController {
   }
 
   @Post('user')
-  async createUser(@Body() user: Prisma.UserCreateInput): Promise<User> {
-    return this.userService.createUser(user); 
+  async createUser(@Body() data): Promise<User> {
+    return this.userService.createUser(data.username, data.isPro, data.isAdmin, data.timeOfRegistration, data.activityPoints, data.email);
   }
 
   @Get('user')
-  getUser(@Req() ID: Prisma.UserWhereUniqueInput): Promise<User> {
+  getUser(@Req() ID: string): Promise<User | null> {
     return this.userService.getUser(ID);
   }
 }

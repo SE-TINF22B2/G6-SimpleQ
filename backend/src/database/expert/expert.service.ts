@@ -1,22 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, Expert } from '@prisma/client';
+import { Expert } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class ExpertService {
     constructor(private prisma: PrismaService) { }
 
-    async createExpert(data: Prisma.ExpertCreateInput): Promise<Expert> {
+    async createExpert(expertUserID: string, tagname: string, expertPoints: number): Promise<Expert> {
         return this.prisma.expert.create({
-            data,
+            data: {
+                expertUser: {
+                    connect: { userID: expertUserID }
+                },
+                tag: {
+                    connect: { tagname: tagname }
+                },
+                expertPoints: expertPoints
+            }
         })
     }
 
-    async getExpert(
-        expertWhereUniqueInput: Prisma.ExpertWhereUniqueInput,
+    async getExpert(expertUserID: string, tagname: string
     ): Promise<Expert | null> {
         return this.prisma.expert.findUnique({
-            where: expertWhereUniqueInput,
+            where: {
+                expertUserID_tagname: {
+                    expertUserID: expertUserID,
+                    tagname: tagname
+                }
+            },
         });
     }
 }
