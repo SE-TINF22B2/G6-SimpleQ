@@ -1,7 +1,7 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import './App.scss';
-import { Navigate, NavigateFunction, Route, Routes, useNavigate } from "react-router-dom";
-import i18n, { TFunction } from "i18next";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import i18n from "i18next";
 import { initReactI18next, useTranslation } from "react-i18next";
 import translationEN from "./locales/en/translation.json";
 import { useMediaQuery } from "@react-hook/media-query";
@@ -40,42 +40,22 @@ export default function App() {
 	if (prefersDarkTheme) themePreference = "dark";
 	else if (prefersLightTheme) themePreference = "light";
 	
-	return <AppComp t={ t } navigate={ navigate } themePreference={ themePreference }/>;
-}
-
-interface Props {
-	t: TFunction<"translation", undefined>;
-	navigate: NavigateFunction;
-	themePreference?: "dark" | "light";
-}
-
-class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
-	constructor(props: Props) {
-		super(props);
-		this.state = {
-			theme: (localStorage.getItem("theme") as "dark" | "light" || props.themePreference) ?? "light"
-		};
-	}
+	const [theme, setTheme] = React.useState<"dark" | "light">(
+		(localStorage.getItem("theme") as "dark" | "light" || themePreference) ?? "light");
 	
-	componentDidMount() {
-		this.updateThemeVariables();
+	useEffect(() => {
+		updateThemeVariables();
+	}, [theme]);
+	
+	useEffect(() => {
+		window.matchMedia('(prefers-color-scheme: dark)')
+			  .addEventListener('change', ({ matches }) => updateThemePreference(matches));
 		
-		window.matchMedia('(prefers-color-scheme: dark)')
-			  .addEventListener('change', ({ matches }) => this.updateThemePreference(matches));
-	}
+		return () => window.matchMedia('(prefers-color-scheme: dark)')
+						   .removeEventListener('change', ({ matches }) => updateThemePreference(matches));
+	}, []);
 	
-	componentWillUnmount() {
-		window.matchMedia('(prefers-color-scheme: dark)')
-			  .removeEventListener('change', ({ matches }) => this.updateThemePreference(matches));
-	}
-	
-	componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<{ theme: "dark" | "light" }>, snapshot?: any) {
-		if (prevState.theme !== this.state.theme) {
-			this.updateThemeVariables();
-		}
-	}
-	
-	updateThemeVariables() {
+	const updateThemeVariables = () => {
 		let root = document.documentElement.style;
 		
 		let variables = [
@@ -92,7 +72,7 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
 		];
 		
 		variables.forEach(variable => {
-			let value = this.state.theme === "dark"
+			let value = theme === "dark"
 				? getComputedStyle(document.documentElement).getPropertyValue(`${ variable }-dark`)
 				: getComputedStyle(document.documentElement).getPropertyValue(`${ variable }-light`);
 			root.setProperty(variable, value);
@@ -103,46 +83,44 @@ class AppComp extends React.Component<Props, { theme: "dark" | "light" }> {
 		if (meta) meta.content = getComputedStyle(document.documentElement).getPropertyValue("--background-color-primary");
 	}
 	
-	updateTheme(theme: "system" | "dark" | "light") {
+	const updateTheme = (theme: "system" | "dark" | "light") => {
 		if (theme === "system") {
 			localStorage.removeItem("theme");
-			this.setState({ theme: this.props.themePreference ?? "light" });
+			setTheme(themePreference ?? "light");
 		} else {
 			localStorage.setItem("theme", theme);
-			this.setState({ theme });
+			setTheme(theme);
 		}
 	}
 	
-	render() {
-		return <SkeletonTheme baseColor={ this.state.theme === "light" ? "#dadada" : "#333" }
-							  highlightColor={ this.state.theme === "light" ? "#f5f5f5" : "#101010" }>
-			<Routes>
-				{ /* Todo: All Suspense Fallback */ }
-				
-				<Route index element={ <Home navigate={ this.props.navigate }/> }/>
-				<Route path={ "login" } element={ <Login/> }/>
-				<Route path={ "dashboard" }
-					   element={ <Suspense fallback={ <p>Loading Dashboard..</p> }>
-						   <Dashboard updateTheme={ this.updateTheme.bind(this) }/>
-					   </Suspense> }>
-					<Route index element={ <Suspense><Navigate to={ "trending" }/></Suspense> }/>
-					<Route path={ "trending" }
-						   element={ <Suspense><Trending navigate={ this.props.navigate }/></Suspense> }/>
-					<Route path={ "question/:id" } element={ <Suspense><Question/></Suspense> }/>
-					<Route path={ "profile" } element={ <Suspense><Profile/></Suspense> }/>
-					<Route path={ "question/new" } element={ <Suspense><Editor/></Suspense> }/>
-					<Route path={ "activity" } element={ <Suspense><Activity/></Suspense> }/>
-					
-					<Route path={ "*" } element={ <Navigate to={ "" }/> }/>
-				</Route>
-				
-				<Route path={ "*" } element={ <Navigate to={ "" }/> }/>
-			</Routes>
-		</SkeletonTheme>;
+	const updateThemePreference = (matches: boolean) => {
+		if (localStorage.getItem("theme") === null)
+			setTheme(matches ? "dark" : "light");
 	}
 	
-	private updateThemePreference(matches: boolean) {
-		if (localStorage.getItem("theme") === null)
-			this.setState({ theme: matches ? "dark" : "light" });
-	}
+	return <SkeletonTheme baseColor={ theme === "light" ? "#dadada" : "#333" }
+						  highlightColor={ theme === "light" ? "#f5f5f5" : "#101010" }>
+		<Routes>
+			{ /* Todo: All Suspense Fallback */ }
+			
+			<Route index element={ <Home/> }/>
+			<Route path={ "login" } element={ <Login/> }/>
+			<Route path={ "dashboard" }
+				   element={ <Suspense fallback={ <p>Loading Dashboard..</p> }>
+					   <Dashboard updateTheme={ updateTheme }/>
+				   </Suspense> }>
+				<Route index element={ <Suspense><Navigate to={ "trending" }/></Suspense> }/>
+				<Route path={ "trending" }
+					   element={ <Suspense><Trending/></Suspense> }/>
+				<Route path={ "question/:id" } element={ <Suspense><Question/></Suspense> }/>
+				<Route path={ "profile" } element={ <Suspense><Profile/></Suspense> }/>
+				<Route path={ "question/new" } element={ <Suspense><Editor/></Suspense> }/>
+				<Route path={ "activity" } element={ <Suspense><Activity/></Suspense> }/>
+				
+				<Route path={ "*" } element={ <Navigate to={ "" }/> }/>
+			</Route>
+			
+			<Route path={ "*" } element={ <Navigate to={ "" }/> }/>
+		</Routes>
+	</SkeletonTheme>;
 }
