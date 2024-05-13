@@ -1,5 +1,5 @@
-import { Injectable, Optional } from '@nestjs/common';
-import { Answer, Discussion, Prisma, Question, UserContent, UserContentType } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
+import { Answer, Discussion, Question, UserContent, UserContentType } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()

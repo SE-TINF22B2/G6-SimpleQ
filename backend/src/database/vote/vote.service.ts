@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { Prisma, Vote } from '@prisma/client';
-import { connect } from 'http2';
+import { Vote } from '@prisma/client';
 
 @Injectable()
 export class VoteService {
