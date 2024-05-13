@@ -3,11 +3,9 @@ import Timeline from "../components/Timeline";
 import React from "react";
 import history from "../illustrations/history.svg";
 import Dropdown from "../components/dropdown/Dropdown";
+import Button from "../components/Button";
 
-interface Props {
-}
-
-export default function Activity(props: Props) {
+export default function Activity(props: {}) {
 	return <>
 		<Section>
 			
@@ -22,10 +20,8 @@ export default function Activity(props: Props) {
 						alignItems: "center",
 						marginTop: "var(--spacing)"
 					} }>
-						<Dropdown button={ <p className={ "btn btn-glass" } tabIndex={ 0 }>
-							<i className={ "fas fa-filter" }/>
-							Filter
-						</p> }
+						<Dropdown button={ <Button icon={ "fas fa-filter" }>Filter</Button> }
+								  direction={ "right" }
 								  items={ [
 									  {
 										  icon: "far fa-sort",

@@ -7,6 +7,7 @@ import QuestionPreview from "../structs/QuestionPreview";
 import QuestionPreviewSkeleton from "../structs/QuestionPreviewSkeleton";
 import Section from "../components/Section";
 import { Question } from "../def/Question";
+import Button from "../components/Button";
 
 export default function Trending(props: {}) {
 	const [sortBy, setSortBy] = React.useState<"timestamp" | "likes" | "dislikes" | "views" | "answers">("timestamp");
@@ -85,10 +86,7 @@ export default function Trending(props: {}) {
 						alignItems: "center",
 						marginTop: "var(--spacing)"
 					} }>
-						<Dropdown button={ <p className={ "btn btn-glass" } tabIndex={ 0 }>
-							<i className={ "fas fa-filter" }/>
-							Adjust questions
-						</p> } items={ [
+						<Dropdown button={ <Button icon={ "fas fa-filter" }>Adjust questions</Button> } items={ [
 							{
 								icon: "fas fa-sort",
 								label: "Sort by",
