@@ -6,6 +6,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { Navigate, useParams } from "react-router-dom";
 import SplitSection from "../components/SplitSection";
 import TextEditor from "../components/TextEditor";
+import Button from "../components/Button";
 
 interface QuestionElemFull {
 	id: string;
@@ -247,6 +248,25 @@ export default function Question() {
 						{ renderAnswerSkeleton() }
 						{ renderAnswerSkeleton() }
 					</> }
+				
+				<div style={ {
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "flex-end",
+					gap: "var(--spacing)"
+				} }>
+					<Button icon={ "fas fa-arrow-left" } onClick={ () => {
+					} }>
+						Previous
+					</Button>
+					
+					<p>Page 1 of 10</p>
+					
+					<Button icon={ "fas fa-arrow-right" } onClick={ () => {
+					} } placeIconRight={ true }>
+						Next
+					</Button>
+				</div>
 			</div>
 			
 			<div style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)" } }>
@@ -318,76 +338,81 @@ export default function Question() {
 					</button>
 				</section>
 				
-				<Dropdown button={ <p className={ "btn btn-glass" } tabIndex={ 0 }>
-					<i className={ "fas fa-filter" }/>
-					Adjust answers
-				</p> } items={ [
-					{
-						icon: "fas fa-sort",
-						label: "Sort by",
-						items: [
-							{
-								icon: "fas fa-scale-balanced",
-								label: "Like-Dislike Ratio",
-								shortcut: sortBy === "ldr" ?
-									<i className={ "fas fa-check" }/> : undefined,
-								onClick: () => setSortBy("ldr")
-							},
-							{
-								icon: "far fa-thumbs-up",
-								label: "Most likes",
-								shortcut: sortBy === "likes" ?
-									<i className={ "fas fa-check" }/> : undefined,
-								onClick: () => setSortBy("likes")
-							},
-							{
-								icon: "far fa-thumbs-down",
-								label: "Most dislikes",
-								shortcut: sortBy === "dislikes" ?
-									<i className={ "fas fa-check" }/> : undefined,
-								onClick: () => setSortBy("dislikes")
-							},
-							{
-								icon: "fas fa-clock-rotate-left",
-								label: "Timestamp",
-								shortcut: sortBy === "timestamp" ?
-									<i className={ "fas fa-check" }/> : undefined,
-								onClick: () => setSortBy("timestamp")
-							}
-						],
-						shortcut: <i className={ getSortByIcon() }/>
-					},
-					{
-						icon: "fas fa-sort-amount-down",
-						label: "Direction",
-						items: [
-							{
-								icon: "fas fa-arrow-trend-up",
-								label: "Ascending",
-								shortcut: sortDirection === "asc" ?
-									<i className={ "fas fa-check" }/> : undefined,
-								onClick: () => setSortDirection("asc")
-							},
-							{
-								icon: "fas fa-arrow-trend-down",
-								label: "Descending",
-								shortcut: sortDirection === "desc" ?
-									<i className={ "fas fa-check" }/> : undefined,
-								onClick: () => setSortDirection("desc")
-							}
-						],
-						shortcut: <i
-							className={ "fas fa-arrow-trend-" + (sortDirection === "asc" ? "up" : "down") }/>
-					},
-					{
-						icon: "fas fa-brain",
-						label: "Enable AI",
-						shortcut: <input type={ "checkbox" }
-										 style={ { userSelect: "none", pointerEvents: "none" } }
-										 checked={ enableAI } tabIndex={ -1 }/>,
-						onClick: () => setEnableAI(!enableAI)
-					}
-				] }/>
+				<section className={ "glass" }>
+					<Dropdown button={ <Button icon={ "fas fa-filter" }>
+						Adjust answers
+					</Button> } items={ [
+						{
+							icon: "fas fa-sort",
+							label: "Sort by",
+							items: [
+								{
+									icon: "fas fa-scale-balanced",
+									label: "Like-Dislike Ratio",
+									shortcut: sortBy === "ldr" ?
+										<i className={ "fas fa-check" }/> : undefined,
+									onClick: () => setSortBy("ldr")
+								},
+								{
+									icon: "far fa-thumbs-up",
+									label: "Most likes",
+									shortcut: sortBy === "likes" ?
+										<i className={ "fas fa-check" }/> : undefined,
+									onClick: () => setSortBy("likes")
+								},
+								{
+									icon: "far fa-thumbs-down",
+									label: "Most dislikes",
+									shortcut: sortBy === "dislikes" ?
+										<i className={ "fas fa-check" }/> : undefined,
+									onClick: () => setSortBy("dislikes")
+								},
+								{
+									icon: "fas fa-clock-rotate-left",
+									label: "Timestamp",
+									shortcut: sortBy === "timestamp" ?
+										<i className={ "fas fa-check" }/> : undefined,
+									onClick: () => setSortBy("timestamp")
+								}
+							],
+							shortcut: <i className={ getSortByIcon() }/>
+						},
+						{
+							icon: "fas fa-sort-amount-down",
+							label: "Direction",
+							items: [
+								{
+									icon: "fas fa-arrow-trend-up",
+									label: "Ascending",
+									shortcut: sortDirection === "asc" ?
+										<i className={ "fas fa-check" }/> : undefined,
+									onClick: () => setSortDirection("asc")
+								},
+								{
+									icon: "fas fa-arrow-trend-down",
+									label: "Descending",
+									shortcut: sortDirection === "desc" ?
+										<i className={ "fas fa-check" }/> : undefined,
+									onClick: () => setSortDirection("desc")
+								}
+							],
+							shortcut: <i
+								className={ "fas fa-arrow-trend-" + (sortDirection === "asc" ? "up" : "down") }/>
+						},
+						{
+							icon: "fas fa-brain",
+							label: "Enable AI",
+							shortcut: <input type={ "checkbox" }
+											 style={ { userSelect: "none", pointerEvents: "none" } }
+											 checked={ enableAI } tabIndex={ -1 }/>,
+							onClick: () => setEnableAI(!enableAI)
+						}
+					] }/>
+					
+					<hr/>
+					
+					<p>Page 1 of 10</p>
+				</section>
 			</div>
 		</SplitSection>
 	</>
