@@ -9,6 +9,7 @@ import i18n from "i18next";
 import logoTodoMakeStatic from "./images/logo-TODO-MAKE-STATIC.png";
 
 import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
+import { useTranslation } from "react-i18next";
 
 const basePath = "http://localhost:4000"
 const ory = new FrontendApi(
@@ -25,25 +26,23 @@ interface Props {
 }
 
 export default function Dashboard(props: Props) {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const [session, setSession] = useState<Session | undefined>();
 	const [logoutUrl, setLogoutUrl] = useState<string | undefined>();
 	
 	const getUserName = (identity?: Identity) =>
-		identity?.traits.email || identity?.traits.username || "Unknown";
+		identity?.traits.email || identity?.traits.username || t('dashboard.anonymous');
 	
 	useEffect(() => {
 		ory.toSession()
 		   .then(({ data }) => {
-			   console.log("logged in", data);
-			   
 			   setSession(data);
 			   ory.createBrowserLogoutFlow().then(({ data }) => {
 				   setLogoutUrl(data.logout_url);
 			   });
 		   })
 		   .catch((err) => {
-			   console.error(err);
 			   // window.location.replace(`${ basePath }/ui/login`);
 		   });
 		
@@ -157,13 +156,13 @@ export default function Dashboard(props: Props) {
 							 },
 							 {
 								 icon: "fas fa-sign-in-alt",
-								 label: "Login",
+								 label: t('dashboard.login'),
 								 onClick: () => window.location.replace(`${ basePath }/ui/login?return_to=` + encodeURIComponent(window.location.href)),
 								 hidden: session?.identity !== undefined
 							 },
 							 {
 								 icon: "fas fa-sign-out-alt",
-								 label: "Logout",
+								 label: t('dashboard.logout'),
 								 onClick: () => window.location.href = (
 									 logoutUrl
 										 ? (logoutUrl + (logoutUrl.includes("?") ? "&" : "?") + "return_to=" + encodeURIComponent(window.location.href))
@@ -173,35 +172,35 @@ export default function Dashboard(props: Props) {
 							 },
 							 {
 								 icon: "fas fa-language",
-								 label: "Language",
+								 label: t('dashboard.appearance.language.language'),
 								 shortcut: i18n.language,
 								 items: [
 									 {
 										 icon: "fas fa-globe",
-										 label: "English",
+										 label: t('dashboard.appearance.language.english'),
 										 onClick: () => i18n.changeLanguage("en"),
 										 shortcut: i18n.language === "en" ?
 											 <i className={ "fas fa-check" }/> : ""
 									 },
 									 {
 										 icon: "fas fa-globe",
-										 label: "German",
+										 label: t('dashboard.appearance.language.german'),
 										 onClick: () => i18n.changeLanguage("de"),
 										 shortcut: i18n.language === "de" ?
 											 <i className={ "fas fa-check" }/> : ""
 									 }
 								 ],
 								 divider: "top",
-								 header: "Appearance"
+								 header: t('dashboard.appearance.appearance')
 							 },
 							 {
 								 icon: "fas fa-brush",
-								 label: "Theme",
+								 label: t('dashboard.appearance.theme.theme'),
 								 shortcut: capitalizeFirstLetter(localStorage.getItem("theme") || "system"),
 								 items: [
 									 {
 										 icon: "fas fa-adjust",
-										 label: "System",
+										 label: t('dashboard.appearance.theme.system'),
 										 onClick: () => props.updateTheme("system"),
 										 shortcut: !localStorage.getItem("theme") ?
 											 <i className={ "fas fa-check" }/> : "",
@@ -209,24 +208,19 @@ export default function Dashboard(props: Props) {
 									 },
 									 {
 										 icon: "fas fa-moon",
-										 label: "Dark",
+										 label: t('dashboard.appearance.theme.dark'),
 										 onClick: () => props.updateTheme("dark"),
 										 shortcut: localStorage.getItem("theme") === "dark" ?
 											 <i className={ "fas fa-check" }/> : ""
 									 },
 									 {
 										 icon: "fas fa-sun",
-										 label: "Light",
+										 label: t('dashboard.appearance.theme.light'),
 										 onClick: () => props.updateTheme("light"),
 										 shortcut: localStorage.getItem("theme") === "light" ?
 											 <i className={ "fas fa-check" }/> : ""
 									 }
-								 ],
-								 divider: "bottom"
-							 },
-							 {
-								 icon: "fas fa-sign-out-alt",
-								 label: "Logout"
+								 ]
 							 }
 						 ] }/>
 	}
@@ -264,12 +258,14 @@ export default function Dashboard(props: Props) {
 				/>
 			</div>
 			
-			<NavLink to={ "trending" }><i className={ "fas fa-chart-line" }/>Trending Questions</NavLink>
-			<NavLink to={ "question/new" }><i className={ "far fa-edit" }/>Ask Something</NavLink>
-			<NavLink to={ "activity" }><i className={ "fas fa-fire" }/>My Activity</NavLink>
-			<NavLink to={ "b" }><i className={ "fas fa-star" }/>My Favorites</NavLink>
-			<NavLink to={ "c" }><i className={ "fas fa-gift" }/>Daily Quests</NavLink>
-			<NavLink to={ "d" }><i className={ "fas fa-bell" }/>Inbox<span className={ "badge" }>3</span></NavLink>
+			<NavLink to={ "trending" }><i className={ "fas fa-chart-line" }/>{ t('dashboard.nav.trending') }</NavLink>
+			<NavLink to={ "question/new" }><i className={ "far fa-edit" }/>{ t('dashboard.nav.question.create') }
+			</NavLink>
+			<NavLink to={ "activity" }><i className={ "fas fa-fire" }/>{ t('dashboard.nav.activity') }</NavLink>
+			<NavLink to={ "b" }><i className={ "fas fa-star" }/>{ t('dashboard.nav.favorites') }</NavLink>
+			<NavLink to={ "c" }><i className={ "fas fa-gift" }/>{ t('dashboard.nav.quests') }</NavLink>
+			<NavLink to={ "d" }><i className={ "fas fa-bell" }/>{ t('dashboard.nav.inbox') }<span
+				className={ "badge" }>3</span></NavLink>
 			
 			{ window.location.pathname.includes("/question") && <>
                 <div style={ { paddingInline: "var(--spacing)" } }>
@@ -278,7 +274,7 @@ export default function Dashboard(props: Props) {
                 
                 <NavLink to="question/1"><i className={ "far fa-question" }/><p
                     style={ { display: "flex", flexDirection: "column" } }>
-                    <span className={ "caption" }>Browsing Question</span>
+                    <span className={ "caption" }>{ t('dashboard.nav.question.browsing') }</span>
                     <span>How to execute..</span>
                 </p></NavLink>
             </> }
@@ -287,7 +283,7 @@ export default function Dashboard(props: Props) {
 			<div style={ { paddingInline: "var(--spacing)" } }>
 				<hr/>
 				<p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
-					My Stats
+					{ t('dashboard.nav.stats') }
 				</p>
 				<div className={ "stats" }>
 					<div className={ "stats-column" }>
@@ -306,7 +302,7 @@ export default function Dashboard(props: Props) {
 				
 				<hr/>
 				<p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
-					Recent Activity
+					{ t('dashboard.nav.activeDays') }
 				</p>
 				<BarChart data={
 					Array.from({ length: 30 }, () => Math.floor(Math.random() * 100))
@@ -347,7 +343,7 @@ export default function Dashboard(props: Props) {
 					<span style={ {
 						display: "flex",
 						alignItems: "center"
-					} }>Search.. { getSearchShortcut() }</span>
+					} }>{ t('dashboard.search.search') } { getSearchShortcut() }</span>
 				</p>
 				
 				{ loggedInDropdown() }
@@ -363,12 +359,11 @@ export default function Dashboard(props: Props) {
 			<div className={ "search-container" }>
 				<div onClick={ (e: any) => e.stopPropagation() }>
 					<i className={ "fas fa-magnifying-glass" }/>
-					<input type={ "text" } placeholder={ "Search.." }/>
+					<input type={ "text" } placeholder={ t('dashboard.search.search') }/>
 				</div>
 				
 				<p className={ "search-info" }>
-					Navigate using <span>↑</span> and <span>↓</span> or <span>{ "\u21B9" }</span>. Select
-					using <span>↵</span>.
+					{ t('dashboard.search.info') }
 				</p>
 				
 				<p className={ "search-result" } tabIndex={ 0 }>

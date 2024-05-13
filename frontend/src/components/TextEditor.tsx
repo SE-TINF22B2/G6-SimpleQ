@@ -1,5 +1,6 @@
 import React from "react";
 import "./TextEditor.scss";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 	height?: string;
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export default function TextEditor(props: Props) {
+	const { t } = useTranslation();
+	
 	const [wordCount, setWordCount] =
 		React.useState(props.children ? (props.children as string).split(" ").length : 0);
 	
@@ -61,7 +64,7 @@ export default function TextEditor(props: Props) {
 		</p>
 		
 		<p className={ "caption text-editor-caption" }>
-			You have written <span>{ wordCount }</span> words.
+			{ t('components.textEditor.wordCount', { count: wordCount }) }
 		</p>
 	</div>
 }

@@ -3,6 +3,7 @@ import './App.scss';
 import { Navigate, NavigateFunction, Route, Routes, useNavigate } from "react-router-dom";
 import i18n, { TFunction } from "i18next";
 import { initReactI18next, useTranslation } from "react-i18next";
+import translationEN from "./locales/en/translation.json";
 import { useMediaQuery } from "@react-hook/media-query";
 import { SkeletonTheme } from "react-loading-skeleton";
 import Home from "./Home";
@@ -14,15 +15,11 @@ import Editor from "./pages/Editor";
 import Login from "./Login";
 import Activity from "./pages/Activity";
 
-// {t('Welcome to React')}
-i18n
-	.use(initReactI18next)
+i18n.use(initReactI18next)
 	.init({
 		resources: {
 			en: {
-				translation: {
-					"Welcome to React": "Welcome to React and react-i18next"
-				}
+				translation: translationEN
 			}
 		},
 		fallbackLng: "en",

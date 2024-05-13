@@ -29,8 +29,8 @@ interface Author {
 
 interface Answer {
 	content: string;
-	answerDate: string;
-	author: Author | "simp";
+	created: string;
+	author: Author;
 	stats: {
 		likes: number;
 		dislikes: number;
@@ -85,17 +85,21 @@ export default function Question() {
 						dislikes: 3,
 						rating: "none"
 					},
-					answerDate: "today"
+					created: "today"
 				},
 				{
 					content: "I am in the same situation as you. I tried the rice method and it worked for me as well. I hope it works for you too. Good luck!",
-					author: "simp",
+					author: {
+						id: "2131",
+						name: "Simp",
+						type: "ai"
+					},
 					stats: {
 						likes: 2,
 						dislikes: 0,
 						rating: "dislike"
 					},
-					answerDate: "today"
+					created: "today"
 				}
 			]);
 		}, 1000);
@@ -121,10 +125,10 @@ export default function Question() {
 		return <div key={ index } className={ "container transparent question-answer" }>
 			<div className={ "question-answer-author" }
 				 style={ {
-					 paddingTop: answer.author === "simp" ? "var(--spacing)" : 0,
-					 paddingInline: answer.author === "simp" ? "var(--spacing)" : 0
+					 paddingTop: answer.author.type === "ai" ? "var(--spacing)" : 0,
+					 paddingInline: answer.author.type === "ai" ? "var(--spacing)" : 0
 				 } }>
-				{ answer.author === "simp" ? <>
+				{ answer.author.type === "ai" ? <>
 					<i className={ "fas fa-brain fa-2xl" }
 					   style={ {
 						   height: "auto",
@@ -144,11 +148,11 @@ export default function Question() {
 					</p>
 				</div> }
 				
-				<span className={ "caption" }>replied { answer.answerDate }</span>
+				<span className={ "caption" }>replied { answer.created }</span>
 			</div>
 			
 			<div className={ "question-answer-text" }>
-				<div className={ "glass" + (answer.author === "simp" ? " glass-simp" : "") }>
+				<div className={ "glass" + (answer.author.type === "ai" ? " glass-simp" : "") }>
 					<p>{ answer.content }</p>
 				</div>
 				
