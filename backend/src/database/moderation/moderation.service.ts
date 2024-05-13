@@ -1,24 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { Moderation, Prisma } from '@prisma/client';
+import { Moderation } from '@prisma/client';
 
 @Injectable()
 export class ModerationService {
   constructor(private prisma: PrismaService) {}
 
-  async createModeration(
-    data: Prisma.ModerationCreateInput,
-  ): Promise<Moderation> {
-    return this.prisma.moderation.create({
-      data,
-    });
-  }
+    async createModeration(moderatorUserID: string, discussionContentID: string): Promise<Moderation> {
+        return this.prisma.moderation.create({
+            data: {
+                moderator: {
+                    connect: { userID: moderatorUserID }
+                },
+                discussion: {
+                    connect: { userContentID: discussionContentID }
+                }
+            }
+        })
+    }
 
-  async getModeration(
-    moderationWhereUniqueInput: Prisma.ModerationWhereUniqueInput,
-  ): Promise<Moderation | null> {
-    return this.prisma.moderation.findUnique({
-      where: moderationWhereUniqueInput,
-    });
-  }
+    async getModeration(
+        moderationID: string
+    ): Promise<Moderation | null> {
+        return this.prisma.moderation.findUnique({
+            where: { moderationID: moderationID },
+        });
+    }
 }

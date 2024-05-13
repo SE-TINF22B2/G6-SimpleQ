@@ -1,24 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { LoginAttempt, Prisma } from '@prisma/client';
+import { LoginAttempt } from '@prisma/client';
 
 @Injectable()
 export class LoginAttemptService {
   constructor(private prisma: PrismaService) {}
 
-  async createLoginAttempt(
-    data: Prisma.LoginAttemptCreateInput,
-  ): Promise<LoginAttempt> {
-    return this.prisma.loginAttempt.create({
-      data,
-    });
-  }
+    async createLoginAttempt(loginUserID: string, wasSuccessful: boolean): Promise<LoginAttempt> {
+        return this.prisma.loginAttempt.create({
+            data: {
+                loginUser: {
+                    connect: { userID: loginUserID }
+                },
+                wasSuccessful: wasSuccessful
+            }
+        })
+    }
 
-  async getLoginAttempt(
-    loginAttemptWhereUniqueInput: Prisma.LoginAttemptWhereUniqueInput,
-  ): Promise<LoginAttempt | null> {
-    return this.prisma.loginAttempt.findUnique({
-      where: loginAttemptWhereUniqueInput,
-    });
-  }
+    async getLoginAttempt(
+        loginUserID: string, timeOfLogin: Date
+    ): Promise<LoginAttempt | null> {
+        return this.prisma.loginAttempt.findUnique({
+            where: {
+                loginUserID_timeOfLogin: {
+                    loginUserID: loginUserID,
+                    timeOfLogin: timeOfLogin
+                }
+            },
+        });
+    }
 }
