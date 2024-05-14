@@ -1,15 +1,14 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
-import { rejects } from "assert";
-import { resolve } from "path";
 import { firstValueFrom } from "rxjs";
+import { UserContentService } from "src/database/user-content/user-content.service";
 
 @Injectable()
 export class ExternalAPIService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly httpService: HttpService, private readonly databaseService: UserContentService) {}
 
-  async requestWolfram(prompt: string): Promise<string> {
-    if(prompt === '') {
+  async requestWolfram(prompt: string, groupID: string): Promise<string> {
+    if(prompt === '' || groupID === '') {
       return "";
     }
 
@@ -28,6 +27,7 @@ export class ExternalAPIService {
     );
     try{
       let imageBase64 = Buffer.from(data, 'binary').toString('base64');
+      this.databaseService.createAnswer(null, groupID, data.output, "GPT")
       return imageBase64;
     }
     catch(error){
@@ -36,8 +36,8 @@ export class ExternalAPIService {
     }
   }
 
-  async requestGPT(prompt: string): Promise<string> {
-    if(prompt === '') {
+  async requestGPT(prompt: string, groupID: string): Promise<string> {
+    if(prompt === '' || groupID === '') {
       return ""
     }
 
@@ -65,6 +65,7 @@ export class ExternalAPIService {
     );
 
     if(data.output != null){
+      this.databaseService.createAnswer(null, groupID, data.output, "GPT")
       return data.output
     }
     else{

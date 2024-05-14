@@ -17,12 +17,14 @@ import { UserTimeoutService } from './database/user-timeout/user-timeout.service
 import { UserService } from './database/user/user.service';
 import { VoteService } from './database/vote/vote.service';
 import { AuthMiddleware } from './middleware/auth/auth.middleware';
+import { AppService } from './app.service';
+import { ExternalApiController } from './externalAPI/externalAPI.controller';
 
 
 @Module({
-  imports: [ConfigModule.forRoot()],
+  imports: [ConfigModule.forRoot(), ExternalAPIModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, UserService, PrismaService, AuthService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
