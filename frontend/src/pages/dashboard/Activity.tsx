@@ -11,7 +11,10 @@ export default function Activity(props: {}) {
 			
 			<div style={ { display: "flex", gap: "var(--spacing)" } }>
 				<div style={ { flex: 1 } }>
-					<h1>Activity</h1>
+					<h1>
+						<i className={ "fas fa-history" }/>
+						Activity
+					</h1>
 					<p>Something happened today</p>
 					
 					<div style={ {
