@@ -6,10 +6,13 @@ import { useEffect, useState } from "react";
 
 export default function Quests(props: {}) {
 	const [minutesUntilEndOfWeek, setMinutesUntilEndOfWeek] = useState<number>(0);
+	const [r, setR] = useState<number>(0.1);
 	
 	let interval: string | number | NodeJS.Timeout | undefined;
 	
 	useEffect(() => {
+		setR(50);
+		
 		updateMinutesUntilEndOfWeek();
 		interval = setInterval(updateMinutesUntilEndOfWeek, 1000);
 		return () => clearInterval(interval);
@@ -63,13 +66,13 @@ export default function Quests(props: {}) {
 		
 		<SplitSection className={ "quests-list" }>
 			<section className={ "glass" }>
-				<CircularProgress percentage={ 50 }/>
+				<CircularProgress percentage={ r }/>
 				<h1>Views</h1>
 				<p>Get 1000 views on a question.</p>
 			</section>
 			
 			<section className={ "glass" }>
-				<CircularProgress percentage={ 50 }/>
+				<CircularProgress percentage={ r }/>
 				<h1>Views</h1>
 				<p>Get 1000 views on a question.</p>
 			</section>

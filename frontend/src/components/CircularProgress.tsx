@@ -26,7 +26,8 @@ const Circle = (color: string, percentage: number) => {
 				   strokeWidth={ "2rem" }
 				   strokeDasharray={ circ }
 				   strokeDashoffset={ percentage ? strokePct : 0 }
-				   strokeLinecap={ "round" }/>;
+				   strokeLinecap={ "round" }
+				   style={ { transition: "all 500ms ease" } }/>;
 };
 
 const Text = (label: string) => {
