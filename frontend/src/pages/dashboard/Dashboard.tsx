@@ -258,26 +258,26 @@ export default function Dashboard(props: Props) {
 				/>
 			</div>
 			
+			{ window.location.pathname.includes("/question") && <>
+                <NavLink to="question/1"><i className={ "far fa-question" }/><p
+                    style={ { display: "flex", flexDirection: "column" } }>
+                    <span className={ "caption" }>{ t('dashboard.nav.question.browsing') }</span>
+                    <span>How to execute..</span>
+                </p></NavLink>
+                
+                <div style={ { paddingInline: "var(--spacing)" } }>
+                    <hr style={ { marginBlock: 0 } }/>
+                </div>
+            </> }
+			
 			<NavLink to={ "trending" }><i className={ "fas fa-chart-line" }/>{ t('dashboard.nav.trending') }</NavLink>
-			<NavLink to={ "question/new" }><i className={ "far fa-edit" }/>{ t('dashboard.nav.question.create') }
+			<NavLink to={ "new" }><i className={ "far fa-edit" }/>{ t('dashboard.nav.question.create') }
 			</NavLink>
 			<NavLink to={ "activity" }><i className={ "fas fa-history" }/>{ t('dashboard.nav.activity') }</NavLink>
 			<NavLink to={ "b" }><i className={ "far fa-star" }/>{ t('dashboard.nav.favorites') }</NavLink>
 			<NavLink to={ "quests" }><i className={ "fas fa-tasks" }/>{ t('dashboard.nav.quests') }</NavLink>
 			<NavLink to={ "d" }><i className={ "far fa-envelope" }/>{ t('dashboard.nav.inbox') }<span
 				className={ "badge" }>3</span></NavLink>
-			
-			{ window.location.pathname.includes("/question") && <>
-                <div style={ { paddingInline: "var(--spacing)" } }>
-                    <hr/>
-                </div>
-                
-                <NavLink to="question/1"><i className={ "far fa-question" }/><p
-                    style={ { display: "flex", flexDirection: "column" } }>
-                    <span className={ "caption" }>{ t('dashboard.nav.question.browsing') }</span>
-                    <span>How to execute..</span>
-                </p></NavLink>
-            </> }
 			
 			<div style={ { flex: 1 } }/>
 			<div style={ { paddingInline: "var(--spacing)" } }>

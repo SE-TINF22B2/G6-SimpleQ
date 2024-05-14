@@ -115,7 +115,7 @@ export default function App() {
 					   element={ <Suspense><Trending/></Suspense> }/>
 				<Route path={ "question/:id" } element={ <Suspense><QuestionView/></Suspense> }/>
 				<Route path={ "profile" } element={ <Suspense><Profile/></Suspense> }/>
-				<Route path={ "question/new" } element={ <Suspense><Editor/></Suspense> }/>
+				<Route path={ "new" } element={ <Suspense><Editor/></Suspense> }/>
 				<Route path={ "activity" } element={ <Suspense><Activity/></Suspense> }/>
 				<Route path={ "quests" } element={ <Suspense><Quests/></Suspense> }/>
 				
