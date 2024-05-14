@@ -1,4 +1,4 @@
-import Section from "../../components/Section";
+import Section from "../../components/section/Section";
 import Timeline from "../../components/timeline/Timeline";
 import React from "react";
 import history from "../../illustrations/history.svg";

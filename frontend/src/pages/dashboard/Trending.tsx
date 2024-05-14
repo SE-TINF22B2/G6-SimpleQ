@@ -3,9 +3,9 @@ import "./Trending.scss";
 import Dropdown from "../../components/dropdown/Dropdown";
 import thinking from "../../illustrations/thinking.svg";
 import LiveInput from "../../components/liveinput/LiveInput";
-import QuestionPreview from "../../structs/QuestionPreview";
-import QuestionPreviewSkeleton from "../../structs/QuestionPreviewSkeleton";
-import Section from "../../components/Section";
+import QuestionPreview from "../../components/questionpreview/QuestionPreview";
+import QuestionPreviewSkeleton from "../../components/questionpreview/QuestionPreviewSkeleton";
+import Section from "../../components/section/Section";
 import { Question } from "../../def/Question";
 import Button from "../../components/button/Button";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Question } from "../def/Question";
+import { Question } from "../../def/Question";
 
 interface Props {
 	question: Question;

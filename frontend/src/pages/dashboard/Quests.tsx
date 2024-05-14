@@ -1,7 +1,7 @@
 import "./Quests.scss";
-import SplitSection from "../../components/SplitSection";
+import SplitSection from "../../components/section/SplitSection";
 import CircularProgress from "../../components/CircularProgress";
-import Section from "../../components/Section";
+import Section from "../../components/section/Section";
 import { useEffect, useState } from "react";
 
 export default function Quests(props: {}) {
