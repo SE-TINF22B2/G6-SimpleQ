@@ -263,7 +263,7 @@ export default function Dashboard(props: Props) {
 			</NavLink>
 			<NavLink to={ "activity" }><i className={ "fas fa-fire" }/>{ t('dashboard.nav.activity') }</NavLink>
 			<NavLink to={ "b" }><i className={ "fas fa-star" }/>{ t('dashboard.nav.favorites') }</NavLink>
-			<NavLink to={ "c" }><i className={ "fas fa-gift" }/>{ t('dashboard.nav.quests') }</NavLink>
+			<NavLink to={ "quests" }><i className={ "fas fa-tasks" }/>{ t('dashboard.nav.quests') }</NavLink>
 			<NavLink to={ "d" }><i className={ "fas fa-bell" }/>{ t('dashboard.nav.inbox') }<span
 				className={ "badge" }>3</span></NavLink>
 			

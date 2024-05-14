@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import Editor from "./pages/Editor";
 import Login from "./Login";
 import Activity from "./pages/Activity";
+import Quests from "./pages/Quests";
 
 i18n.use(initReactI18next)
 	.init({
@@ -116,6 +117,7 @@ export default function App() {
 				<Route path={ "profile" } element={ <Suspense><Profile/></Suspense> }/>
 				<Route path={ "question/new" } element={ <Suspense><Editor/></Suspense> }/>
 				<Route path={ "activity" } element={ <Suspense><Activity/></Suspense> }/>
+				<Route path={ "quests" } element={ <Suspense><Quests/></Suspense> }/>
 				
 				<Route path={ "*" } element={ <Navigate to={ "" }/> }/>
 			</Route>
