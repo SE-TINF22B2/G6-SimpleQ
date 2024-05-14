@@ -1,6 +1,6 @@
 import React from "react";
 import "./Profile.scss";
-import completing from "../illustrations/completing.svg";
+import completing from "../../illustrations/completing.svg";
 
 export default class Profile extends React.Component<any, any> {
 	render() {

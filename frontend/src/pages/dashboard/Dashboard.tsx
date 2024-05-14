@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Dashboard.scss";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import BarChart from "./components/BarChart";
-import Dropdown from "./components/dropdown/Dropdown";
+import BarChart from "../../components/barchart/BarChart";
+import Dropdown from "../../components/dropdown/Dropdown";
 import i18n from "i18next";
 
 /* Todo: Make Logo Static */
-import logoTodoMakeStatic from "./images/logo-TODO-MAKE-STATIC.png";
+import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
 
 import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
 import { useTranslation } from "react-i18next";

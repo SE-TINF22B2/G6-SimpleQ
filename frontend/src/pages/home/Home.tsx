@@ -3,17 +3,17 @@ import "./Home.scss";
 import { useNavigate } from "react-router-dom";
 import { InView } from "react-intersection-observer";
 
-import mockup from "./images/macbook-mockup.png";
+import mockup from "../../images/macbook-mockup.png";
 
 // Todo: Make logo static!!!
-import logoTodoMakeStatic from "./images/logo-TODO-MAKE-STATIC.png";
-import Button from "./components/Button";
+import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
+import Button from "../../components/button/Button";
 
-import benni from "./images/benni.png";
-import joshua from "./images/joshua.png";
-import leonard from "./images/leonard.png";
-import manuel from "./images/manuel.png";
-import tom from "./images/tom.png";
+import benni from "../../images/benni.png";
+import joshua from "../../images/joshua.png";
+import leonard from "../../images/leonard.png";
+import manuel from "../../images/manuel.png";
+import tom from "../../images/tom.png";
 
 export default function Home(props: { updateTheme: (theme: "system" | "dark" | "light") => void }) {
 	const navigate = useNavigate();

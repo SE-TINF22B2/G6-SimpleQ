@@ -1,6 +1,6 @@
 import { Component } from "react";
 import "./Login.scss";
-import MacbookMockup from "./images/macbook-mockup.png";
+import MacbookMockup from "../../images/macbook-mockup.png";
 
 export default class Login extends Component<{}, {}> {
 	render() {

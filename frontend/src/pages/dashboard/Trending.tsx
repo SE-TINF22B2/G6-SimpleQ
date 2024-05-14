@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import "./Trending.scss";
-import Dropdown from "../components/dropdown/Dropdown";
-import thinking from "../illustrations/thinking.svg";
-import LiveInput from "../components/LiveInput";
-import QuestionPreview from "../structs/QuestionPreview";
-import QuestionPreviewSkeleton from "../structs/QuestionPreviewSkeleton";
-import Section from "../components/Section";
-import { Question } from "../def/Question";
-import Button from "../components/Button";
+import Dropdown from "../../components/dropdown/Dropdown";
+import thinking from "../../illustrations/thinking.svg";
+import LiveInput from "../../components/liveinput/LiveInput";
+import QuestionPreview from "../../structs/QuestionPreview";
+import QuestionPreviewSkeleton from "../../structs/QuestionPreviewSkeleton";
+import Section from "../../components/Section";
+import { Question } from "../../def/Question";
+import Button from "../../components/button/Button";
 
 export default function Trending(props: {}) {
 	const [sortBy, setSortBy] = React.useState<"timestamp" | "likes" | "dislikes" | "views" | "answers">("timestamp");

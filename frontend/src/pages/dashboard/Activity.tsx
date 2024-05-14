@@ -1,9 +1,9 @@
-import Section from "../components/Section";
-import Timeline from "../components/Timeline";
+import Section from "../../components/Section";
+import Timeline from "../../components/timeline/Timeline";
 import React from "react";
-import history from "../illustrations/history.svg";
-import Dropdown from "../components/dropdown/Dropdown";
-import Button from "../components/Button";
+import history from "../../illustrations/history.svg";
+import Dropdown from "../../components/dropdown/Dropdown";
+import Button from "../../components/button/Button";
 
 export default function Activity(props: {}) {
 	return <>

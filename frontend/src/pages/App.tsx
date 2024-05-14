@@ -3,18 +3,18 @@ import './App.scss';
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import i18n from "i18next";
 import { initReactI18next, useTranslation } from "react-i18next";
-import translationEN from "./locales/en/translation.json";
+import translationEN from "../locales/en/translation.json";
 import { useMediaQuery } from "@react-hook/media-query";
 import { SkeletonTheme } from "react-loading-skeleton";
-import Home from "./Home";
-import Dashboard from "./Dashboard";
-import Trending from "./pages/Trending";
-import QuestionView from "./pages/QuestionView";
-import Profile from "./pages/Profile";
-import Editor from "./pages/Editor";
-import Login from "./Login";
-import Activity from "./pages/Activity";
-import Quests from "./pages/Quests";
+import Home from "./home/Home";
+import Dashboard from "./dashboard/Dashboard";
+import Trending from "./dashboard/Trending";
+import QuestionView from "./dashboard/QuestionView";
+import Profile from "./dashboard/Profile";
+import Editor from "./dashboard/Editor";
+import Login from "./home/Login";
+import Activity from "./dashboard/Activity";
+import Quests from "./dashboard/Quests";
 
 i18n.use(initReactI18next)
 	.init({

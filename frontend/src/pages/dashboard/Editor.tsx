@@ -1,8 +1,8 @@
 import React from "react";
 import "./Editor.scss";
-import LiveInput from "../components/LiveInput";
-import Button from "../components/Button";
-import TextEditor from "../components/TextEditor";
+import LiveInput from "../../components/liveinput/LiveInput";
+import Button from "../../components/button/Button";
+import TextEditor from "../../components/texteditor/TextEditor";
 import { useTranslation } from "react-i18next";
 
 export default function Editor(props: {}) {
