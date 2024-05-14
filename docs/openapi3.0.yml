@@ -19,7 +19,7 @@ components:
           type: string
         type: 
           type: string
-          enum: ["user", "pro", "ai"]
+          enum: ["guest", "user", "pro", "ai"]
 
     UserContent:
       type: object
@@ -35,7 +35,7 @@ components:
         created:
           type: string
           description: The date, the question was created
-        rating:
+        opinion:
           type: string
           enum:
             - like
@@ -53,7 +53,7 @@ components:
               type: array
               items:
                 type: string
-            answers:
+            numberOfAnswers:
               type: integer
             updated: 
               type: string
@@ -67,7 +67,22 @@ components:
         - type: object
           properties:
             author:
-                $ref:  '#/components/schemas/Author'
+              oneOf: [
+                {
+                  $ref:  '#/components/schemas/Author'
+                },
+                {
+                  $ref: '#/components/schemas/AItype'
+                }
+              ]
+    AItype:
+      type: object
+      properties:
+        type:
+          aiType: string
+          enum:
+            - WolframAlpha
+            - GPT
 
     CreateQuestion:
       type: object
@@ -155,7 +170,7 @@ components:
         date: 
           type: string
           description: The date of the login attempt
-        successfull: 
+        successfully:
           type: boolean
 
         
@@ -196,7 +211,7 @@ paths:
     get:
       tags:
         - questions
-      summary: 'Get answers for specific search request'
+      summary: 'Get a list of question for specific search request, empty list if none'
       parameters:
         - in: query
           name: q # searchString
@@ -343,6 +358,13 @@ paths:
       responses:
         '200': 
           description: 'Question successfully created'
+          content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    userId:
+                      type: string
         '422':
           description: 'Unprocessable Entity: Payload is not sufficient'
 
@@ -515,10 +537,10 @@ paths:
     get: 
       tags:
         - login
-      summary: 'Returns the log of login attemps for the user'
+      summary: 'Returns the log of login attempts for the user'
       responses:
         '200': 
-          description: Returns the log of login attemps
+          description: Returns the log of login attempts
           content:
             application/json:
               schema:
