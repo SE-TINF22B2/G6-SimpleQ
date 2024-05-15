@@ -46,23 +46,23 @@ export default function Dashboard(props: Props) {
 			   // window.location.replace(`${ basePath }/ui/login`);
 		   });
 		
+		const onKeyDown = (e: any) => {
+			if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+				toggleSearch();
+				e.preventDefault();
+			}
+			
+			if (e.key === "Escape") {
+				const search = document.querySelector(".search");
+				if (search && search.classList.contains("active")) {
+					toggleSearch();
+				}
+			}
+		}
+		
 		document.addEventListener("keydown", onKeyDown);
 		return () => document.removeEventListener("keydown", onKeyDown);
 	}, []);
-	
-	const onKeyDown = (e: any) => {
-		if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-			toggleSearch();
-			e.preventDefault();
-		}
-		
-		if (e.key === "Escape") {
-			const search = document.querySelector(".search");
-			if (search && search.classList.contains("active")) {
-				toggleSearch();
-			}
-		}
-	}
 	
 	const capitalizeFirstLetter = (string: string) => {
 		return string.charAt(0).toUpperCase() + string.slice(1);
