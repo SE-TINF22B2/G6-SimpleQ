@@ -1,0 +1,26 @@
+Name;Activity;Duration;Description
+"Joshua Slaar";"Construction";.33;"IDP Proxy fertig konfiguriert."
+"Joshua Slaar";"Construction";1.01;"Ory auf Domain ziehen zusammen mit Front&Backend"
+"Joshua Slaar";"Construction";2.01;"Fixing the ory setup"
+"Tom Schuett";"Construction";2.86;"Tries to fix Ory setup, for using webauthentication"
+"Benjamin Loidl";"Design";4.00;null
+"Joshua Slaar";"Construction";3.25;"Mergen von features in den dev Branch"
+"Tom Schuett";"Construction";3.05;"Fixed branches - with jozys"
+"Benjamin Loidl";"Design";4.00;null
+"Leonard Michalsky";"Construction";1.25;null
+"Leonard Michalsky";"Construction";2.00;null
+"Joshua Slaar";"Construction";.88;"Überarbeitung der Middleware."
+"Manuel Brauneis";"Construction";2.00;null
+"Benjamin Loidl";"Design";4.00;null
+"Manuel Brauneis";"Construction";2.00;null
+"Joshua Slaar";"Design";.48;"Komponentendiagramm Frontend überarbeiten"
+"Joshua Slaar";"Project Management";.23;"Erstellung des Statusreports"
+"Tom Schuett";"Design";1.83;"Frontend design"
+"Joshua Slaar";"Design";1.36;null
+"Joshua Slaar";"Design";.16;null
+"Leonard Michalsky";"Design";.51;null
+"Leonard Michalsky";"Construction";.75;null
+"Leonard Michalsky";"Design";.85;null
+"Joshua Slaar";"Design";3.56;null
+"Tom Schuett";"Design";3.76;"API-Specification\r\nYAML-file for swagger"
+"Benjamin Loidl";"Project Management";2.00;null

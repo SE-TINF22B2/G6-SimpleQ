@@ -1,0 +1,18 @@
+Name;Activity;Duration;Description
+"Joshua Slaar";"Construction";0;"Optimierung der Nutzererstellung"
+"Benjamin Loidl";"Design";3.00;null
+"Joshua Slaar";"Construction";4.98;"Implementierung der Nutzererstellung durch Ory."
+"Joshua Slaar";"Project Management";.63;"Statusreport und kurze Session für NestJS Einführung."
+"Joshua Slaar";"Construction";.36;"teilweise Implementierung der HTTP Requests"
+"Joshua Slaar";"Construction";.28;"Implementierung der Nutzererstellung mittels des Ory Logins."
+"Benjamin Loidl";"Design";1.00;null
+"Leonard Michalsky";"Construction";1.00;null
+"Benjamin Loidl";"Design";1.50;null
+"Benjamin Loidl";"Design";4.00;null
+"Joshua Slaar";"Design";1.18;"OpenAPI schema refactoring"
+"Tom Schuett";"Design";2.93;"changed OpenAPI specification"
+"Joshua Slaar";"Construction";1.33;"Reconfiure ory and implement user creation."
+"Manuel Brauneis";"Construction";1.50;null
+"Joshua Slaar";"Project Management";.15;"Scrum Meeting"
+"Joshua Slaar";"Design";.03;"Refactoring of OpenAPI schema"
+"Leonard Michalsky";"Construction";2.25;null
