@@ -49,7 +49,7 @@ export default function QuestionPreview(props: Props) {
 			<div className={ "question-stats" }>
 				<div
 					className={ "question-stat" + (props.question.rating === "like" ? " rating" : "") }>
-					<i className={ "fas fa-thumbs-up primary-icon" }/>
+					<i className={ "far fa-thumbs-up primary-icon" }/>
 					<span
 						className={ "question-figure" }>{ props.question.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 					<span className={ "question-unit" }>likes</span>
@@ -57,7 +57,7 @@ export default function QuestionPreview(props: Props) {
 				
 				<div
 					className={ "question-stat" + (props.question.rating === "dislike" ? " rating" : "") }>
-					<i className={ "fas fa-thumbs-down primary-icon" }/>
+					<i className={ "far fa-thumbs-down primary-icon" }/>
 					<span
 						className={ "question-figure" }>{ props.question.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 					<span className={ "question-unit" }>dislikes</span>
@@ -66,14 +66,14 @@ export default function QuestionPreview(props: Props) {
 			
 			<div className={ "question-stats" }>
 				<div className={ "question-stat" }>
-					<i className={ "fas fa-eye primary-icon" }/>
+					<i className={ "far fa-eye primary-icon" }/>
 					<span
 						className={ "question-figure" }>{ "0".replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 					<span className={ "question-unit" }>views</span>
 				</div>
 				
 				<div className={ "question-stat" }>
-					<i className={ "fas fa-comment-dots primary-icon" }/>
+					<i className={ "far fa-comment-dots primary-icon" }/>
 					<span
 						className={ "question-figure" }>{ props.question.answers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 					<span className={ "question-unit" }>answers</span>

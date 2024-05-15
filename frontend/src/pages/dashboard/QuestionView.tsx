@@ -123,14 +123,14 @@ export default function QuestionView() {
 				<div className={ "question-answer-actions" }>
 					<div
 						className={ "question-answer-actions-rate" + (answer.rating === "like" ? " rating" : "") }>
-						<i className={ "fas fa-thumbs-up primary-icon" } tabIndex={ 0 }/>
+						<i className={ "far fa-thumbs-up primary-icon" } tabIndex={ 0 }/>
 						<span className={ "question-figure" }>{ answer.likes }</span>
 						<span className={ "question-unit" }>likes</span>
 					</div>
 					
 					<div
 						className={ "question-answer-actions-rate" + (answer.rating === "dislike" ? " rating" : "") }>
-						<i className={ "fas fa-thumbs-down primary-icon" } tabIndex={ 0 }/>
+						<i className={ "far fa-thumbs-down primary-icon" } tabIndex={ 0 }/>
 						<span className={ "question-figure" }>{ answer.dislikes }</span>
 						<span className={ "question-unit" }>dislikes</span>
 					</div>
@@ -138,7 +138,7 @@ export default function QuestionView() {
 					<div style={ { flex: 1 } }/>
 					
 					<button className={ "question-report" }>
-						<i className={ "fas fa-flag" }/>
+						<i className={ "far fa-flag" }/>
 						Report this answer
 					</button>
 				</div>
@@ -262,7 +262,7 @@ export default function QuestionView() {
 					<div className={ "question-stats" }>
 						{ question ? <>
 							<div className={ "question-stat" }>
-								<i className={ "fas fa-eye primary-icon" }/>
+								<i className={ "far fa-eye primary-icon" }/>
 								<span
 									className={ "question-figure" }>{ "0".replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 								<span className={ "question-unit" }>views</span>
@@ -270,7 +270,7 @@ export default function QuestionView() {
 							
 							<div
 								className={ "question-stat" /* + (question.stats.rating === "like" ? " rating" : "") */ }>
-								<i className={ "fas fa-thumbs-up primary-icon" } tabIndex={ 0 }/>
+								<i className={ "far fa-thumbs-up primary-icon" } tabIndex={ 0 }/>
 								<span
 									className={ "question-figure" }>{ question.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 								<span className={ "question-unit" }>likes</span>
@@ -278,14 +278,14 @@ export default function QuestionView() {
 							
 							<div
 								className={ "question-stat" /* + (question.stats.rating === "dislike" ? " rating" : "") */ }>
-								<i className={ "fas fa-thumbs-down primary-icon" } tabIndex={ 0 }/>
+								<i className={ "far fa-thumbs-down primary-icon" } tabIndex={ 0 }/>
 								<span
 									className={ "question-figure" }>{ question.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 								<span className={ "question-unit" }>dislikes</span>
 							</div>
 							
 							<div className={ "question-stat" }>
-								<i className={ "fas fa-comment-dots primary-icon" }/>
+								<i className={ "far fa-comment-dots primary-icon" }/>
 								<span
 									className={ "question-figure" }>{ question.answers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 								<span className={ "question-unit" }>answers</span>
@@ -301,7 +301,7 @@ export default function QuestionView() {
 					<hr style={ { marginBottom: "calc(var(--spacing) / 2)" } }/>
 					
 					<button className={ "question-report" }>
-						<i className={ "fas fa-flag" }/>
+						<i className={ "far fa-flag" }/>
 						Report this question
 					</button>
 				</section>
