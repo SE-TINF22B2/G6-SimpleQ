@@ -30,6 +30,6 @@ Um die Nutzerinteraktivität zu fördern, bieten wir verschiedene Rollen an. Die
 ## 📂 Repository-Struktur
 
 - `README.md`: Dieses Dokument.
-- `docs`: Ist ein Ordner für Dokumentationsspezifische Dateien
-- `backend`: Ordner für die Applikation des Backend, [README-Backend](https://github.com/SE-TINF22B2/G6-SimpleQ/blob/main/backend/README.md)
-- `frondend`: Ordner für Frondend [README-Frondend](https://github.com/SE-TINF22B2/G6-SimpleQ/blob/main/frontend/README.md)
+- `/docs`: Ist ein Ordner für Dokumentationsspezifische Dateien
+- `/backend`: Ordner für die Applikation des Backend, [README-Backend](https://github.com/SE-TINF22B2/G6-SimpleQ/blob/main/backend/README.md)
+- `/frondend`: Ordner für Frondend [README-Frondend](https://github.com/SE-TINF22B2/G6-SimpleQ/blob/main/frontend/README.md)
