@@ -6,13 +6,8 @@
 	--background-bleed-opacity-dark: 0.2;
 	--background-bleed-opacity-light: 0.4;
 
-	--border-color: #e0e0e0;
-	--font-color: black;
 	--primary-color: #109E63;
-
 	--primary-color-contrast: #fff;
-	--border-color-dark: #1f1f1f;
-	--font-color-dark: white;
 
 	--background-color-glass: rgba(255, 255, 255, .6);
 	--background-color-glass-dark: rgba(0, 0, 0, .6);
@@ -22,15 +17,20 @@
 	--background-color-glass-simp-dark: rgba(60, 0, 60, .6);
 	--background-color-glass-simp-light: rgba(255, 225, 255, .6);
 
+	--border-color: #e0e0e0;
 	--border-color-light: #e0e0e0;
-	--font-color-light: black;
-	--background-color-primary: white;
+	--border-color-dark: #1f1f1f;
 
+	--font-color: black;
+	--font-color-light: black;
+	--font-color-dark: white;
+
+	--background-color-primary: white;
 	--background-color-primary-dark: black;
 	--background-color-primary-light: white;
-	--background-color-secondary: #f5f5f5;
 
-	--background-color-secondary-dark: #0e0e0e;
+	--background-color-secondary: #f5f5f5;
+	--background-color-secondary-dark: #141414;
 	--background-color-secondary-light: #f5f5f5;
 
 	--bleed-shadow: drop-shadow(0 0 60px var(--primary-color));
@@ -40,11 +40,11 @@
 
 	--box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 	--box-shadow-light: 0 0 5px rgba(0, 0, 0, 0.1);
-	--box-shadow-dark: 0 0 5px rgba(255, 255, 255, 0.1);
+	--box-shadow-dark: 0 0 5px rgba(150, 150, 150, 0.1);
 
 	--box-shadow-elevated: 0 0 10px rgba(0, 0, 0, 0.2);
 	--box-shadow-elevated-light: 0 0 10px rgba(0, 0, 0, 0.2);
-	--box-shadow-elevated-dark: 0 0 10px rgba(255, 255, 255, 0.2);
+	--box-shadow-elevated-dark: 0 0 10px rgba(150, 150, 150, 0.2);
 
 	--header-height: 60px;
 	--border-radius: 10px;
