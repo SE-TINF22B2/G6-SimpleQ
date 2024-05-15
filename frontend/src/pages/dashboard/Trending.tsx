@@ -129,7 +129,7 @@ export default function Trending(props: {}) {
 					</div>
 				</div>
 				
-				<img src={ thinking }
+				<img src={ thinking } alt={ "Thinking" }
 					 style={ { height: "120px", alignSelf: "center", userSelect: "none", pointerEvents: "none" } }/>
 			</div>
 			
@@ -143,7 +143,7 @@ export default function Trending(props: {}) {
 		
 		{ questions
 			? questions.map((question, index) =>
-				<QuestionPreview question={ question } index={ index }/>)
+				<QuestionPreview question={ question } index={ index } key={ index }/>)
 			: <>
 				<QuestionPreviewSkeleton/>
 				<QuestionPreviewSkeleton/>

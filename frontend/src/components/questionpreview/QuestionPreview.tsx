@@ -10,8 +10,7 @@ interface Props {
 export default function QuestionPreview(props: Props) {
 	const navigate = useNavigate();
 	
-	return <div key={ props.index }
-				className={ "container questions-question focus-indicator glass-hover" }
+	return <div className={ "container questions-question focus-indicator glass-hover" }
 				tabIndex={ 0 }
 				style={ { order: props.index } }
 				onClick={ () => {
@@ -81,7 +80,7 @@ export default function QuestionPreview(props: Props) {
 			</div>
 			
 			<div className={ "author" }>
-				<img className={ "avatar" } src={ "https://www.w3schools.com/w3images/avatar2.png" }/>
+				<img className={ "avatar" } src={ "https://www.w3schools.com/w3images/avatar2.png" } alt={ "Avatar" }/>
 				<p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
 					<span className={ "caption" }>Asked by</span>
 					<span>{ props.question.author.name }</span>
