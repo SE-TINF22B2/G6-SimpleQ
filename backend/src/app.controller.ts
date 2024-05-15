@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import {Body, Controller, Get, Post, Query, Req, Res} from '@nestjs/common';
 import { AppService } from './app.service';
-import { User } from '@prisma/client';
+import {Prisma, Tag, User} from '@prisma/client';
 import { AuthService } from './auth/auth.service';
 import { UserService } from './database/user/user.service';
+import { TagService } from './database/tag/tag.service';
 
 @Controller()
 export class AppController {
@@ -10,7 +11,8 @@ export class AppController {
     private readonly appService: AppService,
     private readonly userService: UserService,
     private readonly authService: AuthService,
-  ) {}
+    private readonly tagService: TagService,
+  ) { }
 
   @Get()
   getHello(): string {
@@ -35,5 +37,11 @@ export class AppController {
   @Get('user')
   getUser(@Req() ID: string): Promise<User | null> {
     return this.userService.getUser(ID);
+  }
+
+  // tag/search/?q=
+  @Get('tag/search/')
+  searchTags(@Query() query:{q: string}): Promise<Tag[] | null> {
+    return this.tagService.searchTags(query.q)
   }
 }

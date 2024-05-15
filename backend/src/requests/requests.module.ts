@@ -8,6 +8,10 @@ import {Controller} from "@nestjs/common/interfaces";
 import {QuestsController} from "./quests/quests.controller";
 import {TagController} from "./tag/tag.controller";
 import {UserController} from "./user/user.controller";
+import {UserService} from "../database/user/user.service";
+import {PrismaService} from "../database/prisma.service";
+import {Expert} from "@prisma/client";
+import {ExpertService} from "../database/expert/expert.service";
 
 @Module({})
 export class RequestsModule {
@@ -28,7 +32,7 @@ export class RequestsModule {
         }
         return {
             module: RequestsModule,
-            providers: [],
+            providers: [PrismaService,UserService,ExpertService],
             controllers
         }
 
