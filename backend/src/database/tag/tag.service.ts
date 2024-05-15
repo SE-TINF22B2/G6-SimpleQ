@@ -1,22 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { Prisma, Tag } from '@prisma/client';
+import { Tag } from '@prisma/client';
 
 @Injectable()
 export class TagService {
   constructor(private prisma: PrismaService) {}
 
-  async createTag(data: Prisma.TagCreateInput): Promise<Tag> {
-    return this.prisma.tag.create({
-      data,
-    });
-  }
+    async createTag(tagname: string): Promise<Tag> {
+        return this.prisma.tag.create({
+            data: {
+                tagname: tagname
+            },
+        })
+    }
 
-  async getTag(
-    tagWhereUniqueInput: Prisma.TagWhereUniqueInput,
-  ): Promise<Tag | null> {
-    return this.prisma.tag.findUnique({
-      where: tagWhereUniqueInput,
-    });
-  }
+    async getTag(
+        tagname: string
+    ): Promise<Tag | null> {
+        return this.prisma.tag.findUnique({
+            where: { tagname: tagname },
+        });
+    }
 }

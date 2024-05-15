@@ -90,8 +90,8 @@ model Moderation {
   moderationID String        @id @default(uuid())
   moderator    User          @relation(fields: [moderatorID], references: [userID])
   moderatorID  String
-  content      Discussion    @relation(fields: [contentID], references: [userContentID])
-  contentID    String
+  discussion   Discussion    @relation(fields: [discussionID], references: [userContentID])
+  discussionID String
   userTimeout  UserTimeout[]
 }
 
