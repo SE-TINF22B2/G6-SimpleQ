@@ -274,6 +274,33 @@ paths:
                 $ref: '#/components/schemas/Question'
         '404':
           description: Not found
+
+  /question/{questionId}/title:
+    get: 
+      tags:
+        - questions
+      summary: Get a title for one question
+      parameters:
+        - in: path
+          name: questionId
+          required: true
+          description: UUID of a question
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched a single title
+          content:
+            application/json: 
+              schema: 
+                object:
+                  properties:
+                    title:
+                      type: string
+        '404':
+          description: Not found
+        
+          
   /question/{questionId}/answers:
     get: 
       tags:
