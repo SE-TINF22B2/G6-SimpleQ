@@ -370,10 +370,10 @@ export default function Dashboard(props: Props) {
 				<p className={ "search-result" } tabIndex={ 0 }>
 					<i className={ "far fa-question badge" }/>
 					<span>How to use React?</span>
-					<div>
+					<span>
 						<i className={ "far fa-user" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
 						<span>Benni Loidl</span>
-					</div>
+					</span>
 					<span>Yesterday</span>
 				</p>
 			</div>
