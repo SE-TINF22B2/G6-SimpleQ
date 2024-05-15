@@ -1,0 +1,55 @@
+.live-input {
+	position: relative;
+	transition: var(--transition);
+	width: 200px;
+	z-index: 200;
+
+	input {
+		background: var(--background-color-glass);
+		border: var(--outline-width) solid var(--border-color);
+		border-bottom: var(--outline-width) solid var(--border-color);
+		border-radius: var(--border-radius);
+		height: 40px;
+		padding: calc(var(--spacing) / 2) var(--spacing);
+		width: 100%;
+	}
+
+	.suggestions {
+		align-items: center;
+		background: var(--background-color-primary);
+		border-radius: 0 0 var(--border-radius) var(--border-radius);
+		display: none;
+		flex-direction: column;
+		min-width: 100%;
+		padding: calc(var(--spacing) / 2);
+		position: absolute;
+		top: calc(100% + var(--outline-width));
+
+		button {
+			background: transparent;
+			border: none;
+			border-radius: var(--border-radius);
+			cursor: pointer;
+			padding: calc(var(--spacing) / 2) var(--spacing);
+			text-align: left;
+			width: 100%;
+
+			&:hover {
+				background: var(--background-color-secondary);
+			}
+		}
+	}
+
+	&:focus-within {
+		filter: var(--bleed-shadow);
+
+		input {
+			background: var(--background-color-primary);
+			border-radius: var(--border-radius) var(--border-radius) 0 0;
+		}
+
+		.suggestions {
+			display: flex;
+		}
+	}
+}
