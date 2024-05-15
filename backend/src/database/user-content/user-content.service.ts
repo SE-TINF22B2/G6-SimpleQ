@@ -89,6 +89,40 @@ export class UserContentService {
         }
     }
 
+    async checkGroupID(
+        groupID: string
+    ): Promise<boolean> {
+        const question = await this.prisma.userContent.findMany({
+            where: { 
+                groupID:groupID,
+                type: UserContentType.Question
+             }
+        });
+        
+        return question != null
+    }
+
+    async checkAIAnswerExists(
+        groupID: string
+    ): Promise<boolean> {
+        const userContent = await this.prisma.userContent.findMany({ 
+            where: {
+              groupID: groupID, 
+              type: UserContentType.Answer
+            }, 
+            include: {
+              answer: true
+            } 
+        });
+        userContent.map((content) => {
+            if(content.answer?.typeOfAI === "gpt" || content.answer?.typeOfAI === "wolfram"){
+                return true
+            }
+        });
+
+        return false;
+    }
+
     // Discussion
     async createDiscussion(ownerID: string, groupID: string, content: string | null, title: string, isPrivate: boolean): Promise<{ userContent: UserContent, discussion: Discussion }> {
         return this.prisma.$transaction(async (tx) => {
