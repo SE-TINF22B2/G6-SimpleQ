@@ -18,7 +18,6 @@ import { UserService } from './database/user/user.service';
 import { VoteService } from './database/vote/vote.service';
 import { AuthMiddleware } from './middleware/auth/auth.middleware';
 import { AppService } from './app.service';
-import { ExternalApiController } from './externalAPI/externalAPI.controller';
 
 
 @Module({

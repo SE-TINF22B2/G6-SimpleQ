@@ -1,7 +1,7 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
 import { firstValueFrom } from "rxjs";
-import { UserContentService } from "src/database/user-content/user-content.service";
+import { UserContentService } from "../database/user-content/user-content.service";
 
 @Injectable()
 export class ExternalAPIService {
