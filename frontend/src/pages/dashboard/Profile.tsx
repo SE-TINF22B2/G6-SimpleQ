@@ -18,6 +18,7 @@ export default class Profile extends React.Component<any, any> {
 						<h3>Profile Picture</h3>
 						<div style={ { display: "flex", gap: "var(--spacing)" } }>
 							<img src={ "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50" }
+								 alt={ "Avatar" }
 								 style={ {
 									 height: "100px",
 									 width: "100px",
@@ -31,7 +32,7 @@ export default class Profile extends React.Component<any, any> {
 						</div>
 					</div>
 					
-					<img src={ completing }
+					<img src={ completing } alt={ "Completing" }
 						 style={ { height: "180px", alignSelf: "center", userSelect: "none", pointerEvents: "none" } }/>
 				</div>
 				
