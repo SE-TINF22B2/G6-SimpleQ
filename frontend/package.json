@@ -29,6 +29,7 @@
     "start-server": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "coverage": "react-scripts test --coverage",
     "lint": "eslint .",
     "eject": "react-scripts eject",
     "ory-auth": "npx @ory/cli auth",
