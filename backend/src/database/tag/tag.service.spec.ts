@@ -43,4 +43,13 @@ describe('TagService', () => {
       testTagList
     )
   });
+
+  it('should return a list of tags containing the testTag twice', async () => {
+    // Returns the tag twice because the taglimit is 5, so with only one return tag, it searches for startsWith and contains. 
+    // Therefore the method findMany is called twice.
+    mockPrisma.tag.findMany.mockResolvedValue([testTag]);
+    await expect(service.searchTags("tag")).resolves.toEqual(
+      [testTag, testTag]
+    )
+  });
 });

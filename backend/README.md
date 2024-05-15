@@ -4,7 +4,7 @@ Hier findet sich der SourceCode des Backends für das G6-SimpleQ Projekt.
 
 ## Initialisierung des Backends
 
-Um die Verbindungen zu Ory und der Datenbank herstellen zu können, muss die Datei `.env.example` kopiert und in `.env` umbenannt werden. In dieser Datei müssen dann die URLs für Ory und der Datenbank angegeben werden. Mit dem Befehl `npm run prisma` wird die Datenbank initialisiert und dabei die nötigen Tabellen erstellt. Um die nötigen Packages für den Server herunterzuladen, muss der Befehl `yarn` ausgeführt werden.
+Um die Verbindungen zu Ory und der Datenbank herstellen zu können, muss die Datei `.env.example` kopiert und in `.env` umbenannt werden. In dieser Datei müssen dann die URLs für Ory und der Datenbank angegeben werden. Mit dem Befehl `yarn prisma` wird die Datenbank initialisiert und dabei die nötigen Tabellen erstellt. Um die nötigen Packages für den Server herunterzuladen, muss der Befehl `yarn` ausgeführt werden.
 
 
 ## Hinweis für den Identity Provider

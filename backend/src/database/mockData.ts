@@ -14,8 +14,11 @@ export const testTag: Tag = {
 
 export const testTagList: Tag[] = [
   { tagname: "tagname1" },
+  { tagname: "a_testtagname" },
+  { tagname: "b_tag" },
   { tagname: "testtag" },
-  { tagname: "testtagname" }
+  { tagname: "testtagname" },
+  { tagname: "z_tagname" }
 ]
 
 export const testUser: User = {
