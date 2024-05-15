@@ -67,14 +67,7 @@ components:
         - type: object
           properties:
             author:
-              oneOf: [
-                {
-                  $ref:  '#/components/schemas/Author'
-                },
-                {
-                  $ref: '#/components/schemas/AItype'
-                }
-              ]
+              $ref:  '#/components/schemas/Author'
     AItype:
       type: object
       properties:
