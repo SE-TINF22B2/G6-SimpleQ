@@ -28,7 +28,7 @@
     "start": "npm-run-all --parallel tunnel start-server",
     "start-server": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll",
     "lint": "eslint .",
     "eject": "react-scripts eject",
     "ory-auth": "npx @ory/cli auth",
