@@ -29,16 +29,15 @@ export default function Dropdown(props: {
 	}, [props.items]);
 	
 	React.useEffect(() => {
+		// close dropdown when clicking outside and dropdown is open
+		const onClick = (e: any) => {
+			if (isOpen && !e.target.closest(".dropdown") && !e.target.closest(".dropdown-menu"))
+				setIsOpen(false);
+		}
+		
 		document.addEventListener("click", onClick);
 		return () => document.removeEventListener("click", onClick);
 	}, [isOpen]);
-	
-	const onClick = (e: any) => {
-		// close dropdown when clicking outside and dropdown is open
-		if (isOpen && !e.target.closest(".dropdown") && !e.target.closest(".dropdown-menu")) {
-			setIsOpen(false);
-		}
-	}
 	
 	const renderItems = (localItems: LocalItem[], level: number, topDistance?: string): JSX.Element => {
 		let classNameAddon = "";
@@ -114,7 +113,7 @@ export default function Dropdown(props: {
 					if (!isFocusWithin) setIsOpen(false);
 				} }>
 		<div className={ "dropdown-button" }
-			 onClick={ () => buttonAction() }
+			 onClick={ buttonAction }
 			 onKeyDown={ (e: any) => {
 				 if (e.key === "Enter") buttonAction();
 			 } }>
