@@ -126,7 +126,7 @@
 			// filter: blur(5px);
 		}
 
-		> .container {
+		.container {
 			margin: 0 auto;
 			max-width: var(--max-width);
 			position: relative;
@@ -234,7 +234,7 @@
 		}
 	}
 
-	main > .container,
+	main .container,
 	.glass {
 		background-color: var(--background-color-glass);
 		border-radius: var(--border-radius);

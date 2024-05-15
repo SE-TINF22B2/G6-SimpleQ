@@ -274,6 +274,7 @@ export default function Dashboard(props: Props) {
 			<NavLink to={ "new" }><i className={ "far fa-edit" }/>{ t('dashboard.nav.question.create') }
 			</NavLink>
 			<NavLink to={ "activity" }><i className={ "fas fa-history" }/>{ t('dashboard.nav.activity') }</NavLink>
+			<NavLink to={ "my" }><i className={ "far fa-rectangle-list" }/>{ t('dashboard.nav.my') }</NavLink>
 			<NavLink to={ "b" }><i className={ "far fa-star" }/>{ t('dashboard.nav.favorites') }</NavLink>
 			<NavLink to={ "quests" }><i className={ "fas fa-tasks" }/>{ t('dashboard.nav.quests') }</NavLink>
 			<NavLink to={ "d" }><i className={ "far fa-envelope" }/>{ t('dashboard.nav.inbox') }<span
