@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
-import { AppService } from './app.service';
 import { User } from '@prisma/client';
+import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { UserService } from './database/user/user.service';
+import {Request, Response} from "express";
 
 @Controller()
 export class AppController {
@@ -23,13 +24,20 @@ export class AppController {
    * Makes it easier to test the features, as the client dont have to copy the cookie from the frontend.
    */
   @Get('/cookie')
-  async getCookie(@Req() req, @Res() res): Promise<any> {
+  async getCookie(@Req() req: Request, @Res() res: Response): Promise<any> {
     return await this.authService.getCookie(req, res);
   }
 
   @Post('user')
   async createUser(@Body() data): Promise<User> {
-    return this.userService.createUser(data.username, data.isPro, data.isAdmin, data.timeOfRegistration, data.activityPoints, data.email);
+    return this.userService.createUser(
+      data.username,
+      data.isPro,
+      data.isAdmin,
+      data.timeOfRegistration,
+      data.activityPoints,
+      data.email,
+    );
   }
 
   @Get('user')

@@ -4,9 +4,33 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import {UserService} from "../database/user/user.service";
+import {Session} from "@ory/client";
+import {User} from "@prisma/client";
 
 @Injectable()
 export class AuthService {
+
+  constructor(private userService: UserService) {}
+
+  /**
+   * This method uses an ory session to
+   * */
+  async checkUser(session: Session) {
+    const possibleUser : User | null = await this.userService.getUser(session?.identity?.id as string);
+    if(!possibleUser) {
+        const result = await this.userService.createUser(
+            session.identity?.traits.username as string,
+            false,
+            false,
+            new Date(),
+            0,
+            session.identity?.traits.email as string,
+            session?.identity?.id as string,
+        )
+    }
+  }
+
   /**
    * This request is only for development purposes
    * It offers the client the possiblity to login to ory and get the cookie needed to send requests to this backend
@@ -38,4 +62,6 @@ export class AuthService {
       );
     }
   }
+
+
 }
