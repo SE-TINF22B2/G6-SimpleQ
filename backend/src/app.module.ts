@@ -17,10 +17,16 @@ import { UserTimeoutService } from './database/user-timeout/user-timeout.service
 import { UserService } from './database/user/user.service';
 import { VoteService } from './database/vote/vote.service';
 import { AuthMiddleware } from './middleware/auth/auth.middleware';
+import {QuestionsController} from "./requests/questions/questions.controller";
+import {SpecialController} from "./requests/special/special.controller";
 
 @Module({
-  imports: [ConfigModule.forRoot()],
-  controllers: [AppController],
+  imports: [ConfigModule.forRoot(),],
+  controllers: [
+      AppController,
+    QuestionsController,
+    SpecialController
+  ],
   providers: [
     AppService,
     AuthService,
@@ -41,6 +47,6 @@ import { AuthMiddleware } from './middleware/auth/auth.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).exclude('/cookie').forRoutes('*');
+    // consumer.apply(AuthMiddleware).exclude('/cookie').forRoutes('*');
   }
 }

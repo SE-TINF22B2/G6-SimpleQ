@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>418 I'm a Teapot</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+        h1 {
+            font-size: 5em;
+            margin: 0;
+            color: #333;
+        }
+        p {
+            font-size: 1.5em;
+            color: #666;
+        }
+        .teapot {
+            font-size: 100px;
+            color: #e2b714;
+            animation: shake 1s infinite;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        @keyframes shake {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(10deg);
+            }
+            75% {
+                transform: rotate(-10deg);
+            }
+        }
+        .steam {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2em;
+            color: #ccc;
+            animation: steam 2s linear infinite;
+        }
+        @keyframes steam {
+            0% {
+                opacity: 0;
+                transform: translateY(0) scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-20px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-40px) scale(1.2);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="tea">
+    <div class="teapot">🫖</div>
+    <h1>418</h1>
+    <p>and I'm a teapot</p>
+    <div class="steam">💨</div>
+    <div class="steam" style="animation-delay: 1s;">💨</div>
+    <div class="steam" style="animation-delay: 2s;">💨</div>
+</div>
+
+</body>
+<script type="text/javascript">
+    document.getElementById("tea").onclick = function () {
+        location.href = "https://brink.ws/rl";
+    };
+</script>
+</html>

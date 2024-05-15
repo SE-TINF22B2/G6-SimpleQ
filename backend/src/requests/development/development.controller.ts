@@ -1,4 +1,12 @@
-import { Controller } from '@nestjs/common';
+import {Controller, Get} from '@nestjs/common';
 
-@Controller('development')
-export class DevelopmentController {}
+@Controller('')
+export class DevelopmentController {
+    constructor(
+        //     private readonly services
+    ) {}
+    @Get("upgrade")
+    upgradeThisUser(){
+        return "not implemented"
+    }
+}
