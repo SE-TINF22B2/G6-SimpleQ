@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../prisma.service';
 import { TagService } from './tag.service';
-import { testTag } from '../mockData';
+import { testTag, testTagList } from '../mockData';
 import { PrismaClient } from '@prisma/client';
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 
@@ -34,6 +34,13 @@ describe('TagService', () => {
     mockPrisma.tag.findUnique.mockResolvedValue(testTag);
     await expect(service.getTag(testTag.tagname)).resolves.toEqual(
       testTag
+    )
+  });
+
+  it('should return a list of tags containing the string "tag"', async () => {
+    mockPrisma.tag.findMany.mockResolvedValue(testTagList);
+    await expect(service.searchTags("tag")).resolves.toEqual(
+      testTagList
     )
   });
 });
