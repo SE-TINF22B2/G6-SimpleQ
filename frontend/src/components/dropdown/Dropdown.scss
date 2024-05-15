@@ -62,7 +62,7 @@
 
 		white-space: nowrap;
 
-		> .divider {
+		.divider {
 			height: calc(var(--dropdown-menu-item-height) / 2);
 			position: relative;
 
@@ -92,13 +92,14 @@
 			outline-offset: calc(var(--outline-width) * -1);
 		}
 
-		> .dropdown-menu-item {
+		.dropdown-menu-item {
 			align-items: center;
 			background: transparent;
 			border: none;
 			cursor: pointer;
 			display: flex;
 			padding: var(--spacing);
+			width: 100%;
 
 			text-align: left;
 

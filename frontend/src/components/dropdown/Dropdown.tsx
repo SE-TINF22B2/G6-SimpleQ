@@ -49,15 +49,14 @@ export default function Dropdown(props: {
 					   top: topDistance,
 					   transform: level === 0 ? "" : "translateX(calc(var(--spacing) * " + (props.direction === "right" ? "" : "-") + "0.5))"
 				   } }>
-			{ localItems.filter(i => i.hidden !== true).map((item, index) => <>
+			{ localItems.filter(i => i.hidden !== true).map((item, index) => <li key={ index }>
 				{ (item.divider === "top" || item.divider === "both") && <div className={ "divider" }/> }
 				
 				{ item.header && <div className={ "dropdown-menu-header" }>{ item.header }</div> }
 				
-				<button key={ index }
-						className={ "dropdown-menu-item" }
+				<button className={ "dropdown-menu-item" }
 						onClick={ () => {
-							setItems(localItems.map(i => {
+							setItems(items.map(i => {
 								return {
 									...i,
 									...{ expanded: i === item ? !i.expanded : false }
@@ -82,7 +81,7 @@ export default function Dropdown(props: {
 				) }
 				
 				{ (item.divider === "bottom" || item.divider === "both") && <div className={ "divider" }/> }
-			</>) }
+			</li>) }
 		</ul>;
 	}
 	
