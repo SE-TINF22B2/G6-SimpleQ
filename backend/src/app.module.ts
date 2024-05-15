@@ -19,13 +19,12 @@ import { VoteService } from './database/vote/vote.service';
 import { AuthMiddleware } from './middleware/auth/auth.middleware';
 import {QuestionsController} from "./requests/questions/questions.controller";
 import {SpecialController} from "./requests/special/special.controller";
+import { RequestsModule } from './requests/requests.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(),],
+  imports: [ConfigModule.forRoot(), RequestsModule.register(),],
   controllers: [
       AppController,
-    QuestionsController,
-    SpecialController
   ],
   providers: [
     AppService,
