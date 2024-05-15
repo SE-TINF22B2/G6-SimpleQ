@@ -1,8 +1,8 @@
 import React, { Suspense, useEffect } from 'react';
 import './App.scss';
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import i18n from "i18next";
-import { initReactI18next, useTranslation } from "react-i18next";
+import { initReactI18next } from "react-i18next";
 import translationEN from "../locales/en/translation.json";
 import { useMediaQuery } from "@react-hook/media-query";
 import { SkeletonTheme } from "react-loading-skeleton";
@@ -31,10 +31,6 @@ i18n.use(initReactI18next)
 	});
 
 export default function App() {
-	const { t } = useTranslation();
-	
-	const navigate = useNavigate();
-	
 	const prefersDarkTheme = useMediaQuery('(prefers-color-scheme: dark)');
 	const prefersLightTheme = useMediaQuery('(prefers-color-scheme: light)');
 	
