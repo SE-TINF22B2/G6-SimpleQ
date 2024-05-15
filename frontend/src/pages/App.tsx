@@ -38,66 +38,69 @@ export default function App() {
 	if (prefersDarkTheme) themePreference = "dark";
 	else if (prefersLightTheme) themePreference = "light";
 	
-	const [theme, setTheme] = React.useState<"dark" | "light">(
-		(localStorage.getItem("theme") as "dark" | "light" || themePreference) ?? "light");
+	const [theme, setTheme] = React.useState<"dark" | "light" | "system">(
+		(localStorage.getItem("theme") as "dark" | "light" | "system" || "system") ?? "system"
+	);
 	
 	useEffect(() => {
+		const updateThemeVariables = () => {
+			let root = document.documentElement.style;
+			
+			let variables = [
+				"--background-color-primary",
+				"--background-color-secondary",
+				"--font-color",
+				"--background-color-glass",
+				"--background-color-glass-simp",
+				"--border-color",
+				"--box-shadow",
+				"--box-shadow-elevated",
+				"--bleed-shadow",
+				"--background-bleed-opacity"
+			];
+			
+			variables.forEach(variable => {
+				let value = theme === "dark" || (theme === "system" && themePreference === "dark")
+					? getComputedStyle(document.documentElement).getPropertyValue(`${ variable }-dark`)
+					: getComputedStyle(document.documentElement).getPropertyValue(`${ variable }-light`);
+				root.setProperty(variable, value);
+			});
+			
+			// update meta theme
+			let meta = document.querySelector("meta[name=theme-color]") as HTMLMetaElement;
+			if (meta) meta.content = getComputedStyle(document.documentElement).getPropertyValue("--background-color-primary");
+		}
+		
 		updateThemeVariables();
-	}, [theme]);
+	}, [theme, themePreference]);
 	
 	useEffect(() => {
+		const updateThemePreference = (matches: boolean) => {
+			if (theme === "system")
+				setTheme(matches ? "dark" : "light");
+		}
+		
 		window.matchMedia('(prefers-color-scheme: dark)')
 			  .addEventListener('change', ({ matches }) => updateThemePreference(matches));
 		
 		return () => window.matchMedia('(prefers-color-scheme: dark)')
 						   .removeEventListener('change', ({ matches }) => updateThemePreference(matches));
-	}, []);
-	
-	const updateThemeVariables = () => {
-		let root = document.documentElement.style;
-		
-		let variables = [
-			"--background-color-primary",
-			"--background-color-secondary",
-			"--font-color",
-			"--background-color-glass",
-			"--background-color-glass-simp",
-			"--border-color",
-			"--box-shadow",
-			"--box-shadow-elevated",
-			"--bleed-shadow",
-			"--background-bleed-opacity"
-		];
-		
-		variables.forEach(variable => {
-			let value = theme === "dark"
-				? getComputedStyle(document.documentElement).getPropertyValue(`${ variable }-dark`)
-				: getComputedStyle(document.documentElement).getPropertyValue(`${ variable }-light`);
-			root.setProperty(variable, value);
-		});
-		
-		// update meta theme
-		let meta = document.querySelector("meta[name=theme-color]") as HTMLMetaElement;
-		if (meta) meta.content = getComputedStyle(document.documentElement).getPropertyValue("--background-color-primary");
-	}
+	}, [theme]);
 	
 	const updateTheme = (theme: "system" | "dark" | "light") => {
-		if (theme === "system") {
-			localStorage.removeItem("theme");
-			setTheme(themePreference ?? "light");
-		} else {
-			localStorage.setItem("theme", theme);
-			setTheme(theme);
-		}
+		localStorage.setItem("theme", theme);
+		setTheme(theme);
 	}
 	
-	const updateThemePreference = (matches: boolean) => {
-		if (localStorage.getItem("theme") === null)
-			setTheme(matches ? "dark" : "light");
-	}
+	const skeletonBaseColor = theme === "system"
+		? (themePreference === "light" ? "#dadada" : "#333")
+		: (theme === "light" ? "#dadada" : "#333");
+	const skeletonHighlightColor = theme === "system"
+		? (themePreference === "light" ? "#f5f5f5" : "#101010")
+		: (theme === "light" ? "#f5f5f5" : "#101010");
 	
-	return <SkeletonTheme baseColor={ theme === "light" ? "#dadada" : "#333" }
-						  highlightColor={ theme === "light" ? "#f5f5f5" : "#101010" }>
+	return <SkeletonTheme baseColor={ skeletonBaseColor }
+						  highlightColor={ skeletonHighlightColor }>
 		<Routes>
 			{ /* Todo: All Suspense Fallback */ }
 			
