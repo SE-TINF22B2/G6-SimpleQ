@@ -138,6 +138,7 @@ export default function Dashboard(props: Props) {
 									   tabIndex={ 0 }>
 			<img className={ "avatar" }
 				 src={ session !== undefined ? "https://benniloidl.de/static/media/me.6c5597f7d72f68a1e83c.jpeg" : "" }
+				 alt={ "Avatar" }
 				 onError={ ({ currentTarget }) => {
 					 currentTarget.onerror = null; // prevents looping
 					 currentTarget.src = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50";
@@ -231,7 +232,8 @@ export default function Dashboard(props: Props) {
 				<button className={ "btn btn-primary" }
 						style={ { outlineColor: "var(--primary-color-contrast)" } }
 						onClick={ () => navigate("/") }>
-					<img src={ logoTodoMakeStatic } height={ "100%" } width={ "100%" }
+					<img src={ logoTodoMakeStatic } alt={ "Logo" }
+						 height={ "100%" } width={ "100%" }
 						 style={ { objectFit: "contain" } }/>
 				</button>
 				<i className={ "fas fa-x toggle-nav" }
