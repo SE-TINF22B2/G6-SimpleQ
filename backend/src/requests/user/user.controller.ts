@@ -1,6 +1,16 @@
-import {BadGatewayException, Controller, Get, NotFoundException, Param, ParseUUIDPipe, Put} from '@nestjs/common';
+import {
+    Controller,
+    ForbiddenException,
+    Get,
+    NotFoundException, NotImplementedException,
+    Param,
+    ParseUUIDPipe,
+    Put,
+    Req
+} from '@nestjs/common';
 import {UserService} from "../../database/user/user.service";
 import {ExpertService} from "../../database/expert/expert.service";
+import {LoginAttemptService} from "../../database/login-attempt/login-attempt.service";
 
 enum Registration{      // TODO extract
     registered = "registered",
@@ -11,9 +21,16 @@ enum Registration{      // TODO extract
 export class UserController {
     constructor(
         private readonly userService: UserService,
-        private readonly expertService: ExpertService
+        private readonly expertService: ExpertService,
+        private readonly userLoginAttemptService: LoginAttemptService
     ) {}
 
+    /**
+     * Returns basic information of users, can be used for overviews
+     * and can be _seen by everybody_
+     * @param id :string
+     * return 404 if user not found or user object
+     */
     @Get(":id")
     async getBasicProfile(@Param("id", new ParseUUIDPipe()) id: string){
         const usrProfile = await this.userService.getUser(id);
@@ -34,6 +51,12 @@ export class UserController {
         }
     }
 
+    /**
+     * Returns detailed information for one user, can be used for profiles and
+     * can be requested by everybody
+     * @param id
+     * returns 404 if id is invalid
+     */
     @Get(":id/profile")
     async getDetailedProfile(@Param("id", new ParseUUIDPipe()) id: string){
         const usrProfile = await this.userService.getUser(id);
@@ -59,11 +82,17 @@ export class UserController {
 
     @Put("update")
     updateProfile(){
-        return "not implemented"
+        new NotImplementedException() // TODO implement
     }
 
     @Get("login/attemps")
-    getLoginAttempts(){
-        return "not implemented"
+    async getLoginAttempts(@Req() req: any){
+        const userId = req.headers.cookie.id
+        if (userId === null ){
+            throw new ForbiddenException();
+        }
+        const loginRange: any[] = await this.userLoginAttemptService.getLoginAttemptRange(userId);
+
+        throw new NotImplementedException(); // TODO
     }
 }

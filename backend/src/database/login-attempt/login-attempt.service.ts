@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotImplementedException} from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { LoginAttempt } from '@prisma/client';
 
@@ -28,5 +28,18 @@ export class LoginAttemptService {
                 }
             },
         });
+    }
+
+    async getLoginAttemptRange(
+        loginUserID: string,
+        startTimeOfLogin: Date = new Date(Date.now() - 1000000),
+        endTimeOfLogin: Date = new Date(Date.now())
+    ):Promise<LoginAttempt[]>{
+      // return this.prisma.loginAttempt.findMany({
+      //     where: {
+      //       // TODO Login user && startTime <= searchResults <= endTimeOfLogin
+      //     }
+      // })
+        throw new NotImplementedException();
     }
 }
