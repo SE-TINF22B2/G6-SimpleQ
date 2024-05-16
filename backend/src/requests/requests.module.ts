@@ -17,10 +17,9 @@ import {ModerationService} from "../database/moderation/moderation.service";
 import {QuestService} from "../database/quest/quest.service";
 import {TagService} from "../database/tag/tag.service";
 import { DevelopmentService } from './development/development.service';
+import {AuthService} from "../auth/auth.service";
 
-@Module({
-  providers: [DevelopmentService]
-})
+@Module({})
 export class RequestsModule {
     static register(): DynamicModule {
         const controllers : any[] = [
@@ -36,6 +35,7 @@ export class RequestsModule {
         const providers: any[] = [
             // services, specialized and implemented in other folders
             PrismaService,
+            AuthService,
             BlacklistService,
             ExpertService,
             FavoriteService,
@@ -44,6 +44,8 @@ export class RequestsModule {
             QuestService,
             TagService,
             UserService,
+            // request services
+            DevelopmentService
         ]
         if (process.env.NODE_ENV === "dev"){
             console.log("Dev: DevelopmentController is loaded.")
