@@ -64,6 +64,6 @@ src
 | `package.json`   | Datei des Packetmanagers für externe pakete (dependencies)                         |
 
 
-Die Komponenten bestehen jeweils aus einer `.JSX` und einer `.SCSS`-Datei.
+Die Komponenten bestehen jeweils aus einer `.TSX` und einer `.SCSS`-Datei.
 [TSX](https://fr.react.dev/learn/typescript) ist eine Syntaxerweiterung für TypeScript, die HTML-Ähnliches Markup in der Datei ermöglicht.
 [SCSS](https://sass-lang.com/documentation/syntax/) (Syntactically Awesome Stylesheets) ist eine geänderte [Stylesheet-Sprache](https://en.wikipedia.org/wiki/Style_sheet_language)
