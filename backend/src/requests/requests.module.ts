@@ -16,8 +16,11 @@ import {FavoriteService} from "../database/favorite/favorite.service";
 import {ModerationService} from "../database/moderation/moderation.service";
 import {QuestService} from "../database/quest/quest.service";
 import {TagService} from "../database/tag/tag.service";
+import { DevelopmentService } from './development/development.service';
 
-@Module({})
+@Module({
+  providers: [DevelopmentService]
+})
 export class RequestsModule {
     static register(): DynamicModule {
         const controllers : any[] = [
