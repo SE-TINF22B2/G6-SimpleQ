@@ -103,12 +103,21 @@ src
 |= app.service.ts
 |= main.ts
 ```
-`/src` beinhaltet den Quellcode für die Applikation
-Der Einstieg der Applikation liegt in der `main.ts` welche direkt auf das `AppModule` in `app.module.ts` verweist.
-Sämtliche Anfragen werden in dem Ordner `/request` von einem seperaten Modul verwaltet.
-Alle Anfragen wurden nach dem Tag, wie in der _OpenAPI_ Spezifikation in seperate controller aufgeteilt.
+| Ordner/Datei                | Beschreibung                                                |
+|-----------------------------|-------------------------------------------------------------|
+| `src/`                      | Quellcode für das Backend                                   |
+| `request/`                  | Verwaltung der Anfragen                                     |
+| `database/`                 | Services für Datenbankanfragen                              |
+| `auth/`                     | Services für Authentifizierungen                            |
+| `login/`                    | Login                                                       |
+| `request/request.module.ts` | Controller für die Verwaltung von Anfragen                  |
+| `main.ts`                   | Einstieg der Applikation, verweist direkt auf das AppModule |
 
-Die Logik für Datenbanken befindet sich in `\database`, für Authentifizierung in `\auth`, Login in `\login`.
+
+
+
+Der Einstieg der Applikation liegt in der `main.ts` welche direkt auf das `AppModule` in `app.module.ts` verweist.
+Alle Anfragen in `request/` wurden nach dem Tag, wie in der _OpenAPI_ Spezifikation in seperate controller aufgeteilt.
 
 Für jeden service und controller ist eine testdatei angelegt (`*.spec.ts`), 
 welche jeweils direkt bei der Logikkomponente liegt. 
