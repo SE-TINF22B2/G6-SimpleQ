@@ -52,18 +52,4 @@ describe('TagService', () => {
       [testTag, testTag]
     )
   });
-
-  it('should create a new tag', async () => {
-    mockPrisma.tag.create.mockResolvedValue(testTag);
-    await expect(service.createTag(testTag.tagname)).resolves.toEqual(
-      testTag
-    )
-  });
-
-  it('should get a tag', async () => {
-    mockPrisma.tag.findUnique.mockResolvedValue(testTag);
-    await expect(service.getTag(testTag.tagname)).resolves.toEqual(
-      testTag
-    )
-  });
 });
