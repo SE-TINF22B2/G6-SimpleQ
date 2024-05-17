@@ -14,8 +14,8 @@ NestJS gibt eine robuste Architektur vor.
 2. Packete installieren: `yarn install`
 3. Datenbank initialisieren: `yarn prisma`
 4. Ausführen: 
-   5. Tunnel zu ory starten: `yarn  tunnel`
-   6. Server starten: `yarn start:dev`
+   1. Tunnel zu ory starten: `yarn  tunnel`
+   2. Server starten: `yarn start:dev`
 
 ----
 #### Beschreibung
@@ -37,7 +37,7 @@ In dieser Datei sind Änderungen notwendig. Siehe Hinweise: [Umgebungsvariablen]
     ```bash
     yarn prisma
     ```
-    Falls die Datenbank korrekt in der `env` eingetragen wurde, kann die Datenbank mit Prisma initialisiert und die nötigen Tabellen erstellt werden.
+    Falls die Datenbank URL korrekt in der `env` eingetragen wurde, wird die Datenbank mit Prisma initialisiert und die nötigen Tabellen erstellt.
 
 + Aufgrund von [CORS](https://developer.mozilla.org/fr/docs/Web/HTTP/CORS) wird ein Tunnel zu Ory über die Applikation benötigt
     [https://www.ory.sh/docs/guides/cli/proxy-and-tunnel](https://www.ory.sh/docs/guides/cli/proxy-and-tunnel).
@@ -57,19 +57,19 @@ In dieser Datei sind Änderungen notwendig. Siehe Hinweise: [Umgebungsvariablen]
 
 ### Hinweise:
 <h4 id="env"> Umgebungsvariablen (`.env`)</h4>
-+ Änderungen _zwingend_ Notwendig
-  + `DATABASE_URL`: Verbindung zur Datenbank
 
++ Änderungen _zwingend_ Notwendig
+   + `DATABASE_URL`: Verbindung zur Datenbank
 + Änderungen Optional:
   + `ORY_URL`: URL, auf dem der Tunnel/Proxy erreichbar ist
   + `NODE_ENV`: Modus der Applikation, Auswahl: [`dev`, `prod`] 
 
 #### Hinweis für den Identity Provider
 
-Aufgrund der Tatsache, dass wir Social Logins via GitHub und Google verwenden, muss man sich in der Entwicklung bei der ory-cli auf dem ory Cloud Projekt einloggen, damit das einwandfrei funktioniert. Dafür kann der `yarn ory-auth` 
-Befehl verwendet werden. Dieser führt den Login aus. Danach kann der Befehl `yarn tunnel` verwendet werden. 
-Dieser setzt den für die Entwicklung notwendigen und hilfsbereiten Tunnel zu verwenden.
+Aufgrund der Tatsache, dass wir Social Logins via GitHub und Google verwenden, muss man sich in der Entwicklung bei der ory-cli auf dem ory Cloud Projekt einloggen. 
+Dafür kann der Befehl `yarn ory-auth` verwendet werden, der den Login ausführt. 
 
+Danach kann der Befehl `yarn tunnel` verwendet werden. 
 
 
 
@@ -78,7 +78,7 @@ Dieser setzt den für die Entwicklung notwendigen und hilfsbereiten Tunnel zu ve
 ------------
 In NestJS sind Module die oberste Ebene der Organisation und dienen als Container für weitere Komponenten, 
 wie Controller, Services und Submodule.
-Die Controller sind für die Verarbetung von HTTP-Anfragen und Antworten  verantwortlich und interagieren mit den 
+Die Controller sind für die Verarbeitung von HTTP-Anfragen und Antworten  verantwortlich und interagieren mit den 
 Services, die die Geschäftslogik beinhalten.
 
 ### Dateistruktur
@@ -108,18 +108,16 @@ src
 | `src/`                      | Quellcode für das Backend                                   |
 | `request/`                  | Verwaltung der Anfragen                                     |
 | `database/`                 | Services für Datenbankanfragen                              |
-| `auth/`                     | Services für Authentifizierungen                            |
-| `login/`                    | Login                                                       |
-| `request/request.module.ts` | Controller für die Verwaltung von Anfragen                  |
+| `auth/`                     | Services zur Authentifizierungen                            |
+| `request/request.module.ts` | Modul der Anfragenverarbeitung                              |
 | `main.ts`                   | Einstieg der Applikation, verweist direkt auf das AppModule |
 
 
 
-
 Der Einstieg der Applikation liegt in der `main.ts` welche direkt auf das `AppModule` in `app.module.ts` verweist.
-Alle Anfragen in `request/` wurden nach dem Tag, wie in der _OpenAPI_ Spezifikation in seperate controller aufgeteilt.
+Alle Anfragen in `request/` wurden entsprechend der _OpenAPI_ Spezifikation in seperate Controller aufgeteilt.
 
-Für jeden service und controller ist eine testdatei angelegt (`*.spec.ts`), 
+Für jeden Service und Controller ist eine Testdatei angelegt (`*.spec.ts`), 
 welche jeweils direkt bei der Logikkomponente liegt. 
 
 ### Werkzeuge
