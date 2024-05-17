@@ -29,7 +29,7 @@ jobs:
       - name: Run Test Script
         run: |
           cd frontend
-          npm test
+          npm run test
 
       - name: Lint application
         run: |
