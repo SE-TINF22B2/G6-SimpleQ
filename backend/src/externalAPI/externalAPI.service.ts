@@ -2,6 +2,7 @@ import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
 import { firstValueFrom } from "rxjs";
 import { UserContentService } from "../database/user-content/user-content.service";
+import { TypeOfAI } from "@prisma/client";
 
 @Injectable()
 export class ExternalAPIService {
@@ -11,13 +12,13 @@ export class ExternalAPIService {
   private async checkParams(prompt: string, groupID: string): Promise<boolean> {
     if(prompt === '') {
       throw new Error("prompt is empty")
-    } else if(await this.databaseService.checkGroupID(groupID)) {
+    } else if(await this.databaseService.checkGroupIDExists(groupID)) {
       throw new Error("groupID does not exist")
     } else if(process.env.NODE_ENV === "dev"){
         return false
     } else if(process.env.WOLFRAM_APP_ID == undefined || process.env.GPT_APP_URL == undefined) {
         throw Error("ENV for AI is undefined")
-    } else if(await this.databaseService.checkAIAnswerExists(groupID)) {
+    } else if(await this.databaseService.checkAIAnswerExists(groupID, [TypeOfAI.GPT, TypeOfAI.WollframAlpha])) {
       throw Error("AI-generated Answer already exists with this groupID")
     } else {
       return true
@@ -32,7 +33,7 @@ export class ExternalAPIService {
           this.httpService.get(process.env.WOLFRAM_APP_ID+encodeURIComponent(prompt)).pipe()
         );
         let imageBase64 = Buffer.from(data, 'binary').toString('base64');
-        this.databaseService.createAnswer(null, groupID, data.output, "wolfram")
+        this.databaseService.createAnswer(null, groupID, data.output, TypeOfAI.WollframAlpha)
         return imageBase64;
       } else {
         return "Das ist eine automatisch generierte Antwort um Tokens zu sparen!"
@@ -64,7 +65,7 @@ export class ExternalAPIService {
           this.httpService.post(gptURL, body, header).pipe()
         );
         if(data.output != null){
-          this.databaseService.createAnswer(null, groupID, data.output, "gpt")
+          this.databaseService.createAnswer(null, groupID, data.output, TypeOfAI.GPT)
           return data.output
         }
         else{

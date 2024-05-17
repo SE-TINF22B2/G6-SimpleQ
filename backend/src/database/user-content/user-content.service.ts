@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Answer, Discussion, Question, UserContent, UserContentType } from '@prisma/client';
+import { Answer, Discussion, Question, TypeOfAI, UserContent, UserContentType } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
@@ -49,7 +49,7 @@ export class UserContentService {
     }
 
     // Answer
-    async createAnswer(ownerID: string | null, groupID: string, content: string | null, typeOfAI: string | null): Promise<{ userContent: UserContent, answer: Answer }> {
+    async createAnswer(ownerID: string | null, groupID: string, content: string | null, typeOfAI: TypeOfAI): Promise<{ userContent: UserContent, answer: Answer }> {
         return this.prisma.$transaction(async (tx) => {
             const createdContent = await tx.userContent.create({
                 data: {
@@ -89,42 +89,45 @@ export class UserContentService {
         }
     }
 
-    async checkGroupID(
+    async checkGroupIDExists(
         groupID: string
     ): Promise<boolean> {
-        const question = await this.prisma.userContent.findMany({
+        const contentExists = await this.prisma.userContent.findFirst({
             where: {
                 groupID: groupID,
                 type: UserContentType.Question
+            },
+            select: {
+                userContentID: true
             }
         });
 
-        return question != null
+        return contentExists != null
     }
 
     async checkAIAnswerExists(
-        groupID: string
+        groupID: string, typesOfAI: TypeOfAI[]
     ): Promise<boolean> {
-        const userContent = await this.prisma.userContent.findMany({
+        const aiAnswer = await this.prisma.userContent.findFirst({
             where: {
                 groupID: groupID,
-                type: UserContentType.Answer
+                type: UserContentType.Answer,
+                answer: {
+                    typeOfAI: {
+                        in: typesOfAI
+                    }
+                }
             },
-            include: {
-                answer: true
-            }
-        });
-        userContent.map((content) => {
-            if (content.answer?.typeOfAI === "gpt" || content.answer?.typeOfAI === "wolfram") {
-                return true
+            select: {
+                userContentID: true
             }
         });
 
-        return false;
+        return aiAnswer != null;
     }
 
     // Discussion
-    async createDiscussion(ownerID: string| null, groupID: string, content: string | null, title: string, isPrivate: boolean): Promise<{ userContent: UserContent, discussion: Discussion }> {
+    async createDiscussion(ownerID: string | null, groupID: string, content: string | null, title: string, isPrivate: boolean): Promise<{ userContent: UserContent, discussion: Discussion }> {
         return this.prisma.$transaction(async (tx) => {
             const createdContent = await tx.userContent.create({
                 data: {
