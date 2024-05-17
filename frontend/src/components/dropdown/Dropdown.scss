@@ -1,0 +1,137 @@
+.dropdown {
+	display: inline-block;
+
+	--dropdown-menu-item-height: 46px;
+	position: relative;
+	transition: var(--transition);
+	z-index: 200;
+
+	&.active {
+		filter: var(--bleed-shadow);
+
+		> .dropdown-button > * {
+			background: var(--background-color-secondary);
+		}
+	}
+
+	> .dropdown-menu {
+		min-width: 100%;
+
+		&.right {
+			left: 0;
+
+			.dropdown-menu {
+				left: calc(100% + var(--outline-width));
+			}
+
+			.dropdown-menu-item {
+				.fa-angle-down {
+					&.expanded {
+						transform: rotate(-90deg);
+					}
+				}
+			}
+		}
+
+		&.left {
+			right: 0;
+
+			.dropdown-menu {
+				right: calc(100% + var(--outline-width));
+			}
+
+			.dropdown-menu-item {
+				.fa-angle-down {
+					&.expanded {
+						transform: rotate(90deg);
+					}
+				}
+			}
+		}
+	}
+
+	.dropdown-menu {
+		background: var(--background-color-primary);
+		border-radius: var(--border-radius);
+		display: flex;
+		flex-direction: column;
+		list-style-type: none;
+		padding: calc(var(--spacing) / 2);
+		position: absolute;
+		top: calc(100% + var(--spacing) / 2);
+
+		white-space: nowrap;
+
+		.divider {
+			height: calc(var(--dropdown-menu-item-height) / 2);
+			position: relative;
+
+			&::before {
+				background: var(--border-color);
+				content: '';
+				height: var(--outline-width);
+				left: 0;
+				position: absolute;
+				top: 50%;
+				width: 100%;
+			}
+		}
+
+		.dropdown-menu-header {
+			font-size: 0.8em;
+			font-weight: 600;
+			height: calc(var(--dropdown-menu-item-height) / 2);
+			opacity: 0.8;
+			padding-inline: var(--spacing);
+			text-transform: uppercase;
+		}
+
+		.dropdown-menu-item {
+			border-radius: var(--border-radius);
+			height: var(--dropdown-menu-item-height);
+			outline-offset: calc(var(--outline-width) * -1);
+		}
+
+		.dropdown-menu-item {
+			align-items: center;
+			background: transparent;
+			border: none;
+			cursor: pointer;
+			display: flex;
+			padding: var(--spacing);
+			width: 100%;
+
+			text-align: left;
+
+			.fa-angle-down {
+				transition: var(--transition);
+			}
+
+			&:hover {
+				background: var(--background-color-secondary);
+			}
+
+			> i:first-child {
+				margin-inline-end: var(--spacing);
+				text-align: center;
+				width: 20px;
+			}
+
+			> i:last-child {
+				margin-inline-start: var(--spacing);
+			}
+
+			> span:first-of-type {
+				flex: 1;
+				padding-inline-end: calc(var(--spacing) * 2);
+			}
+
+			.shortcut {
+				align-items: center;
+				color: var(--primary-color);
+				display: flex;
+				filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.1));
+			}
+		}
+	}
+}

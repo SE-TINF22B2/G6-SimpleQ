@@ -26,6 +26,11 @@ jobs:
           cd frontend
           npm install
 
+      - name: Run Test Script
+        run: |
+          cd frontend
+          npm test
+
       - name: Lint application
         run: |
           cd frontend
