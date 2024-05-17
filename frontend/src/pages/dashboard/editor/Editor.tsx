@@ -1,10 +1,13 @@
 import React from "react";
 import "./Editor.scss";
-import LiveInput from "../../components/liveinput/LiveInput";
-import Button from "../../components/button/Button";
-import TextEditor from "../../components/texteditor/TextEditor";
+import LiveInput from "../../../components/liveinput/LiveInput";
+import Button from "../../../components/button/Button";
+import TextEditor from "../../../components/texteditor/TextEditor";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Renders the editor page used to ask a new question
+ */
 export default function Editor(props: {}) {
 	const { t } = useTranslation();
 	

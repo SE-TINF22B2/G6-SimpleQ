@@ -7,6 +7,11 @@ interface Props {
 	index: number;
 }
 
+/**
+ * Renders a preview of a question
+ * @param props.question Question to be previewed
+ * @param props.index Index of the preview to be rendered, also used for changing direction
+ */
 export default function QuestionPreview(props: Props) {
 	const navigate = useNavigate();
 	

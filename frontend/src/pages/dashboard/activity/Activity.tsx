@@ -1,10 +1,13 @@
-import Section from "../../components/section/Section";
-import Timeline from "../../components/timeline/Timeline";
+import Section from "../../../components/section/Section";
+import Timeline from "../../../components/timeline/Timeline";
 import React from "react";
-import history from "../../illustrations/history.svg";
-import Dropdown from "../../components/dropdown/Dropdown";
-import Button from "../../components/button/Button";
+import history from "../../../illustrations/history.svg";
+import Dropdown from "../../../components/dropdown/Dropdown";
+import Button from "../../../components/button/Button";
 
+/**
+ * Renders the activity page, currently static
+ */
 export default function Activity(props: {}) {
 	return <>
 		<Section>

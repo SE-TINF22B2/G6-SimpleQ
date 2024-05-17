@@ -16,6 +16,12 @@ interface LocalItem extends Item {
 	expanded?: boolean
 }
 
+/**
+ * Renders a dropdown menu
+ * @param props.button JSX Element that should be displayed and will open the dropdown menu on click
+ * @param props.items List of items that should be displayed in the dropdown menu, recursion possible
+ * @param props.direction direction the dropdown menus align, default is "left"
+ */
 export default function Dropdown(props: {
 	button: JSX.Element,
 	items: Item[],

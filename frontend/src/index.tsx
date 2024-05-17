@@ -4,9 +4,8 @@ import './index.scss';
 import App from "./pages/App";
 import { BrowserRouter } from "react-router-dom";
 
-const root = ReactDOM.createRoot(
-	document.getElementById('root') as HTMLElement
-);
+// render the app inside the root div in ../public/index.html
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(<BrowserRouter>
 	<App/>
 </BrowserRouter>);
