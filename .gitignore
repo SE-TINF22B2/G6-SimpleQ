@@ -1,4 +1,7 @@
 
-.idea/watcherTasks.xml
+.idea/
+.vscode/
+
 *.css
 *.css.map
+
