@@ -33,8 +33,8 @@ model User {
 
 model UserContent {
   userContentID  String          @id @default(uuid())
-  owner          User?            @relation(fields: [ownerID], references: [userID])
-  ownerID        String?
+  owner          User            @relation(fields: [ownerID], references: [userID])
+  ownerID        String
   groupID        String          @default(uuid())
   content        String?
   timeOfCreation DateTime        @default(now())
@@ -56,13 +56,7 @@ model Question {
 model Answer {
   userContent   UserContent @relation(fields: [userContentID], references: [userContentID])
   userContentID String      @id
-  typeOfAI TypeOfAI
-}
-
-enum TypeOfAI {
-  GPT
-  WollframAlpha
-  None
+  typeOfAI      String?
 }
 
 model Discussion {

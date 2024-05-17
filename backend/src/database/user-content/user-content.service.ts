@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { Answer, Discussion, Question, TypeOfAI, UserContent, UserContentType } from '@prisma/client';
+import { Answer, Discussion, Question, UserContent, UserContentType } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class UserContentService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
     // Question
-    async createQuestion(ownerID: string | null, groupID: string, content: string | null, title: string): Promise<{ userContent: UserContent, question: Question }> {
+    async createQuestion(ownerID: string, groupID: string, content: string | null, title: string): Promise<{ userContent: UserContent, question: Question }> {
         return this.prisma.$transaction(async (tx) => {
             const createdContent = await tx.userContent.create({
                 data: {
@@ -49,7 +49,7 @@ export class UserContentService {
     }
 
     // Answer
-    async createAnswer(ownerID: string | null, groupID: string, content: string | null, typeOfAI: TypeOfAI): Promise<{ userContent: UserContent, answer: Answer }> {
+    async createAnswer(ownerID: string, groupID: string, content: string | null, typeOfAI: string | null): Promise<{ userContent: UserContent, answer: Answer }> {
         return this.prisma.$transaction(async (tx) => {
             const createdContent = await tx.userContent.create({
                 data: {
@@ -89,45 +89,8 @@ export class UserContentService {
         }
     }
 
-    async checkGroupIDExists(
-        groupID: string
-    ): Promise<boolean> {
-        const contentExists = await this.prisma.userContent.findFirst({
-            where: {
-                groupID: groupID,
-                type: UserContentType.Question
-            },
-            select: {
-                userContentID: true
-            }
-        });
-
-        return contentExists != null
-    }
-
-    async checkAIAnswerExists(
-        groupID: string, typesOfAI: TypeOfAI[]
-    ): Promise<boolean> {
-        const aiAnswer = await this.prisma.userContent.findFirst({
-            where: {
-                groupID: groupID,
-                type: UserContentType.Answer,
-                answer: {
-                    typeOfAI: {
-                        in: typesOfAI
-                    }
-                }
-            },
-            select: {
-                userContentID: true
-            }
-        });
-
-        return aiAnswer != null;
-    }
-
     // Discussion
-    async createDiscussion(ownerID: string | null, groupID: string, content: string | null, title: string, isPrivate: boolean): Promise<{ userContent: UserContent, discussion: Discussion }> {
+    async createDiscussion(ownerID: string, groupID: string, content: string | null, title: string, isPrivate: boolean): Promise<{ userContent: UserContent, discussion: Discussion }> {
         return this.prisma.$transaction(async (tx) => {
             const createdContent = await tx.userContent.create({
                 data: {
