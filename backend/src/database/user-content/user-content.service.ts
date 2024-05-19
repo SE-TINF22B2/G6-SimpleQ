@@ -4,10 +4,10 @@ import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class UserContentService {
-    constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
     // Question
-    async createQuestion(ownerID: string | null, groupID: string, content: string | null, title: string): Promise<{ userContent: UserContent, question: Question }> {
+    async createQuestion(ownerID: string, groupID: string, content: string | null, title: string): Promise<{ userContent: UserContent, question: Question }> {
         return this.prisma.$transaction(async (tx) => {
             const createdContent = await tx.userContent.create({
                 data: {
@@ -49,7 +49,7 @@ export class UserContentService {
     }
 
     // Answer
-    async createAnswer(ownerID: string | null, groupID: string, content: string | null, typeOfAI: string | null): Promise<{ userContent: UserContent, answer: Answer }> {
+    async createAnswer(ownerID: string, groupID: string, content: string | null, typeOfAI: string | null): Promise<{ userContent: UserContent, answer: Answer }> {
         return this.prisma.$transaction(async (tx) => {
             const createdContent = await tx.userContent.create({
                 data: {
@@ -90,7 +90,7 @@ export class UserContentService {
     }
 
     // Discussion
-    async createDiscussion(ownerID: string | null, groupID: string, content: string | null, title: string, isPrivate: boolean): Promise<{ userContent: UserContent, discussion: Discussion }> {
+    async createDiscussion(ownerID: string, groupID: string, content: string | null, title: string, isPrivate: boolean): Promise<{ userContent: UserContent, discussion: Discussion }> {
         return this.prisma.$transaction(async (tx) => {
             const createdContent = await tx.userContent.create({
                 data: {
