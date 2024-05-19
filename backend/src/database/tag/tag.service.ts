@@ -1,17 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { Tag } from '@prisma/client';
-
-const tagLimit: number = 5
+import { TAG_LIMIT } from 'config';
 
 @Injectable()
 export class TagService {
     constructor(private prisma: PrismaService) { }
 
     async createTag(tagname: string): Promise<Tag> {
-        if (tagname) {
-            tagname = tagname.toLowerCase()
-        }
+        tagname = tagname.toLowerCase()
         return this.prisma.tag.create({
             data: {
                 tagname: tagname
@@ -22,35 +19,32 @@ export class TagService {
     async getTag(
         tagname: string
     ): Promise<Tag | null> {
-        if (tagname) {
-            tagname = tagname.toLowerCase()
-        }
+        tagname = tagname.toLowerCase()
         return this.prisma.tag.findUnique({
             where: { tagname: tagname },
         });
     }
 
-
     /**
-    Returns up to 5 (tagLimit) tags containing the query string. 
-    If a tag starts with the query, it has a higher priority and is first in the return array.
-*/
+     * Returns up to 5 (TAG_LIMIT in config.ts) tags containing the query string. 
+     * If a tag starts with the query, it has a higher priority and is first in the return array.
+     * @param query String to search for similar tags
+     * @returns Array of Tag objects that contain the query in their tagname
+     */
     async searchTags(
         query: string
     ): Promise<Tag[] | null> {
-        if (query) {
-            query = query.toLowerCase()
-        }
+        query = query.toLowerCase()
         let returnTags = await this.prisma.tag.findMany({
             where: {
                 tagname: {
                     startsWith: query
                 }
             },
-            take: tagLimit
+            take: TAG_LIMIT
         });
-        
-        if (returnTags.length < tagLimit) {
+
+        if (returnTags.length < TAG_LIMIT) {
             returnTags = returnTags.concat(await this.prisma.tag.findMany({
                 where: {
                     tagname: {
@@ -60,7 +54,7 @@ export class TagService {
                         }
                     }
                 },
-                take: (tagLimit - returnTags.length)
+                take: (TAG_LIMIT - returnTags.length)
             }))
         }
         return returnTags
