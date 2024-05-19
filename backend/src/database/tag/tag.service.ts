@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { Tag } from '@prisma/client';
-import { TAG_LIMIT } from 'config';
+import { TAG_LIMIT } from '../../../config';
 
 @Injectable()
 export class TagService {
