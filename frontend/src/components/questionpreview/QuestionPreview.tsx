@@ -1,3 +1,4 @@
+import "./QuestionPreview.scss";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Question } from "../../def/Question";
@@ -44,9 +45,19 @@ export default function QuestionPreview(props: Props) {
 				{ props.question.title }
 			</h2>
 			
-			<span className={ "caption" }>
-                    created: { props.question.created } · last updated: { props.question.updated }
-                </span>
+			<p className={ "caption" }>
+				<span style={ { display: "inline-flex" } }>
+					<i className={ "fi fi-rr-clock" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+					Created: { props.question.created }
+				</span>
+				
+				<span style={ { marginInline: "calc(var(--spacing) / 2)" } }>·</span>
+				
+				<span style={ { display: "inline-flex" } }>
+					<i className={ "fi fi-rr-user" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+					Updated: { props.question.updated }
+				</span>
+			</p>
 		</div>
 		
 		<div className={ "question-details-wrapper" }>
