@@ -10,8 +10,10 @@ describe('LoginAttemptService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [PrismaService, LoginAttemptService],
-    }).overrideProvider(PrismaService)
-      .useValue(mockPrisma).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue(mockPrisma)
+      .compile();
 
     service = module.get<LoginAttemptService>(LoginAttemptService);
   });
@@ -21,14 +23,20 @@ describe('LoginAttemptService', () => {
   });
 
   it('should create a new loginAttempt', async () => {
-    await expect(service.createLoginAttempt(testLoginAttempt.loginUserID, testLoginAttempt.wasSuccessful)).resolves.toEqual(
-      testLoginAttempt
-    )
+    await expect(
+      service.createLoginAttempt(
+        testLoginAttempt.loginUserID,
+        testLoginAttempt.wasSuccessful,
+      ),
+    ).resolves.toEqual(testLoginAttempt);
   });
 
   it('should get a loginAttempt', async () => {
-    await expect(service.getLoginAttempt(testLoginAttempt.loginUserID, testLoginAttempt.timeOfLogin)).resolves.toEqual(
-      testLoginAttempt
-    )
+    await expect(
+      service.getLoginAttempt(
+        testLoginAttempt.loginUserID,
+        testLoginAttempt.timeOfLogin,
+      ),
+    ).resolves.toEqual(testLoginAttempt);
   });
 });

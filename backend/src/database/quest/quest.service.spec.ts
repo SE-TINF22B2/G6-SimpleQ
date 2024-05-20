@@ -10,8 +10,10 @@ describe('QuestService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [PrismaService, QuestService],
-    }).overrideProvider(PrismaService)
-      .useValue(mockPrisma).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue(mockPrisma)
+      .compile();
 
     service = module.get<QuestService>(QuestService);
   });
@@ -21,14 +23,20 @@ describe('QuestService', () => {
   });
 
   it('should create a new quest', async () => {
-    await expect(service.createQuest(testQuest.name, testQuest.description, testQuest.type, testQuest.points, testQuest.isSelected)).resolves.toEqual(
-      testQuest
-    )
+    await expect(
+      service.createQuest(
+        testQuest.name,
+        testQuest.description,
+        testQuest.type,
+        testQuest.points,
+        testQuest.isSelected,
+      ),
+    ).resolves.toEqual(testQuest);
   });
 
   it('should get a quest', async () => {
     await expect(service.getQuest(testQuest.questID)).resolves.toEqual(
-      testQuest
-    )
+      testQuest,
+    );
   });
 });

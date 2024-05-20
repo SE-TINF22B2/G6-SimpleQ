@@ -4,6 +4,7 @@ import { Tag, User } from '@prisma/client';
 import { AuthService } from './auth/auth.service';
 import { UserService } from './database/user/user.service';
 import { TagService } from './database/tag/tag.service';
+import { Request, Response } from 'express';
 
 @Controller()
 export class AppController {

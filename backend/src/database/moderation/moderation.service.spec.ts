@@ -10,8 +10,10 @@ describe('ModerationService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [PrismaService, ModerationService],
-    }).overrideProvider(PrismaService)
-      .useValue(mockPrisma).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue(mockPrisma)
+      .compile();
 
     service = module.get<ModerationService>(ModerationService);
   });
@@ -21,14 +23,17 @@ describe('ModerationService', () => {
   });
 
   it('should create a new moderation', async () => {
-    await expect(service.createModeration(testModeration.moderatorID, testModeration.discussionID)).resolves.toEqual(
-      testModeration
-    )
+    await expect(
+      service.createModeration(
+        testModeration.moderatorID,
+        testModeration.discussionID,
+      ),
+    ).resolves.toEqual(testModeration);
   });
 
   it('should get a moderation', async () => {
-    await expect(service.getModeration(testModeration.moderationID)).resolves.toEqual(
-      testModeration
-    )
+    await expect(
+      service.getModeration(testModeration.moderationID),
+    ).resolves.toEqual(testModeration);
   });
 });

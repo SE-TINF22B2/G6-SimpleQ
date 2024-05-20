@@ -10,8 +10,10 @@ describe('VoteService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [PrismaService, VoteService],
-    }).overrideProvider(PrismaService)
-      .useValue(mockPrisma).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue(mockPrisma)
+      .compile();
 
     service = module.get<VoteService>(VoteService);
   });
@@ -21,14 +23,18 @@ describe('VoteService', () => {
   });
 
   it('should create a new userTimeout', async () => {
-    await expect(service.createVote(testVote.contentID, testVote.votingUserID, testVote.isPositive)).resolves.toEqual(
-      testVote
-    )
+    await expect(
+      service.createVote(
+        testVote.contentID,
+        testVote.votingUserID,
+        testVote.isPositive,
+      ),
+    ).resolves.toEqual(testVote);
   });
 
   it('should get a userTimeout', async () => {
-    await expect(service.getVote(testVote.contentID, testVote.votingUserID)).resolves.toEqual(
-      testVote
-    )
+    await expect(
+      service.getVote(testVote.contentID, testVote.votingUserID),
+    ).resolves.toEqual(testVote);
   });
 });
