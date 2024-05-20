@@ -9,7 +9,7 @@ interface Props {
 }
 
 /**
- * Renders a live input
+ * Renders a live input that shows selectable suggestions based on the input text
  * @param props.onSuggestionSelected Optional function to be executed once a suggestion is selected
  * @param props.placeholder Optional string to be displayed as an input placeholder
  * @param props.disabled Optional boolean to disable the live input

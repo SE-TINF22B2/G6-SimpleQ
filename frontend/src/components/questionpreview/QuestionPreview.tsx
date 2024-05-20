@@ -8,7 +8,7 @@ interface Props {
 }
 
 /**
- * Renders a preview of a question
+ * Renders a preview of a question, including the title, tags and basic stats
  * @param props.question Question to be previewed
  * @param props.index Index of the preview to be rendered, also used for changing direction
  */
