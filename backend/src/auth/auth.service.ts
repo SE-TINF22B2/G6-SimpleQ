@@ -46,9 +46,9 @@ export class AuthService {
           return res.json({ cookie: result.config.headers.Cookie });
         }
       } catch (e) {
-        if (e?.response?.data?.error?.code == 401) {
+        if (e?.response?.data?.error?.code == 401 || e?.response.data.statusCode == 401) {
           return res.redirect(
-            `${process.env.ORY_URL}/ui/login?return_to=${encodeURI('http://localhost:3000/cookie')}`,
+            `${process.env.ORY_URL}/ui/login?return_to=${encodeURI(`${process.env.APP_URL}/cookie`)}`,
           );
         }
 
