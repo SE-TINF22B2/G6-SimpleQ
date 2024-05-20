@@ -33,8 +33,8 @@ model User {
 
 model UserContent {
   userContentID  String          @id @default(uuid())
-  owner          User            @relation(fields: [ownerID], references: [userID])
-  ownerID        String
+  owner          User?            @relation(fields: [ownerID], references: [userID])
+  ownerID        String?
   groupID        String          @default(uuid())
   content        String?
   timeOfCreation DateTime        @default(now())
@@ -56,7 +56,13 @@ model Question {
 model Answer {
   userContent   UserContent @relation(fields: [userContentID], references: [userContentID])
   userContentID String      @id
-  typeOfAI      String?
+  typeOfAI TypeOfAI
+}
+
+enum TypeOfAI {
+  GPT
+  WolframAlpha
+  None
 }
 
 model Discussion {
@@ -90,8 +96,8 @@ model Moderation {
   moderationID String        @id @default(uuid())
   moderator    User          @relation(fields: [moderatorID], references: [userID])
   moderatorID  String
-  content      Discussion    @relation(fields: [contentID], references: [userContentID])
-  contentID    String
+  discussion   Discussion    @relation(fields: [discussionID], references: [userContentID])
+  discussionID String
   userTimeout  UserTimeout[]
 }
 

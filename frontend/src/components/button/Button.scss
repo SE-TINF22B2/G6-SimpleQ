@@ -1,0 +1,80 @@
+.btn {
+	border-radius: var(--border-radius);
+
+	font-size: 0.9em;
+	height: var(--form-element-height);
+
+	align-items: center;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	padding: calc(var(--spacing) / 1.5) calc(var(--spacing) * 1.5);
+	text-decoration: none;
+	transition: background-color var(--transition);
+	user-select: none;
+	white-space: nowrap;
+
+	&.btn-primary {
+		background: var(--primary-color);
+		color: var(--primary-color-contrast);
+		font-weight: 600;
+		outline-offset: var(--outline-width);
+
+		overflow: hidden;
+		position: relative;
+
+		* {
+			z-index: 10;
+		}
+
+		&::before {
+			animation: rotate 2s infinite linear;
+			background-color: transparent;
+			content: "";
+			height: 50%;
+			left: -50%;
+			position: absolute;
+			transition: background-color var(--transition);
+			width: calc(200%);
+		}
+
+		@keyframes rotate {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+
+		&::after {
+			background-color: inherit;
+			border-radius: inherit;
+			content: "";
+			inset: var(--outline-width);
+			position: absolute;
+		}
+
+		&:focus,
+		&:hover {
+			&::before {
+				background-color: var(--primary-color-contrast);
+			}
+		}
+	}
+
+	&.btn-glass {
+		background: var(--background-color-glass);
+		border: var(--outline-width) solid var(--border-color);
+		box-shadow: var(--box-shadow);
+
+		&:focus-within {
+			background: var(--background-color-secondary);
+		}
+	}
+
+	&:disabled {
+		pointer-events: none;
+		opacity: 0.6;
+	}
+}

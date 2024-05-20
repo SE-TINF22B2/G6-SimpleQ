@@ -1,0 +1,21 @@
+.quests-list {
+	> * {
+		flex: 1;
+		align-self: stretch;
+		text-align: center;
+	}
+
+	> .quest-done {
+		background: linear-gradient(45deg, var(--primary-color), transparent 200%), url(https://grainy-gradients.vercel.app/noise.svg);
+		color: var(--primary-color-contrast);
+		box-shadow: var(--box-shadow-elevated);
+
+		i {
+			height: 120px;
+			font-size: 4em;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+}
