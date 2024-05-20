@@ -1,13 +1,25 @@
 import { Answer, Blacklist, Discussion, Expert, Favorite, LoginAttempt, Moderation, Quest, Question, QuestType, Tag, User, UserContent, UserContentType, UserQuest, UserTimeout, Vote } from "@prisma/client";
 
+const dateTime = new Date(2024, 1, 1, 11, 59);
+
 export const testBlacklistItem: Blacklist = { name: 'test' };
-export const testBlacklist: Blacklist[] = [{ name: 'test1' }, { name: 'test2' }]
+export const testBlacklist: Blacklist[] = [
+  { name: 'test1' },
+  { name: 'test2' }
+]
 
 export const testTag: Tag = {
-  tagname: "testTag"
+  tagname: "testtag"
 }
 
-const dateTime = new Date(2024, 1, 1, 11, 59);
+export const testTagList: Tag[] = [
+  { tagname: "tagname1" },
+  { tagname: "a_testtagname" },
+  { tagname: "b_tag" },
+  { tagname: "testtag" },
+  { tagname: "testtagname" },
+  { tagname: "z_tagname" }
+]
 
 export const testUser: User = {
   userID: "userID",
