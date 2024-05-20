@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import {act, render, screen} from "@testing-library/react";
 import React from "react";
 import Button from "./Button";
 
@@ -12,9 +12,11 @@ test('testing Button component', () => {
 	expect(button).toBeInTheDocument();
 	
 	// check if button has the correct icon
-	expect(button.parentNode!.firstChild).toHaveClass("f2a94");
+	const {parentNode} = button;
+	const {firstChild} = parentNode!;
+	expect(firstChild).toHaveClass("f2a94");
 	
 	// check if onClick will be called
-	button.click();
+	act(() => button.click());
 	expect(onClick).toBeCalled();
 });

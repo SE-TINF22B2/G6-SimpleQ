@@ -16,6 +16,7 @@ import Login from "./home/Login";
 import Activity from "./dashboard/Activity";
 import Quests from "./dashboard/Quests";
 import MyQuestions from "./dashboard/MyQuestions";
+import ConsentBanner from "../components/consentbanner/ConsentBanner";
 
 i18n.use(initReactI18next)
 	.init({
@@ -88,7 +89,8 @@ export default function App() {
 	}, [theme]);
 	
 	const updateTheme = (theme: "system" | "dark" | "light") => {
-		localStorage.setItem("theme", theme);
+		if (localStorage.getItem("consent") === "true")
+			localStorage.setItem("theme", theme);
 		setTheme(theme);
 	}
 	
@@ -101,6 +103,8 @@ export default function App() {
 	
 	return <SkeletonTheme baseColor={ skeletonBaseColor }
 						  highlightColor={ skeletonHighlightColor }>
+		<ConsentBanner/>
+		
 		<Routes>
 			{ /* Todo: All Suspense Fallback */ }
 			

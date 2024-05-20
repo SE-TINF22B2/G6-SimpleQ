@@ -1,3 +1,4 @@
+/* eslint-disable testing-library/no-node-access */
 import { act, render, screen } from "@testing-library/react";
 import Dropdown from "./Dropdown";
 
