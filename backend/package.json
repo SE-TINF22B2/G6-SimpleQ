@@ -20,16 +20,20 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "ory-auth": "npx @ory/cli auth",
     "tunnel": "npx @ory/cli --project objective-ramanujan-9xyl1ro5qe tunnel --dev http://localhost:3000",
+    "proxy": "npx @ory/cli --project objective-ramanujan-9xyl1ro5qe proxy --port 4001 http://localhost:3000 http://localhost:4001",
     "prisma": "npx prisma migrate dev --name db"
   },
   "dependencies": {
+    "@nestjs/axios": "^3.0.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.2",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
     "@ory/client": "^1.9.0",
     "@prisma/client": "^5.13.0",
+    "axios": "^1.6.8",
     "jest-mock-extended": "^3.0.7",
+    "openai": "^4.40.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },

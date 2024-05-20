@@ -33,7 +33,8 @@
     "lint": "eslint .",
     "eject": "react-scripts eject",
     "ory-auth": "npx @ory/cli auth",
-    "tunnel": "npx @ory/cli --project objective-ramanujan-9xyl1ro5qe tunnel --dev http://localhost:3000"
+    "tunnel": "npx @ory/cli --project objective-ramanujan-9xyl1ro5qe tunnel --dev http://localhost:3000",
+    "proxy": "npx @ory/cli --project objective-ramanujan-9xyl1ro5qe proxy --port 4001 http://localhost:3000 https://simpleq.joshua.slaar.de"
   },
   "eslintConfig": {
     "extends": [
