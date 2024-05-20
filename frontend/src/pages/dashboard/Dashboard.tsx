@@ -37,7 +37,8 @@ export default function Dashboard(props: Props) {
 	useEffect(() => {
 		ory.toSession()
 		   .then(({ data }) => {
-			   setSession(data);
+			   if (localStorage.getItem("consent") === "true")
+				   setSession(data);
 			   ory.createBrowserLogoutFlow().then(({ data }) => {
 				   setLogoutUrl(data.logout_url);
 			   });

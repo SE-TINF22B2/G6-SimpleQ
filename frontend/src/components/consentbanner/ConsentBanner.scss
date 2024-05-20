@@ -1,0 +1,32 @@
+.consent-banner-wrapper {
+	position: fixed;
+	bottom: var(--spacing);
+	width: 100%;
+
+	z-index: 10000;
+
+	.consent-banner {
+		width: 100%;
+		max-width: var(--max-width);
+		margin: 0 auto;
+
+		padding: var(--spacing);
+		border-radius: var(--border-radius);
+
+		background: linear-gradient(45deg, var(--background-color-primary), var(--background-color-glass)), url(https://grainy-gradients.vercel.app/noise.svg);
+		box-shadow: var(--box-shadow-elevated);
+
+		h2 i {
+			margin-inline-end: calc(var(--spacing) / 2);
+		}
+
+		p {
+			margin-block: calc(var(--spacing) / 2) var(--spacing);
+		}
+
+		.consent-banner-buttons {
+			display: flex;
+			gap: var(--spacing);
+		}
+	}
+}
