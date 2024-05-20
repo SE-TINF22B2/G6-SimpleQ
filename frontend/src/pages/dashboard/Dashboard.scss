@@ -153,6 +153,7 @@
 
 			h1,
 			h2 {
+				display: inline-flex;
 
 				i {
 					margin-inline-end: calc(var(--spacing) / 2);

@@ -78,7 +78,7 @@ export default function Trending(props: {}) {
 			<div style={ { display: "flex", gap: "var(--spacing)" } }>
 				<div style={ { flex: 1 } }>
 					<h1>
-						<i className={ "fas fa-chart-line" }/>
+						<i className={ "fi fi-sr-file-chart-line" }/>
 						Trending
 					</h1>
 					<p>See what's trending on our platform.</p>
@@ -89,42 +89,42 @@ export default function Trending(props: {}) {
 						alignItems: "center",
 						marginTop: "var(--spacing)"
 					} }>
-						<Dropdown button={ <Button icon={ "fas fa-filter" }>Adjust questions</Button> } items={ [
+						<Dropdown button={ <Button icon={ "fi fi-rr-filter" }>Adjust questions</Button> } items={ [
 							{
-								icon: "fas fa-sort",
+								icon: "fi fi-rr-sort",
 								label: "Sort by",
 								items: [
 									{
-										icon: "fas fa-clock-rotate-left",
+										icon: "fi fi-rr-time-past",
 										label: "Timestamp",
 										shortcut: sortBy === "timestamp" ?
-											<i className={ "fas fa-check" }/> : undefined,
+											<i className={ "fi fi-rr-check" }/> : undefined,
 										onClick: () => setSortBy("timestamp")
 									}
 								],
-								shortcut: <i className={ "fas fa-clock-rotate-left" }/>
+								shortcut: <i className={ "fi fi-rr-time-past" }/>
 							},
 							{
-								icon: "fas fa-sort-amount-down",
+								icon: "fi fi-rr-sort-amount-down",
 								label: "Direction",
 								items: [
 									{
-										icon: "fas fa-arrow-trend-up",
+										icon: "fi fi-rr-arrow-trend-up",
 										label: "Ascending",
 										shortcut: sortDirection === "asc" ?
-											<i className={ "fas fa-check" }/> : undefined,
+											<i className={ "fi fi-rr-check" }/> : undefined,
 										onClick: () => setSortDirection("asc")
 									},
 									{
-										icon: "fas fa-arrow-trend-down",
+										icon: "fi fi-rr-arrow-trend-down",
 										label: "Descending",
 										shortcut: sortDirection === "desc" ?
-											<i className={ "fas fa-check" }/> : undefined,
+											<i className={ "fi fi-rr-check" }/> : undefined,
 										onClick: () => setSortDirection("desc")
 									}
 								],
 								shortcut: <i
-									className={ "fas fa-arrow-trend-" + (sortDirection === "asc" ? "up" : "down") }/>
+									className={ "fi fi-rr-arrow-trend-" + (sortDirection === "asc" ? "up" : "down") }/>
 							}
 						] } direction={ "right" }/>
 						

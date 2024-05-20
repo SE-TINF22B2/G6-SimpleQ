@@ -25,7 +25,7 @@
 			}
 
 			.dropdown-menu-item {
-				.fa-angle-down {
+				.fi-rr-angle-down {
 					&.expanded {
 						transform: rotate(-90deg);
 					}
@@ -41,7 +41,7 @@
 			}
 
 			.dropdown-menu-item {
-				.fa-angle-down {
+				.fi-rr-angle-down {
 					&.expanded {
 						transform: rotate(90deg);
 					}
@@ -103,8 +103,9 @@
 
 			text-align: left;
 
-			.fa-angle-down {
+			.fi-rr-angle-down {
 				transition: var(--transition);
+				font-size: 0.8em;
 			}
 
 			&:hover {

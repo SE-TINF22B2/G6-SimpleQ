@@ -85,6 +85,9 @@ code {
 	padding: calc(var(--spacing) / 4) calc(var(--spacing) / 1.5);
 	white-space: nowrap;
 
+	display: inline-flex;
+	align-items: center;
+
 	&.badge-outline {
 		background: transparent;
 		color: var(--primary-color);
@@ -184,4 +187,26 @@ p.tags {
 			}
 		}
 	}
+}
+
+i {
+	display: inline-grid;
+	place-items: center;
+
+	&.spin {
+		animation: spin 1s infinite linear;
+
+		@keyframes spin {
+			from {
+				transform: rotate(0deg);
+			}
+			to {
+				transform: rotate(360deg);
+			}
+		}
+	}
+}
+
+.flipY {
+	transform: scaleY(-1);
 }

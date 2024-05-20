@@ -78,13 +78,13 @@ export default function QuestionView() {
 	const getSortByIcon = () => {
 		switch (sortBy) {
 			case "ldr":
-				return "fas fa-scale-balanced";
+				return "fi fi-rr-equality";
 			case "likes":
-				return "far fa-thumbs-up";
+				return "fi fi-rr-social-network";
 			case "dislikes":
-				return "far fa-thumbs-down";
+				return "fi fi-rr-social-network flipY";
 			case "timestamp":
-				return "fas fa-clock-rotate-left";
+				return "fi fi-rr-time-past";
 		}
 	}
 	
@@ -96,14 +96,15 @@ export default function QuestionView() {
 					 paddingInline: answer.author.type === "ai" ? "var(--spacing)" : 0
 				 } }>
 				{ answer.author.type === "ai" ? <>
-					<i className={ "fas fa-brain fa-2xl" }
+					<i className={ "fi fi-sr-brain" }
 					   style={ {
+						   fontSize: "2em",
 						   height: "auto",
 						   color: "var(--primary-color)",
 						   filter: "drop-shadow(0 0 5px rgba(0, 0, 0, 0.2))"
 					   } }/>
 					
-					<p style={ { paddingTop: "calc(var(--spacing) * 1.5)" } }>
+					<p style={ { paddingTop: "calc(var(--spacing) * 0.5)" } }>
 						<span>Simp</span>
 					</p>
 				</> : <div className={ "question-answer-author-user" } tabIndex={ 0 }>
@@ -126,14 +127,14 @@ export default function QuestionView() {
 				<div className={ "question-answer-actions" }>
 					<div
 						className={ "question-answer-actions-rate" + (answer.rating === "like" ? " rating" : "") }>
-						<i className={ "far fa-thumbs-up primary-icon" } tabIndex={ 0 }/>
+						<i className={ "fi fi-rr-social-network primary-icon" } tabIndex={ 0 }/>
 						<span className={ "question-figure" }>{ answer.likes }</span>
 						<span className={ "question-unit" }>likes</span>
 					</div>
 					
 					<div
 						className={ "question-answer-actions-rate" + (answer.rating === "dislike" ? " rating" : "") }>
-						<i className={ "far fa-thumbs-down primary-icon" } tabIndex={ 0 }/>
+						<i className={ "fi fi-rr-social-network flipY primary-icon" } tabIndex={ 0 }/>
 						<span className={ "question-figure" }>{ answer.dislikes }</span>
 						<span className={ "question-unit" }>dislikes</span>
 					</div>
@@ -141,8 +142,8 @@ export default function QuestionView() {
 					<div style={ { flex: 1 } }/>
 					
 					<button className={ "question-report" }>
-						<i className={ "far fa-flag" }/>
-						Report this answer
+						<i className={ "fi fi-rr-flag" }/>
+						Report answer
 					</button>
 				</div>
 			</div>
@@ -199,7 +200,7 @@ export default function QuestionView() {
                         created: { question.created } · last updated: { question.updated }
                     </span> : <Skeleton/> }
 					
-					{ question && <i className={ "far fa-star add-favorite" } tabIndex={ 0 }/> }
+					{ question && <i className={ "fi fi-rr-star add-favorite" } tabIndex={ 0 }/> }
 				</section>
 				
 				<hr style={ { margin: 0 } }/>
@@ -226,14 +227,14 @@ export default function QuestionView() {
 					justifyContent: "flex-end",
 					gap: "var(--spacing)"
 				} }>
-					<Button icon={ "fas fa-arrow-left" } onClick={ () => {
+					<Button icon={ "fi fi-rr-arrow-left" } onClick={ () => {
 					} }>
 						Previous
 					</Button>
 					
 					<p>Page 1 of 10</p>
 					
-					<Button icon={ "fas fa-arrow-right" } onClick={ () => {
+					<Button icon={ "fi fi-rr-arrow-right" } onClick={ () => {
 					} } placeIconRight={ true }>
 						Next
 					</Button>
@@ -265,7 +266,7 @@ export default function QuestionView() {
 					<div className={ "question-stats" }>
 						{ question ? <>
 							<div className={ "question-stat" }>
-								<i className={ "far fa-eye primary-icon" }/>
+								<i className={ "fi fi-rr-eye primary-icon" }/>
 								<span
 									className={ "question-figure" }>{ "0".replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 								<span className={ "question-unit" }>views</span>
@@ -273,7 +274,7 @@ export default function QuestionView() {
 							
 							<div
 								className={ "question-stat" /* + (question.stats.rating === "like" ? " rating" : "") */ }>
-								<i className={ "far fa-thumbs-up primary-icon" } tabIndex={ 0 }/>
+								<i className={ "fi fi-rr-social-network primary-icon" } tabIndex={ 0 }/>
 								<span
 									className={ "question-figure" }>{ question.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 								<span className={ "question-unit" }>likes</span>
@@ -281,14 +282,14 @@ export default function QuestionView() {
 							
 							<div
 								className={ "question-stat" /* + (question.stats.rating === "dislike" ? " rating" : "") */ }>
-								<i className={ "far fa-thumbs-down primary-icon" } tabIndex={ 0 }/>
+								<i className={ "fi fi-rr-social-network flipY primary-icon" } tabIndex={ 0 }/>
 								<span
 									className={ "question-figure" }>{ question.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 								<span className={ "question-unit" }>dislikes</span>
 							</div>
 							
 							<div className={ "question-stat" }>
-								<i className={ "far fa-comment-dots primary-icon" }/>
+								<i className={ "fi fi-rr-comment-dots primary-icon" }/>
 								<span
 									className={ "question-figure" }>{ question.answers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
 								<span className={ "question-unit" }>answers</span>
@@ -304,86 +305,80 @@ export default function QuestionView() {
 					<hr style={ { marginBottom: "calc(var(--spacing) / 2)" } }/>
 					
 					<button className={ "question-report" }>
-						<i className={ "far fa-flag" }/>
-						Report this question
+						<i className={ "fi fi-rr-flag" }/>
+						Report question
 					</button>
 				</section>
 				
-				<section className={ "glass" }>
-					<Dropdown button={ <Button icon={ "fas fa-filter" }>
-						Adjust answers
-					</Button> } items={ [
-						{
-							icon: "fas fa-sort",
-							label: "Sort by",
-							items: [
-								{
-									icon: "fas fa-scale-balanced",
-									label: "Like-Dislike Ratio",
-									shortcut: sortBy === "ldr" ?
-										<i className={ "fas fa-check" }/> : undefined,
-									onClick: () => setSortBy("ldr")
-								},
-								{
-									icon: "far fa-thumbs-up",
-									label: "Most likes",
-									shortcut: sortBy === "likes" ?
-										<i className={ "fas fa-check" }/> : undefined,
-									onClick: () => setSortBy("likes")
-								},
-								{
-									icon: "far fa-thumbs-down",
-									label: "Most dislikes",
-									shortcut: sortBy === "dislikes" ?
-										<i className={ "fas fa-check" }/> : undefined,
-									onClick: () => setSortBy("dislikes")
-								},
-								{
-									icon: "fas fa-clock-rotate-left",
-									label: "Timestamp",
-									shortcut: sortBy === "timestamp" ?
-										<i className={ "fas fa-check" }/> : undefined,
-									onClick: () => setSortBy("timestamp")
-								}
-							],
-							shortcut: <i className={ getSortByIcon() }/>
-						},
-						{
-							icon: "fas fa-sort-amount-down",
-							label: "Direction",
-							items: [
-								{
-									icon: "fas fa-arrow-trend-up",
-									label: "Ascending",
-									shortcut: sortDirection === "asc" ?
-										<i className={ "fas fa-check" }/> : undefined,
-									onClick: () => setSortDirection("asc")
-								},
-								{
-									icon: "fas fa-arrow-trend-down",
-									label: "Descending",
-									shortcut: sortDirection === "desc" ?
-										<i className={ "fas fa-check" }/> : undefined,
-									onClick: () => setSortDirection("desc")
-								}
-							],
-							shortcut: <i
-								className={ "fas fa-arrow-trend-" + (sortDirection === "asc" ? "up" : "down") }/>
-						},
-						{
-							icon: "fas fa-brain",
-							label: "Enable AI",
-							shortcut: <input type={ "checkbox" }
-											 style={ { userSelect: "none", pointerEvents: "none" } }
-											 checked={ enableAI } tabIndex={ -1 }/>,
-							onClick: () => setEnableAI(!enableAI)
-						}
-					] }/>
-					
-					<hr/>
-					
-					<p>Page 1 of 10</p>
-				</section>
+				<Dropdown button={ <Button icon={ "fi fi-rr-filter" }>
+					Adjust answers
+				</Button> } items={ [
+					{
+						icon: "fi fi-rr-sort",
+						label: "Sort by",
+						items: [
+							{
+								icon: "fi fi-rr-equality",
+								label: "Like-Dislike Ratio",
+								shortcut: sortBy === "ldr" ?
+									<i className={ "fi fi-rr-check" }/> : undefined,
+								onClick: () => setSortBy("ldr")
+							},
+							{
+								icon: "fi fi-rr-social-network",
+								label: "Most likes",
+								shortcut: sortBy === "likes" ?
+									<i className={ "fi fi-rr-check" }/> : undefined,
+								onClick: () => setSortBy("likes")
+							},
+							{
+								icon: "fi fi-rr-social-network flipY",
+								label: "Most dislikes",
+								shortcut: sortBy === "dislikes" ?
+									<i className={ "fi fi-rr-check" }/> : undefined,
+								onClick: () => setSortBy("dislikes")
+							},
+							{
+								icon: "fi fi-rr-time-past",
+								label: "Timestamp",
+								shortcut: sortBy === "timestamp" ?
+									<i className={ "fi fi-rr-check" }/> : undefined,
+								onClick: () => setSortBy("timestamp")
+							}
+						],
+						shortcut: <i className={ getSortByIcon() }/>
+					},
+					{
+						icon: "fi fi-rr-sort-amount-down",
+						label: "Direction",
+						items: [
+							{
+								icon: "fi fi-rr-arrow-trend-up",
+								label: "Ascending",
+								shortcut: sortDirection === "asc" ?
+									<i className={ "fi fi-rr-check" }/> : undefined,
+								onClick: () => setSortDirection("asc")
+							},
+							{
+								icon: "fi fi-rr-arrow-trend-down",
+								label: "Descending",
+								shortcut: sortDirection === "desc" ?
+									<i className={ "fi fi-rr-check" }/> : undefined,
+								onClick: () => setSortDirection("desc")
+							}
+						],
+						shortcut: <i
+							className={ "fi fi-rr-arrow-trend-" + (sortDirection === "asc" ? "up" : "down") }/>
+					},
+					{
+						icon: "fi fi-rr-brain",
+						label: "Enable AI",
+						shortcut: <input type={ "checkbox" }
+										 style={ { userSelect: "none", pointerEvents: "none" } }
+										 checked={ enableAI } tabIndex={ -1 }/>,
+						onClick: () => setEnableAI(!enableAI)
+					}
+				] }/>
 			</div>
 		</SplitSection>
 	</>
