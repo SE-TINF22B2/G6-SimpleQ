@@ -146,9 +146,13 @@
 		cursor: pointer;
 		opacity: 0.8;
 		outline-offset: var(--outline-width);
+		padding-inline-end: var(--spacing);
+		
+		display: flex;
+		align-items: center;
 
 		i {
-			margin-inline-end: var(--spacing);
+			margin-inline: var(--spacing);
 		}
 
 		&:hover {

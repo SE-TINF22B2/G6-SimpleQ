@@ -31,7 +31,7 @@ export default function Editor(props: {}) {
 			
 			<div className={ "glass" }>
 				<h2>
-					<i className={ "far fa-question" }/>
+					<i className={ "fi fi-rr-question" }/>
 					<span id={ "editor-question-title" }
 						  contentEditable={ hasBeenSubmitted ? false : "plaintext-only" }
 						  onInput={ (e) => {
@@ -64,7 +64,7 @@ export default function Editor(props: {}) {
 			
 			<div className={ "glass" }>
 				<h2>
-					<i className={ "fas fa-tag" }/>
+					<i className={ "fi fi-rr-tags" }/>
 					{ t('dashboard.questionEditor.tags.title') }
 				</h2>
 				<p>{ t('dashboard.questionEditor.tags.hint') }</p>
@@ -101,7 +101,7 @@ export default function Editor(props: {}) {
 			
 			<div className={ "glass" }>
 				<h2>
-					<i className={ "fas fa-align-left" }/>
+					<i className={ "fi fi-rr-align-left" }/>
 					{ t('dashboard.questionEditor.description.title') }
 				</h2>
 				<p>{ t('dashboard.questionEditor.description.hint') }</p>
@@ -124,7 +124,7 @@ export default function Editor(props: {}) {
 					 if (hasBeenSubmitted) return;
 					 setQuestionType("simp");
 				 } }>
-				<i className={ "fas fa-2xl fa-brain icon-test" }/>
+				<i className={ "fi fi-sr-brain icon-test" } style={ { fontSize: "2em" } }/>
 				<h3>{ t('dashboard.questionEditor.type.simp.title') }</h3>
 				<p>{ t('dashboard.questionEditor.type.simp.hint') }</p>
 			</div>
@@ -134,7 +134,7 @@ export default function Editor(props: {}) {
 					 if (hasBeenSubmitted) return;
 					 setQuestionType("users");
 				 } }>
-				<i className={ "far fa-2xl fa-user icon-test" }/>
+				<i className={ "fi fi-sr-user icon-test" } style={ { fontSize: "2em" } }/>
 				<h3>{ t('dashboard.questionEditor.type.users.title') }</h3>
 				<p>{ t('dashboard.questionEditor.type.users.hint') }</p>
 			</div>
@@ -148,7 +148,7 @@ export default function Editor(props: {}) {
 			
 			<div className={ "glass" }>
 				<h2>
-					<i className={ "fas fa-check" }/>
+					<i className={ "fi fi-rr-check" }/>
 					{ t('dashboard.questionEditor.validate.title') }
 				</h2>
 				<p>{ t('dashboard.questionEditor.validate.hint') }</p>
@@ -157,17 +157,17 @@ export default function Editor(props: {}) {
 				<table>
 					<tbody>
 					<tr>
-						<td><i className={ "fas fa-" + (isTitleValid ? "check" : "x") }
+						<td><i className={ "fi fi-rr-" + (isTitleValid ? "check" : "x") }
 							   style={ { width: "40px", textAlign: "center" } }/></td>
 						<td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>{ t('dashboard.questionEditor.validate.checks.title') }</td>
 					</tr>
 					<tr>
-						<td><i className={ "fas fa-" + (isTagsValid ? "check" : "x") }
+						<td><i className={ "fi fi-rr-" + (isTagsValid ? "check" : "x") }
 							   style={ { width: "40px", textAlign: "center" } }/></td>
 						<td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>{ t('dashboard.questionEditor.validate.checks.tags') }</td>
 					</tr>
 					<tr>
-						<td><i className={ "fas fa-" + (isDescriptionValid ? "check" : "x") }
+						<td><i className={ "fi fi-rr-" + (isDescriptionValid ? "check" : "x") }
 							   style={ { width: "40px", textAlign: "center" } }/></td>
 						<td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>{ t('dashboard.questionEditor.validate.checks.description') }</td>
 					</tr>
@@ -178,7 +178,7 @@ export default function Editor(props: {}) {
 		
 		<div className={ "container editor-container transparent" } style={ { display: "flex" } }>
 			<div style={ { flex: 1 } }/>
-			<Button style={ "primary" } icon={ "fas fa-paper-plane" }
+			<Button style={ "primary" } icon={ "fi fi-rr-paper-plane" }
 					onClick={ () => {
 						setHasBeenSubmitted(true);
 						
