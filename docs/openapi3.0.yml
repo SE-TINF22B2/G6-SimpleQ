@@ -19,35 +19,64 @@ components:
           type: string
         type: 
           type: string
-          enum: ["user", "pro", "ai"]       
-    Question:
+          enum: ["guest", "user", "pro", "ai"]
+
+    UserContent:
       type: object
       properties:
-        id: 
+        id:
           type: string
-        title: 
+        content:
           type: string
-        content: 
-          type: string
-        tags: 
-          type: array
-          items:
-            type: string
-        likes: 
+        likes:
           type: integer
         dislikes:
-          type: integer
-        answers:
           type: integer
         created:
           type: string
           description: The date, the question was created
-        updated: 
+        opinion:
           type: string
-          description: The date, the question was last updated
-        author: 
-           $ref: '#/components/schemas/Author'
-            
+          enum:
+            - like
+            - dislike
+            - none
+          
+    Question:
+      allOf:
+        - $ref: '#/components/schemas/UserContent'
+        - type: object
+          properties:
+            title:
+              type: string
+            tags: 
+              type: array
+              items:
+                type: string
+            numberOfAnswers:
+              type: integer
+            updated: 
+              type: string
+              description: The date, the question was last updated
+            author: 
+                $ref: '#/components/schemas/Author'
+
+    Answer:
+      allOf:
+        - $ref: '#/components/schemas/UserContent'
+        - type: object
+          properties:
+            author:
+              $ref:  '#/components/schemas/Author'
+    AItype:
+      type: object
+      properties:
+        type:
+          aiType: string
+          enum:
+            - WolframAlpha
+            - GPT
+
     CreateQuestion:
       type: object
       properties:
@@ -61,6 +90,7 @@ components:
           type: boolean
           description: Will be validated in the backend for user permission
           default: false
+    
     UpdateUser:
       type: object
       properties:
@@ -133,7 +163,7 @@ components:
         date: 
           type: string
           description: The date of the login attempt
-        successfull: 
+        successfully:
           type: boolean
 
         
@@ -174,6 +204,7 @@ paths:
     get:
       tags:
         - questions
+      summary: 'Get a list of question for specific search request, empty list if none'
       parameters:
         - in: query
           name: q # searchString
@@ -215,14 +246,13 @@ paths:
             maximum: 50
       responses:
         '200':
-          description: Successful
+          description: 'Successful; **TODO: maybe skip content in this view to lower response payload**'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Question'
-        '401':
-          description: User is not logged in
-
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
   /question/{questionId}:
     get: 
       tags:
@@ -244,6 +274,33 @@ paths:
                 $ref: '#/components/schemas/Question'
         '404':
           description: Not found
+
+  /question/{questionId}/title:
+    get: 
+      tags:
+        - questions
+      summary: Get a title for one question
+      parameters:
+        - in: path
+          name: questionId
+          required: true
+          description: UUID of a question
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully fetched a single title
+          content:
+            application/json: 
+              schema: 
+                object:
+                  properties:
+                    title:
+                      type: string
+        '404':
+          description: Not found
+        
+          
   /question/{questionId}/answers:
     get: 
       tags:
@@ -301,14 +358,13 @@ paths:
           content:
             application/json: 
               schema: 
-                $ref: '#/components/schemas/Question'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Answer'
         '404':
           description: Not found      
   /question/create:
     post: 
-      responses:
-        '200': 
-          description: TODO
       tags: 
        - questions
       summary: Create a new question
@@ -319,11 +375,24 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateQuestion'
+      responses:
+        '200': 
+          description: 'Question successfully created'
+          content:
+            application/json:
+                schema:
+                  type: object
+                  properties:
+                    userId:
+                      type: string
+        '422':
+          description: 'Unprocessable Entity: Payload is not sufficient'
+
   /tags/find:
     get: 
       tags:
         - tag
-      description: Find possible results for a given tag
+      summary: Find possible results for a given tag
       parameters:
         - in: query
           name: tag
@@ -338,7 +407,7 @@ paths:
             application/json:
               schema:
                 type: array
-                description: The array of tags
+                description: 'The array of tags, __if tag is not valid result is empty__'
                 items: 
                   type: string
   
@@ -346,11 +415,16 @@ paths:
     get:
       tags:
         - user
-      description: 'basic information of users, can be used for overviews'
-      parameters: []
+      summary: 'basic information of users, can be used for overviews, can be seen by everybody'
+      parameters: 
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
       responses:
         '200':
-          description: TODO TODO
+          description: 'Ok'
           content:
             application/json:
               schema:
@@ -361,11 +435,16 @@ paths:
     get:
       tags:
         - user
-      description: 'detailed information for one user, can be used for profiles'
-      parameters: []
+      summary: 'detailed information for one user, can be used for profiles, can be seen by everybody'
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema:
+            type: string
       responses:
         '200':
-          description: Found
+          description: 'Ok'
           content:
             application/json:
               schema:
@@ -373,80 +452,95 @@ paths:
         '404':
           description: 'User does not exist'
   
-  /profile/{userId}/update:
+  /profile/update:
     put: 
       tags:
         - user
-      responses:
-        '200': 
-          description: TODO
-        '401':
-          description: 'Unauthorized'
+      summary: 'update profile information for this user'
+      parameters: []
       requestBody:
         description: the data that needs to be send
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Question'
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        '200': 
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '422':
+          description: 'Unprocessable Entity: Payload is not sufficient'
+        '401':
+          description: 'Unauthorized'
   /favourites:
     get: 
       tags:
         - favourites
-      description: get all your favourite questions
+      summary: "get all your favourite questions"
+      description: "Result is empty if user has no question"
       responses:
         '200': 
-          description: Sucess
+          description: "Ok"
           content:
             application/json:
               schema:
-                 $ref: '#/components/schemas/Question'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+        '401':
+          description: 'Unauthorized'
   /favourites/{questionId}: 
     post: 
       tags:
         - favourites
+      summary: Add a question to your favourites
       parameters:
         - in: path
           name: questionId
           required: true
+          description: 'ID for _question_ which should be manipulated in favourite'
           schema:
             type: string
-      description: Add a question to your favourites
       responses:
         '200': 
           description: 'Success'
           content:
             application/json:
               schema:
-                 $ref: '#/components/schemas/Question'
+                $ref: '#/components/schemas/Question'
         '401':
           description: 'Unauthorized'
         '403':
           description: 'Forbidden: The user has reached its maximum amount of favourites. Link to upgrade to premium page'
+        '404':
+          description: 'Not Found: This QuestionID does not exist.'
     delete:
       tags:
         - favourites
+      summary: Remove a question to your favourites
       parameters:
         - in: path
           name: questionId
           required: true
           schema:
             type: string
-      description: Remove a question to your favourites
       responses:
         '200': 
           description: 'Success'
-          content:
-            application/json:
-              schema:
-                 $ref: '#/components/schemas/Question'
         '401':
           description: 'Unauthorized'
+        '404':
+          description: 'Not Found: This QuestionID does not exist or does not exist in your favourites'
         
   /quests:
     get: 
       tags:
         - quests
+      summary: 'Returns the quests of the week of a user'
       responses:
         '200': 
           description: Returns all the quests of a user
@@ -463,9 +557,10 @@ paths:
     get: 
       tags:
         - login
+      summary: 'Returns the log of login attempts for the user'
       responses:
         '200': 
-          description: Returns the log of login attemps
+          description: Returns the log of login attempts
           content:
             application/json:
               schema:
@@ -475,18 +570,48 @@ paths:
         '401':  
           description: 'Unauthorized'
 
-      
+
+  /cookie:
+    get:
+      tags:
+      - development
+      summary: 'Returns the cookie if it exists, otherwise redirects to Ory.'
+      parameters: []
+      responses:
+        '200': 
+          description: 'OK'
+  /upgrade:
+    get:
+      tags:
+      - development
+      summary: 'upgrade this user to premium'
+      responses:
+        '200':
+          description: 'OK'
+        '403':
+          description: 'Forbidden, you are currently premium'
+        '401':
+          description: 'Unauthorized'
+        '500':
+          description: 'Server Error'
 
   /whatWasMyPassword/{userId}:
     get:
       tags:
       - special
+      summary: Allows users to retrieve a forgotten password."
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: 'userId is ignored'
+          schema:
+            type: string
       responses:
         '418':
           description: 'Never gonna give you up'
           
           
-    
 
 
 
