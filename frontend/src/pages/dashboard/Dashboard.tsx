@@ -152,7 +152,7 @@ export default function Dashboard(props: Props) {
 		</div> }
 						 items={ [
 							 {
-								 icon: "fi fi-rr-user",
+								 icon: "far fa-user",
 								 label: getUserName(session?.identity),
 								 shortcut: <span className={ "badge" }>Pro</span>,
 								 onClick: (closeDropdown) => {
@@ -162,13 +162,13 @@ export default function Dashboard(props: Props) {
 								 hidden: session?.identity === undefined
 							 },
 							 {
-								 icon: "fi fi-rr-sign-in-alt",
+								 icon: "fas fa-sign-in-alt",
 								 label: t('dashboard.login'),
 								 onClick: () => window.location.replace(`${ basePath }/ui/login?return_to=` + encodeURIComponent(window.location.href)),
 								 hidden: session?.identity !== undefined
 							 },
 							 {
-								 icon: "fi fi-rr-sign-out-alt",
+								 icon: "fas fa-sign-out-alt",
 								 label: t('dashboard.logout'),
 								 onClick: () => window.location.href = (
 									 logoutUrl
@@ -178,55 +178,54 @@ export default function Dashboard(props: Props) {
 								 hidden: session?.identity === undefined
 							 },
 							 {
-								 icon: "fi fi-rr-language",
+								 icon: "fas fa-language",
 								 label: t('dashboard.appearance.language.language'),
 								 shortcut: i18n.language,
 								 items: [
 									 {
-										 icon: "fi fi-rr-globe",
+										 icon: "fas fa-globe",
 										 label: t('dashboard.appearance.language.english'),
 										 onClick: () => i18n.changeLanguage("en"),
 										 shortcut: i18n.language === "en" ?
-											 <i className={ "fi fi-rr-check" }/> : ""
+											 <i className={ "fas fa-check" }/> : ""
 									 },
 									 {
-										 icon: "fi fi-rr-globe",
+										 icon: "fas fa-globe",
 										 label: t('dashboard.appearance.language.german'),
 										 onClick: () => i18n.changeLanguage("de"),
 										 shortcut: i18n.language === "de" ?
-											 <i className={ "fi fi-rr-check" }/> : ""
+											 <i className={ "fas fa-check" }/> : ""
 									 }
 								 ],
 								 divider: "top",
 								 header: t('dashboard.appearance.appearance')
 							 },
 							 {
-								 icon: "fi fi-rr-brush",
+								 icon: "fas fa-brush",
 								 label: t('dashboard.appearance.theme.theme'),
 								 shortcut: capitalizeFirstLetter(localStorage.getItem("theme") || "system"),
 								 items: [
 									 {
-										 icon: "fi fi-rr-insight-alt",
+										 icon: "fas fa-adjust",
 										 label: t('dashboard.appearance.theme.system'),
 										 onClick: () => props.updateTheme("system"),
-										 shortcut: !localStorage.getItem("theme")
-										 || localStorage.getItem("theme") === "system" ?
-											 <i className={ "fi fi-rr-check" }/> : "",
+										 shortcut: !localStorage.getItem("theme") ?
+											 <i className={ "fas fa-check" }/> : "",
 										 divider: "bottom"
 									 },
 									 {
-										 icon: "fi fi-rr-moon",
+										 icon: "fas fa-moon",
 										 label: t('dashboard.appearance.theme.dark'),
 										 onClick: () => props.updateTheme("dark"),
 										 shortcut: localStorage.getItem("theme") === "dark" ?
-											 <i className={ "fi fi-rr-check" }/> : ""
+											 <i className={ "fas fa-check" }/> : ""
 									 },
 									 {
-										 icon: "fi fi-rr-sun",
+										 icon: "fas fa-sun",
 										 label: t('dashboard.appearance.theme.light'),
 										 onClick: () => props.updateTheme("light"),
 										 shortcut: localStorage.getItem("theme") === "light" ?
-											 <i className={ "fi fi-rr-check" }/> : ""
+											 <i className={ "fas fa-check" }/> : ""
 									 }
 								 ]
 							 }
@@ -243,7 +242,7 @@ export default function Dashboard(props: Props) {
 						 height={ "100%" } width={ "100%" }
 						 style={ { objectFit: "contain" } }/>
 				</button>
-				<i className={ "fi fi-rr-x toggle-nav" }
+				<i className={ "fas fa-x toggle-nav" }
 				   style={ {
 					   fontSize: "1.5em",
 					   cursor: "pointer",
@@ -268,62 +267,26 @@ export default function Dashboard(props: Props) {
 			</div>
 			
 			{ window.location.pathname.includes("/question") && <>
-                <NavLink to="question/1">
-                    <i className={ "fi fi-sr-question-square" }/>
-                    <p style={ { display: "flex", flexDirection: "column" } }>
-                        <span className={ "caption" }>{ t('dashboard.nav.question.browsing') }</span>
-                        <span>How to execute..</span>
-                    </p>
-                </NavLink>
+                <NavLink to="question/1"><i className={ "far fa-question" }/><p
+                    style={ { display: "flex", flexDirection: "column" } }>
+                    <span className={ "caption" }>{ t('dashboard.nav.question.browsing') }</span>
+                    <span>How to execute..</span>
+                </p></NavLink>
                 
                 <div style={ { paddingInline: "var(--spacing)" } }>
                     <hr style={ { marginBlock: 0 } }/>
                 </div>
             </> }
 			
-			<NavLink to={ "trending" }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-file-chart-line" }/>
-					{ t('dashboard.nav.trending') }
-				</> }
+			<NavLink to={ "trending" }><i className={ "fas fa-chart-line" }/>{ t('dashboard.nav.trending') }</NavLink>
+			<NavLink to={ "new" }><i className={ "far fa-edit" }/>{ t('dashboard.nav.question.create') }
 			</NavLink>
-			<NavLink to={ "new" }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-edit" }/>
-					{ t('dashboard.nav.question.create') }
-				</> }
-			</NavLink>
-			<NavLink to={ "activity" }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-vertical-history" }/>
-					{ t('dashboard.nav.activity') }
-				</> }
-			</NavLink>
-			<NavLink to={ "my" }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-list" }/>
-					{ t('dashboard.nav.my') }
-				</> }
-			</NavLink>
-			<NavLink to={ "b" }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-star" }/>
-					{ t('dashboard.nav.favorites') }
-				</> }
-			</NavLink>
-			<NavLink to={ "quests" }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-treasure-chest" }/>
-					{ t('dashboard.nav.quests') }
-				</> }
-			</NavLink>
-			<NavLink to={ "d" }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-envelope" }/>
-					{ t('dashboard.nav.inbox') }
-					<span className={ "badge" }>3</span>
-				</> }
-			</NavLink>
+			<NavLink to={ "activity" }><i className={ "fas fa-history" }/>{ t('dashboard.nav.activity') }</NavLink>
+			<NavLink to={ "my" }><i className={ "far fa-rectangle-list" }/>{ t('dashboard.nav.my') }</NavLink>
+			<NavLink to={ "b" }><i className={ "far fa-star" }/>{ t('dashboard.nav.favorites') }</NavLink>
+			<NavLink to={ "quests" }><i className={ "fas fa-tasks" }/>{ t('dashboard.nav.quests') }</NavLink>
+			<NavLink to={ "d" }><i className={ "far fa-envelope" }/>{ t('dashboard.nav.inbox') }<span
+				className={ "badge" }>3</span></NavLink>
 			
 			<div style={ { flex: 1 } }/>
 			<div style={ { paddingInline: "var(--spacing)" } }>
@@ -333,15 +296,15 @@ export default function Dashboard(props: Props) {
 				</p>
 				<div className={ "stats" }>
 					<div className={ "stats-column" }>
-						<i className={ "fi fi-rr-flame primary-icon" }/>
+						<i className={ "fas fa-fire primary-icon" }/>
 						<span>253d</span>
 					</div>
 					<div className={ "stats-column" }>
-						<i className={ "fi fi-rr-eye primary-icon" }/>
+						<i className={ "fas fa-eye primary-icon" }/>
 						<span>1.8k</span>
 					</div>
 					<div className={ "stats-column" }>
-						<i className={ "fi fi-rr-social-network primary-icon" }/>
+						<i className={ "fas fa-thumbs-up primary-icon" }/>
 						<span>1.1k</span>
 					</div>
 				</div>
@@ -358,7 +321,7 @@ export default function Dashboard(props: Props) {
 		
 		<main>
 			<div className={ "container transparent top-bar" }>
-				<i className={ "fi fi-rr-menu-burger glass toggle-nav" }
+				<i className={ "fas fa-bars glass toggle-nav" }
 				   id={ "toggle-nav-close-ref" }
 				   style={ { fontSize: "1.5em", cursor: "pointer" } }
 				   tabIndex={ 0 }
@@ -385,7 +348,7 @@ export default function Dashboard(props: Props) {
 				   id={ "search-bar" }
 				   tabIndex={ 0 }
 				   onClick={ () => toggleSearch() }>
-					<i className={ "fi fi-rr-search" }/>
+					<i className={ "fas fa-magnifying-glass" }/>
 					<span style={ {
 						display: "flex",
 						alignItems: "center"
@@ -404,7 +367,7 @@ export default function Dashboard(props: Props) {
 			 onClick={ () => toggleSearch() }>
 			<div className={ "search-container" }>
 				<div onClick={ (e: any) => e.stopPropagation() }>
-					<i className={ "fi fi-rr-search" }/>
+					<i className={ "fas fa-magnifying-glass" }/>
 					<input type={ "text" } placeholder={ t('dashboard.search.search') }/>
 				</div>
 				
@@ -413,11 +376,12 @@ export default function Dashboard(props: Props) {
 				</p>
 				
 				<p className={ "search-result" } tabIndex={ 0 }>
-					<i className={ "fi fi-rr-question badge" }/>
+					<i className={ "far fa-question badge" }/>
 					<span>How to use React?</span>
-					<i className={ "fi fi-rr-user" }
-					   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-					<span>Benni Loidl</span>
+					<span>
+						<i className={ "far fa-user" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+						<span>Benni Loidl</span>
+					</span>
 					<span>Yesterday</span>
 				</p>
 			</div>

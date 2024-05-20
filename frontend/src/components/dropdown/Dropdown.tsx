@@ -78,7 +78,7 @@ export default function Dropdown(props: {
 					{ item.shortcut && <span className={ "shortcut" }>{ item.shortcut }</span> }
 					
 					{ (item.items && item.items.length > 0) &&
-                        <i className={ "fi fi-rr-angle-down" + (item.expanded ? " expanded" : "") }/> }
+                        <i className={ "fas fa-angle-down" + (item.expanded ? " expanded" : "") }/> }
 				</button>
 				
 				{ item.expanded && item.items && item.items.length > 0 && renderItems(item.items, level + 1,

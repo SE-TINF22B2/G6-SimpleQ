@@ -47,7 +47,7 @@ export default class Timeline extends Component<any, any> {
 				[0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((item) => (
 					<>
 						<div className={ "timeline-item" }>
-							<div className={ "timeline-point" }><i className={ "fi fi-rr-question" }/></div>
+							<div className={ "timeline-point" }><i className={ "far fa-question fa-xl" }/></div>
 							<section className={ "timeline-content" }>
 								<h1>
 									How to rescue waterlogged iPhone?
@@ -70,7 +70,7 @@ export default class Timeline extends Component<any, any> {
 							</section>
 						</div>
 						<div className={ "timeline-item" }>
-							<div className={ "timeline-point" }><i className={ "fi fi-rr-comment" }/></div>
+							<div className={ "timeline-point" }><i className={ "far fa-comment fa-xl" }/></div>
 							<section className={ "timeline-content" }>
 								<h1>
 									Where to buy iPhone 5s parts?

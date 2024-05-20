@@ -34,10 +34,10 @@ export default function Button(props: Props) {
 					
 					setIsLoading(false);
 				} }>
-			{ props.icon && !props.placeIconRight && <i className={ isLoading ? "fi fi-rr-spinner spin" : props.icon }
+			{ props.icon && !props.placeIconRight && <i className={ isLoading ? "fas fa-spinner fa-spin" : props.icon }
                                                         style={ { marginRight: "var(--spacing)" } }/> }
 			<span>{ props.children }</span>
-			{ props.icon && props.placeIconRight && <i className={ isLoading ? "fi fi-rr-spinner spin" : props.icon }
+			{ props.icon && props.placeIconRight && <i className={ isLoading ? "fas fa-spinner fa-spin" : props.icon }
                                                        style={ { marginLeft: "var(--spacing)" } }/> }
 		</button>
 	);

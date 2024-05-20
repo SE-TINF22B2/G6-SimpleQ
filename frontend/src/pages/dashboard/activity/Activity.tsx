@@ -11,10 +11,11 @@ import Button from "../../../components/button/Button";
 export default function Activity(props: {}) {
 	return <>
 		<Section>
+			
 			<div style={ { display: "flex", gap: "var(--spacing)" } }>
 				<div style={ { flex: 1 } }>
 					<h1>
-						<i className={ "fi fi-sr-rectangle-vertical-history" }/>
+						<i className={ "fas fa-history" }/>
 						Activity
 					</h1>
 					<p>Something happened today</p>
@@ -25,13 +26,13 @@ export default function Activity(props: {}) {
 						alignItems: "center",
 						marginTop: "var(--spacing)"
 					} }>
-						<Dropdown button={ <Button icon={ "fi fi-rr-filter" }>Filter</Button> }
+						<Dropdown button={ <Button icon={ "fas fa-filter" }>Filter</Button> }
 								  direction={ "right" }
 								  items={ [
 									  {
-										  icon: "fi fi-rr-sort",
+										  icon: "far fa-sort",
 										  label: "Sort by",
-										  shortcut: <i className={ "fi fi-rr-clock-rotate-left" }/>
+										  shortcut: <i className={ "fas fa-clock-rotate-left" }/>
 									  }
 								  ] }/>
 					</div>

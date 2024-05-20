@@ -66,11 +66,11 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					<a href={ "login" }>Login</a>
 				</div>
 				
-				<Button icon={ "fi fi-rr-sign-in-alt" } onClick={ () => window.location.href = "/login" }>Login</Button>
-				<Button icon={ "fi fi-rr-angle-right" } onClick={ () => navigate("dashboard") }>Dashboard</Button>
+				<Button icon={ "fas fa-sign-in-alt" } onClick={ () => window.location.href = "/login" }>Login</Button>
+				<Button icon={ "fas fa-angle-right" } onClick={ () => navigate("dashboard") }>Dashboard</Button>
 				
 				<Button
-					icon={ "fi fi-rr-" + (currentThemeOnlyDisplay === "system" ? "insight-alt" : currentThemeOnlyDisplay === "dark" ? "moon" : "sun") }
+					icon={ "fas fa-" + (currentThemeOnlyDisplay === "system" ? "adjust" : currentThemeOnlyDisplay === "dark" ? "moon" : "sun") }
 					onClick={ () => {
 						let theme: "dark" | "light" | "system" = (localStorage.getItem("theme") as "dark" | "light" || "system");
 						theme = theme === "dark" ? "light" : theme === "light" ? "system" : "dark";
@@ -116,7 +116,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					<div style={ { display: "flex", gap: "var(--spacing)", alignItems: "center" } }>
 						<h2>You don't believe us?</h2>
 						<Button style={ "primary" }>Try Yourself!</Button>
-						<Button icon={ "fi fi-brands-github" }
+						<Button icon={ "fa-brands fa-github" }
 								onClick={ () => window.open("https://github.com/SE-TINF22B2/G6-SimpleQ", "_blank") }>
 							Learn More on GitHub
 						</Button>
@@ -147,22 +147,22 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					
 					<div className={ "cards" }>
 						<div className={ "card fade-in" }>
-							<i className={ "fi fi-rr-wallet" }/>
+							<i className={ "fas fa-wallet" }/>
 							<h1>100% Free.</h1>
 							<p>Forever.</p>
 						</div>
 						<div className={ "card fade-in" }>
-							<i className={ "fi fi-rr-brain" }/>
+							<i className={ "fas fa-brain" }/>
 							<h1>Meet Simp.</h1>
 							<p>Our Seamless AI Integration.</p>
 						</div>
 						<div className={ "card fade-in" }>
-							<i className={ "fi fi-rr-handshake-angle" }/>
+							<i className={ "fas fa-handshake-angle" }/>
 							<h1>Contribute.</h1>
 							<p>Help the Community.</p>
 						</div>
 						<div className={ "card fade-in" }>
-							<i className={ "fi fi-rr-treasure-chest" }/>
+							<i className={ "fas fa-toolbox" }/>
 							<h1>Collect Rewards.</h1>
 							<p>Stay Active.</p>
 						</div>
@@ -193,10 +193,10 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 								<h1>Benni</h1>
 								<div className={ "member-socials" }>
 									<a href={ "" }>
-										<i className={ "fi fi-brands-github" }/>
+										<i className={ "fa-brands fa-github" }/>
 									</a>
 									<a href={ "" }>
-										<i className={ "fi fi-brands-discord" }/>
+										<i className={ "fa-brands fa-discord" }/>
 									</a>
 								</div>
 							</div>
@@ -208,10 +208,10 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 								<h1>Joshua</h1>
 								<div className={ "member-socials" }>
 									<a href={ "" }>
-										<i className={ "fi fi-brands-github" }/>
+										<i className={ "fa-brands fa-github" }/>
 									</a>
 									<a href={ "" }>
-										<i className={ "fi fi-brands-discord" }/>
+										<i className={ "fa-brands fa-discord" }/>
 									</a>
 								</div>
 							</div>
@@ -223,10 +223,10 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 								<h1>Leonard</h1>
 								<div className={ "member-socials" }>
 									<a href={ "" }>
-										<i className={ "fi fi-brands-github" }/>
+										<i className={ "fa-brands fa-github" }/>
 									</a>
 									<a href={ "" }>
-										<i className={ "fi fi-brands-discord" }/>
+										<i className={ "fa-brands fa-discord" }/>
 									</a>
 								</div>
 							</div>
@@ -238,10 +238,10 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 								<h1>Manuel</h1>
 								<div className={ "member-socials" }>
 									<a href={ "" }>
-										<i className={ "fi fi-brands-github" }/>
+										<i className={ "fa-brands fa-github" }/>
 									</a>
 									<a href={ "" }>
-										<i className={ "fi fi-brands-discord" }/>
+										<i className={ "fa-brands fa-discord" }/>
 									</a>
 								</div>
 							</div>
@@ -253,10 +253,10 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 								<h1>Tom</h1>
 								<div className={ "member-socials" }>
 									<a href={ "" }>
-										<i className={ "fi fi-brands-github" }/>
+										<i className={ "fa-brands fa-github" }/>
 									</a>
 									<a href={ "" }>
-										<i className={ "fi fi-brands-discord" }/>
+										<i className={ "fa-brands fa-discord" }/>
 									</a>
 								</div>
 							</div>
@@ -284,8 +284,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					<div className={ "dev-tl" }>
 						<div className={ "dev-tl-step done fade-in" }>
 							<div className={ "dev-tl-icons" }>
-								<i className={ "fi fi-rr-list" } style={ { top: "40%", left: "30%" } }/>
-								<i className={ "fi fi-rr-split" }
+								<i className={ "fas fa-list" } style={ { top: "40%", left: "30%" } }/>
+								<i className={ "fas fa-arrows-split-up-and-left" }
 								   style={ { top: "65%", left: "65%" } }/>
 							</div>
 							<p className={ "dev-tl-desc" }>Requirements</p>
@@ -294,8 +294,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						
 						<div className={ "dev-tl-step done fade-in" }>
 							<div className={ "dev-tl-icons" }>
-								<i className={ "fi fi-rr-brush" } style={ { top: "35%", left: "70%" } }/>
-								<i className={ "fi fi-rr-pen-nib" } style={ { top: "55%", left: "30%" } }/>
+								<i className={ "fas fa-brush" } style={ { top: "35%", left: "70%" } }/>
+								<i className={ "fas fa-pen" } style={ { top: "55%", left: "30%" } }/>
 							</div>
 							<p className={ "dev-tl-desc" }>Planning</p>
 							<p className={ "caption" }>~ 12 weeks</p>
@@ -303,9 +303,9 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						
 						<div className={ "dev-tl-step progress fade-in" }>
 							<div className={ "dev-tl-icons" }>
-								<i className={ "fi fi-rr-gears" } style={ { top: "30%", left: "70%" } }/>
-								<i className={ "fi fi-rr-display-code" } style={ { top: "70%", left: "50%" } }/>
-								<i className={ "fi fi-rr-keyboard" } style={ { top: "40%", left: "25%" } }/>
+								<i className={ "fas fa-gear" } style={ { top: "30%", left: "70%" } }/>
+								<i className={ "fas fa-code" } style={ { top: "70%", left: "50%" } }/>
+								<i className={ "far fa-keyboard" } style={ { top: "40%", left: "25%" } }/>
 							</div>
 							<p className={ "dev-tl-desc" }>Implementing</p>
 							<p className={ "caption" }>~ 4 weeks</p>
@@ -313,8 +313,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						
 						<div className={ "dev-tl-step incoming fade-in" }>
 							<div className={ "dev-tl-icons" }>
-								<i className={ "fi fi-rr-quiz" } style={ { top: "40%", left: "35%" } }/>
-								<i className={ "fi fi-rr-clipboard" } style={ { top: "60%", left: "65%" } }/>
+								<i className={ "fas fa-flask-vial" } style={ { top: "40%", left: "35%" } }/>
+								<i className={ "far fa-clipboard" } style={ { top: "60%", left: "65%" } }/>
 							</div>
 							<p className={ "dev-tl-desc" }>Testing</p>
 							<p className={ "caption" }>~ 1 week</p>
@@ -324,17 +324,10 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					<a href={ "https://github.com/SE-TINF22B2/G6-SimpleQ" } target={ "_blank" }
 					   className={ "fade-in" }
 					   style={ { textDecoration: "none", color: "var(--primary-color)" } }>
-						<i className={ "fi fi-rr-arrow-right" } style={ { marginRight: "var(--spacing)" } }/>
+						<i className={ "fas fa-arrow-right" } style={ { marginRight: "var(--spacing)" } }/>
 						<span>For further information, please have a look at the Wiki linked in our GitHub Repository.</span>
 					</a>
 				</InView>
-			</section>
-			
-			<section className={ "page" }>
-				<p>© simpleQ 2024</p>
-				<div>
-					UIcons by <a href="https://www.flaticon.com/uicons">Flaticon</a>
-				</div>
 			</section>
 		</main>
 	</div>

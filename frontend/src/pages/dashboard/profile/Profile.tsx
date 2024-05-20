@@ -12,7 +12,7 @@ export default class Profile extends React.Component<any, any> {
 				<div style={ { display: "flex", gap: "var(--spacing)" } }>
 					<div style={ { flex: 1 } }>
 						<h1>
-							<i className={ "fi fi-rr-user" }/>
+							<i className={ "far fa-user" }/>
 							Profile
 						</h1>
 						<p>View and edit your profile.</p>
@@ -29,7 +29,7 @@ export default class Profile extends React.Component<any, any> {
 									 objectFit: "cover"
 								 } }/>
 							<button className={ "btn btn-glass" } style={ { alignSelf: "center" } }>
-								<i className={ "fi fi-rr-upload" }/>
+								<i className={ "fas fa-upload" }/>
 								<span>Upload</span>
 							</button>
 						</div>
@@ -78,7 +78,7 @@ export default class Profile extends React.Component<any, any> {
 			
 			<div className={ "container profile-expert-topics" }>
 				<h2>
-					<i className={ "fi fi-rr-brain" }/>
+					<i className={ "fas fa-brain" }/>
 					Expert Topics
 				</h2>
 				<p>Choose your expert topics to help others find you.</p>
@@ -100,7 +100,7 @@ export default class Profile extends React.Component<any, any> {
 			
 			<div className={ "container profile-memberships" }>
 				<h2>
-					<i className={ "fi fi-rr-ranking-star" }/>
+					<i className={ "fas fa-ranking-star" }/>
 					My Membership
 				</h2>
 				<p>Upgrade your membership to unlock more features.</p>
@@ -130,34 +130,34 @@ export default class Profile extends React.Component<any, any> {
 					</tr>
 					<tr>
 						<td style={ { textAlign: "left" } }>
-							<i className={ "fi fi-rr-question" }/>
+							<i className={ "far fa-question" }/>
 							Ask Questions
 						</td>
-						<td><i className={ "fi fi-rr-check" }/></td>
-						<td><i className={ "fi fi-rr-check" }/></td>
-						<td><i className={ "fi fi-rr-check" }/></td>
+						<td><i className={ "fas fa-check" }/></td>
+						<td><i className={ "fas fa-check" }/></td>
+						<td><i className={ "fas fa-check" }/></td>
 					</tr>
 					<tr>
 						<td style={ { textAlign: "left" } }>
-							<i className={ "fi fi-rr-comment-dots" }/>
+							<i className={ "fas fa-comment-dots" }/>
 							Comment
 						</td>
-						<td><i className={ "fi fi-rr-check" }/></td>
-						<td><i className={ "fi fi-rr-check" }/></td>
-						<td><i className={ "fi fi-rr-check" }/></td>
+						<td><i className={ "fas fa-check" }/></td>
+						<td><i className={ "fas fa-check" }/></td>
+						<td><i className={ "fas fa-check" }/></td>
 					</tr>
 					<tr>
 						<td style={ { textAlign: "left" } }>
-							<i className={ "fi fi-rr-brain" }/>
+							<i className={ "fas fa-brain" }/>
 							AI Replies
 						</td>
 						<td>up to 3 / m</td>
-						<td><i className={ "fi fi-rr-infinity" }/></td>
-						<td><i className={ "fi fi-rr-infinity" }/></td>
+						<td><i className={ "fas fa-infinity" }/></td>
+						<td><i className={ "fas fa-infinity" }/></td>
 					</tr>
 					<tr>
 						<td style={ { textAlign: "left" } }>
-							<i className={ "fi fi-rr-wallet" }/>
+							<i className={ "fas fa-wallet" }/>
 							Price
 						</td>
 						<td><p>
