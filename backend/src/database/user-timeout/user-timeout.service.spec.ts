@@ -10,8 +10,10 @@ describe('UserTimeoutService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [PrismaService, UserTimeoutService],
-    }).overrideProvider(PrismaService)
-      .useValue(mockPrisma).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue(mockPrisma)
+      .compile();
 
     service = module.get<UserTimeoutService>(UserTimeoutService);
   });
@@ -21,14 +23,22 @@ describe('UserTimeoutService', () => {
   });
 
   it('should create a new userTimeout', async () => {
-    await expect(service.createUserTimeout(testUserTimeout.timeoutedUserID, testUserTimeout.moderationID, testUserTimeout.contentID, testUserTimeout.timeout)).resolves.toEqual(
-      testUserTimeout
-    )
+    await expect(
+      service.createUserTimeout(
+        testUserTimeout.timeoutedUserID,
+        testUserTimeout.moderationID,
+        testUserTimeout.contentID,
+        testUserTimeout.timeout,
+      ),
+    ).resolves.toEqual(testUserTimeout);
   });
 
   it('should get a userTimeout', async () => {
-    await expect(service.getUserTimeout(testUserTimeout.timeoutedUserID, testUserTimeout.contentID)).resolves.toEqual(
-      testUserTimeout
-    )
+    await expect(
+      service.getUserTimeout(
+        testUserTimeout.timeoutedUserID,
+        testUserTimeout.contentID,
+      ),
+    ).resolves.toEqual(testUserTimeout);
   });
 });

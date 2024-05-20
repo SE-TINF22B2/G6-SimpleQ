@@ -4,7 +4,6 @@ import { UserContentService } from '../database/user-content/user-content.servic
 import { HttpModule } from '@nestjs/axios';
 import { PrismaService } from '../database/prisma.service';
 
-
 describe('ExternalAPIService', () => {
   let service: ExternalAPIService;
   let userContentService: UserContentService;
@@ -12,7 +11,7 @@ describe('ExternalAPIService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [HttpModule],
-      providers: [ExternalAPIService, PrismaService, UserContentService]
+      providers: [ExternalAPIService, PrismaService, UserContentService],
     }).compile();
 
     service = module.get<ExternalAPIService>(ExternalAPIService);
@@ -32,7 +31,9 @@ describe('ExternalAPIService', () => {
   });
 
   it('requestWolfram should throw an error: prompt is empty', async () => {
-    await expect(service.requestWolfram('', '')).rejects.toThrow('prompt is empty');
+    await expect(service.requestWolfram('', '')).rejects.toThrow(
+      'prompt is empty',
+    );
   });
 
   /* it('requestGPT should throw an error: groupID does not exist', async () => {

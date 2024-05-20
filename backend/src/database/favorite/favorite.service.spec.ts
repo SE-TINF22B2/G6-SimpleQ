@@ -10,8 +10,10 @@ describe('FavoriteService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [PrismaService, FavoriteService],
-    }).overrideProvider(PrismaService)
-      .useValue(mockPrisma).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue(mockPrisma)
+      .compile();
 
     service = module.get<FavoriteService>(FavoriteService);
   });
@@ -21,14 +23,17 @@ describe('FavoriteService', () => {
   });
 
   it('should create a new favorite', async () => {
-    await expect(service.createFavorite(testFavorite.favoriteUserID, testFavorite.contentID)).resolves.toEqual(
-      testFavorite
-    )
+    await expect(
+      service.createFavorite(
+        testFavorite.favoriteUserID,
+        testFavorite.contentID,
+      ),
+    ).resolves.toEqual(testFavorite);
   });
 
   it('should get a favorite', async () => {
-    await expect(service.getFavorite(testFavorite.favoriteUserID, testFavorite.contentID)).resolves.toEqual(
-      testFavorite
-    )
+    await expect(
+      service.getFavorite(testFavorite.favoriteUserID, testFavorite.contentID),
+    ).resolves.toEqual(testFavorite);
   });
 });

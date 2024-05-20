@@ -10,8 +10,10 @@ describe('ExpertService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [PrismaService, ExpertService],
-    }).overrideProvider(PrismaService)
-      .useValue(mockPrisma).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue(mockPrisma)
+      .compile();
 
     service = module.get<ExpertService>(ExpertService);
   });
@@ -21,21 +23,25 @@ describe('ExpertService', () => {
   });
 
   it('should create a new expert', async () => {
-    await expect(service.createExpert(testExpert.expertUserID, testExpert.tagname, testExpert.expertPoints)).resolves.toEqual(
-      testExpert
-    )
+    await expect(
+      service.createExpert(
+        testExpert.expertUserID,
+        testExpert.tagname,
+        testExpert.expertPoints,
+      ),
+    ).resolves.toEqual(testExpert);
   });
 
   it('should get a expert', async () => {
-    await expect(service.getExpert(testExpert.expertUserID, testExpert.tagname)).resolves.toEqual(
-      testExpert
-    )
+    await expect(
+      service.getExpert(testExpert.expertUserID, testExpert.tagname),
+    ).resolves.toEqual(testExpert);
   });
 
   it('should get all tags, the user is an expert in', async () => {
     mockPrisma.expert.findMany.mockResolvedValue([testExpert]);
-    await expect(service.getExpertTagsForUser(testExpert.expertUserID)).resolves.toEqual(
-      [testExpert]
-    )
+    await expect(
+      service.getExpertTagsForUser(testExpert.expertUserID),
+    ).resolves.toEqual([testExpert]);
   });
 });

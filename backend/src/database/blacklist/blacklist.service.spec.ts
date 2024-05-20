@@ -10,8 +10,10 @@ describe('BlacklistService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [PrismaService, BlacklistService],
-    }).overrideProvider(PrismaService)
-      .useValue(mockPrisma).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue(mockPrisma)
+      .compile();
 
     service = module.get<BlacklistService>(BlacklistService);
   });
@@ -21,20 +23,20 @@ describe('BlacklistService', () => {
   });
 
   it('should create a new blacklist item', async () => {
-    await expect(service.createBlacklistItem(testBlacklistItem.name)).resolves.toEqual(
-      testBlacklistItem
-    )
+    await expect(
+      service.createBlacklistItem(testBlacklistItem.name),
+    ).resolves.toEqual(testBlacklistItem);
   });
 
   it('should get one blacklist item', async () => {
-    await expect(service.getBlacklistItem(testBlacklistItem.name)).resolves.toEqual(
-      testBlacklistItem
-    )
+    await expect(
+      service.getBlacklistItem(testBlacklistItem.name),
+    ).resolves.toEqual(testBlacklistItem);
   });
 
   it('should get all blacklist items', async () => {
     await expect(service.getAllBlacklistItems()).resolves.toEqual(
-      testBlacklist
-    )
+      testBlacklist,
+    );
   });
 });
