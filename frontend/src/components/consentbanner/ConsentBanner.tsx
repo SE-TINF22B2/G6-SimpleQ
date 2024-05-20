@@ -3,6 +3,9 @@ import { useState } from "react";
 import Button from "../button/Button";
 import { useTranslation } from "react-i18next";
 
+/**
+ * Renders the consent banner
+ */
 export default function ConsentBanner(props: {}) {
 	const { t } = useTranslation();
 	

@@ -8,6 +8,12 @@ interface Props {
 	disabled?: boolean;
 }
 
+/**
+ * Renders a live input
+ * @param props.onSuggestionSelected Optional function to be executed once a suggestion is selected
+ * @param props.placeholder Optional string to be displayed as an input placeholder
+ * @param props.disabled Optional boolean to disable the live input
+ */
 export default function LiveInput(props: Props) {
 	const { t } = useTranslation();
 	const [suggestions, setSuggestions] = React.useState<string[]>([]);

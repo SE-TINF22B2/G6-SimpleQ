@@ -1,14 +1,17 @@
 import React, { useEffect } from "react";
 import "./Question.scss";
-import Dropdown from "../../components/dropdown/Dropdown";
+import Dropdown from "../../../components/dropdown/Dropdown";
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Navigate, useParams } from "react-router-dom";
-import SplitSection from "../../components/section/SplitSection";
-import TextEditor from "../../components/texteditor/TextEditor";
-import Button from "../../components/button/Button";
-import { Answer, Question } from "../../def/Question";
+import SplitSection from "../../../components/section/SplitSection";
+import TextEditor from "../../../components/texteditor/TextEditor";
+import Button from "../../../components/button/Button";
+import { Answer, Question } from "../../../def/Question";
 
+/**
+ * Renders the question page
+ */
 export default function QuestionView() {
 	const { id } = useParams();
 	

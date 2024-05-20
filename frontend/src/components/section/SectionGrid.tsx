@@ -1,3 +1,7 @@
+/**
+ * Renders a grid of sections
+ * @param props.children Optional array of sections, use Section!
+ */
 export default function SectionGrid(props: { children?: JSX.Element[] }) {
 	return <div style={ {
 		width: "100%",

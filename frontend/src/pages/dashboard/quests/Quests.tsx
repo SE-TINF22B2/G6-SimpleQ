@@ -1,9 +1,12 @@
 import "./Quests.scss";
-import SplitSection from "../../components/section/SplitSection";
-import CircularProgress from "../../components/CircularProgress";
-import Section from "../../components/section/Section";
+import SplitSection from "../../../components/section/SplitSection";
+import CircularProgress from "../../../components/CircularProgress";
+import Section from "../../../components/section/Section";
 import { useEffect, useState } from "react";
 
+/**
+ * Renders the quests page, currently static
+ */
 export default function Quests(props: {}) {
 	const [minutesUntilEndOfWeek, setMinutesUntilEndOfWeek] = useState<number>(0);
 	const [r, setR] = useState<number>(0.1);

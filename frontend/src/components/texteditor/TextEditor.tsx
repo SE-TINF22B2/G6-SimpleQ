@@ -9,6 +9,13 @@ interface Props {
 	onInput?: (value: string) => void;
 }
 
+/**
+ * Renders a text editor with rich text buttons and a word counter
+ * @param props.height Optional height setting (e.g. "200px"), default is auto, a scrollbar will be visible when set
+ * @param props.disabled Optional boolean to dísabling manipulation of the text
+ * @param props.children Optional ReactNode representing the content of the text editor
+ * @param props.onInput() Optional function to be executed once the user makes an input
+ */
 export default function TextEditor(props: Props) {
 	const { t } = useTranslation();
 	
