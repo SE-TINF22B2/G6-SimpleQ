@@ -101,10 +101,22 @@
 				padding: var(--spacing);
 
 				&.glass-simp {
-					background: linear-gradient(to right, var(--background-color-glass-simp) 0%, var(--background-color-glass) 200%);
-				}
+					background: transparent;
+					position: relative;
+					z-index: 1;
 
-				p {
+					&::before {
+						position: absolute;
+						content: '';
+						width: 100%;
+						height: 100%;
+						top: 0;
+						left: 0;
+						border-radius: inherit;
+						z-index: -1;
+						background: linear-gradient(to right, var(--background-color-glass-simp) 0%, transparent 200%), url(https://grainy-gradients.vercel.app/noise.svg);
+						opacity: 0.6;
+					}
 				}
 			}
 
@@ -147,7 +159,7 @@
 		opacity: 0.8;
 		outline-offset: var(--outline-width);
 		padding-inline-end: var(--spacing);
-		
+
 		display: flex;
 		align-items: center;
 
