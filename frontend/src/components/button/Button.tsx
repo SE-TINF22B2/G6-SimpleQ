@@ -10,6 +10,15 @@ interface Props {
 	placeIconRight?: boolean
 }
 
+/**
+ * Renders a button
+ * @param props.style style of the button, default is "glass"
+ * @param props.icon icon of the button, optional
+ * @param props.onClick() function to be executed once the button is pressed
+ * @param props.children ReactNode as child of the button, automatically wrapped in <span></span>, used to render a text inside the button
+ * @param props.disabled optionally disable clicking the button
+ * @param props.placeIconRight optionally change the icon placement to the right side of the button
+ * */
 export default function Button(props: Props) {
 	const [isLoading, setIsLoading] = React.useState(false);
 	

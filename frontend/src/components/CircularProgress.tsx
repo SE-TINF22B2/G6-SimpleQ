@@ -1,3 +1,7 @@
+/**
+ * Renders animated circular progress that goes from 0 deg (0%) to 180 deg (100%) and renders the percentage in between
+ * @param props.percentage The percentage to create the progress chart
+ */
 export default function CircularProgress(props: { percentage: number }) {
 	const pct = cleanPercentage(props.percentage);
 	return <svg width={ 200 } height={ 200 } style={ { marginBottom: -80 } }>

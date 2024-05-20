@@ -1,7 +1,10 @@
 import React from "react";
 import "./Profile.scss";
-import completing from "../../illustrations/completing.svg";
+import completing from "../../../illustrations/completing.svg";
 
+/**
+ * Renders the profile page, currently static
+ */
 export default class Profile extends React.Component<any, any> {
 	render() {
 		return <>

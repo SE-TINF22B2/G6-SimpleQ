@@ -1,6 +1,9 @@
 import Skeleton from "react-loading-skeleton";
 import React from "react";
 
+/**
+ * Renders a skeleton, based on QuestionPreview
+ */
 export default function QuestionPreviewSkeleton() {
 	return <div className={ "container questions-question" } style={ { cursor: "auto" } }>
 		<div className={ "question" }>

@@ -11,6 +11,7 @@ import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
 import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
 import { useTranslation } from "react-i18next";
 
+// ory setup
 const basePath = "http://localhost:4000"
 const ory = new FrontendApi(
 	new Configuration({
@@ -25,6 +26,10 @@ interface Props {
 	updateTheme: (theme: "system" | "dark" | "light") => void;
 }
 
+/**
+ * Renders the dashboard consisting of a navigation and an outlet for subordinate pages
+ * @param props.updateTheme Function used to update the theme of the entire app
+ */
 export default function Dashboard(props: Props) {
 	const { t } = useTranslation();
 	const navigate = useNavigate();

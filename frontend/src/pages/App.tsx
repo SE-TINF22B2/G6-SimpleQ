@@ -8,16 +8,17 @@ import { useMediaQuery } from "@react-hook/media-query";
 import { SkeletonTheme } from "react-loading-skeleton";
 import Home from "./home/Home";
 import Dashboard from "./dashboard/Dashboard";
-import Trending from "./dashboard/Trending";
-import QuestionView from "./dashboard/QuestionView";
-import Profile from "./dashboard/Profile";
-import Editor from "./dashboard/Editor";
+import Trending from "./dashboard/trending/Trending";
+import QuestionView from "./dashboard/question/QuestionView";
+import Profile from "./dashboard/profile/Profile";
+import Editor from "./dashboard/editor/Editor";
 import Login from "./home/Login";
-import Activity from "./dashboard/Activity";
-import Quests from "./dashboard/Quests";
+import Activity from "./dashboard/activity/Activity";
+import Quests from "./dashboard/quests/Quests";
 import MyQuestions from "./dashboard/MyQuestions";
 import ConsentBanner from "../components/consentbanner/ConsentBanner";
 
+// internationalization setup
 i18n.use(initReactI18next)
 	.init({
 		resources: {
@@ -31,6 +32,9 @@ i18n.use(initReactI18next)
 		}
 	});
 
+/**
+ * Renders the app and takes care of choosing the appropriate language and theme
+ */
 export default function App() {
 	const prefersDarkTheme = useMediaQuery('(prefers-color-scheme: dark)');
 	const prefersLightTheme = useMediaQuery('(prefers-color-scheme: light)');

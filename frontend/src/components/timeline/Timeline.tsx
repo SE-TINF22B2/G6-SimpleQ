@@ -1,6 +1,9 @@
 import React, { Component } from "react"
 import "./Timeline.scss"
 
+/**
+ * Renders a timeline, currently used as a static class inside Activity
+ */
 export default class Timeline extends Component<any, any> {
 	static updateTimeline = () => {
 		// @ts-ignore
