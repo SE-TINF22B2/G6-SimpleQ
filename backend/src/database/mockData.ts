@@ -1,4 +1,4 @@
-import { Answer, Blacklist, Discussion, Expert, Favorite, LoginAttempt, Moderation, Quest, Question, QuestType, Tag, User, UserContent, UserContentType, UserQuest, UserTimeout, Vote } from "@prisma/client";
+import { Answer, Blacklist, Discussion, Expert, Favorite, LoginAttempt, Moderation, Quest, Question, QuestType, Tag, TypeOfAI, User, UserContent, UserContentType, UserQuest, UserTimeout, Vote } from "@prisma/client";
 
 const dateTime = new Date(2024, 1, 1, 11, 59);
 
@@ -77,7 +77,7 @@ export const testDiscussion: Discussion = {
 
 export const testAnswer: Answer = {
   userContentID: testUserContentAnswer.userContentID,
-  typeOfAI: null
+  typeOfAI: TypeOfAI.GPT
 }
 
 export const testFavorite: Favorite = {
