@@ -20,7 +20,7 @@ export class AuthService {
       session?.identity?.id as string,
     );
     if (!possibleUser) {
-      const result = await this.userService.createUser(
+      await this.userService.createUser(
         session.identity?.traits.username as string,
         false,
         false,
