@@ -74,7 +74,7 @@ export default function Trending(props: {}) {
 	}, []);
 	
 	return <>
-		<Section className={ "trending-header" }>
+		<Section>
 			<div style={ { display: "flex", gap: "var(--spacing)" } }>
 				<div style={ { flex: 1 } }>
 					<h1>
