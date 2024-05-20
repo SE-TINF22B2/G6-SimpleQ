@@ -22,7 +22,7 @@ export const testUser: User = {
 export const testExpert: Expert = {
   expertUserID: testUser.userID,
   tagname: testTag.tagname,
-  expertPoints: 0
+  expertPoints: 100
 }
 
 export const testUserContentQuestion: UserContent = {

@@ -36,4 +36,11 @@ describe('ExpertService', () => {
       testExpert
     )
   });
+
+  it('should get all tags, the user is an expert in', async () => {
+    mockPrisma.expert.findMany.mockResolvedValue([testExpert]);
+    await expect(service.getExpertTagsForUser(testExpert.expertUserID)).resolves.toEqual(
+      [testExpert]
+    )
+  });
 });
