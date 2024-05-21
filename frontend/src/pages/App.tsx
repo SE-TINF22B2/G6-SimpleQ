@@ -2,6 +2,7 @@ import React, { Suspense, useEffect } from 'react';
 import './App.scss';
 import { Navigate, Route, Routes } from "react-router-dom";
 import i18n from "i18next";
+import detector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 import translationEN from "../locales/en/translation.json";
 import { useMediaQuery } from "@react-hook/media-query";
@@ -18,14 +19,18 @@ import Quests from "./dashboard/quests/Quests";
 import MyQuestions from "./dashboard/MyQuestions";
 import ConsentBanner from "../components/consentbanner/ConsentBanner";
 
+// internationalization resources
+const resources = {
+	en: {
+		translation: translationEN
+	}
+}
+
 // internationalization setup
-i18n.use(initReactI18next)
+i18n.use(detector)
+	.use(initReactI18next)
 	.init({
-		resources: {
-			en: {
-				translation: translationEN
-			}
-		},
+		resources,
 		fallbackLng: "en",
 		interpolation: {
 			escapeValue: false
