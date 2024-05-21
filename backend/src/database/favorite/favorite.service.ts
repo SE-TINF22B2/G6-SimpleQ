@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import {Injectable, NotImplementedException} from '@nestjs/common';
 import { Favorite } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 
@@ -29,5 +29,15 @@ export class FavoriteService {
                 }
             }
         });
+    }
+    async getFavoriteOfUser(favoriteUserID:string): Promise<Favorite[] | null> {
+        //   return this.prisma.favorite.findMany({
+        //       where: {
+        //         fff: {
+        //             favoriteUserID:  favoriteUserID
+        //         }
+        //       }
+        //   })
+        throw new NotImplementedException()
     }
 }
