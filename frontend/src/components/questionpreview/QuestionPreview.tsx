@@ -29,9 +29,9 @@ export default function QuestionPreview(props: Props) {
 		<div className={ "question" }>
 			<p className={ "tags" }>
 				{ props.question.isDiscussion
-					? <span className={ "badge badge-outline" }><i className={ "fi fi-rr-comment" }
+					? <span className={ "badge badge-outline" }><i className={ "fi fi-rr-comments-question" }
 																   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>Discussion</span>
-					: <span className={ "badge badge-outline" }><i className={ "fi fi-rr-question" }
+					: <span className={ "badge badge-outline" }><i className={ "fi fi-rr-interrogation" }
 																   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>Question</span>
 				}
 				
