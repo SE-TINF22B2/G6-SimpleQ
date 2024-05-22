@@ -39,6 +39,7 @@ const Text = (label: string) => {
 				 y={ "50%" }
 				 dominantBaseline={ "central" }
 				 textAnchor={ "middle" }
+				 fill={ "var(--font-color)" }
 				 fontSize={ "1.4em" }>
 		{ label }
 	</text>;

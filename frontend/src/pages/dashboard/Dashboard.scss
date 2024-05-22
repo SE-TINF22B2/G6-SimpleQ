@@ -41,6 +41,8 @@
 				font-size: 1.2em;
 				text-align: center;
 				width: 40px;
+
+				color: var(--primary-color);
 			}
 
 			.badge {
@@ -153,6 +155,7 @@
 
 			h1,
 			h2 {
+				display: inline-flex;
 
 				i {
 					margin-inline-end: calc(var(--spacing) / 2);

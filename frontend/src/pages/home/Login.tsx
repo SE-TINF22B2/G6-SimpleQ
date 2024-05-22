@@ -6,13 +6,13 @@ export default class Login extends Component<{}, {}> {
 	render() {
 		return <div className={ "login" }>
 			<div>
-				<img src={ MacbookMockup }/>
+				<img src={ MacbookMockup } alt={ "Dashboard" }/>
 			</div>
 			
 			<main>
 				{ document.referrer !== window.location.href &&
                     <a href={ document.referrer } className={ "back" }>
-                        <i className={ "fas fa-arrow-left" }/>
+                        <i className={ "fi fi-rr-arrow-left" }/>
                         <span>Go back</span>
                     </a>
 				}
@@ -39,11 +39,11 @@ export default class Login extends Component<{}, {}> {
 				
 				<div className={ "login-social" }>
 					<button className={ "btn btn-secondary" }>
-						<i className={ "fa-brands fa-apple" }/>
+						<i className={ "fi fi-brands-apple" }/>
 						<span>Apple</span>
 					</button>
 					<button className={ "btn btn-secondary" }>
-						<i className={ "fa-brands fa-google" }/>
+						<i className={ "fi fi-brands-google" }/>
 						<span>Google</span>
 					</button>
 				</div>

@@ -18,7 +18,10 @@
 			border: none;
 			border-radius: var(--border-radius);
 			cursor: pointer;
-			padding: 0.4em 0.8em;
+			padding: 0.6em 0.8em;
+
+			display: grid;
+			place-items: center;
 
 			&:hover {
 				background: var(--primary-color);
@@ -30,7 +33,7 @@
 			background: var(--border-color);
 			border-radius: var(--border-radius);
 			height: 1em;
-			margin-inline: var(--spacing);
+			margin-inline: calc(var(--spacing) / 2);
 			width: var(--outline-width);
 		}
 

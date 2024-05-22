@@ -1,3 +1,4 @@
+import "./QuestionPreview.scss";
 import Skeleton from "react-loading-skeleton";
 import React from "react";
 
@@ -10,7 +11,7 @@ export default function QuestionPreviewSkeleton() {
 			<Skeleton containerClassName={ "tags" }/>
 			
 			<h2>
-				<Skeleton/>
+				<Skeleton width={ 400 }/>
 			</h2>
 			
 			<Skeleton containerClassName={ "caption" } width={ 300 }/>

@@ -52,13 +52,13 @@ export default function Quests(props: {}) {
 			<div style={ { display: "flex", alignItems: "center", gap: "var(--spacing)" } }>
 				<div style={ { flex: 1 } }>
 					<h1>
-						<i className={ "fas fa-tasks" }/>
+						<i className={ "fi fi-sr-treasure-chest" }/>
 						Weekly Quests
 					</h1>
 					<p>Here you can see this week's quests and how far you have completed them.</p>
 				</div>
 				
-				<i className={ "fas fa-stopwatch fa-2xl" }/>
+				<i className={ "fi fi-rr-stopwatch" } style={ { fontSize: "2em" } }/>
 				
 				<div>
 					<h2>{ renderQuestCountdown() }</h2>
@@ -81,7 +81,7 @@ export default function Quests(props: {}) {
 			</section>
 			
 			<section className={ "glass quest-done" }>
-				<i className={ "fas fa-check-circle" }/>
+				<i className={ "fi fi-rr-check-circle" }/>
 				<h1>Views</h1>
 				<p>Get 1000 views on a question.</p>
 			</section>
