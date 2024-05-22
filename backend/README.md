@@ -10,8 +10,8 @@ NestJS gibt eine robuste Architektur vor.
 -------
 ### Initialisierung des Backends
 #### Schnellstart
-1. Enviromentvariablen anpassen: `.env` erstellen und anpassen
-2. Packete installieren: `yarn install`
+1. Umgebungsvariablen anpassen: `.env` erstellen und anpassen
+2. Pakete installieren: `yarn install`
 3. Datenbank initialisieren: `yarn prisma`
 4. Ausführen: 
    1. Tunnel zu ory starten: `yarn  tunnel`
@@ -29,7 +29,7 @@ In dieser Datei sind Änderungen notwendig. Siehe Hinweise: [Umgebungsvariablen]
   ```bash
   cp .env.example .env
   ```
-+ Die nötigen Packete mit yarn installieren:
++ Die nötigen Pakete mit yarn installieren:
     ```bash
     yarn install
     ```
@@ -60,17 +60,15 @@ In dieser Datei sind Änderungen notwendig. Siehe Hinweise: [Umgebungsvariablen]
 
 + Änderungen _zwingend_ Notwendig
    + `DATABASE_URL`: Verbindung zur Datenbank
-+ Änderungen Optional:
++ Änderungen optional:
   + `ORY_URL`: URL, auf dem der Tunnel/Proxy erreichbar ist
   + `NODE_ENV`: Modus der Applikation, Auswahl: [`dev`, `prod`] 
 
 #### Hinweis für den Identity Provider
 
 Aufgrund der Tatsache, dass wir Social Logins via GitHub und Google verwenden, muss man sich in der Entwicklung bei der ory-cli auf dem ory Cloud Projekt einloggen. 
-Dafür kann der Befehl `yarn ory-auth` verwendet werden, der den Login ausführt. 
-
-Danach kann der Befehl `yarn tunnel` verwendet werden. 
-
+Dafür kann der Befehl `yarn ory-auth` verwendet werden, der den Login ausführt.
+Die Ausführung ist jedoch optional, da durch die Verwendung des Befehls `yarn tunnel` ggf. zum Einloggen auffordert.
 
 
 ## Projektstruktur
@@ -78,7 +76,7 @@ Danach kann der Befehl `yarn tunnel` verwendet werden.
 ------------
 In NestJS sind Module die oberste Ebene der Organisation und dienen als Container für weitere Komponenten, 
 wie Controller, Services und Submodule.
-Die Controller sind für die Verarbeitung von HTTP-Anfragen und Antworten  verantwortlich und interagieren mit den 
+Die Controller sind für die Verarbeitung von HTTP-Anfragen und Antworten verantwortlich und interagieren mit den 
 Services, die die Geschäftslogik beinhalten.
 
 ### Dateistruktur
@@ -109,19 +107,19 @@ src
 | `request/`                  | Verwaltung der Anfragen                                     |
 | `database/`                 | Services für Datenbankanfragen                              |
 | `auth/`                     | Services zur Authentifizierungen                            |
-| `request/request.module.ts` | Modul der Anfragenverarbeitung                              |
+| `request/request.module.ts` | Modul der Verarbeitung von Anfragen                         |
 | `main.ts`                   | Einstieg der Applikation, verweist direkt auf das AppModule |
 
 
 
-Der Einstieg der Applikation liegt in der `main.ts` welche direkt auf das `AppModule` in `app.module.ts` verweist.
-Alle Anfragen in `request/` wurden entsprechend der _OpenAPI_ Spezifikation in seperate Controller aufgeteilt.
+Der Einstieg der Applikation liegt in der `main.ts`, welche direkt auf das `AppModule` in `app.module.ts` verweist.
+Alle Anfragen in `request/` wurden entsprechend der _OpenAPI_ Spezifikation in separate Controller aufgeteilt.
 
 Für jeden Service und Controller ist eine Testdatei angelegt (`*.spec.ts`), 
 welche jeweils direkt bei der Logikkomponente liegt. 
 
 ### Werkzeuge
-Für die Generierung von einzelnen Komponenten wurde das [_Comandlineinterface (CLI)_](https://docs.nestjs.com/recipes/crud-generator) von NestJS genutzt,
+Für die Generierung von einzelnen Komponenten wurde das [_Commandline-interface (CLI)_](https://docs.nestjs.com/recipes/crud-generator) von NestJS genutzt,
 die CLI legt ein Grundgerüst einer Komponente zusammen mit einem Test in dem ggf. erstellten Ordner ab.
 
-Als Packetmanager wird [_yarn_](https://classic.yarnpkg.com/lang/en/docs/) in der Version 1 verwendet.
+Als Paketmanager wird [_yarn_](https://classic.yarnpkg.com/lang/en/docs/) in der Version 1 verwendet.
