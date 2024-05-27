@@ -3,9 +3,12 @@ import {
   Answer,
   Discussion,
   Question,
+  Tag,
   TypeOfAI,
+  User,
   UserContent,
   UserContentType,
+  Vote,
 } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 
@@ -59,6 +62,105 @@ export class UserContentService {
     };
   }
 
+  /**
+   * Get the most voted questions of the last seven days.
+   * @param limit Maximum amount of questions that are returned. Default: 10
+   * @param offset Number of questions that are skipped. Default: 0
+   * @returns Array of UserContents with question
+   */
+  async getTrendingQuestions(limit: number = 10, offset: number = 0) {
+    let time: Date = new Date();
+    time.setDate(time.getDate() - 7);
+    return this.prisma.userContent.findMany({
+      where: {
+        type: UserContentType.Question,
+        timeOfCreation: { gte: time },
+      },
+      orderBy: { vote: { _count: 'desc' } }, // impossible to order by the last upvoted questions with isPositive=true
+      take: limit,
+      skip: offset,
+      include: {
+        question: true,
+      },
+    });
+  }
+
+  /**
+   * Get all tags of a specific UserContent
+   * @param userContentID ID of the UserContent
+   * @returns Array of Tags; or null if the UserContent does not exist
+   */
+  async getTagsOfUserContent(userContentID: string): Promise<Tag[] | null> {
+    return (
+      (
+        await this.prisma.userContent.findUnique({
+          where: { userContentID: userContentID },
+          select: {
+            tag: true,
+          },
+        })
+      )?.tag || null
+    );
+  }
+
+  /**
+   * Get the amount of likes and dislikes of an UserContent.
+   * @param userContentID ID of the UserContent
+   * @returns object containing likes and dislikes as numbers
+   */
+  async getLikesAndDislikesOfUserContent(
+    userContentID: string,
+  ): Promise<{ likes: number; dislikes: number }> {
+    let votes: Vote[] | null =
+      (
+        await this.prisma.userContent.findUnique({
+          where: { userContentID: userContentID },
+          select: {
+            vote: true,
+          },
+        })
+      )?.vote || null;
+    let likes: number = 0;
+    let dislikes: number = 0;
+    votes?.forEach((vote) => {
+      if (vote.isPositive) {
+        likes++;
+      } else {
+        dislikes++;
+      }
+    });
+    return { likes: likes, dislikes: dislikes };
+  }
+
+  /**
+   * Get the number of answers that exist for a specific groupID.
+   * @param groupID ID of the group
+   * @returns number of answers
+   */
+  async getNumberOfAnswersFromGroupID(groupID: string): Promise<number | null> {
+    return await this.prisma.userContent.count({
+      where: { groupID: groupID, type: UserContentType.Answer },
+    });
+  }
+
+  /**
+   * Get the author of a UserContent.
+   * @param userContentID ID of the UserContent
+   * @returns object of type User or null if it does not exist
+   */
+  async getAuthorOfUserContent(userContentID: string): Promise<User | null> {
+    return (
+      (
+        await this.prisma.userContent.findUnique({
+          where: { userContentID: userContentID },
+          select: {
+            owner: true,
+          },
+        })
+      )?.owner || null
+    );
+  }
+
   // Answer
   async createAnswer(
     ownerID: string | null,
@@ -105,6 +207,11 @@ export class UserContentService {
     };
   }
 
+  /**
+   * Check if an UserContent with the given groupID exists.
+   * @param groupID ID of the Group the UserContent should be in
+   * @returns true if an UserContent exist
+   */
   async checkGroupIDExists(groupID: string): Promise<boolean> {
     const contentExists = await this.prisma.userContent.findFirst({
       where: {
@@ -119,6 +226,12 @@ export class UserContentService {
     return contentExists != null;
   }
 
+  /**
+   * Check if an ai-generated answer of one of the given ai-types already exists.
+   * @param groupID ID of the group from the Question/Discussion the Answer belongs to
+   * @param typesOfAI Array of AI-Types
+   * @returns true if an answer exists
+   */
   async checkAIAnswerExists(
     groupID: string,
     typesOfAI: TypeOfAI[],

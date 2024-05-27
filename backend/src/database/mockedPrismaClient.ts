@@ -14,6 +14,7 @@ import {
   testTag,
   testUser,
   testUserContentQuestion,
+  testUserContentQuestionList,
   testUserQuest,
   testUserTimeout,
   testVote,
@@ -56,6 +57,10 @@ beforeAll(() => {
 
   mockPrisma.userContent.create.mockResolvedValue(testUserContentQuestion);
   mockPrisma.userContent.findUnique.mockResolvedValue(testUserContentQuestion);
+  mockPrisma.userContent.findMany.mockResolvedValue(
+    testUserContentQuestionList,
+  );
+  mockPrisma.userContent.count.mockResolvedValue(5);
   mockPrisma.question.create.mockResolvedValue(testQuestion);
   mockPrisma.question.findUnique.mockResolvedValue(testQuestion);
   mockPrisma.answer.create.mockResolvedValue(testAnswer);
