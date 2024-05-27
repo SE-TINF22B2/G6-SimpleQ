@@ -1,7 +1,7 @@
 import {
   Controller,
   ForbiddenException,
-  Get,
+  Get, InternalServerErrorException,
   NotFoundException,
   NotImplementedException,
   Param,
@@ -12,6 +12,7 @@ import {
 import { UserService } from '../../database/user/user.service';
 import { ExpertService } from '../../database/expert/expert.service';
 import { LoginAttemptService } from '../../database/login-attempt/login-attempt.service';
+import {LoginAttempt} from "@prisma/client";
 
 enum Registration { // TODO extract
   registered = 'registered',
@@ -90,14 +91,29 @@ export class UserController {
     new NotImplementedException(); // TODO implement
   }
 
-    @Get("login/attemps")
-    async getLoginAttempts(@Req() req: any){
-        const userId = req.headers.cookie.id
-        if (userId === null ){
-            throw new ForbiddenException();
-        }
-        const loginRange: any[] = await this.userLoginAttemptService.getLoginAttemptRange(userId);
+  @Get('login/attemps')
+  async getLoginAttempts(@Req() req: any) {
+    const userId = req.headers.cookie.id;
+    if (userId === null) {
+      throw new ForbiddenException();
+    }
 
-    throw new NotImplementedException(); // TODO
+    // Date-range from 7days in past to now
+    let firstDate: Date = new Date()
+    let lastDate: Date = new Date()
+    firstDate.setDate(lastDate.getDate()- 7)
+
+    let loginRange: LoginAttempt[] | null;
+    try {
+      loginRange = await this.userLoginAttemptService.getLoginAttemptRange(
+          userId, firstDate, lastDate);
+    } catch (e){
+      throw new InternalServerErrorException(e)
+    }
+
+    if (loginRange == null){
+      return [];
+    }
+    return loginRange;
   }
 }
