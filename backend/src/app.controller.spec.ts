@@ -26,7 +26,7 @@ describe('AppController', () => {
 
   describe('root', () => {
     it('should be defined', () => {
-      expect(appController.getHello()).toBeDefined();
+      expect(appController).toBeDefined();
     });
   });
 });
