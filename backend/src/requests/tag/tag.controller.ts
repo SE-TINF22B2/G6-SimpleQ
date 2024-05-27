@@ -1,11 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
+import {Controller, Get, Query} from '@nestjs/common';
+import {query} from "express";
+import {TagService} from "../../database/tag/tag.service";
 
 @Controller('tags')
 export class TagController {
-  constructor() {}
+  constructor(
+      private readonly tagService: TagService,
+      ) { }
 
   @Get('find')
-  getTag() {
-    return 'not implemented';
+  getTag(@Query('tag')tagname: string) {
+    return this.tagService.searchTags(tagname)
   }
 }
