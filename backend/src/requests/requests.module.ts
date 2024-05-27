@@ -18,6 +18,7 @@ import { QuestService } from '../database/quest/quest.service';
 import { TagService } from '../database/tag/tag.service';
 import { DevelopmentService } from './development/development.service';
 import { AuthService } from '../auth/auth.service';
+import { UserContentService } from '../database/user-content/user-content.service';
 
 @Module({})
 export class RequestsModule {
@@ -44,6 +45,7 @@ export class RequestsModule {
       QuestService,
       TagService,
       UserService,
+      UserContentService,
       // request services
       DevelopmentService,
     ];
