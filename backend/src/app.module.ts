@@ -8,9 +8,14 @@ import { UserService } from './database/user/user.service';
 import { AuthMiddleware } from './middleware/auth/auth.middleware';
 import { AppService } from './app.service';
 import { TagService } from './database/tag/tag.service';
+import { RequestsModule } from './requests/requests.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), ExternalAPIModule],
+  imports: [
+    ConfigModule.forRoot(),
+    ExternalAPIModule,
+    RequestsModule.register(),
+  ],
   controllers: [AppController],
   providers: [AppService, UserService, PrismaService, AuthService, TagService],
 })
