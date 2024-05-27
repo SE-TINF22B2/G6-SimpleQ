@@ -1,49 +1,57 @@
 import {
-    Controller,
-    Delete,
-    Get,
-    InternalServerErrorException,
-    NotImplementedException,
-    Param,
-    ParseUUIDPipe,
-    Post,
-    Req
+  Controller,
+  Delete,
+  Get,
+  InternalServerErrorException, NotFoundException,
+  NotImplementedException,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Req,
 } from '@nestjs/common';
-import {FavoriteService} from "../../database/favorite/favorite.service";
-import {Favorite} from "@prisma/client";
+import { FavoriteService } from '../../database/favorite/favorite.service';
+import { Favorite } from '@prisma/client';
+import {UserContentService} from "../../database/user-content/user-content.service";
 
 @Controller('favourites')
 export class FavouritesController {
-    constructor(
-        //     private readonly services
-        private readonly favoriteService: FavoriteService
-    ) {}
-    @Get()
-    async getFavourites(@Req() req: any){
-        //@IsUUID
-        const userId   = req.headers.cookie.id
-        const userFavorites: Favorite[] | null = await this.favoriteService.getFavoriteOfUser(userId)
-        if (null === userFavorites){
-            return []
-        }
-        return userFavorites;
+  constructor(
+    //     private readonly services
+    private readonly favoriteService: FavoriteService,
+    private readonly usercontentService: UserContentService
+  ) {}
+  @Get()
+  async getFavourites(@Req() req: any) {
+    //@IsUUID
+    const userId = req.userId;
+    const userFavorites: Favorite[] | null =
+      await this.favoriteService.getFavoriteOfUser(userId);
+    if (null === userFavorites) {
+      return [];
     }
-    @Post(":questionID")
-    async addFavourite(@Req() req: any, @Param("id", new ParseUUIDPipe()) id: string){
-        const userId   = req.headers.cookie.id
-        try {
-            // validating format is not irrelevant
-            const result = await this.favoriteService.createFavorite(userId, id)
-            if (null === result){
-                throw new InternalServerErrorException()
-            }
-            return result;
-        } catch (Exception){
-            throw new InternalServerErrorException()
-        }
+    return userFavorites;
+  }
+  @Post(':questionID')
+  async addFavourite(
+    @Req() req: any,
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ) {
+    const userId = req.userId;
+
+    if (await this.usercontentService.getAnswer(userId) == null){
+      throw new NotFoundException("Question not found!")
     }
-    @Delete(":id")
-    removeFavourite(@Param("id", new ParseUUIDPipe()) id: string){
-        throw new NotImplementedException()
+
+    try {
+      const result = await this.favoriteService.createFavorite(userId, id);
+    } catch (Exception){
+      throw new InternalServerErrorException();
     }
+
+
+  }
+  @Delete(':id')
+  removeFavourite(@Param('id', new ParseUUIDPipe()) id: string) {
+    throw new NotImplementedException();
+  }
 }
