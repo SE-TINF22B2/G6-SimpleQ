@@ -5,9 +5,12 @@ import {
   testAnswer,
   testDiscussion,
   testQuestion,
+  testTagList,
   testUserContentAnswer,
   testUserContentDiscussion,
   testUserContentQuestion,
+  testUserContentQuestionList,
+  testVoteList,
 } from '../mockData';
 import { mockPrisma } from '../mockedPrismaClient';
 
@@ -50,6 +53,38 @@ describe('UserContentService', () => {
       userContent: testUserContentQuestion,
       question: testQuestion,
     });
+  });
+
+  it('should get a list of questions', async () => {
+    await expect(service.getTrendingQuestions()).resolves.toEqual(
+      testUserContentQuestionList,
+    );
+  });
+
+  it('should get all tags of the question', async () => {
+    const questionWithTags: any = testUserContentQuestion;
+    questionWithTags.tag = testTagList;
+    mockPrisma.userContent.findUnique.mockResolvedValueOnce(questionWithTags);
+    await expect(
+      service.getTagsOfUserContent(testUserContentQuestion.userContentID),
+    ).resolves.toEqual(testTagList);
+  });
+
+  it('should get likes and dislikes of the question', async () => {
+    const questionWithVotes: any = testUserContentQuestion;
+    questionWithVotes.vote = testVoteList;
+    mockPrisma.userContent.findUnique.mockResolvedValueOnce(questionWithVotes);
+    await expect(
+      service.getLikesAndDislikesOfUserContent(
+        testUserContentQuestion.userContentID,
+      ),
+    ).resolves.toEqual({ likes: 2, dislikes: 1 });
+  });
+
+  it('should get number of answers', async () => {
+    await expect(
+      service.getNumberOfAnswersFromGroupID(testUserContentQuestion.groupID),
+    ).resolves.toEqual(5);
   });
 
   it('should create a new answer', async () => {

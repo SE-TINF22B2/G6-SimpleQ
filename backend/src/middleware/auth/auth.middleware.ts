@@ -16,10 +16,16 @@ export class AuthMiddleware implements NestMiddleware {
       result = await global.ory.toSession({
         cookie: req.header('cookie'),
       });
+      console.log(result);
       if (result) {
-        await this.authService.checkUser(result.data as unknown as Session);
+        if (result.data?.identity?.id) {
+          await this.authService.checkUser(result.data as unknown as Session);
+          req.userId = result.data.identity.id;
+          console.log(req);
+        }
       }
     } catch (e) {
+      console.log(e)
       throw new UnauthorizedException('You are not logged in!');
     }
     if (result) {

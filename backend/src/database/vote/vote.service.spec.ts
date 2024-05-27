@@ -22,7 +22,7 @@ describe('VoteService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should create a new userTimeout', async () => {
+  it('should create a new vote', async () => {
     await expect(
       service.createVote(
         testVote.contentID,
@@ -32,9 +32,18 @@ describe('VoteService', () => {
     ).resolves.toEqual(testVote);
   });
 
-  it('should get a userTimeout', async () => {
+  it('should get a vote', async () => {
     await expect(
       service.getVote(testVote.contentID, testVote.votingUserID),
     ).resolves.toEqual(testVote);
+  });
+
+  it('should get a positive vote for the UserContent', async () => {
+    await expect(
+      service.getOpinionToUserContent(
+        testVote.contentID,
+        testVote.votingUserID,
+      ),
+    ).resolves.toEqual(true);
   });
 });

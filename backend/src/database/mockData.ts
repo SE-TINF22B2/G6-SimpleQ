@@ -65,6 +65,12 @@ export const testUserContentQuestion: UserContent = {
   type: UserContentType.Question,
 };
 
+export const testUserContentQuestionList: UserContent[] = [
+  testUserContentQuestion,
+  testUserContentQuestion,
+  testUserContentQuestion,
+];
+
 export const testUserContentDiscussion: UserContent = {
   userContentID: 'contentID2',
   ownerID: testUser.userID,
@@ -143,3 +149,21 @@ export const testVote: Vote = {
   votingUserID: testUser.userID,
   isPositive: true,
 };
+
+export const testVoteList: Vote[] = [
+  {
+    contentID: testUserContentQuestion.userContentID,
+    votingUserID: testUser.userID,
+    isPositive: true,
+  },
+  {
+    contentID: testUserContentQuestion.userContentID,
+    votingUserID: testUser.userID,
+    isPositive: false,
+  },
+  {
+    contentID: testUserContentQuestion.userContentID,
+    votingUserID: testUser.userID,
+    isPositive: true,
+  },
+];
