@@ -25,7 +25,7 @@ export class AuthMiddleware implements NestMiddleware {
         }
       }
     } catch (e) {
-      console.log(e)
+      console.log(e);
       throw new UnauthorizedException('You are not logged in!');
     }
     if (result) {
