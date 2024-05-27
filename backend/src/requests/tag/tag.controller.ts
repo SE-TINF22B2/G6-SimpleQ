@@ -1,5 +1,4 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { query } from 'express';
 import { TagService } from '../../database/tag/tag.service';
 
 @Controller('tags')

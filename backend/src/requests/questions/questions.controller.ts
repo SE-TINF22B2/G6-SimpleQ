@@ -1,11 +1,5 @@
-import {
-  Controller,
-  Get,
-  Param,
-  ParseUUIDPipe,
-  Post,
-  ValidationPipe,
-} from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 
 @Controller('questions') // prefix: domain/question/...
 export class QuestionsController {

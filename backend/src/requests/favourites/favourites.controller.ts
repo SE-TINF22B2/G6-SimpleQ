@@ -45,11 +45,13 @@ export class FavouritesController {
 
     try {
       const result = await this.favoriteService.createFavorite(userId, id);
+      return result;
     } catch (Exception) {
       throw new InternalServerErrorException();
     }
   }
   @Delete(':id')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeFavourite(@Param('id', new ParseUUIDPipe()) id: string) {
     throw new NotImplementedException();
   }

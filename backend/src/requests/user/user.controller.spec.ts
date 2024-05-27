@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
-import { testUser } from '../../database/mockData';
 import { UserService } from '../../database/user/user.service';
 import { PrismaService } from '../../database/prisma.service';
 import { ExpertService } from '../../database/expert/expert.service';
