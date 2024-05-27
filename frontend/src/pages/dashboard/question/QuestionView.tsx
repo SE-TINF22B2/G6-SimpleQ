@@ -70,7 +70,7 @@ export default function QuestionView() {
 				}
 			]);
 		}, 1000);
-	}, []);
+	}, [id]);
 	
 	// Todo: further id checks
 	if (id === undefined) return <Navigate to={ "" }/>;
@@ -108,7 +108,7 @@ export default function QuestionView() {
 						<span>Simp</span>
 					</p>
 				</> : <div className={ "question-answer-author-user" } tabIndex={ 0 }>
-					<img className={ "avatar" } src={ answer.author.id }/>
+					<img className={ "avatar" } src={ answer.author.id } alt={ "Answer Author" }/>
 					
 					<p>
 						<span>{ answer.author.name }</span>
@@ -245,7 +245,7 @@ export default function QuestionView() {
 				<section className={ "glass" }>
 					<div className={ "question-author" } tabIndex={ 0 }>
 						{ question
-							? <img className={ "avatar" } src={ question.author.id }/>
+							? <img className={ "avatar" } src={ question.author.id } alt={ "Question Author" }/>
 							: <Skeleton height={ 40 } width={ 40 }/> }
 						
 						<div className={ "question-author-info" }>

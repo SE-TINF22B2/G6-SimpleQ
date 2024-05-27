@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import "./Home.scss";
 import { useNavigate } from "react-router-dom";
 import { InView } from "react-intersection-observer";
@@ -16,57 +16,58 @@ import manuel from "../../images/manuel.png";
 import tom from "../../images/tom.png";
 
 export default function Home(props: { updateTheme: (theme: "system" | "dark" | "light") => void }) {
-	let blobs: (HTMLDivElement | null)[] = [];
+	let blobs: (HTMLDivElement | null)[] = useMemo(() => [], []);
+	
 	
 	const navigate = useNavigate();
 	const [currentThemeOnlyDisplay, setCurrentThemeOnlyDisplay] =
 		React.useState<"dark" | "light" | "system">((localStorage.getItem("theme") as "dark" | "light" || "system"));
 	
 	useEffect(() => {
+		const animateBlobs = () => {
+			blobs.forEach((el, i) => {
+				if (!el) return;
+				
+				let r1 = 20 + Math.floor(Math.random() * 60);
+				let r2 = 20 + Math.floor(Math.random() * 60);
+				let r3 = 20 + Math.floor(Math.random() * 60);
+				let r4 = 20 + Math.floor(Math.random() * 60);
+				
+				let sx = 0.8 + Math.random() * 0.4;
+				let sy = 0.8 + Math.random() * 0.4;
+				
+				el.animate([
+					{
+						borderRadius: `${ r1 }% ${ 100 - r1 }% ${ r2 }% ${ 100 - r2 }% / ${ r3 }% ${ r4 }% ${ 100 - r4 }% ${ 100 - r3 }%`,
+						transform: `scale(${ sx }, ${ sy })`
+					}
+				], {
+					duration: 2000,
+					delay: i * 1000,
+					iterations: 1,
+					fill: "forwards",
+					easing: "ease"
+				});
+			});
+		}
+		
 		animateBlobs();
 		let interval = setInterval(() => {
 			animateBlobs();
 		}, 2000);
 		
 		return () => clearInterval(interval);
-	}, []);
-	
-	const animateBlobs = () => {
-		blobs.forEach((el, i) => {
-			if (!el) return;
-			
-			let r1 = 20 + Math.floor(Math.random() * 60);
-			let r2 = 20 + Math.floor(Math.random() * 60);
-			let r3 = 20 + Math.floor(Math.random() * 60);
-			let r4 = 20 + Math.floor(Math.random() * 60);
-			
-			let sx = 0.8 + Math.random() * 0.4;
-			let sy = 0.8 + Math.random() * 0.4;
-			
-			el.animate([
-				{
-					borderRadius: `${ r1 }% ${ 100 - r1 }% ${ r2 }% ${ 100 - r2 }% / ${ r3 }% ${ r4 }% ${ 100 - r4 }% ${ 100 - r3 }%`,
-					transform: `scale(${ sx }, ${ sy })`
-				}
-			], {
-				duration: 2000,
-				delay: i * 1000,
-				iterations: 1,
-				fill: "forwards",
-				easing: "ease"
-			});
-		});
-	}
+	}, [blobs]);
 	
 	return <div className={ "home" }>
 		<nav>
 			<div className={ "nav-wrapper" }>
-				<img src={ logoTodoMakeStatic }/>
+				<img src={ logoTodoMakeStatic } alt={ "Logo" }/>
 				
 				<div className={ "pages" }>
-					<a href={ "#" }>Features</a>
-					<a href={ "#" }>Developers</a>
-					<a href={ "#" }>Development</a>
+					<a href={ "#features" }>Features</a>
+					<a href={ "#developers" }>Developers</a>
+					<a href={ "#development" }>Development</a>
 					<a href={ "login" }>Login</a>
 				</div>
 				
@@ -102,7 +103,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					background: "linear-gradient(to left, var(--background-color-glass-simp), transparent), url(https://grainy-gradients.vercel.app/noise.svg)"
 				} }/>
 				
-				<img src={ mockup }/>
+				<img src={ mockup } alt={ "Dashboard" }/>
 				
 				<div>
 					<h1 className={ "title" }>
@@ -111,7 +112,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					</h1>
 					<div style={ { display: "flex", gap: "var(--spacing)", alignItems: "center" } }>
 						<h2>You don't believe us?</h2>
-						<Button style={ "primary" }>Try Yourself!</Button>
+						<Button buttonStyle={ "primary" }>Try Yourself!</Button>
 						<Button icon={ "fi fi-brands-github" }
 								onClick={ () => window.open("https://github.com/SE-TINF22B2/G6-SimpleQ", "_blank") }>
 							Learn More on GitHub
@@ -120,7 +121,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 				</div>
 			</section>
 			
-			<section className={ "page" }>
+			<section className={ "page" } id={ "features" }>
 				<InView as={ "div" } onChange={ (inView, entry) => {
 					entry.target.querySelectorAll(".fade-in").forEach((el, i) => {
 						
@@ -166,7 +167,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 				</InView>
 			</section>
 			
-			<section className={ "page" }>
+			<section className={ "page" } id={ "developers" }>
 				<InView as={ "div" } onChange={ (inView, entry) => {
 					entry.target.querySelectorAll(".fade-in").forEach((el, i) => {
 						setTimeout(() => {
@@ -184,14 +185,15 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					
 					<div className={ "members" }>
 						<div className={ "member fade-in" }>
-							<img src={ benni }/>
+							<img src={ benni } alt={ "Benni" }/>
 							<div className={ "member-details" }>
 								<h1>Benni</h1>
 								<div className={ "member-socials" }>
-									<a href={ "" }>
+									<a href={ "https://github.com/benniloidl" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "" }>
+									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -199,14 +201,15 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 						
 						<div className={ "member fade-in" }>
-							<img src={ joshua }/>
+							<img src={ joshua } alt={ "Joshua" }/>
 							<div className={ "member-details" }>
 								<h1>Joshua</h1>
 								<div className={ "member-socials" }>
-									<a href={ "" }>
+									<a href={ "https://github.com/jozys" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "" }>
+									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -214,14 +217,15 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 						
 						<div className={ "member fade-in" }>
-							<img src={ leonard }/>
+							<img src={ leonard } alt={ "Leonard" }/>
 							<div className={ "member-details" }>
 								<h1>Leonard</h1>
 								<div className={ "member-socials" }>
-									<a href={ "" }>
+									<a href={ "https://github.com/michalskyl" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "" }>
+									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -229,14 +233,14 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 						
 						<div className={ "member fade-in" }>
-							<img src={ manuel }/>
+							<img src={ manuel } alt={ "Manuel" }/>
 							<div className={ "member-details" }>
 								<h1>Manuel</h1>
 								<div className={ "member-socials" }>
-									<a href={ "" }>
+									<a href={ "https://github.com/manuelbrs" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "" }>
+									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -244,14 +248,15 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 						
 						<div className={ "member fade-in" }>
-							<img src={ tom }/>
+							<img src={ tom } alt={ "Tom" }/>
 							<div className={ "member-details" }>
 								<h1>Tom</h1>
 								<div className={ "member-socials" }>
-									<a href={ "" }>
+									<a href={ "https://github.com/integraluminium" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "" }>
+									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -261,7 +266,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 				</InView>
 			</section>
 			
-			<section className={ "page" }>
+			<section className={ "page" } id={ "development" }>
 				<InView as={ "div" } onChange={ (inView, entry) => {
 					entry.target.querySelectorAll(".fade-in").forEach((el, i) => {
 						setTimeout(() => {
@@ -317,7 +322,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 					</div>
 					
-					<a href={ "https://github.com/SE-TINF22B2/G6-SimpleQ" } target={ "_blank" }
+					<a href={ "https://github.com/SE-TINF22B2/G6-SimpleQ" } target={ "_blank" } rel={ "noreferrer" }
 					   className={ "fade-in" }
 					   style={ { textDecoration: "none", color: "var(--primary-color)" } }>
 						<i className={ "fi fi-rr-arrow-right" } style={ { marginRight: "var(--spacing)" } }/>

@@ -39,7 +39,7 @@ export default function ConsentBanner(props: {}) {
 					{ t("components.consentBanner.content") }
 				</p>
 				<div className={ "consent-banner-buttons" }>
-					<Button icon={ "fi fi-rr-thumbs-up" } style={ "primary" } onClick={ giveConsent }>
+					<Button icon={ "fi fi-rr-thumbs-up" } buttonStyle={ "primary" } onClick={ giveConsent }>
 						{ t("components.consentBanner.accept") }
 					</Button>
 					<Button icon={ "fi fi-rr-thumbs-down" } onClick={ revokeConsent }>
