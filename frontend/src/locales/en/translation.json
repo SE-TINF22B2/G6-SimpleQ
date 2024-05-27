@@ -1,0 +1,93 @@
+{
+	"components": {
+		"consentBanner": {
+			"title": "We use cookies",
+			"content": "We use cookies and local storage to ensure you get the best experience on our website. By using our website, you agree to our use of cookies and local storage. Declining consent may result in suboptimal website performance.",
+			"accept": "Accept",
+			"decline": "Decline"
+		},
+		"liveInput": {
+			"empty": "Please start typing.."
+		},
+		"textEditor": {
+			"wordCount": "You have written {{count}} words."
+		}
+	},
+	"dashboard": {
+		"nav": {
+			"trending": "Trending Questions",
+			"question": {
+				"create": "Create Question",
+				"browsing": "Browsing Question / Discussion"
+			},
+			"activity": "Activity",
+			"my": "My Questions",
+			"favorites": "Favorites",
+			"quests": "Weekly Quests",
+			"inbox": "Inbox",
+			"stats": "Statistics",
+			"activeDays": "Recent Activity"
+		},
+		"search": {
+			"search": "Search..",
+			"info": "Navigate using ↑ and ↓ or \u21B9. Select using ↵."
+		},
+		"login": "Login",
+		"logout": "Logout",
+		"appearance": {
+			"appearance": "Appearance",
+			"language": {
+				"language": "Language",
+				"english": "English",
+				"german": "German"
+			},
+			"theme": {
+				"theme": "Theme",
+				"system": "System",
+				"dark": "Dark",
+				"light": "Light"
+			}
+		},
+		"questionEditor": {
+			"title": {
+				"caption": "Title",
+				"placeholder": "New Question",
+				"hint": "What's your programming question? Be specific."
+			},
+			"tags": {
+				"title": "Tags",
+				"caption": "Tags",
+				"placeholder": "Add a tag",
+				"hint": "Add up to 5 tags to describe what your question is about."
+			},
+			"description": {
+				"title": "Description",
+				"caption": "Description",
+				"placeholder": "Describe your question in detail.",
+				"hint": "Include all the information someone would need to answer your question."
+			},
+			"type": {
+				"caption": "Customize Answers",
+				"simp": {
+					"title": "Enable Simp",
+					"hint": "Users, as well as our in-house AI chatbot will be able to reply to your question to help provide you with the best help possible."
+				},
+				"users": {
+					"title": "Only Users",
+					"hint": "Only Users will be able to upload answers to your question."
+				}
+			},
+			"validate": {
+				"title": "Check your Question",
+				"caption": "Validate",
+				"hint": "Verify that you have created your question correctly.",
+				"checks": {
+					"title": "A valid title",
+					"tags": "At least one tag",
+					"description": "A detailed description of at least 20 words"
+				}
+			},
+			"submit": "Post your Question"
+		}
+	}
+}

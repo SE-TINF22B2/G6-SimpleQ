@@ -1,46 +1,83 @@
-# Getting Started with Create React App
+# Frontend Applikation für G6-SimpleQ
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Hier findet sich der SourceCode für das Frontend des G6-SimpleQ Projektes.
 
-## Available Scripts
+Die Anwendung baut auf die JavaScript-Bibliothek [React](https://fr.react.dev/reference/react) auf und wird in diesem
+Projekt als SinglePage-Application genutzt.
+Das Kernkonzept von React ist, dass einzelne Elemente der Benutzeroberfläche als Komponente zusammengefasst werden und
+die Komponenten wiederverwendet werden können.
 
-In the project directory, you can run:
+## Erste Schritte
 
-### `npm start`
+### Verfügbare Skripte von React
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+`npm start`
+Führt die Anwendung im Entwicklungsmodus aus.\
+Diese lässt sich unter [http://localhost:3000](http://localhost:3000) im Browser betrachten.
+Die Seite wird neu geladen, wenn Änderungen vorgenommen werden.\
+Außerdem wird der Ory-Tunnel auf Port 4000 gestartet, um die Anmeldung zum lokalen Testen zu ermöglichen.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+`npm run start-server`
+Startet lediglich die Frontend React-Anwendung.
 
-### `npm test`
+`npm run tunnel`
+Startet lediglich den Ory-Tunnel.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`npm test`
+Führt alle Tests geänderter Dateien aus.
 
-### `npm run build`
+`npm run coverage`
+Berechnet die Abdeckung des SourceCodes durch Tests.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+`npm run build`
+Bereitet das Frontend für das Deployment vor und baut die Anwendung für die Produktion im `build` Ordner.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Hinweise
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Projektstruktur
 
-### `npm run eject`
+```text
+src
+|- components
+    |- button
+        |= Button.tsx
+        |= Button.test.tsx
+        |= Button.scss
+|- def
+|- illustrations
+|- images
+|- locales
+    |- en
+        |= translation.json
+|- pages
+    |- dashboard
+        |- editor
+            |= Editor.tsx
+            |= Editor.scss
+        |- ...
+        |= Dashboard.tsx
+        |= Dashboard.scss
+    |- home
+        |- ...
+    |= App.tsx
+    |= App.scss
+|= index.tsx
+|= index.scss
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+| Directory/File       | Beschreibung                                                                       |
+|----------------------|------------------------------------------------------------------------------------|
+| `src/`               | Quellcode für das Frontend                                                         |
+| `src/images/`        | Bildressourcen                                                                     |
+| `src/illustrations/` | Illustrationen                                                                     |
+| `src/locales/`       | Sprachressourcen, Standard- and Rückfallsprache is `en`                            |
+| `src/pages/`         | Quelltext für einzelne Seiten, hierarchische Struktur                              |
+| `src/components/`    | Wiederverwendbare Komponenten z.B. Schaltflächen, Auswahlfelder, Diagrammbausteine |
+| `src/index.tsx`      | Einstiegspunkt der Anwendung                                                       |
+| `package.json`       | Datei des Paketmanagers für externe Pakete (dependencies)                          |
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Die Komponenten bestehen jeweils aus einer `.tsx` und einer `.scss`-Datei.
+[TSX](https://fr.react.dev/learn/typescript) ist eine Syntaxerweiterung für TypeScript, die HTML-Ähnliches Markup in der
+Datei ermöglicht.
+[SCSS](https://sass-lang.com/documentation/syntax/) (Syntactically Awesome Stylesheets) ist eine
+geänderte [Stylesheet-Sprache](https://en.wikipedia.org/wiki/Style_sheet_language)

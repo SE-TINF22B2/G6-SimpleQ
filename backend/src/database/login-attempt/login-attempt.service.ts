@@ -1,4 +1,4 @@
-import {Injectable, NotImplementedException} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { LoginAttempt } from '@prisma/client';
 
@@ -6,40 +6,31 @@ import { LoginAttempt } from '@prisma/client';
 export class LoginAttemptService {
   constructor(private prisma: PrismaService) {}
 
-    async createLoginAttempt(loginUserID: string, wasSuccessful: boolean): Promise<LoginAttempt> {
-        return this.prisma.loginAttempt.create({
-            data: {
-                loginUser: {
-                    connect: { userID: loginUserID }
-                },
-                wasSuccessful: wasSuccessful
-            }
-        })
-    }
+  async createLoginAttempt(
+    loginUserID: string,
+    wasSuccessful: boolean,
+  ): Promise<LoginAttempt> {
+    return this.prisma.loginAttempt.create({
+      data: {
+        loginUser: {
+          connect: { userID: loginUserID },
+        },
+        wasSuccessful: wasSuccessful,
+      },
+    });
+  }
 
-    async getLoginAttempt(
-        loginUserID: string, timeOfLogin: Date
-    ): Promise<LoginAttempt | null> {
-        return this.prisma.loginAttempt.findUnique({
-            where: {
-                loginUserID_timeOfLogin: {
-                    loginUserID: loginUserID,
-                    timeOfLogin: timeOfLogin
-                }
-            },
-        });
-    }
-
-    async getLoginAttemptRange(
-        loginUserID: string,
-        startTimeOfLogin: Date = new Date(Date.now() - 1000000),
-        endTimeOfLogin: Date = new Date(Date.now())
-    ):Promise<LoginAttempt[]>{
-      // return this.prisma.loginAttempt.findMany({
-      //     where: {
-      //       // TODO Login user && startTime <= searchResults <= endTimeOfLogin
-      //     }
-      // })
-        throw new NotImplementedException();
-    }
+  async getLoginAttempt(
+    loginUserID: string,
+    timeOfLogin: Date,
+  ): Promise<LoginAttempt | null> {
+    return this.prisma.loginAttempt.findUnique({
+      where: {
+        loginUserID_timeOfLogin: {
+          loginUserID: loginUserID,
+          timeOfLogin: timeOfLogin,
+        },
+      },
+    });
+  }
 }
