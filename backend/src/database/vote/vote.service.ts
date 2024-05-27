@@ -34,4 +34,28 @@ export class VoteService {
       },
     });
   }
+
+  /**
+   * Get the own voting of a user to a specific UserContent.
+   * @param userContentID
+   * @param userID
+   * @returns true if the voting is positive; null if the user didn't vote for the UserContent
+   */
+  async getOpinionToUserContent(
+    userContentID: string,
+    userID: string,
+  ): Promise<boolean | null> {
+    return (
+      (
+        await this.prisma.vote.findUnique({
+          where: {
+            contentID_votingUserID: {
+              contentID: userContentID,
+              votingUserID: userID,
+            },
+          },
+        })
+      )?.isPositive || null
+    );
+  }
 }
