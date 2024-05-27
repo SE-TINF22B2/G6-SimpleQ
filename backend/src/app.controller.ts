@@ -15,12 +15,6 @@ export class AppController {
     private readonly tagService: TagService,
   ) {}
 
-  @Get()
-  getHello(): string {
-    //return this.appService.getHello();
-    return "Hello World!";
-  }
-
   /**
    * This request is only for development purposes
    * It offers the client the possiblity to login to ory and get the cookie needed to send requests to this backend
