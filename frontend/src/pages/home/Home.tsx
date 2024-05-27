@@ -16,6 +16,8 @@ import manuel from "../../images/manuel.png";
 import tom from "../../images/tom.png";
 
 export default function Home(props: { updateTheme: (theme: "system" | "dark" | "light") => void }) {
+	let blobs: (HTMLDivElement | null)[] = [];
+	
 	const navigate = useNavigate();
 	const [currentThemeOnlyDisplay, setCurrentThemeOnlyDisplay] =
 		React.useState<"dark" | "light" | "system">((localStorage.getItem("theme") as "dark" | "light" || "system"));
@@ -30,7 +32,9 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 	}, []);
 	
 	const animateBlobs = () => {
-		document.querySelectorAll(".home-bg-blob").forEach((el, i) => {
+		blobs.forEach((el, i) => {
+			if (!el) return;
+			
 			let r1 = 20 + Math.floor(Math.random() * 60);
 			let r2 = 20 + Math.floor(Math.random() * 60);
 			let r3 = 20 + Math.floor(Math.random() * 60);
@@ -84,22 +88,14 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 		
 		<main>
 			<section className={ "page" }>
-				<div className={ "home-bg-blob" } style={ {
-					position: "absolute",
-					zIndex: -1,
-					height: "40%",
-					width: "40%",
+				<div className={ "home-bg-blob" } ref={ b => blobs.push(b) } style={ {
 					top: "calc(var(--header-height) + 10%)",
 					left: "10%",
 					borderRadius: "47% 53% 67% 33% / 13% 62% 38% 87%",
 					opacity: 0.6,
 					background: "linear-gradient(to right, var(--primary-color), transparent), url(https://grainy-gradients.vercel.app/noise.svg)"
 				} }/>
-				<div className={ "home-bg-blob" } style={ {
-					position: "absolute",
-					zIndex: -1,
-					height: "40%",
-					width: "40%",
+				<div className={ "home-bg-blob" } ref={ b => blobs.push(b) } style={ {
 					top: "calc(var(--header-height) + 20%)",
 					left: "30%",
 					borderRadius: "63% 37% 23% 77% / 53% 62% 38% 47%",

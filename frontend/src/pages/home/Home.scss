@@ -67,6 +67,13 @@
 		overflow-y: scroll;
 		scroll-snap-type: y mandatory;
 
+		.home-bg-blob {
+			position: absolute;
+			z-index: -1;
+			height: 40% !important;
+			width: 40% !important;
+		}
+
 		.page {
 			align-items: center;
 
