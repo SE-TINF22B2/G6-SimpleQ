@@ -1,12 +1,11 @@
-import {Controller, Get} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 
 @Controller('quests')
 export class QuestsController {
-    constructor() {
-    }
+  constructor() {}
 
-    @Get()
-    getQuests(){
-        return "not Implemented"
-    }
+  @Get()
+  getQuests() {
+    return 'not Implemented';
+  }
 }

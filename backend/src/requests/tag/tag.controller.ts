@@ -1,13 +1,11 @@
-import {Controller, Get} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 
 @Controller('tags')
 export class TagController {
-    constructor() {
-    }
+  constructor() {}
 
-    @Get("find")
-    getTag(){
-        return "not implemented"
-    }
-
+  @Get('find')
+  getTag() {
+    return 'not implemented';
+  }
 }
