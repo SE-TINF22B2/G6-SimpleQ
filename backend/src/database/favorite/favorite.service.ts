@@ -35,4 +35,14 @@ export class FavoriteService {
       },
     });
   }
+
+  async getFavoriteOfUser(
+    favoriteUserID: string
+  ) {
+    return this.prisma.favorite.findMany({
+      where: {
+        favoriteUserID: favoriteUserID,
+      },
+    });
+  }
 }

@@ -62,7 +62,7 @@ describe('UserContentService', () => {
   });
 
   it('should get all tags of the question', async () => {
-    let questionWithTags: any = testUserContentQuestion;
+    const questionWithTags: any = testUserContentQuestion;
     questionWithTags.tag = testTagList;
     mockPrisma.userContent.findUnique.mockResolvedValueOnce(questionWithTags);
     await expect(
@@ -71,7 +71,7 @@ describe('UserContentService', () => {
   });
 
   it('should get likes and dislikes of the question', async () => {
-    let questionWithVotes: any = testUserContentQuestion;
+    const questionWithVotes: any = testUserContentQuestion;
     questionWithVotes.vote = testVoteList;
     mockPrisma.userContent.findUnique.mockResolvedValueOnce(questionWithVotes);
     await expect(
