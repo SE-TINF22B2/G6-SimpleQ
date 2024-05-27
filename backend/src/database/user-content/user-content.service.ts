@@ -69,7 +69,7 @@ export class UserContentService {
    * @returns Array of UserContents with question
    */
   async getTrendingQuestions(limit: number = 10, offset: number = 0) {
-    let time: Date = new Date();
+    const time: Date = new Date();
     time.setDate(time.getDate() - 7);
     return this.prisma.userContent.findMany({
       where: {
@@ -111,7 +111,7 @@ export class UserContentService {
   async getLikesAndDislikesOfUserContent(
     userContentID: string,
   ): Promise<{ likes: number; dislikes: number }> {
-    let votes: Vote[] | null =
+    const votes: Vote[] | null =
       (
         await this.prisma.userContent.findUnique({
           where: { userContentID: userContentID },
