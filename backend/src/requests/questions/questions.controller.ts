@@ -35,7 +35,8 @@ export class QuestionsController {
    * */
   @Get('search')
   getSearch(@Query() query: SearchQuery): Promise<object> {
-    return this.userContentService.search(query);
+    console.log(query);
+    return this.userContentService.search();
   }
 
   @Get(':id')
