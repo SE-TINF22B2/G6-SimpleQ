@@ -18,9 +18,12 @@ import { QuestService } from '../database/quest/quest.service';
 import { TagService } from '../database/tag/tag.service';
 import { DevelopmentService } from './development/development.service';
 import { AuthService } from '../auth/auth.service';
-import { UserContentService } from '../database/user-content/user-content.service';
+import { UserContentService as DBUserContentService } from '../database/user-content/user-content.service';
+import { UserContentService } from './user-content/user-content.service';
 
-@Module({})
+@Module({
+  providers: [UserContentService],
+})
 export class RequestsModule {
   static register(): DynamicModule {
     const controllers: any[] = [
@@ -44,6 +47,7 @@ export class RequestsModule {
       ModerationService,
       QuestService,
       TagService,
+      DBUserContentService,
       UserService,
       UserContentService,
       // request services
