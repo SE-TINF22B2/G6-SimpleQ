@@ -11,7 +11,12 @@ export class ExternalAPIService {
     private readonly databaseService: UserContentService,
   ) {}
 
-  private async checkParams(prompt: string, groupID: string): Promise<boolean> {
+  private async checkAllowed(userID: string): Promise<boolean> {
+    
+    return true
+  }
+
+  private async checkParams(prompt: string, groupID: string, userID: string): Promise<boolean> {
     if (prompt === '') {
       throw new Error('prompt is empty');
     } else if (await this.databaseService.checkGroupIDExists(groupID)) {
@@ -35,7 +40,7 @@ export class ExternalAPIService {
     }
   }
 
-  async requestWolfram(prompt: string, groupID: string): Promise<string> {
+  async requestWolfram(prompt: string, groupID: string, userID: string): Promise<string> {
     try {
       const paramsCheck = await this.checkParams(prompt, groupID);
       if (paramsCheck) {
@@ -60,7 +65,7 @@ export class ExternalAPIService {
     }
   }
 
-  async requestGPT(prompt: string, groupID: string): Promise<string> {
+  async requestGPT(prompt: string, groupID: string, userID: string): Promise<string> {
     const body = {
       prompt: prompt,
     };
