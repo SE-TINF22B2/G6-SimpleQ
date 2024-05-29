@@ -22,11 +22,19 @@ export class ExternalAPIService {
     let user: User | null = await this.databaseUserService.getUser(userID);
     if (user == null) {
       throw new Error('User ID not found');
-    } else if (user.isPro == false && await this.databaseContentService.countKIAnswersForUser(userID) >= 15) {
+    } else if (user.isPro == false && await this.databaseContentService.countAIAnswersForUser(userID) >= 15) {
       throw new Error('You have reached the limit for free AI responses');
     }
   }
 
+
+  /**
+   * This function should check the params for the AI functions.
+   * @param prompt
+   * @param groupID
+   * @param userID
+   * @throws The prompt cannot be empty | Group ID not found | The environment variable for AI is undefined | An AI-generated answer with this groupID already exists
+   */
   private async checkParams(prompt: string, groupID: string, userID: string): Promise<boolean> {
     if (prompt === '') {
       throw new Error('The prompt cannot be empty');
@@ -51,6 +59,14 @@ export class ExternalAPIService {
     }
   }
 
+
+  /**
+   * This function should generates an AI answer with the Wolfram Alpha API.
+   * @param prompt
+   * @param groupID
+   * @param userID
+   * @returns Promise<string>
+   */
   async requestWolfram(prompt: string, groupID: string, userID: string): Promise<string> {
     try {
       this.checkAllowed(userID);
@@ -77,6 +93,14 @@ export class ExternalAPIService {
     }
   }
 
+
+  /**
+   * This function should generates an AI answer with the LLM API.
+   * @param prompt
+   * @param groupID
+   * @param userID
+   * @returns Promise<string>
+   */
   async requestGPT(prompt: string, groupID: string, userID: string): Promise<string> {
     const body = {
       prompt: prompt,

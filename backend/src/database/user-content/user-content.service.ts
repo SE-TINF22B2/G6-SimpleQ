@@ -260,7 +260,7 @@ export class UserContentService {
    * @param groupID ID of the group from the Question/Discussion the Answer belongs to
    * @returns number - number of KI generated answers
    */
-  async countKIAnswersForUser(
+  async countAIAnswersForUser(
     groupID: string
   ): Promise<number> {
     const count = await this.prisma.userContent.count({
