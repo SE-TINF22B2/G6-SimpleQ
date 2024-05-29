@@ -38,8 +38,8 @@ export class AppController {
   }
 
   @Get('user')
-  getUser(@Req() ID: string): Promise<User | null> {
-    return this.userService.getUser(ID);
+  getUser(@Req() req: any): Promise<User | null> {
+    return this.userService.getUser(req.userId);
   }
 
   // tag/search/?q=

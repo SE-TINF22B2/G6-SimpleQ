@@ -21,6 +21,8 @@ import { RequestsModule } from './requests/requests.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).exclude('/cookie').forRoutes('*');
+    // Include every request in the AuthMiddleware
+    // Some are excluded within the middleware itself.
+    consumer.apply(AuthMiddleware).forRoutes('*');
   }
 }

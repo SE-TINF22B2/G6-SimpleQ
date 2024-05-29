@@ -46,7 +46,8 @@ export class UserContentService {
     );
     if (result) {
       return {
-        groupId: result.userContent?.userContentID,
+        id: result.userContent.userContentID,
+        groupId: result.userContent?.groupID,
         title: result.question?.title,
         numberOfAnswers,
         ...evaluation,

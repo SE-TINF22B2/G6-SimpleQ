@@ -8,10 +8,10 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { SearchQuery } from './search.dto';
+import { SearchQuery } from './dto/search.dto';
 import { Type, UserContentService } from '../user-content/user-content.service';
 
-@Controller('questions') // prefix: domain/question/...
+@Controller('question') // prefix: domain/question/...
 export class QuestionsController {
   constructor(private readonly userContentService: UserContentService) {} //     private readonly services
 

@@ -36,9 +36,9 @@ describe('UserContentService', () => {
     await expect(
       service.createQuestion(
         testUserContentQuestion.ownerID,
-        testUserContentQuestion.groupID,
         testUserContentQuestion.content,
         testQuestion.title,
+        testUserContentQuestion.groupID,
       ),
     ).resolves.toEqual({
       userContent: testUserContentQuestion,

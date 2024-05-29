@@ -92,9 +92,9 @@ export class UserController {
     new NotImplementedException(); // TODO implement
   }
 
-  @Get('login/attemps')
+  @Get('login/attempts')
   async getLoginAttempts(@Req() req: any) {
-    const userId = req.headers.cookie.id;
+    const userId = req.userId;
     if (userId === null) {
       throw new ForbiddenException();
     }
