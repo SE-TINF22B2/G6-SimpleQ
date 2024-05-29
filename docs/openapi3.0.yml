@@ -72,7 +72,7 @@ components:
       type: object
       properties:
         type:
-          aiType: string
+#          aiType: string
           enum:
             - WolframAlpha
             - GPT
@@ -207,8 +207,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Question'
-        '401':
-          description: User is not logged in
   
   /question/search/:
     get:
@@ -303,10 +301,10 @@ paths:
           content:
             application/json: 
               schema: 
-                object:
-                  properties:
-                    title:
-                      type: string
+                type: object
+                properties:
+                  title:
+                    type: string
         '404':
           description: Not found
         
