@@ -123,3 +123,10 @@ Für die Generierung von einzelnen Komponenten wurde das [_Commandline-interface
 die CLI legt ein Grundgerüst einer Komponente zusammen mit einem Test in dem ggf. erstellten Ordner ab.
 
 Als Paketmanager wird [_yarn_](https://classic.yarnpkg.com/lang/en/docs/) in der Version 1 verwendet.
+
+### Versionen auf denen entwickelt wurde
+| Werkzeug   | Version |
+|------------|---------|
+| yarn       | 1.22    |
+| NestJS     | 10      |
+| ory-client | 1.9     |
