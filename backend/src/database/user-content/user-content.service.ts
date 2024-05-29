@@ -254,6 +254,31 @@ export class UserContentService {
     return aiAnswer != null;
   }
 
+  /**
+   * Counts the number of KI generated answers for a user
+   * MAX number of KI generated answer for not prime user: 15
+   * @param groupID ID of the group from the Question/Discussion the Answer belongs to
+   * @returns number - number of KI generated answers
+   */
+  async countKIAnswersForUser(
+    groupID: string
+  ): Promise<number> {
+    const count = await this.prisma.userContent.count({
+      where: {
+        groupID: groupID,
+        type: UserContentType.Answer,
+        answer: {
+          typeOfAI: {
+            in: [TypeOfAI.GPT, TypeOfAI.WolframAlpha],
+          },
+        },
+      },
+    });
+  
+    return count;
+  }
+  
+
   // Discussion
   async createDiscussion(
     ownerID: string | null,
