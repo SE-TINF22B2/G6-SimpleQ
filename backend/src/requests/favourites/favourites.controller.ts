@@ -2,7 +2,8 @@ import {
   Controller,
   Delete,
   Get,
-  InternalServerErrorException, NotFoundException,
+  InternalServerErrorException,
+  NotFoundException,
   NotImplementedException,
   Param,
   ParseUUIDPipe,
@@ -11,14 +12,14 @@ import {
 } from '@nestjs/common';
 import { FavoriteService } from '../../database/favorite/favorite.service';
 import { Favorite } from '@prisma/client';
-import {UserContentService} from "../../database/user-content/user-content.service";
+import { UserContentService } from '../../database/user-content/user-content.service';
 
 @Controller('favourites')
 export class FavouritesController {
   constructor(
     //     private readonly services
     private readonly favoriteService: FavoriteService,
-    private readonly usercontentService: UserContentService
+    private readonly usercontentService: UserContentService,
   ) {}
   @Get()
   async getFavourites(@Req() req: any) {
@@ -38,19 +39,19 @@ export class FavouritesController {
   ) {
     const userId = req.userId;
 
-    if (await this.usercontentService.getAnswer(userId) == null){
-      throw new NotFoundException("Question not found!")
+    if ((await this.usercontentService.getAnswer(id)) == null) {
+      throw new NotFoundException('Question not found!');
     }
 
     try {
       const result = await this.favoriteService.createFavorite(userId, id);
-    } catch (Exception){
+      return result;
+    } catch (Exception) {
       throw new InternalServerErrorException();
     }
-
-
   }
   @Delete(':id')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeFavourite(@Param('id', new ParseUUIDPipe()) id: string) {
     throw new NotImplementedException();
   }

@@ -41,19 +41,18 @@ export class LoginAttemptService {
    * @param maxDate
    */
   async getLoginAttemptRange(
-      loginUserID:string,
-      minDate:Date,
-      maxDate:Date
-  ): Promise<LoginAttempt[] | null>{
+    loginUserID: string,
+    minDate: Date,
+    maxDate: Date,
+  ): Promise<LoginAttempt[] | null> {
     return this.prisma.loginAttempt.findMany({
       where: {
-          loginUserID: loginUserID,
-          timeOfLogin: {
-            gte: minDate,
-            lte: maxDate
-          },
+        loginUserID: loginUserID,
+        timeOfLogin: {
+          gte: minDate,
+          lte: maxDate,
+        },
       },
     });
   }
-
 }

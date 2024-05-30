@@ -1,7 +1,7 @@
 import {
   Controller,
   ForbiddenException,
-  Get, InternalServerErrorException,
+  Get,
   NotFoundException,
   NotImplementedException,
   Param,
@@ -9,10 +9,9 @@ import {
   Put,
   Req,
 } from '@nestjs/common';
-import { UserService } from '../../database/user/user.service';
-import { ExpertService } from '../../database/expert/expert.service';
-import { LoginAttemptService } from '../../database/login-attempt/login-attempt.service';
-import {LoginAttempt} from "@prisma/client";
+import {UserService} from '../../database/user/user.service';
+import {ExpertService} from '../../database/expert/expert.service';
+import {RequestsUserService} from './requests-user.service';
 
 enum Registration { // TODO extract
   registered = 'registered',
@@ -24,7 +23,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly expertService: ExpertService,
-    private readonly userLoginAttemptService: LoginAttemptService,
+    private readonly requestsUserService: RequestsUserService,
   ) {}
 
   /**
@@ -91,29 +90,12 @@ export class UserController {
     new NotImplementedException(); // TODO implement
   }
 
-  @Get('login/attemps')
+  @Get('login/attempts')
   async getLoginAttempts(@Req() req: any) {
-    const userId = req.headers.cookie.id;
+    const userId = req.userId;
     if (userId === null) {
       throw new ForbiddenException();
     }
-
-    // Date-range from 7days in past to now
-    let firstDate: Date = new Date()
-    let lastDate: Date = new Date()
-    firstDate.setDate(lastDate.getDate()- 7)
-
-    let loginRange: LoginAttempt[] | null;
-    try {
-      loginRange = await this.userLoginAttemptService.getLoginAttemptRange(
-          userId, firstDate, lastDate);
-    } catch (e){
-      throw new InternalServerErrorException(e)
-    }
-
-    if (loginRange == null){
-      return [];
-    }
-    return loginRange;
+    return this.requestsUserService.loginAttemptRangeService(userId);
   }
 }

@@ -19,9 +19,9 @@ export class UserContentService {
   // Question
   async createQuestion(
     ownerID: string | null,
-    groupID: string,
     content: string | null,
     title: string,
+    groupID?: string,
   ): Promise<{ userContent: UserContent; question: Question }> {
     return this.prisma.$transaction(async (tx) => {
       const createdContent = await tx.userContent.create({

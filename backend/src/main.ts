@@ -4,13 +4,14 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const ory = new sdk.FrontendApi(
+  // TODO: configure cors origins, * is rather a bad idea
+  app.enableCors({ origin: '*', methods: ['*'], credentials: true });
+  global.ory = new sdk.FrontendApi(
     new sdk.Configuration({
       basePath:
         process.env.ORY_URL || 'https://playground.projects.oryapis.com',
     }),
   );
-  global.ory = ory;
 
   await app.listen(3000);
 }

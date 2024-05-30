@@ -7,7 +7,6 @@ import { DevelopmentController } from './development/development.controller';
 import { QuestsController } from './quests/quests.controller';
 import { TagController } from './tag/tag.controller';
 import { UserController } from './user/user.controller';
-import { UserService } from '../database/user/user.service';
 import { PrismaService } from '../database/prisma.service';
 import { ExpertService } from '../database/expert/expert.service';
 import { LoginAttemptService } from '../database/login-attempt/login-attempt.service';
@@ -18,9 +17,13 @@ import { QuestService } from '../database/quest/quest.service';
 import { TagService } from '../database/tag/tag.service';
 import { DevelopmentService } from './development/development.service';
 import { AuthService } from '../auth/auth.service';
-import { UserContentService } from '../database/user-content/user-content.service';
+import { UserContentService as DBUserContentService } from '../database/user-content/user-content.service';
+import { UserContentService } from './user-content/user-content.service';
+import { RequestsUserService } from './user/requests-user.service';
 
-@Module({})
+@Module({
+  providers: [UserContentService, RequestsUserService],
+})
 export class RequestsModule {
   static register(): DynamicModule {
     const controllers: any[] = [
@@ -44,7 +47,8 @@ export class RequestsModule {
       ModerationService,
       QuestService,
       TagService,
-      UserService,
+      DBUserContentService,
+      RequestsUserService,
       UserContentService,
       // request services
       DevelopmentService,
