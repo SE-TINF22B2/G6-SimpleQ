@@ -39,7 +39,7 @@ export class FavouritesController {
   ) {
     const userId = req.userId;
 
-    if ((await this.usercontentService.getAnswer(userId)) == null) {
+    if ((await this.usercontentService.getAnswer(id)) == null) {
       throw new NotFoundException('Question not found!');
     }
 
