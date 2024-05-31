@@ -63,6 +63,7 @@ export default function TextEditor(props: Props) {
 		
 		<p className={ "text-editor-content" }
 		   contentEditable={ !(props.disabled) }
+		   suppressContentEditableWarning={ true }
 		   onInput={ (e) => {
 			   setWordCount((e.target as HTMLSpanElement).innerText.split(" ").length);
 			   if (props.onInput) props.onInput((e.target as HTMLSpanElement).innerHTML);
