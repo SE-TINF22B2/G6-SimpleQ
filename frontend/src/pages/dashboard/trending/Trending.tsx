@@ -46,7 +46,7 @@ export default function Trending(props: {}) {
 				  setQuestions(_questions);
 			  })
 			  .catch(err => alert.show(err.message, { type: "error" }));
-	}, []);
+	}, [alert]);
 	
 	return <>
 		<Section>
