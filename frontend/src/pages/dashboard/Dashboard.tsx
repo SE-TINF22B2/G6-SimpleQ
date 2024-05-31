@@ -50,6 +50,7 @@ export default function Dashboard(props: Props) {
 			   });
 		   })
 		   .catch((err) => {
+			   console.log("error logging in", err);
 			   // window.location.replace(`${ basePath }/ui/login`);
 		   });
 		

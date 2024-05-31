@@ -39,8 +39,10 @@ i18n.use(detector)
 	});
 
 // axios setup for fetching backend data
-axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
-axios.defaults.timeout = 6000;
+const axiosInstance = axios.create();
+axiosInstance.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
+axiosInstance.defaults.timeout = 6000;
+global.axios = axiosInstance;
 
 /**
  * Renders the app and takes care of choosing the appropriate language and theme

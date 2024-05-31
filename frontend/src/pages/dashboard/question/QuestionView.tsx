@@ -8,7 +8,6 @@ import SplitSection from "../../../components/section/SplitSection";
 import TextEditor from "../../../components/texteditor/TextEditor";
 import Button from "../../../components/button/Button";
 import { Answer, Question } from "../../../def/Question";
-import axios from "axios";
 import { formatDate } from "../../../def/converter";
 import { useAlert } from "react-alert";
 
@@ -30,26 +29,26 @@ export default function QuestionView() {
 	const alert = useAlert();
 	
 	useEffect(() => {
-		axios.get("question/" + encodeURIComponent(id ?? ""), { withCredentials: true })
-			 .then(res => {
-				 console.log(res);
-				 let _question: Question = {
-					 answers: res.data.numberOfAnswers ?? 0,
-					 author: res.data.author ?? undefined,
-					 content: res.data.content ?? "",
-					 created: formatDate(res.data.created ?? ""),
-					 dislikes: res.data.dislikes ?? 0,
-					 id: id ?? "",
-					 isDiscussion: res.data.isDiscussion ?? false,
-					 likes: res.data.likes ?? 0,
-					 rating: res.data.rating ?? "none",
-					 tags: res.data.tags ?? [],
-					 title: res.data.title ?? "",
-					 updated: formatDate(res.data.updated ?? "")
-				 }
-				 setQuestion(_question);
-			 })
-			 .catch(err => alert.show(err.message, { type: "error" }));
+		global.axios.get("question/" + encodeURIComponent(id ?? ""), { withCredentials: true })
+			  .then(res => {
+				  console.log(res);
+				  let _question: Question = {
+					  answers: res.data.numberOfAnswers ?? 0,
+					  author: res.data.author ?? undefined,
+					  content: res.data.content ?? "",
+					  created: formatDate(res.data.created ?? ""),
+					  dislikes: res.data.dislikes ?? 0,
+					  id: id ?? "",
+					  isDiscussion: res.data.isDiscussion ?? false,
+					  likes: res.data.likes ?? 0,
+					  rating: res.data.rating ?? "none",
+					  tags: res.data.tags ?? [],
+					  title: res.data.title ?? "",
+					  updated: formatDate(res.data.updated ?? "")
+				  }
+				  setQuestion(_question);
+			  })
+			  .catch(err => alert.show(err.message, { type: "error" }));
 	}, [id, navigate, alert]);
 	
 	const getSortByIcon = () => {

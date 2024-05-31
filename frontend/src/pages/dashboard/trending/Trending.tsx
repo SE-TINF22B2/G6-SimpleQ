@@ -8,7 +8,6 @@ import QuestionPreviewSkeleton from "../../../components/questionpreview/Questio
 import Section from "../../../components/section/Section";
 import { Question } from "../../../def/Question";
 import Button from "../../../components/button/Button";
-import axios from "axios";
 import { formatDate } from "../../../def/converter";
 import { useAlert } from "react-alert";
 
@@ -23,30 +22,30 @@ export default function Trending(props: {}) {
 	const alert = useAlert();
 	
 	useEffect(() => {
-		axios.get("question/trending")
-			 .then(res => {
-				 let _questions: Question[] = [];
-				 res.data.forEach((_question: any) => {
-					 if (!_question.id) return null;
-					 
-					 let question: Question = {
-						 answers: _question.numberOfAnswers ?? 0,
-						 author: _question.author ?? undefined,
-						 created: formatDate(_question.created ?? ""),
-						 dislikes: _question.dislikes ?? 0,
-						 id: _question.id,
-						 isDiscussion: _question.isDiscussion ?? false,
-						 likes: _question.likes ?? 0,
-						 rating: _question.rating ?? "none",
-						 tags: _question.tags ?? [],
-						 title: _question.title ?? "",
-						 updated: formatDate(_question.updated ?? "")
-					 }
-					 _questions.push(question);
-				 });
-				 setQuestions(_questions);
-			 })
-			 .catch(err => alert.show(err.message, { type: "error" }));
+		global.axios.get("question/trending")
+			  .then(res => {
+				  let _questions: Question[] = [];
+				  res.data.forEach((_question: any) => {
+					  if (!_question.id) return null;
+					  
+					  let question: Question = {
+						  answers: _question.numberOfAnswers ?? 0,
+						  author: _question.author ?? undefined,
+						  created: formatDate(_question.created ?? ""),
+						  dislikes: _question.dislikes ?? 0,
+						  id: _question.id,
+						  isDiscussion: _question.isDiscussion ?? false,
+						  likes: _question.likes ?? 0,
+						  rating: _question.rating ?? "none",
+						  tags: _question.tags ?? [],
+						  title: _question.title ?? "",
+						  updated: formatDate(_question.updated ?? "")
+					  }
+					  _questions.push(question);
+				  });
+				  setQuestions(_questions);
+			  })
+			  .catch(err => alert.show(err.message, { type: "error" }));
 	}, []);
 	
 	return <>

@@ -32,19 +32,19 @@ export default function LiveInput(props: Props) {
 		
 		cancelToken = axios.CancelToken.source();
 		
-		axios.get("tags/find?tag=" + encodeURIComponent(input.toLowerCase()), { cancelToken: cancelToken.token })
-			 .then(res => {
-				 let tags = res.data.tags;
-				 if (!tags.includes(input.toLowerCase()) && input.trim().length > 0)
-					 tags.push(input.toLowerCase());
-				 setSuggestions(tags);
-			 })
-			 .catch(err => {
-				 if (err.message.includes('new request')) return;
-				 setSuggestions([]);
-				 alert.show(err.message, { type: "error" });
-			 })
-			 .finally(() => setIsLoading(false));
+		global.axios.get("tags/find?tag=" + encodeURIComponent(input.toLowerCase()), { cancelToken: cancelToken.token })
+			  .then(res => {
+				  let tags = res.data.tags;
+				  if (!tags.includes(input.toLowerCase()) && input.trim().length > 0)
+					  tags.push(input.toLowerCase());
+				  setSuggestions(tags);
+			  })
+			  .catch(err => {
+				  if (err.message.includes('new request')) return;
+				  setSuggestions([]);
+				  alert.show(err.message, { type: "error" });
+			  })
+			  .finally(() => setIsLoading(false));
 	}
 	
 	return <div className={ "live-input" }>
