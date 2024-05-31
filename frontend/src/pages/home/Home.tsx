@@ -18,10 +18,18 @@ import tom from "../../images/tom.png";
 export default function Home(props: { updateTheme: (theme: "system" | "dark" | "light") => void }) {
 	let blobs: (HTMLDivElement | null)[] = useMemo(() => [], []);
 	
-	
 	const navigate = useNavigate();
 	const [currentThemeOnlyDisplay, setCurrentThemeOnlyDisplay] =
 		React.useState<"dark" | "light" | "system">((localStorage.getItem("theme") as "dark" | "light" || "system"));
+	
+	const inViewOnChange = (inView: any, entry: any) => {
+		entry.target.querySelectorAll(".fade-in").forEach((el: any, i: any) => {
+			setTimeout(() => {
+				if (inView) el.classList.add("fade-in-visible");
+				else el.classList.remove("fade-in-visible");
+			}, (i + 1) * 100);
+		});
+	}
 	
 	useEffect(() => {
 		const animateBlobs = () => {
@@ -68,7 +76,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					<a href={ "#features" }>Features</a>
 					<a href={ "#developers" }>Developers</a>
 					<a href={ "#development" }>Development</a>
-					<a href={ "login" }>Login</a>
+					<a href={ "#plans" }>Plans</a>
 				</div>
 				
 				<Button icon={ "fi fi-rr-sign-in-alt" } onClick={ () => window.location.href = "/login" }>Login</Button>
@@ -122,17 +130,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 			</section>
 			
 			<section className={ "page" } id={ "features" }>
-				<InView as={ "div" } onChange={ (inView, entry) => {
-					entry.target.querySelectorAll(".fade-in").forEach((el, i) => {
-						
-						// Todo: Timeout only for fading in, not for fading out!!
-						
-						setTimeout(() => {
-							if (inView) el.classList.add("fade-in-visible");
-							else el.classList.remove("fade-in-visible");
-						}, (i + 1) * 100);
-					});
-				} }>
+				<InView as={ "div" } onChange={ inViewOnChange }>
 					<h2 className={ "page-title fade-in" }>Features</h2>
 					<h1 className={ "page-subtitle fade-in" }>What We Offer</h1>
 					<p className={ "page-summary fade-in" }>
@@ -168,14 +166,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 			</section>
 			
 			<section className={ "page" } id={ "developers" }>
-				<InView as={ "div" } onChange={ (inView, entry) => {
-					entry.target.querySelectorAll(".fade-in").forEach((el, i) => {
-						setTimeout(() => {
-							if (inView) el.classList.add("fade-in-visible");
-							else el.classList.remove("fade-in-visible");
-						}, (i + 1) * 100);
-					});
-				} }>
+				<InView as={ "div" } onChange={ inViewOnChange }>
 					<h2 className={ "page-title fade-in" }>Developers</h2>
 					<h1 className={ "page-subtitle fade-in" }>Meet our Team</h1>
 					<p className={ "page-summary fade-in" }>
@@ -267,14 +258,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 			</section>
 			
 			<section className={ "page" } id={ "development" }>
-				<InView as={ "div" } onChange={ (inView, entry) => {
-					entry.target.querySelectorAll(".fade-in").forEach((el, i) => {
-						setTimeout(() => {
-							if (inView) el.classList.add("fade-in-visible");
-							else el.classList.remove("fade-in-visible");
-						}, (i + 1) * 100);
-					});
-				} }>
+				<InView as={ "div" } onChange={ inViewOnChange }>
 					<h2 className={ "page-title fade-in" }>Development</h2>
 					<h1 className={ "page-subtitle fade-in" }>Follow and take part in the process</h1>
 					<p className={ "page-summary fade-in" }>
@@ -331,10 +315,156 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 				</InView>
 			</section>
 			
+			<section className={ "page" } id={ "plans" }>
+				<InView as={ "div" } onChange={ inViewOnChange }>
+					<h2 className={ "page-title fade-in" }>Meet our Plans</h2>
+					<h1 className={ "page-subtitle fade-in" }>Take the next step</h1>
+					<p className={ "page-summary fade-in" }>Take a look at our convenient plans that intend to improve
+						your question-related workflows even more.</p>
+					
+					<div className={ "plans" }>
+						<div className={ "plan fade-in" }>
+							<div style={ {
+								display: "flex",
+								flexDirection: "row",
+								alignItems: "center",
+								gap: "var(--spacing)",
+								background: "var(--background-color-secondary)",
+								margin: "calc(var(--spacing) * -1)",
+								padding: "var(--spacing)"
+							} }>
+								<h1>Guest</h1>
+								<span className={ "badge badge-outline" }>Most Secure</span>
+							</div>
+							<hr style={ { opacity: 0 } }/>
+							<p>
+								<i className={ "fi fi-rr-comment primary-icon" }/>
+								<span>
+									<span className={ "caption" }>Basic Features</span>
+									<br/>
+									<span>Ask Questions</span>
+								</span>
+							</p>
+							
+							<div style={ { flex: 1, marginBlock: "var(--spacing)" } }/>
+							<h2>
+								Free.
+								<br/>
+								Forever.
+							</h2>
+						</div>
+						
+						<div className={ "divider fade-in" }/>
+						
+						<div className={ "plan fade-in" }>
+							<div style={ {
+								display: "flex",
+								flexDirection: "row",
+								alignItems: "center",
+								gap: "var(--spacing)",
+								background: "var(--background-color-secondary)",
+								margin: "calc(var(--spacing) * -1)",
+								padding: "var(--spacing)"
+							} }>
+								<h1>User</h1>
+							</div>
+							<hr style={ { opacity: 0 } }/>
+							<p>
+								<i className={ "fi fi-rr-comment primary-icon" }/>
+								<span>
+									<span className={ "caption" }>Basic Features</span>
+									<br/>
+									<span>Ask Questions</span>
+									<br/>
+									<span>Create Answers</span>
+								</span>
+							</p>
+							<hr/>
+							<p>
+								<i className={ "fi fi-rr-brain primary-icon" }/>
+								<span>
+									<span className={ "caption" }>AI Answers</span>
+									<br/>
+									<span>up to 3 / day</span>
+								</span>
+							</p>
+							
+							<div style={ { flex: 1, marginBlock: "var(--spacing)" } }/>
+							<h2>
+								Free.
+								<br/>
+								Forever.
+							</h2>
+						</div>
+						
+						<div className={ "divider fade-in" }/>
+						
+						<div className={ "plan fade-in" }>
+							<div style={ {
+								display: "flex",
+								flexDirection: "row",
+								alignItems: "center",
+								gap: "var(--spacing)",
+								background: "var(--background-color-secondary)",
+								margin: "calc(var(--spacing) * -1)",
+								padding: "var(--spacing)"
+							} }>
+								<h1>Pro</h1>
+								<span className={ "badge" }>Recommended</span>
+							</div>
+							<hr style={ { opacity: 0 } }/>
+							<p>
+								<i className={ "fi fi-rr-comment primary-icon" }/>
+								<span>
+									<span className={ "caption" }>Basic Features</span>
+									<br/>
+									<span>Ask Questions</span>
+									<br/>
+									<span>Create Answers</span>
+								</span>
+							</p>
+							<hr/>
+							<p>
+								<i className={ "fi fi-rr-brain primary-icon" }/>
+								<span>
+									<span className={ "caption" }>AI Answers</span>
+									<br/>
+									<span>unlimited</span>
+								</span>
+							</p>
+							
+							<div style={ { flex: 1, marginBlock: "var(--spacing)" } }/>
+							<h2>
+								2.99
+								<span className={ "caption" }> / mo.</span>
+							</h2>
+						</div>
+					</div>
+				</InView>
+			</section>
+			
 			<section className={ "page" }>
-				<p>© simpleQ 2024</p>
 				<div>
-					UIcons by <a href="https://www.flaticon.com/uicons">Flaticon</a>
+					<h2 className={ "page-title" }>Let's go!</h2>
+					<h1 className={ "page-subtitle" }>What are you waiting for?</h1>
+					<p className={ "page-summary" }>Instead of reading this, you could have already submitted your first
+						question to the community.</p>
+				</div>
+				<div style={ {
+					display: "flex",
+					flexDirection: "row",
+					alignItems: "flex-end",
+					borderTop: "var(--outline-width) solid var(--border-color)",
+					paddingBlock: "var(--spacing)"
+				} }>
+					<div style={ { flex: 1 } }>
+						<p>© simpleQ 2024</p>
+						<a href={ "mailto:mail@simpleq.simplepeople.com" }>mail@simpleq.simplepeople.com</a>
+					</div>
+					<div style={ { flex: 1 } }>
+						UIcons by <a href={ "https://www.flaticon.com/uicons" }
+									 target={ "_blank" } rel={ "noreferrer" }>Flaticon</a>
+					</div>
 				</div>
 			</section>
 		</main>

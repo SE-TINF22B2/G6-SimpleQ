@@ -91,8 +91,26 @@
 				width: 100%;
 			}
 
+			position: relative;
+
+			&:not(:last-child)::after {
+				position: absolute;
+				content: '';
+				height: 50px;
+				width: 100%;
+				bottom: -25px;
+				left: 0;
+				background: var(--background-color-primary);
+				border-radius: 50%;
+				z-index: 1;
+			}
+
 			&:nth-child(even) {
 				background-color: var(--background-color-secondary);
+
+				&::after {
+					background-color: var(--background-color-secondary);
+				}
 			}
 
 			.fade-in {
@@ -435,6 +453,91 @@
 					.caption {
 						text-align: center;
 						margin-bottom: var(--spacing);
+					}
+				}
+			}
+
+			.plans {
+				margin-top: calc(var(--spacing) * 2);
+				display: flex;
+				flex-direction: row;
+				align-items: stretch;
+				font-size: 1.2em;
+
+				.divider {
+					width: var(--outline-width);
+					background: var(--border-color);
+					transition: var(--transition);
+					border-radius: var(--border-radius);
+				}
+
+				&:hover .divider {
+					opacity: 0;
+				}
+
+				.plan {
+					flex: 1;
+					padding: var(--spacing);
+					display: flex;
+					flex-direction: column;
+
+					transition: var(--transition);
+					overflow: hidden;
+
+					&:first-child {
+						border-top-left-radius: var(--border-radius);
+					}
+
+					&:last-child {
+						border-top-right-radius: var(--border-radius);
+					}
+
+					&:hover {
+						box-shadow: var(--box-shadow-elevated);
+						border-radius: var(--border-radius);
+						z-index: 10;
+
+						h2:last-child::before {
+							opacity: 1;
+							transform: rotate(-2.5deg) scale(1);
+						}
+					}
+
+					h1 {
+						font-size: 1.8em;
+					}
+
+					h2:last-child {
+						text-align: center;
+
+						position: relative;
+
+						&::before {
+							position: absolute;
+							content: '';
+							height: 115%;
+							width: 90%;
+							top: -10%;
+							left: 5%;
+							border: var(--outline-width) solid var(--primary-color);
+							border-radius: 50% 40% 60% 40%;
+							opacity: 0;
+							transform: rotate(2.5deg) scale(0.9);
+							transition: var(--transition);
+						}
+					}
+
+					p {
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						gap: var(--spacing);
+						font-size: 0.95em;
+
+						i {
+							font-size: 1.2em;
+							height: 44px;
+						}
 					}
 				}
 			}
