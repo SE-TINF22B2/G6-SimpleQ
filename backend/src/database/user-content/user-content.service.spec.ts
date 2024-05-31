@@ -1,6 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../prisma.service';
-import { UserContentService } from './user-content.service';
 import {
   testAnswer,
   testDiscussion,
@@ -12,6 +10,8 @@ import {
   testUserContentQuestionList,
   testVoteList,
 } from '../mockData';
+import { PrismaService } from '../prisma.service';
+import { UserContentService } from './user-content.service';
 import { mockPrisma } from '../mockedPrismaClient';
 
 describe('UserContentService', () => {
@@ -119,10 +119,10 @@ describe('UserContentService', () => {
     await expect(
       service.createDiscussion(
         testUserContentDiscussion.ownerID,
-        testUserContentDiscussion.groupID,
         testUserContentDiscussion.content,
         testDiscussion.title,
         testDiscussion.isPrivate,
+        testUserContentDiscussion.groupID,
       ),
     ).resolves.toEqual({
       userContent: testUserContentDiscussion,
