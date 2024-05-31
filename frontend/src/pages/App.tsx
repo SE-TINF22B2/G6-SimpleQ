@@ -18,6 +18,7 @@ import Activity from "./dashboard/activity/Activity";
 import Quests from "./dashboard/quests/Quests";
 import MyQuestions from "./dashboard/MyQuestions";
 import ConsentBanner from "../components/consentbanner/ConsentBanner";
+import axios from "axios";
 
 // internationalization resources
 const resources = {
@@ -36,6 +37,10 @@ i18n.use(detector)
 			escapeValue: false
 		}
 	});
+
+// axios setup for fetching backend data
+axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
+axios.defaults.timeout = 6000;
 
 /**
  * Renders the app and takes care of choosing the appropriate language and theme
