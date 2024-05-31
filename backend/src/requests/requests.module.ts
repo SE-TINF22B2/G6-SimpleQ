@@ -1,4 +1,4 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, Logger, Module } from '@nestjs/common';
 import * as process from 'process';
 import { AuthService } from '../auth/auth.service';
 import { BlacklistService } from '../database/blacklist/blacklist.service';
@@ -9,7 +9,7 @@ import { ModerationService } from '../database/moderation/moderation.service';
 import { PrismaService } from '../database/prisma.service';
 import { QuestService } from '../database/quest/quest.service';
 import { TagService } from '../database/tag/tag.service';
-import { UserContentService as DBUserContentService } from '../database/user-content/user-content.service';
+import { UserContentService } from '../database/user-content/user-content.service';
 import { UserService } from '../database/user/user.service';
 import { VoteService } from '../database/vote/vote.service';
 import { DevelopmentController } from './development/development.controller';
@@ -19,12 +19,11 @@ import { QuestionsController } from './questions/questions.controller';
 import { QuestsController } from './quests/quests.controller';
 import { SpecialController } from './special/special.controller';
 import { TagController } from './tag/tag.controller';
-import { UserContentService } from './user-content/user-content.service';
+import { UserContentRequestService } from './user-content-request/user-content-request.service';
 import { UserController } from './user/user.controller';
+import { RequestsUserService } from './user/requests-user.service';
 
-@Module({
-  providers: [UserContentService],
-})
+@Module({})
 export class RequestsModule {
   static register(): DynamicModule {
     const controllers: any[] = [
@@ -48,18 +47,19 @@ export class RequestsModule {
       ModerationService,
       QuestService,
       TagService,
-      DBUserContentService,
       UserService,
       UserContentService,
       VoteService,
       // request services
+      RequestsUserService,
       DevelopmentService,
+      UserContentRequestService,
     ];
     if (process.env.NODE_ENV === 'dev') {
-      console.log('Dev: DevelopmentController is loaded.');
+      Logger.log('Dev: DevelopmentController is loaded.', 'RequestModule');
       controllers.push(DevelopmentController);
     } else {
-      console.log('Prod: DevelopmentController skipped');
+      Logger.log('Prod: DevelopmentController skipped', 'RequestModule');
     }
     return {
       module: RequestsModule,

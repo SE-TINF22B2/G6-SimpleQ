@@ -9,9 +9,9 @@ import {
   Put,
   Req,
 } from '@nestjs/common';
-import {UserService} from '../../database/user/user.service';
-import {ExpertService} from '../../database/expert/expert.service';
-import {RequestsUserService} from './requests-user.service';
+import { UserService } from '../../database/user/user.service';
+import { ExpertService } from '../../database/expert/expert.service';
+import { RequestsUserService } from './requests-user.service';
 
 enum Registration { // TODO extract
   registered = 'registered',

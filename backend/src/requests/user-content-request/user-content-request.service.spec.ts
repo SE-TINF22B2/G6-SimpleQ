@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../database/prisma.service';
-import { UserContentService as DBUserContentService } from '../../database/user-content/user-content.service';
+import { UserContentService } from '../../database/user-content/user-content.service';
 import { VoteService } from '../../database/vote/vote.service';
-import { UserContentRequestService } from './user-content.service';
+import { UserContentRequestService } from './user-content-request.service';
 
 describe('UserContentRequestService', () => {
   let service: UserContentRequestService;
@@ -11,9 +11,9 @@ describe('UserContentRequestService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UserContentRequestService,
-        DBUserContentService,
-        VoteService,
+        UserContentService,
         PrismaService,
+        VoteService,
       ],
     }).compile();
 

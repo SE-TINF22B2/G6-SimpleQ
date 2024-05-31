@@ -12,8 +12,6 @@ import {
   Vote,
 } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
-import { SearchQuery } from '../../requests/questions/dto/search.dto';
-import { QueryParameters } from '../../requests/questions/dto/query-params.dto';
 
 @Injectable()
 export class UserContentService {
@@ -93,7 +91,7 @@ export class UserContentService {
    * @param query typeof SearchQuery described in ./dto/search.dto.ts
    * */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async search(query: SearchQuery) {
+  async search(query: any) {
     // TODO: This method must be implemented
     return [];
   }
@@ -212,7 +210,7 @@ export class UserContentService {
    * */
   async getAnswersOfGroupID(
     groupID: string | undefined,
-    sortCriteria: QueryParameters,
+    sortCriteria: any,
   ): Promise<object[]> {
     // TODO: needs to be implemented
     return [];
@@ -328,6 +326,4 @@ export class UserContentService {
       discussion: discussion,
     };
   }
-
-
 }

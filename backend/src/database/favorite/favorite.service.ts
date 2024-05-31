@@ -22,6 +22,20 @@ export class FavoriteService {
     });
   }
 
+  async deleteFavorite(
+    favoriteUserID: string,
+    contentID: string,
+  ): Promise<object> {
+    return this.prisma.favorite.delete({
+      where: {
+        contentID_favoriteUserID: {
+          contentID,
+          favoriteUserID,
+        },
+      },
+    });
+  }
+
   async getFavorite(
     favoriteUserID: string,
     contentID: string,

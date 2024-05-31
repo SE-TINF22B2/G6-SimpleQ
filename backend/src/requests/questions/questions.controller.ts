@@ -11,14 +11,17 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
-import { Type, UserContentService } from '../user-content/user-content.service';
+import {
+  Type,
+  UserContentRequestService,
+} from '../user-content-request/user-content-request.service';
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
 
 @Controller('question') // prefix: domain/question/...
 export class QuestionsController {
-  constructor(private readonly userContentService: UserContentService) {} //     private readonly services
+  constructor(private readonly userContentService: UserContentRequestService) {} //     private readonly services
 
   /*
    * Get the currently must up voted, questions from the last seven days

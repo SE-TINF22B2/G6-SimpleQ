@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { QuestionsController } from './questions.controller';
-import { UserContentService } from '../user-content/user-content.service';
-import { UserContentService as DBUserContentService } from '../../database/user-content/user-content.service';
 import { PrismaService } from '../../database/prisma.service';
+import { UserContentService as DBUserContentService } from '../../database/user-content/user-content.service';
+import { VoteService } from '../../database/vote/vote.service';
+import { UserContentRequestService } from '../user-content-request/user-content-request.service';
+import { QuestionsController } from './questions.controller';
 
 describe('QuestionsController', () => {
   let controller: QuestionsController;
@@ -10,7 +11,12 @@ describe('QuestionsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [QuestionsController],
-      providers: [UserContentService, DBUserContentService, PrismaService],
+      providers: [
+        UserContentRequestService,
+        DBUserContentService,
+        VoteService,
+        PrismaService,
+      ],
     }).compile();
 
     controller = module.get<QuestionsController>(QuestionsController);

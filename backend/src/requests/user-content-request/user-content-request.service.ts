@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { UserContentService as DBUserContentService } from '../../database/user-content/user-content.service';
+import { UserContentService } from '../../database/user-content/user-content.service';
 import { VoteService } from '../../database/vote/vote.service';
 import { QueryParameters } from '../questions/dto/query-params.dto';
 import { SearchQuery } from '../questions/dto/search.dto';
@@ -18,12 +18,12 @@ export enum Type {
 @Injectable()
 export class UserContentRequestService {
   constructor(
-    private readonly dbUserContentService: DBUserContentService,
+    private readonly userContentService: UserContentService,
     private readonly voteService: VoteService,
   ) {}
 
   async getTrendingQuestions(req: any) {
-    const questions = await this.dbUserContentService.getTrendingQuestions();
+    const questions = await this.userContentService.getTrendingQuestions();
 
     const results: any[] = [];
     for (let i = 0; i < questions.length; i++) {
@@ -40,7 +40,7 @@ export class UserContentRequestService {
   }
 
   async getUserContent(id: string, type: Type, userId?: string) {
-    const result = await this.dbUserContentService.getQuestion(id);
+    const result = await this.userContentService.getQuestion(id);
 
     if (result.userContent == null)
       throw new NotFoundException(
@@ -48,15 +48,15 @@ export class UserContentRequestService {
       );
 
     const evaluation =
-      await this.dbUserContentService.getLikesAndDislikesOfUserContent(
+      await this.userContentService.getLikesAndDislikesOfUserContent(
         result.userContent?.userContentID as string,
       );
 
     const numberOfAnswers =
-      await this.dbUserContentService.getNumberOfAnswersFromGroupID(
+      await this.userContentService.getNumberOfAnswersFromGroupID(
         result.userContent?.groupID as string,
       );
-    const creator = await this.dbUserContentService.getAuthorOfUserContent(
+    const creator = await this.userContentService.getAuthorOfUserContent(
       result?.userContent?.userContentID as string,
     );
     console.log(userId);
@@ -83,7 +83,7 @@ export class UserContentRequestService {
         // @ts-ignore
         response.title = result.question?.title;
         // @ts-ignore
-        response.tags = await this.dbUserContentService.getTagsOfUserContent(id);
+        response.tags = await this.userContentService.getTagsOfUserContent(id);
       }
       return response;
     }
@@ -93,7 +93,7 @@ export class UserContentRequestService {
   }
 
   async getTitleOfQuestion(id: string) {
-    const question = await this.dbUserContentService.getQuestion(id);
+    const question = await this.userContentService.getQuestion(id);
     if (question == null)
       throw new NotFoundException('No question found with this id.');
 
@@ -111,11 +111,11 @@ export class UserContentRequestService {
    * @throws NotFoundException if no question is found with that id
    * */
   async getAnswersOfQuestion(id: string, sortCriteria: QueryParameters) {
-    const question = await this.dbUserContentService.getQuestion(id);
+    const question = await this.userContentService.getQuestion(id);
     if (question == null)
       throw new NotFoundException('No question found with this id.');
 
-    const rawAnswers = await this.dbUserContentService.getAnswersOfGroupID(
+    const rawAnswers = await this.userContentService.getAnswersOfGroupID(
       question?.userContent?.groupID,
       sortCriteria,
     );
@@ -142,7 +142,7 @@ export class UserContentRequestService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async search(query: SearchQuery, req: any) {
     console.log(req);
-    return await this.dbUserContentService.search(query);
+    return await this.userContentService.search(query);
   }
 
   /**
@@ -156,14 +156,14 @@ export class UserContentRequestService {
       let result;
       switch (type) {
         case Type.QUESTION:
-          result = await this.dbUserContentService.createQuestion(
+          result = await this.userContentService.createQuestion(
             userId,
             data.content,
             data.title,
           );
           break;
         case Type.DISCUSSION:
-          result = await this.dbUserContentService.createDiscussion(
+          result = await this.userContentService.createDiscussion(
             userId,
             data.content,
             data.title,
@@ -171,7 +171,7 @@ export class UserContentRequestService {
           );
           break;
         case Type.ANSWER:
-          result = await this.dbUserContentService.createAnswer(
+          result = await this.userContentService.createAnswer(
             userId,
             data.groupId,
             data.content,
