@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404: Lost in Space</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+        h1 {
+            font-size: 5em;
+            margin: 0;
+            color: #333;
+        }
+        p {
+            font-size: 1.5em;
+            color: #666;
+        }
+        .space {
+            font-size: 100px;
+            color: #fff;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+        .asteroid {
+            left: 50px;
+            transform: translateX(-50%) translateY(-50%);
+            font-size: 20px;
+            color: #666;
+            animation: asteroid 2s linear infinite;
+        }
+
+        .left{
+            position: relative;
+            left: -60px;
+            top: -10px;
+        }
+        .right{
+            position: relative;
+            left: 50px;
+        }
+
+        @keyframes asteroid {
+            0%, 100% {
+                opacity: 0.5;
+                transform: rotate(0deg);
+            }
+            25% {
+                opacity: 1;
+                transform: rotate(10deg);
+            }
+            75% {
+                opacity: 1;
+                transform: rotate(-10deg);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="asteroid left">⭐️</div>
+    <div class="space">🚀</div>
+    <div class="asteroid right">⭐️</div>
+    <h1>404</h1>
+    <p>Oops, it looks like we're lost in space!</p>
+    <p>We're not quite sure how we got here,<br> but we're pretty sure it's not intentional.</p>
+    <a href="/">Take me home</a>
+</div>
+
+</body>
+</html>
