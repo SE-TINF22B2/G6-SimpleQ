@@ -34,6 +34,7 @@ export default function Editor(props: {}) {
 					<i className={ "fi fi-rr-question" }/>
 					<span id={ "editor-question-title" }
 						  contentEditable={ hasBeenSubmitted ? false : "plaintext-only" }
+						  suppressContentEditableWarning={ true }
 						  onInput={ (e) => {
 							  let title = (e.target as HTMLSpanElement).innerText.trim();
 							  while (title.includes("  ")) title = title.replace("  ", " ");
