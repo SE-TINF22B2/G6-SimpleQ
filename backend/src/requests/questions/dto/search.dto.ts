@@ -1,21 +1,10 @@
-import { IsOptional, IsPositive, IsString } from 'class-validator';
+import {IsNotEmpty, IsString} from 'class-validator';
+import { QueryParameters } from './query-params.dto';
 
 export type SortBy = 'ldr' | 'likes' | 'dislikes' | 'timestamp';
 
-export class SearchQuery {
+export class SearchQuery extends QueryParameters {
   @IsString()
+  @IsNotEmpty()
   q: string;
-
-  @IsOptional()
-  sortBy: SortBy;
-
-  @IsOptional()
-  sortDirection: 'ASC' | 'DESC';
-
-  @IsOptional()
-  @IsPositive()
-  offset: number;
-
-  @IsOptional()
-  limit: number;
 }

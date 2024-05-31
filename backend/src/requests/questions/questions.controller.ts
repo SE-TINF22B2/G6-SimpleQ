@@ -1,15 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import {
+  Body,
   Controller,
   Get,
   Param,
   ParseUUIDPipe,
   Post,
   Query,
+  Req,
+  ValidationPipe,
 } from '@nestjs/common';
-import { SearchQuery } from './dto/search.dto';
 import { Type, UserContentService } from '../user-content/user-content.service';
+import { CreateQuestion } from './dto/create-question.dto';
+import { QueryParameters } from './dto/query-params.dto';
+import { SearchQuery } from './dto/search.dto';
 
 @Controller('question') // prefix: domain/question/...
 export class QuestionsController {
@@ -20,8 +25,8 @@ export class QuestionsController {
    * @Returns an array of trending questions
    * */
   @Get('trending')
-  async getTrending(): Promise<object[]> {
-    return this.userContentService.getTrendingQuestions();
+  async getTrending(@Req() request: any): Promise<object[]> {
+    return this.userContentService.getTrendingQuestions(request);
   }
 
   /*
@@ -34,16 +39,23 @@ export class QuestionsController {
    * limit - the limit of questions, defaults to 10
    * */
   @Get('search')
-  getSearch(@Query() query: SearchQuery): Promise<object> {
-    console.log(query);
-    return this.userContentService.search();
+  getSearch(
+    @Req() req: any,
+    @Query(new ValidationPipe()) query: SearchQuery,
+  ): Promise<object> {
+    return this.userContentService.search(query, req);
   }
 
   @Get(':id')
   async getQuestionDetails(
+    @Req() request: any,
     @Param('id', new ParseUUIDPipe()) id: string,
   ): Promise<object> {
-    return this.userContentService.getUserContent(id, Type.QUESTION);
+    return this.userContentService.getUserContent(
+      id,
+      Type.QUESTION,
+      request?.userId,
+    );
   }
 
   @Get(':id/title')
@@ -51,22 +63,24 @@ export class QuestionsController {
     @Param('id', new ParseUUIDPipe()) id: string,
   ): Promise<object> {
     //@ts-ignore
-    return {
-      title: 'not implemented',
-    };
+    return await this.userContentService.getTitleOfQuestion(id);
   }
   @Get(':id/answers')
   async getQuestionAnswers(
     @Param('id', new ParseUUIDPipe()) id: string,
+    @Query(new ValidationPipe()) query: QueryParameters,
   ): Promise<object> {
-    //@ts-ignore
-    return 'not implemented';
+    return this.userContentService.getAnswersOfQuestion(id, query);
   }
   @Post('create')
   async createNewQuestion(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Req() req: any,
+    @Body(new ValidationPipe()) createQuestion: CreateQuestion,
   ): Promise<object> {
-    //@ts-ignore
-    return 'not implemented';
+    return await this.userContentService.createUserContent(
+      createQuestion,
+      Type.QUESTION,
+      req.userId,
+    );
   }
 }

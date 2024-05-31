@@ -1,25 +1,26 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { QuestionsController } from './questions/questions.controller';
-import { SpecialController } from './special/special.controller';
-import { FavouritesController } from './favourites/favourites.controller';
 import * as process from 'process';
-import { DevelopmentController } from './development/development.controller';
-import { QuestsController } from './quests/quests.controller';
-import { TagController } from './tag/tag.controller';
-import { UserController } from './user/user.controller';
-import { UserService } from '../database/user/user.service';
-import { PrismaService } from '../database/prisma.service';
-import { ExpertService } from '../database/expert/expert.service';
-import { LoginAttemptService } from '../database/login-attempt/login-attempt.service';
+import { AuthService } from '../auth/auth.service';
 import { BlacklistService } from '../database/blacklist/blacklist.service';
+import { ExpertService } from '../database/expert/expert.service';
 import { FavoriteService } from '../database/favorite/favorite.service';
+import { LoginAttemptService } from '../database/login-attempt/login-attempt.service';
 import { ModerationService } from '../database/moderation/moderation.service';
+import { PrismaService } from '../database/prisma.service';
 import { QuestService } from '../database/quest/quest.service';
 import { TagService } from '../database/tag/tag.service';
-import { DevelopmentService } from './development/development.service';
-import { AuthService } from '../auth/auth.service';
 import { UserContentService as DBUserContentService } from '../database/user-content/user-content.service';
+import { UserService } from '../database/user/user.service';
+import { VoteService } from '../database/vote/vote.service';
+import { DevelopmentController } from './development/development.controller';
+import { DevelopmentService } from './development/development.service';
+import { FavouritesController } from './favourites/favourites.controller';
+import { QuestionsController } from './questions/questions.controller';
+import { QuestsController } from './quests/quests.controller';
+import { SpecialController } from './special/special.controller';
+import { TagController } from './tag/tag.controller';
 import { UserContentService } from './user-content/user-content.service';
+import { UserController } from './user/user.controller';
 
 @Module({
   providers: [UserContentService],
@@ -50,6 +51,7 @@ export class RequestsModule {
       DBUserContentService,
       UserService,
       UserContentService,
+      VoteService,
       // request services
       DevelopmentService,
     ];

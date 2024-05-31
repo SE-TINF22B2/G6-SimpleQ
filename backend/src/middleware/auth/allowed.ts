@@ -1,7 +1,7 @@
 const allowedRequests = [
   'question/search',
   'question/trending',
-  'question/:id',
+  'question/',
   'question/create',
   'tags/find',
   'cookie',
