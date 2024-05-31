@@ -5,7 +5,8 @@ import { Response } from 'express';
 export class SpecialController {
   @Get('/whatWasMyPassword/:id')
   @HttpCode(418)
-  async revealuserPassword(@Res() _res: Response) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async revealuserPassword(@Res() res: Response) {
     throw new ImATeapotException()
   }
 }
