@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import {
   Answer,
@@ -83,6 +84,16 @@ export class UserContentService {
         question: true,
       },
     });
+  }
+
+  /**
+   * Search for questions in the database with given search criteria
+   * @param query typeof SearchQuery described in ./dto/search.dto.ts
+   * */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async search(query: any) {
+    // TODO: This method must be implemented
+    return [];
   }
 
   /**
@@ -192,6 +203,19 @@ export class UserContentService {
     });
   }
 
+  /**
+   * Should return all the answers to a corresponding question
+   * @param groupID the groupId of the question
+   * @returns array with answers or an empty one if no anwers exist
+   * */
+  async getAnswersOfGroupID(
+    groupID: string | undefined,
+    sortCriteria: any,
+  ): Promise<object[]> {
+    // TODO: needs to be implemented
+    return [];
+  }
+
   async getAnswer(
     answerID: string,
   ): Promise<{ userContent: UserContent | null; answer: Answer | null }> {
@@ -257,10 +281,10 @@ export class UserContentService {
   // Discussion
   async createDiscussion(
     ownerID: string | null,
-    groupID: string,
     content: string | null,
     title: string,
     isPrivate: boolean,
+    groupID?: string,
   ): Promise<{ userContent: UserContent; discussion: Discussion }> {
     return this.prisma.$transaction(async (tx) => {
       const createdContent = await tx.userContent.create({
