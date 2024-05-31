@@ -20,6 +20,7 @@ import { AuthService } from '../auth/auth.service';
 import { UserContentService as DBUserContentService } from '../database/user-content/user-content.service';
 import { UserContentService } from './user-content/user-content.service';
 import { RequestsUserService } from './user/requests-user.service';
+import {UserService} from "../database/user/user.service";
 
 @Module({
   providers: [UserContentService, RequestsUserService],
@@ -48,10 +49,11 @@ export class RequestsModule {
       QuestService,
       TagService,
       DBUserContentService,
-      RequestsUserService,
+      UserService,
       UserContentService,
       // request services
       DevelopmentService,
+      RequestsUserService,
     ];
     if (process.env.NODE_ENV === 'dev') {
       console.log('Dev: DevelopmentController is loaded.');
