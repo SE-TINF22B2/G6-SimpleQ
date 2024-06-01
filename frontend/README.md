@@ -9,27 +9,23 @@ die Komponenten wiederverwendet werden können.
 
 ## Erste Schritte
 
-### Verfügbare Skripte von React
+### Verfügbare Skripte des Frontends
 
-`npm start`
+`yarn start`
 Führt die Anwendung im Entwicklungsmodus aus.\
-Diese lässt sich unter [http://localhost:3000](http://localhost:3000) im Browser betrachten.
+Diese lässt sich unter [http://localhost:3006](http://localhost:3006) im Browser betrachten.
 Die Seite wird neu geladen, wenn Änderungen vorgenommen werden.\
-Außerdem wird der Ory-Tunnel auf Port 4000 gestartet, um die Anmeldung zum lokalen Testen zu ermöglichen.
 
-`npm run start-server`
-Startet lediglich die Frontend React-Anwendung.
+`yarn tunnel`
+Der Ory-Tunnel wird auf Port 4000 gestartet, um die Anmeldung zum lokalen Testen zu ermöglichen.
 
-`npm run tunnel`
-Startet lediglich den Ory-Tunnel.
-
-`npm test`
+`yarn test`
 Führt alle Tests geänderter Dateien aus.
 
-`npm run coverage`
+`yarn coverage`
 Berechnet die Abdeckung des SourceCodes durch Tests.
 
-`npm run build`
+`yarn build`
 Bereitet das Frontend für das Deployment vor und baut die Anwendung für die Produktion im `build` Ordner.
 
 ### Hinweise

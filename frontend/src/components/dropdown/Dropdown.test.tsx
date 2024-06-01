@@ -1,9 +1,10 @@
 /* eslint-disable testing-library/no-node-access */
 import { act, render, screen } from "@testing-library/react";
 import Dropdown from "./Dropdown";
+import { vi } from "vitest";
 
 test('testing Dropdown component', async () => {
-	const onClick = jest.fn();
+	const onClick = vi.fn();
 	
 	render(
 		<Dropdown
@@ -49,7 +50,7 @@ test('testing Dropdown component', async () => {
 });
 
 test('testing Dropdown component submenu', async () => {
-	const onClick = jest.fn();
+	const onClick = vi.fn();
 	
 	render(
 		<Dropdown
