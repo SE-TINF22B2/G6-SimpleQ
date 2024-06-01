@@ -35,8 +35,3 @@ jobs:
         run: |
           cd frontend
           yarn lint
-
-      - name: Start application
-        run: |
-          cd frontend
-          yarn start
