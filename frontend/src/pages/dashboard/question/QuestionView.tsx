@@ -10,6 +10,7 @@ import Button from "../../../components/button/Button";
 import { Answer, Question } from "../../../def/Question";
 import { formatDate } from "../../../def/converter";
 import { useAlert } from "react-alert";
+import { axiosError } from "../../../def/axios-error";
 
 /**
  * Renders the question page
@@ -48,7 +49,7 @@ export default function QuestionView() {
 				  }
 				  setQuestion(_question);
 			  })
-			  .catch(err => alert.show(err.message, { type: "error" }));
+			  .catch(err => axiosError(err, alert));
 	}, [id, navigate, alert]);
 	
 	const getSortByIcon = () => {

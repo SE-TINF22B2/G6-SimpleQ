@@ -10,6 +10,7 @@ import { Question } from "../../../def/Question";
 import Button from "../../../components/button/Button";
 import { formatDate } from "../../../def/converter";
 import { useAlert } from "react-alert";
+import { axiosError } from "../../../def/axios-error";
 
 /**
  * Renders the trending page, currently static
@@ -45,7 +46,7 @@ export default function Trending(props: {}) {
 				  });
 				  setQuestions(_questions);
 			  })
-			  .catch(err => alert.show(err.message, { type: "error" }));
+			  .catch(err => axiosError(err, alert));
 	}, [alert]);
 	
 	return <>

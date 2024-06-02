@@ -5,6 +5,7 @@ import Button from "../../../components/button/Button";
 import TextEditor from "../../../components/texteditor/TextEditor";
 import { useTranslation } from "react-i18next";
 import { useAlert } from "react-alert";
+import { axiosError } from "../../../def/axios-error";
 
 /**
  * Renders the editor page used to ask a new question
@@ -196,15 +197,7 @@ export default function Editor(props: {}) {
 										alert.info(res.data);
 										console.log(res.data);
 									})
-									.catch(err => alert.error(<>
-										<span style={ { fontWeight: "bold" } }>{ err.message }</span>
-										{ err.response.data.message.map((m: string) => {
-											return <>
-												<br/>
-												{ m }
-											</>
-										}) }
-									</>));
+									.catch(err => axiosError(err, alert));
 						
 						setHasBeenSubmitted(false);
 					} }

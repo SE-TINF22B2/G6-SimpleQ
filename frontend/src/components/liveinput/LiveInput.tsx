@@ -3,6 +3,7 @@ import "./LiveInput.scss";
 import { useTranslation } from "react-i18next";
 import axios, { CancelTokenSource } from "axios";
 import { useAlert } from "react-alert";
+import { axiosError } from "../../def/axios-error";
 
 let cancelToken: CancelTokenSource;
 
@@ -42,7 +43,7 @@ export default function LiveInput(props: Props) {
 			  .catch(err => {
 				  if (err.message.includes('new request')) return;
 				  setSuggestions([]);
-				  alert.show(err.message, { type: "error" });
+				  axiosError(err, alert);
 			  })
 			  .finally(() => setIsLoading(false));
 	}
