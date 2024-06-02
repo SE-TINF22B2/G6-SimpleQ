@@ -8,12 +8,21 @@ import { AlertContainer } from "react-alert";
  * @param err The error object provided in the catch block of an axios request
  * @param alert The AlertContainer used to show the alert
  */
-export const axiosError = (err: any, alert: AlertContainer) => alert.error(<>
-	<span style={ { fontWeight: "bold" } }>{ err.message }</span>
-	{ err.response.data.message.map((m: string) => {
-		return <>
-			<br/>
-			{ m }
-		</>
-	}) }
-</>)
+export const axiosError = (err: any, alert: AlertContainer) => {
+	const backendMessage = err.response.data.message;
+	
+	alert.error(<>
+		<span style={ { fontWeight: "bold" } }>{ err.message }</span>
+		{ Array.isArray(backendMessage)
+			? backendMessage.map((m: string) => {
+				return <>
+					<br/>
+					{ m }
+				</>
+			})
+			: <>
+				<br/>
+				{ backendMessage }
+			</> }
+	</>);
+}
