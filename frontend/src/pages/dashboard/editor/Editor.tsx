@@ -4,12 +4,14 @@ import LiveInput from "../../../components/liveinput/LiveInput";
 import Button from "../../../components/button/Button";
 import TextEditor from "../../../components/texteditor/TextEditor";
 import { useTranslation } from "react-i18next";
+import { useAlert } from "react-alert";
 
 /**
  * Renders the editor page used to ask a new question
  */
 export default function Editor(props: {}) {
 	const { t } = useTranslation();
+	const alert = useAlert();
 	
 	const [title, setTitle] = React.useState("New Question");
 	const [tags, setTags] = React.useState<string[]>([]);
@@ -180,13 +182,33 @@ export default function Editor(props: {}) {
 		<div className={ "container editor-container transparent" } style={ { display: "flex" } }>
 			<div style={ { flex: 1 } }/>
 			<Button buttonStyle={ "primary" } icon={ "fi fi-rr-paper-plane" }
-					onClick={ () => {
+					onClick={ async () => {
 						setHasBeenSubmitted(true);
 						
-						// Todo: Remove this timeout
-						setTimeout(() => setHasBeenSubmitted(false), 1000);
+						await global.axios.post("question/create", {
+							title: title,
+							tags: tags,
+							content: description,
+							useAI: questionType === "simp"
+						})
+									.then(res => {
+										alert.info(res.status);
+										alert.info(res.data);
+										console.log(res.data);
+									})
+									.catch(err => alert.error(<>
+										<span style={ { fontWeight: "bold" } }>{ err.message }</span>
+										{ err.response.data.message.map((m: string) => {
+											return <>
+												<br/>
+												{ m }
+											</>
+										}) }
+									</>));
+						
+						setHasBeenSubmitted(false);
 					} }
-					disabled={ !isTitleValid || !isTagsValid || !isDescriptionValid }>
+					disabled={ !isTitleValid || !isTagsValid || !isDescriptionValid || hasBeenSubmitted }>
 				{ t('dashboard.questionEditor.submit') }
 			</Button>
 		</div>

@@ -4,7 +4,7 @@ import "./Button.scss";
 interface Props {
 	buttonStyle?: "primary" | "glass",
 	icon?: string,
-	onClick?: () => void,
+	onClick?: () => Promise<void>,
 	children?: React.ReactNode,
 	disabled?: boolean,
 	placeIconRight?: boolean
@@ -25,12 +25,12 @@ export default function Button(props: Props) {
 	return (
 		<button className={ "btn btn-" + (props.buttonStyle ?? "glass") }
 				disabled={ props.disabled || isLoading }
-				onClick={ () => {
+				onClick={ async () => {
 					if (!props.onClick) return;
 					if (isLoading) return;
 					
 					setIsLoading(true);
-					props.onClick();
+					await props.onClick();
 					
 					setIsLoading(false);
 				} }>
