@@ -40,7 +40,7 @@ i18n.use(detector)
 
 // axios setup for fetching backend data
 const axiosInstance = axios.create();
-axiosInstance.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
+axiosInstance.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 axiosInstance.defaults.timeout = 6000;
 global.axios = axiosInstance;
 

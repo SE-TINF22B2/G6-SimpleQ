@@ -24,14 +24,14 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend
-          npm install
+          yarn install
 
       - name: Run Test Script
         run: |
           cd frontend
-          npm run test
+          yarn test
 
       - name: Lint application
         run: |
           cd frontend
-          npm run lint
+          yarn lint

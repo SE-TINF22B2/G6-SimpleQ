@@ -18,10 +18,14 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
-		"jsx": "react-jsx"
+		"jsx": "react-jsx",
+		"types": [
+			"vite/client"
+		]
 	},
 	"include": [
 		"global.d.ts",
-		"src"
+		"src",
+		"node_modules/@types/node/globals.global.d.ts"
 	]
 }
