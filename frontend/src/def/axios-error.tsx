@@ -9,7 +9,7 @@ import { AlertContainer } from "react-alert";
  * @param alert The AlertContainer used to show the alert
  */
 export const axiosError = (err: any, alert: AlertContainer) => {
-	const backendMessage = err.response.data.message;
+	const backendMessage = err.response?.data.message;
 	
 	alert.error(<>
 		<span style={ { fontWeight: "bold" } }>{ err.message }</span>
