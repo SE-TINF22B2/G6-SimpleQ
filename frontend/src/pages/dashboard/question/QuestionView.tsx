@@ -21,6 +21,7 @@ export default function QuestionView() {
 	
 	const [question, setQuestion] = React.useState<Question | undefined>(undefined);
 	const [answers, setAnswers] = React.useState<Answer[]>([]);
+	const [answersLoading, setAnswersLoading] = React.useState(true);
 	const [sortBy, setSortBy] = React.useState<"ldr" | "likes" | "dislikes" | "timestamp">("ldr");
 	const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">("desc");
 	const [enableAI, setEnableAI] = React.useState(true);
@@ -30,9 +31,8 @@ export default function QuestionView() {
 	const alert = useAlert();
 	
 	useEffect(() => {
-		global.axios.get("question/" + encodeURIComponent(id ?? ""), { withCredentials: true })
+		global.axios.get("question/" + encodeURIComponent(id ?? ""))
 			  .then(res => {
-				  console.log(res);
 				  let _question: Question = {
 					  answers: res.data.numberOfAnswers ?? 0,
 					  author: res.data.author ?? undefined,
@@ -50,6 +50,24 @@ export default function QuestionView() {
 				  setQuestion(_question);
 			  })
 			  .catch(err => axiosError(err, alert));
+		
+		global.axios.get("question/" + encodeURIComponent(id ?? "") + "/answers")
+			  .then(res => {
+				  let _answers: Answer[] = res.data.map((_answer: any) => {
+					  return {
+						  id: _answer.id ?? "",
+						  content: _answer.content ?? "",
+						  created: formatDate(_answer.created ?? ""),
+						  likes: _answer.likes ?? 0,
+						  dislikes: _answer.dislikes ?? 0,
+						  rating: "none",
+						  author: _answer.author ?? undefined
+					  }
+				  });
+				  setAnswers(_answers);
+			  })
+			  .catch(err => axiosError(err, alert))
+			  .finally(() => setAnswersLoading(false));
 	}, [id, navigate, alert]);
 	
 	const getSortByIcon = () => {
@@ -190,7 +208,7 @@ export default function QuestionView() {
 			
 			<hr style={ { margin: 0 } }/>
 			
-			{ question
+			{ !answersLoading
 				? answers.map((answer, index) => renderAnswer(answer, index))
 				: <>
 					{ renderAnswerSkeleton() }
