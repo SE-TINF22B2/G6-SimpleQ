@@ -1,12 +1,17 @@
 import {
+  HttpException,
+  HttpStatus,
   Injectable,
-  InternalServerErrorException, NotFoundException,
+  InternalServerErrorException,
+  NotAcceptableException,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginAttempt } from '@prisma/client';
 import { LoginAttemptService } from '../../database/login-attempt/login-attempt.service';
 import { UserService } from '../../database/user/user.service';
-import {ExpertService} from "../../database/expert/expert.service";
+import { ExpertService } from '../../database/expert/expert.service';
+import { UpdateUser } from './dto/update-user.dto';
 
 enum Registration { // TODO extract
   registered = 'registered',
@@ -21,7 +26,12 @@ export class RequestsUserService {
     private readonly expertService: ExpertService,
   ) {}
 
-  async getProfileWrapper(userId:string){
+  /**
+   * Get information on a user identified by its id
+   * @returns user if found, object after the defined schema in OpenAPI
+   * @throws NotFoundException if no user found with id
+   * */
+  async getProfileWrapper(userId: string) {
     const usrProfile = await this.userService.getUser(userId);
     const expertTags = await this.expertService.getExpertTagsForUser(userId);
 
@@ -29,8 +39,8 @@ export class RequestsUserService {
       throw new NotFoundException('User does not exist');
     }
     const accountState: Registration = usrProfile.isPro
-        ? Registration.proUser
-        : Registration.registered;
+      ? Registration.proUser
+      : Registration.registered;
     const expertTagList: string[] = expertTags.map((e) => e.tagname);
 
     return {
@@ -46,6 +56,40 @@ export class RequestsUserService {
     };
   }
 
+  /**
+   * Update the user (currently only the name)
+   * @param req the requests data
+   * @param data the body of the request including the payload to update the user
+   * @return the updated user
+   * @throws NotFoundException if the user does not exists
+   * @throws NotModified if nothing changes
+   * @throws NotAcceptableException if the payload is invalid
+   * */
+  async updateUser(req: any, data: UpdateUser) {
+    const user = await this.userService.getUser(req.userId);
+    if (user == null) throw new NotFoundException('No user found with this id');
+
+    console.log(data);
+    if (user.username == data.name || Object.keys(data).length == 0)
+      throw new HttpException(
+        'Nothing will be changed',
+        HttpStatus.NOT_MODIFIED,
+      );
+
+    if (!data) {
+      throw new NotAcceptableException(
+        'The payload sent within this request is not acceptable!',
+      );
+    }
+
+    try {
+      return await this.userService.updateUser(req.userId, {
+        name: data.name,
+      });
+    } catch (e) {
+      throw new InternalServerErrorException(e);
+    }
+  }
 
   /**
    * Get login attempts of a user in a range of time

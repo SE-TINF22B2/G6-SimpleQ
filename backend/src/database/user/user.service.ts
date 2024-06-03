@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { User } from '@prisma/client';
+import { UpdateUser } from '../../requests/user/dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -42,4 +43,9 @@ export class UserService {
   }
 
   //TODO update user
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async updateUser(userId: string, data: UpdateUser): Promise<User | null> {
+    // TODO: This is only a mocked request. It needs to be implemented
+    return await this.getUser(userId);
+  }
 }

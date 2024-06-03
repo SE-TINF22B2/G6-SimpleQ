@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   ForbiddenException,
   Get,
@@ -6,11 +7,12 @@ import {
   Param,
   ParseUUIDPipe,
   Put,
-  Req,
+  Req, ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from '../../database/user/user.service';
 import { ExpertService } from '../../database/expert/expert.service';
 import { RequestsUserService } from './requests-user.service';
+import {UpdateUser} from "./dto/update-user.dto";
 
 
 
@@ -45,9 +47,16 @@ export class UserController {
     return await this.requestsUserService.getProfileWrapper(userId)
   }
 
+  @Get()
+  async getAuthorizedUser(@Req() req: any){
+    return await this.requestsUserService.getProfileWrapper(req.userId);
+  }
+
   @Put('update')
-  updateProfile() {
-    new NotImplementedException(); // TODO implement
+  async updateProfile(@Req() req: any, @Body(new ValidationPipe()) data: UpdateUser) {
+    console.log(data);
+    console.log(req.userId);
+    return await this.requestsUserService.updateUser(req, data);
   }
 
   @Get('login/attempts')

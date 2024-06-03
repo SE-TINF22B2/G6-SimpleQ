@@ -3,7 +3,7 @@ import { RequestsUserService } from './requests-user.service';
 import { LoginAttemptService } from '../../database/login-attempt/login-attempt.service';
 import { UserService } from '../../database/user/user.service';
 import { PrismaService } from '../../database/prisma.service';
-import {ExpertService} from "../../database/expert/expert.service";
+import { ExpertService } from '../../database/expert/expert.service';
 
 describe('UserService', () => {
   let service: RequestsUserService;
