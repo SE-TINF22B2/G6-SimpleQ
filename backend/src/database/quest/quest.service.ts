@@ -29,4 +29,10 @@ export class QuestService {
       where: { questID: questID },
     });
   }
+
+  async getUserQuests(userID: string): Promise<Quest[]> {
+    // TODO implement
+    console.log(userID)
+    return [];
+  }
 }
