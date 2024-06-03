@@ -4,8 +4,7 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // TODO: configure cors origins, * is rather a bad idea
-  app.enableCors({ origin: '*', methods: ['*'], credentials: true });
+  app.enableCors({ origin: process.env.FRONTEND_URL, methods: ['*'], credentials: true });
   global.ory = new sdk.FrontendApi(
     new sdk.Configuration({
       basePath:
