@@ -43,6 +43,9 @@ export default function Editor(props: {}) {
 							  while (title.includes("  ")) title = title.replace("  ", " ");
 							  setTitle(title);
 						  } }
+						  onFocus={ (e) => {
+							  window.setTimeout(() => document.execCommand('selectAll', false, undefined), 1);
+						  } }
 						  onBlur={ (e) => {
 							  let elem = document.getElementById("editor-question-title");
 							  if (elem) elem.innerText = title;
