@@ -54,6 +54,7 @@ beforeAll(() => {
 
   mockPrisma.user.create.mockResolvedValue(testUser);
   mockPrisma.user.findUnique.mockResolvedValue(testUser);
+  mockPrisma.user.update.mockResolvedValue(testUser);
 
   mockPrisma.userContent.create.mockResolvedValue(testUserContentQuestion);
   mockPrisma.userContent.findUnique.mockResolvedValue(testUserContentQuestion);

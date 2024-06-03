@@ -35,11 +35,40 @@ export class UserService {
   }
 
   async userIdExists(userId: string): Promise<boolean> {
-    const userData: object | null = await this.prisma.user.findFirst({
+    const userData: User | null = await this.prisma.user.findFirst({
       where: { userID: userId },
     });
     return !!userData;
   }
 
-  //TODO update user
+  /**
+   * Update information of the user profile
+   * @param userID ID of the user to update
+   * @param newUsername optional
+   * @param isPro optional
+   * @param isAdmin optional
+   * @param activityPoints optional
+   * @param email optional
+   * @returns the updated user object
+   */
+  async updateUser(
+    userID: string,
+    newUsername?: string,
+    isPro?: boolean,
+    isAdmin?: boolean,
+    activityPoints?: number,
+    email?: string,
+  ): Promise<User | null> {
+    const userData = await this.prisma.user.update({
+      where: { userID: userID },
+      data: {
+        username: newUsername,
+        isPro: isPro,
+        isAdmin: isAdmin,
+        activityPoints: activityPoints,
+        email: email,
+      },
+    });
+    return userData;
+  }
 }
