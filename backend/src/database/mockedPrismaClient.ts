@@ -71,6 +71,7 @@ beforeAll(() => {
 
   mockPrisma.userQuest.create.mockResolvedValue(testUserQuest);
   mockPrisma.userQuest.findUnique.mockResolvedValue(testUserQuest);
+  mockPrisma.userQuest.createMany.mockResolvedValue({ count: 3 });
 
   mockPrisma.userTimeout.create.mockResolvedValue(testUserTimeout);
   mockPrisma.userTimeout.findUnique.mockResolvedValue(testUserTimeout);

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { testUserQuest } from '../mockData';
+import { testUser, testUserQuest } from '../mockData';
 import { PrismaService } from '../prisma.service';
 import { UserQuestService } from './user-quest.service';
 import { mockPrisma } from '../mockedPrismaClient';
@@ -36,5 +36,15 @@ describe('UserQuestService', () => {
     await expect(
       service.getUserQuest(testUserQuest.questID, testUserQuest.questUserID),
     ).resolves.toEqual(testUserQuest);
+  });
+
+  it('should create new userQuests', async () => {
+    await expect(
+      service.createNewUserQuests(testUser.userID, [
+        'questID1',
+        'questID2',
+        'questID3',
+      ]),
+    ).resolves.toEqual(3);
   });
 });

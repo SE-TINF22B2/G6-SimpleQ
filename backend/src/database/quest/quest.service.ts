@@ -29,4 +29,42 @@ export class QuestService {
       where: { questID: questID },
     });
   }
+
+  /**
+   * Gets the currently selected quests of the week.
+   * @returns array of Quest objects, or null if there are no selected quests
+   */
+  async getSelectedQuests(): Promise<Quest[] | null> {
+    return this.prisma.quest.findMany({
+      where: { isSelected: true },
+    });
+  }
+
+  /**
+   * Set new quests to be the weekly quests. The selection of the old selected quests
+   * will be removed.
+   * @param newQuestIDs array of strings containing the IDs of the new quests
+   */
+  async setSelectedQuests(newQuestIDs: string[]) {
+    this.prisma.$transaction(async (tx) => {
+      // unselect current quests
+      await tx.quest.updateMany({
+        where: { isSelected: true },
+        data: {
+          isSelected: false,
+        },
+      });
+      //select new quests
+      tx.quest.updateMany({
+        where: {
+          questID: {
+            in: newQuestIDs,
+          },
+        },
+        data: {
+          isSelected: true,
+        },
+      });
+    });
+  }
 }
