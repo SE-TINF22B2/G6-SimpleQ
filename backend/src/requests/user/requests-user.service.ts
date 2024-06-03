@@ -1,18 +1,51 @@
 import {
   Injectable,
-  InternalServerErrorException,
+  InternalServerErrorException, NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginAttempt } from '@prisma/client';
 import { LoginAttemptService } from '../../database/login-attempt/login-attempt.service';
 import { UserService } from '../../database/user/user.service';
+import {ExpertService} from "../../database/expert/expert.service";
+
+enum Registration { // TODO extract
+  registered = 'registered',
+  proUser = 'proUser',
+}
 
 @Injectable()
 export class RequestsUserService {
   constructor(
     private readonly userLoginAttemptService: LoginAttemptService,
     private readonly userService: UserService,
+    private readonly expertService: ExpertService,
   ) {}
+
+  async getProfileWrapper(userId:string){
+    const usrProfile = await this.userService.getUser(userId);
+    const expertTags = await this.expertService.getExpertTagsForUser(userId);
+
+    if (usrProfile === null || expertTags === null) {
+      throw new NotFoundException('User does not exist');
+    }
+    const accountState: Registration = usrProfile.isPro
+        ? Registration.proUser
+        : Registration.registered;
+    const expertTagList: string[] = expertTags.map((e) => e.tagname);
+
+    return {
+      name: usrProfile.username,
+      profilePicture: null,
+      registrationDate: usrProfile.timeOfRegistration,
+      accountState: accountState.toString(),
+      expertTopics: expertTagList,
+      userStatistics: {
+        TODO: null,
+      },
+      activityPoints: usrProfile.activityPoints,
+    };
+  }
+
 
   /**
    * Get login attempts of a user in a range of time
