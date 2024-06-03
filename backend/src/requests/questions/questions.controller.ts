@@ -11,13 +11,11 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
-import {
-  Type,
-  UserContentRequestService,
-} from '../user-content-request/user-content-request.service';
+import { UserContentRequestService } from '../user-content-request/user-content-request.service';
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
+import { UserContentType } from '@prisma/client';
 
 @Controller('question') // prefix: domain/question/...
 export class QuestionsController {
@@ -56,7 +54,7 @@ export class QuestionsController {
   ): Promise<object> {
     return this.userContentService.getUserContent(
       id,
-      Type.QUESTION,
+      UserContentType.Question,
       request?.userId,
     );
   }
@@ -82,7 +80,7 @@ export class QuestionsController {
   ): Promise<object> {
     return await this.userContentService.createUserContent(
       createQuestion,
-      Type.QUESTION,
+      UserContentType.Question,
       req.userId,
     );
   }

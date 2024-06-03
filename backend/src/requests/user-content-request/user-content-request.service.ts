@@ -8,12 +8,7 @@ import { UserContentService } from '../../database/user-content/user-content.ser
 import { VoteService } from '../../database/vote/vote.service';
 import { QueryParameters } from '../questions/dto/query-params.dto';
 import { SearchQuery } from '../questions/dto/search.dto';
-
-export enum Type {
-  QUESTION,
-  ANSWER,
-  DISCUSSION,
-}
+import { UserContentType } from '@prisma/client';
 
 @Injectable()
 export class UserContentRequestService {
@@ -30,7 +25,7 @@ export class UserContentRequestService {
       results.push(
         await this.getUserContent(
           questions[i].userContentID,
-          Type.QUESTION,
+          UserContentType.Question,
           req?.userId,
         ),
       );
@@ -39,12 +34,12 @@ export class UserContentRequestService {
     return results;
   }
 
-  async getUserContent(id: string, type: Type, userId?: string) {
+  async getUserContent(id: string, type: UserContentType, userId?: string) {
     const result = await this.userContentService.getQuestion(id);
 
     if (result.userContent == null)
       throw new NotFoundException(
-        `No ${Type[type].toLowerCase()} found with this id.`,
+        `No ${type.toLowerCase()} found with this id.`,
       );
 
     const evaluation =
@@ -79,7 +74,10 @@ export class UserContentRequestService {
           type: creator?.isPro ? 'pro' : 'registered' ?? 'guest',
         },
       };
-      if (type === Type.QUESTION || type === Type.DISCUSSION) {
+      if (
+        type === UserContentType.Question ||
+        type === UserContentType.Discussion
+      ) {
         // @ts-ignore
         response.title = result.question?.title;
         // @ts-ignore
@@ -87,9 +85,7 @@ export class UserContentRequestService {
       }
       return response;
     }
-    throw new NotFoundException(
-      `No ${Type[type].toLowerCase()} found with this id.`,
-    );
+    throw new NotFoundException(`No ${type.toLowerCase()} found with this id.`);
   }
 
   async getTitleOfQuestion(id: string) {
@@ -151,18 +147,18 @@ export class UserContentRequestService {
    * @param type the type of userContent, question, answer, discussion
    * @param userId the id of the user which creates this resource
    * */
-  async createUserContent(data: any, type: Type, userId: string) {
+  async createUserContent(data: any, type: UserContentType, userId: string) {
     try {
       let result;
       switch (type) {
-        case Type.QUESTION:
+        case UserContentType.Question:
           result = await this.userContentService.createQuestion(
             userId,
             data.content,
             data.title,
           );
           break;
-        case Type.DISCUSSION:
+        case UserContentType.Discussion:
           result = await this.userContentService.createDiscussion(
             userId,
             data.content,
@@ -170,7 +166,7 @@ export class UserContentRequestService {
             data.isPrivate,
           );
           break;
-        case Type.ANSWER:
+        case UserContentType.Answer:
           result = await this.userContentService.createAnswer(
             userId,
             data.groupId,

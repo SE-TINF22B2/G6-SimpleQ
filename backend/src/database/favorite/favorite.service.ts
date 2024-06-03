@@ -20,18 +20,6 @@ export class FavoriteService {
         },
       },
     });
-  }  async delFavorite(
-    favoriteUserID: string,
-    contentID: string,
-  ): Promise<Favorite> {
-    return this.prisma.favorite.delete({
-      where: {
-        contentID_favoriteUserID: {
-          contentID,
-          favoriteUserID,
-        },
-      },
-    });
   }
 
   async deleteFavorite(
@@ -41,8 +29,8 @@ export class FavoriteService {
     return this.prisma.favorite.delete({
       where: {
         contentID_favoriteUserID: {
-          contentID,
-          favoriteUserID,
+          contentID: contentID,
+          favoriteUserID: favoriteUserID,
         },
       },
     });
@@ -62,7 +50,7 @@ export class FavoriteService {
     });
   }
 
-  async getFavoriteOfUser(favoriteUserID: string) {
+  async getAllFavoritesOfUser(favoriteUserID: string) {
     return this.prisma.favorite.findMany({
       where: {
         favoriteUserID: favoriteUserID,
