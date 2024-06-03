@@ -10,7 +10,7 @@ import { AppService } from './app.service';
 import { TagService } from './database/tag/tag.service';
 import { RequestsModule } from './requests/requests.module';
 import {APP_FILTER} from "@nestjs/core";
-import {ImATeapotFilter, NotFoundExceptionFilter} from "./requests/filters/http-exception.filter";
+import {ImATeapotFilter, NotFoundExceptionFilter} from "./requests/exception-handling/http-exception.filter";
 
 @Module({
   imports: [

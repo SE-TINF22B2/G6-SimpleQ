@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { DevelopmentService } from './development.service';
 import {TagService} from "../../database/tag/tag.service";
 import {PrismaService} from "../../database/prisma.service";
+import {UserService} from "../../database/user/user.service";
 
 describe('DevelopmentService', () => {
   let service: DevelopmentService;
@@ -11,6 +12,7 @@ describe('DevelopmentService', () => {
       providers: [
           DevelopmentService,
           TagService,
+          UserService,
           PrismaService,
       ],
     }).compile();
