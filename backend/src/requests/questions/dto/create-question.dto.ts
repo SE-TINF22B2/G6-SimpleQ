@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import {ArrayMaxSize, IsBoolean, IsNotEmpty, IsString} from 'class-validator';
 
 export class CreateQuestion {
   @IsString()
@@ -9,7 +9,13 @@ export class CreateQuestion {
   @IsNotEmpty()
   content: string;
 
+  @IsString( {each: true})
+  @IsNotEmpty()
+  @ArrayMaxSize(30)   // FIXME setSize for whole Array
+  // @MaxLength(80)      // FIXME setLenght for each Token
+  tags: string[]
+
   @IsBoolean()
   @IsNotEmpty()
-  genAI: boolean;
+  useAI: boolean;
 }

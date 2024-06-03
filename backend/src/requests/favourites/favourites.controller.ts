@@ -10,9 +10,9 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-import { FavoriteService } from '../../database/favorite/favorite.service';
-import { Favorite } from '@prisma/client';
-import { UserContentService } from '../../database/user-content/user-content.service';
+import {FavoriteService} from '../../database/favorite/favorite.service';
+import {Favorite} from '@prisma/client';
+import {UserContentService} from '../../database/user-content/user-content.service';
 
 @Controller('favourites')
 export class FavouritesController {
@@ -44,8 +44,7 @@ export class FavouritesController {
     }
 
     try {
-      const result = await this.favoriteService.createFavorite(userId, id);
-      return result;
+      return await this.favoriteService.createFavorite(userId, id);
     } catch (Exception) {
       throw new InternalServerErrorException();
     }
@@ -53,6 +52,6 @@ export class FavouritesController {
   @Delete(':id')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeFavourite(@Param('id', new ParseUUIDPipe()) id: string) {
-    throw new NotImplementedException();
+    throw new NotImplementedException(); // TODO implement
   }
 }

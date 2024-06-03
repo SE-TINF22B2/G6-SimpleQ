@@ -10,6 +10,7 @@ import { QueryParameters } from '../questions/dto/query-params.dto';
 import { SearchQuery } from '../questions/dto/search.dto';
 import {TypeOfAI} from "@prisma/client";
 import {BlacklistService} from "../../database/blacklist/blacklist.service";
+import {TagService} from "../../database/tag/tag.service";
 
 export enum Type {
   QUESTION,
@@ -22,7 +23,8 @@ export class UserContentRequestService {
   constructor(
     private readonly userContentService: UserContentService,
     private readonly voteService: VoteService,
-    private readonly blacklistService: BlacklistService
+    private readonly blacklistService: BlacklistService,
+    private readonly tagService: TagService
   ) {}
 
   async getTrendingQuestions(req: any) {
@@ -114,20 +116,23 @@ export class UserContentRequestService {
    * @throws NotFoundException if no question is found with that id
    * */
   async getAnswersOfQuestion(id: string, sortCriteria: QueryParameters) {
+    // check question does exist
     const question = await this.userContentService.getQuestion(id);
     if (question == null)
       throw new NotFoundException('No question found with this id.');
 
+    // fetch answers
     const rawAnswers = await this.userContentService.getAnswersOfGroupID(
       question?.userContent?.groupID,
       sortCriteria,
     );
-    if (rawAnswers == null)
+    if (rawAnswers == null) {
       throw new InternalServerErrorException(
-        'There was an error fetching the answers.',
+          'There was an error fetching the answers.',
       );
-
-    const answers = [];
+    }
+    // change results to openAPI schema
+    const answers: object[] = [];
     for (const answer of rawAnswers){
       //@ts-ignore
       answers.push(await this.getUserContent(answer.userContentID, Type.ANSWER));
@@ -139,6 +144,7 @@ export class UserContentRequestService {
   /**
    * Wrapper for creation of Questions,
    * does Input validation and error handling
+   * Tags are created if they do not exist in the database at the time the question is created
    * throws:
    *    UnprocessableEntityException
    *    NotAcceptableException
@@ -146,10 +152,29 @@ export class UserContentRequestService {
    * @param userId
    */
   async createQuestionWrapper(data: any, userId: string): Promise<object> {
+    const forbiddenWords: string[] = await this.blacklistService.getBlacklistArray(); // TODO buffer
+
+    // check basic data is present
     if (data == null || data.content == null || data.title == null) {
       throw new UnprocessableEntityException("Payload is not sufficient!")
     }
-    const forbiddenWords: string[] = await this.blacklistService.getBlacklistArray(); // TODO buffer
+
+    // handle tags, create Tags if they do not exist in the database
+    if (data.tags !== undefined && data.tags !== null) {
+      const notIntersectedTags: string[] = await this.tagService.getNotInsertedTags(data.tags)
+      if (this.blacklistService.checkTextWithBlacklist(notIntersectedTags.join(" "), forbiddenWords)){
+        throw new NotFoundException(
+            "You have used unappropriated tags!\nThis is not Acceptable, incident will be reported!"
+        )
+      }
+      notIntersectedTags.forEach(tag => {
+            console.log("ADD " + tag) // TODO change with Logging service
+            this.tagService.createTag(tag);
+          }
+      )
+    }
+
+    // check text for restricted words
     if (this.blacklistService.checkTextWithBlacklist(data.title, forbiddenWords)
         || this.blacklistService.checkTextWithBlacklist(data.content, forbiddenWords)) {
       throw new NotAcceptableException(null,
@@ -176,23 +201,29 @@ export class UserContentRequestService {
     if (data.content == null){
       throw new UnprocessableEntityException("Payload is not sufficient!")
     }
+
+    // check question exists
     const answer = await this.userContentService.getQuestion(questionId)
     if(answer == null || answer.userContent == null || answer.userContent.groupID == null){
       throw new NotFoundException("Question " + questionId + " doesn't exist!")
     }
+
+    // check text for forbidden words
     const groupId = answer.userContent.groupID;
     const forbiddenWords: string[] = await this.blacklistService.getBlacklistArray(); // TODO buffer
     if(this.blacklistService.checkTextWithBlacklist(data.content, forbiddenWords)){
       throw new NotAcceptableException(null,
-          "you have used unappropriated words!\nThis is not Acceptable, incident will be reported!"
+          "your Answer includes unappropriated words!\nThis is not Acceptable, incident will be reported!"
       )
     }
+
+    // map data to fit requirements
     const answerData = {
       groupId: groupId,
       content: data.content,
       typeOfAI: cleaned_typeOfAI,
     }
-    console.log(answerData)
+    // create answer
     return await this.createUserContent(answerData, Type.ANSWER, userId)
   }
 

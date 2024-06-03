@@ -23,6 +23,26 @@ export class TagService {
     });
   }
 
+  async getNotInsertedTags(tagsToCheck: string[]): Promise<string[]> {
+    const allTags = await this._getAllTags() // TODO cache these tags
+    const notAddedTags: string[] = []
+    for(let tag of tagsToCheck) {
+      if (!allTags.includes(tag.toLowerCase())){
+        notAddedTags.push(tag);
+      }
+    }
+    return notAddedTags;
+  }
+
+  /**
+   * returns all Tags of this database, existing at this moment
+   */
+  async _getAllTags(): Promise<string[]> {
+    return (
+        await this.prisma.tag.findMany({})
+    ).map(tag => tag.tagname);
+  }
+
   /**
    * Returns up to 5 (TAG_LIMIT in config.ts) tags containing the query string.
    * If a tag starts with the query, it has a higher priority and is first in the return array.
