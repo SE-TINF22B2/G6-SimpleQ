@@ -203,14 +203,14 @@ export default function QuestionView() {
 				justifyContent: "flex-end",
 				gap: "var(--spacing)"
 			} }>
-				<Button icon={ "fi fi-rr-arrow-left" } onClick={ () => {
+				<Button icon={ "fi fi-rr-arrow-left" } onClick={ async () => {
 				} }>
 					Previous
 				</Button>
 				
 				<p>Page 1 of 10</p>
 				
-				<Button icon={ "fi fi-rr-arrow-right" } onClick={ () => {
+				<Button icon={ "fi fi-rr-arrow-right" } onClick={ async () => {
 				} } placeIconRight={ true }>
 					Next
 				</Button>
