@@ -13,7 +13,12 @@
 		position: sticky;
 		top: 0;
 
-		overflow-y: scroll;
+		overflow-y: auto;
+		direction: rtl;
+
+		* {
+			direction: ltr;
+		}
 
 		> :first-child {
 			align-items: center;
