@@ -6,6 +6,8 @@
 		padding: var(--spacing);
 		width: 100px;
 
+		position: relative;
+
 		.hint-number {
 			background: var(--primary-color);
 			border-radius: var(--border-radius);
@@ -16,6 +18,11 @@
 			height: 1.8em;
 			place-items: center;
 			width: 1.8em;
+
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			z-index: 4;
 		}
 
 		.caption {
@@ -25,6 +32,10 @@
 			overflow: hidden;
 			text-align: center;
 			transition: all var(--transition);
+
+			position: absolute;
+			top: 50%;
+			z-index: 3;
 		}
 	}
 
@@ -36,7 +47,7 @@
 	&:hover {
 		.editor-hints {
 			.caption {
-				margin-top: calc(var(--spacing) / 2);
+				margin-top: calc(var(--spacing) * 2);
 				max-height: 100px;
 				opacity: 1;
 			}

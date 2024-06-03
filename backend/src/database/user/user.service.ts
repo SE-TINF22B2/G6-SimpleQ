@@ -33,4 +33,13 @@ export class UserService {
       where: { userID: userID },
     });
   }
+
+  async userIdExists(userId: string): Promise<boolean> {
+    const userData: object | null = await this.prisma.user.findFirst({
+      where: { userID: userId },
+    });
+    return !!userData;
+  }
+
+  //TODO update user
 }

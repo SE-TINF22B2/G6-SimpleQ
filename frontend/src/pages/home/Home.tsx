@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import "./Home.scss";
 import { useNavigate } from "react-router-dom";
 import { InView } from "react-intersection-observer";
@@ -16,54 +16,67 @@ import manuel from "../../images/manuel.png";
 import tom from "../../images/tom.png";
 
 export default function Home(props: { updateTheme: (theme: "system" | "dark" | "light") => void }) {
+	let blobs: (HTMLDivElement | null)[] = useMemo(() => [], []);
+	
 	const navigate = useNavigate();
 	const [currentThemeOnlyDisplay, setCurrentThemeOnlyDisplay] =
 		React.useState<"dark" | "light" | "system">((localStorage.getItem("theme") as "dark" | "light" || "system"));
 	
+	const inViewOnChange = (inView: any, entry: any) => {
+		entry.target.querySelectorAll(".fade-in").forEach((el: any, i: any) => {
+			setTimeout(() => {
+				if (inView) el.classList.add("fade-in-visible");
+				else el.classList.remove("fade-in-visible");
+			}, (i + 1) * 100);
+		});
+	}
+	
 	useEffect(() => {
+		const animateBlobs = () => {
+			blobs.forEach((el, i) => {
+				if (!el) return;
+				
+				let r1 = 20 + Math.floor(Math.random() * 60);
+				let r2 = 20 + Math.floor(Math.random() * 60);
+				let r3 = 20 + Math.floor(Math.random() * 60);
+				let r4 = 20 + Math.floor(Math.random() * 60);
+				
+				let sx = 0.8 + Math.random() * 0.4;
+				let sy = 0.8 + Math.random() * 0.4;
+				
+				el.animate([
+					{
+						borderRadius: `${ r1 }% ${ 100 - r1 }% ${ r2 }% ${ 100 - r2 }% / ${ r3 }% ${ r4 }% ${ 100 - r4 }% ${ 100 - r3 }%`,
+						transform: `scale(${ sx }, ${ sy })`
+					}
+				], {
+					duration: 2000,
+					delay: i * 1000,
+					iterations: 1,
+					fill: "forwards",
+					easing: "ease"
+				});
+			});
+		}
+		
 		animateBlobs();
 		let interval = setInterval(() => {
 			animateBlobs();
 		}, 2000);
 		
 		return () => clearInterval(interval);
-	}, []);
-	
-	const animateBlobs = () => {
-		document.querySelectorAll(".home-bg-blob").forEach((el, i) => {
-			let r1 = 20 + Math.floor(Math.random() * 60);
-			let r2 = 20 + Math.floor(Math.random() * 60);
-			let r3 = 20 + Math.floor(Math.random() * 60);
-			let r4 = 20 + Math.floor(Math.random() * 60);
-			
-			let sx = 0.8 + Math.random() * 0.4;
-			let sy = 0.8 + Math.random() * 0.4;
-			
-			el.animate([
-				{
-					borderRadius: `${ r1 }% ${ 100 - r1 }% ${ r2 }% ${ 100 - r2 }% / ${ r3 }% ${ r4 }% ${ 100 - r4 }% ${ 100 - r3 }%`,
-					transform: `scale(${ sx }, ${ sy })`
-				}
-			], {
-				duration: 2000,
-				delay: i * 1000,
-				iterations: 1,
-				fill: "forwards",
-				easing: "ease"
-			});
-		});
-	}
+	}, [blobs]);
 	
 	return <div className={ "home" }>
 		<nav>
 			<div className={ "nav-wrapper" }>
-				<img src={ logoTodoMakeStatic }/>
+				<img src={ logoTodoMakeStatic } alt={ "Logo" }/>
 				
 				<div className={ "pages" }>
-					<a href={ "#" }>Features</a>
-					<a href={ "#" }>Developers</a>
-					<a href={ "#" }>Development</a>
-					<a href={ "login" }>Login</a>
+					<a href={ "#features" }>Features</a>
+					<a href={ "#developers" }>Developers</a>
+					<a href={ "#development" }>Development</a>
+					<a href={ "#plans" }>Plans</a>
 				</div>
 				
 				<Button icon={ "fi fi-rr-sign-in-alt" } onClick={ () => window.location.href = "/login" }>Login</Button>
@@ -84,29 +97,21 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 		
 		<main>
 			<section className={ "page" }>
-				<div className={ "home-bg-blob" } style={ {
-					position: "absolute",
-					zIndex: -1,
-					height: "40%",
-					width: "40%",
+				<div className={ "home-bg-blob" } ref={ b => blobs.push(b) } style={ {
 					top: "calc(var(--header-height) + 10%)",
 					left: "10%",
 					borderRadius: "47% 53% 67% 33% / 13% 62% 38% 87%",
 					opacity: 0.6,
 					background: "linear-gradient(to right, var(--primary-color), transparent), url(https://grainy-gradients.vercel.app/noise.svg)"
 				} }/>
-				<div className={ "home-bg-blob" } style={ {
-					position: "absolute",
-					zIndex: -1,
-					height: "40%",
-					width: "40%",
+				<div className={ "home-bg-blob" } ref={ b => blobs.push(b) } style={ {
 					top: "calc(var(--header-height) + 20%)",
 					left: "30%",
 					borderRadius: "63% 37% 23% 77% / 53% 62% 38% 47%",
 					background: "linear-gradient(to left, var(--background-color-glass-simp), transparent), url(https://grainy-gradients.vercel.app/noise.svg)"
 				} }/>
 				
-				<img src={ mockup }/>
+				<img src={ mockup } alt={ "Dashboard" }/>
 				
 				<div>
 					<h1 className={ "title" }>
@@ -115,7 +120,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					</h1>
 					<div style={ { display: "flex", gap: "var(--spacing)", alignItems: "center" } }>
 						<h2>You don't believe us?</h2>
-						<Button style={ "primary" }>Try Yourself!</Button>
+						<Button buttonStyle={ "primary" }>Try Yourself!</Button>
 						<Button icon={ "fi fi-brands-github" }
 								onClick={ () => window.open("https://github.com/SE-TINF22B2/G6-SimpleQ", "_blank") }>
 							Learn More on GitHub
@@ -124,18 +129,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 				</div>
 			</section>
 			
-			<section className={ "page" }>
-				<InView as={ "div" } onChange={ (inView, entry) => {
-					entry.target.querySelectorAll(".fade-in").forEach((el, i) => {
-						
-						// Todo: Timeout only for fading in, not for fading out!!
-						
-						setTimeout(() => {
-							if (inView) el.classList.add("fade-in-visible");
-							else el.classList.remove("fade-in-visible");
-						}, (i + 1) * 100);
-					});
-				} }>
+			<section className={ "page" } id={ "features" }>
+				<InView as={ "div" } onChange={ inViewOnChange }>
 					<h2 className={ "page-title fade-in" }>Features</h2>
 					<h1 className={ "page-subtitle fade-in" }>What We Offer</h1>
 					<p className={ "page-summary fade-in" }>
@@ -170,15 +165,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 				</InView>
 			</section>
 			
-			<section className={ "page" }>
-				<InView as={ "div" } onChange={ (inView, entry) => {
-					entry.target.querySelectorAll(".fade-in").forEach((el, i) => {
-						setTimeout(() => {
-							if (inView) el.classList.add("fade-in-visible");
-							else el.classList.remove("fade-in-visible");
-						}, (i + 1) * 100);
-					});
-				} }>
+			<section className={ "page" } id={ "developers" }>
+				<InView as={ "div" } onChange={ inViewOnChange }>
 					<h2 className={ "page-title fade-in" }>Developers</h2>
 					<h1 className={ "page-subtitle fade-in" }>Meet our Team</h1>
 					<p className={ "page-summary fade-in" }>
@@ -188,14 +176,15 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					
 					<div className={ "members" }>
 						<div className={ "member fade-in" }>
-							<img src={ benni }/>
+							<img src={ benni } alt={ "Benni" }/>
 							<div className={ "member-details" }>
 								<h1>Benni</h1>
 								<div className={ "member-socials" }>
-									<a href={ "" }>
+									<a href={ "https://github.com/benniloidl" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "" }>
+									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -203,14 +192,15 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 						
 						<div className={ "member fade-in" }>
-							<img src={ joshua }/>
+							<img src={ joshua } alt={ "Joshua" }/>
 							<div className={ "member-details" }>
 								<h1>Joshua</h1>
 								<div className={ "member-socials" }>
-									<a href={ "" }>
+									<a href={ "https://github.com/jozys" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "" }>
+									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -218,14 +208,15 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 						
 						<div className={ "member fade-in" }>
-							<img src={ leonard }/>
+							<img src={ leonard } alt={ "Leonard" }/>
 							<div className={ "member-details" }>
 								<h1>Leonard</h1>
 								<div className={ "member-socials" }>
-									<a href={ "" }>
+									<a href={ "https://github.com/michalskyl" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "" }>
+									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -233,14 +224,14 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 						
 						<div className={ "member fade-in" }>
-							<img src={ manuel }/>
+							<img src={ manuel } alt={ "Manuel" }/>
 							<div className={ "member-details" }>
 								<h1>Manuel</h1>
 								<div className={ "member-socials" }>
-									<a href={ "" }>
+									<a href={ "https://github.com/manuelbrs" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "" }>
+									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -248,14 +239,15 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 						
 						<div className={ "member fade-in" }>
-							<img src={ tom }/>
+							<img src={ tom } alt={ "Tom" }/>
 							<div className={ "member-details" }>
 								<h1>Tom</h1>
 								<div className={ "member-socials" }>
-									<a href={ "" }>
+									<a href={ "https://github.com/integraluminium" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "" }>
+									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -265,15 +257,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 				</InView>
 			</section>
 			
-			<section className={ "page" }>
-				<InView as={ "div" } onChange={ (inView, entry) => {
-					entry.target.querySelectorAll(".fade-in").forEach((el, i) => {
-						setTimeout(() => {
-							if (inView) el.classList.add("fade-in-visible");
-							else el.classList.remove("fade-in-visible");
-						}, (i + 1) * 100);
-					});
-				} }>
+			<section className={ "page" } id={ "development" }>
+				<InView as={ "div" } onChange={ inViewOnChange }>
 					<h2 className={ "page-title fade-in" }>Development</h2>
 					<h1 className={ "page-subtitle fade-in" }>Follow and take part in the process</h1>
 					<p className={ "page-summary fade-in" }>
@@ -321,7 +306,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</div>
 					</div>
 					
-					<a href={ "https://github.com/SE-TINF22B2/G6-SimpleQ" } target={ "_blank" }
+					<a href={ "https://github.com/SE-TINF22B2/G6-SimpleQ" } target={ "_blank" } rel={ "noreferrer" }
 					   className={ "fade-in" }
 					   style={ { textDecoration: "none", color: "var(--primary-color)" } }>
 						<i className={ "fi fi-rr-arrow-right" } style={ { marginRight: "var(--spacing)" } }/>
@@ -330,10 +315,156 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 				</InView>
 			</section>
 			
+			<section className={ "page" } id={ "plans" }>
+				<InView as={ "div" } onChange={ inViewOnChange }>
+					<h2 className={ "page-title fade-in" }>Meet our Plans</h2>
+					<h1 className={ "page-subtitle fade-in" }>Take the next step</h1>
+					<p className={ "page-summary fade-in" }>Take a look at our convenient plans that intend to improve
+						your question-related workflows even more.</p>
+					
+					<div className={ "plans" }>
+						<div className={ "plan fade-in" }>
+							<div style={ {
+								display: "flex",
+								flexDirection: "row",
+								alignItems: "center",
+								gap: "var(--spacing)",
+								background: "var(--background-color-secondary)",
+								margin: "calc(var(--spacing) * -1)",
+								padding: "var(--spacing)"
+							} }>
+								<h1>Guest</h1>
+								<span className={ "badge badge-outline" }>Most Secure</span>
+							</div>
+							<hr style={ { opacity: 0 } }/>
+							<p>
+								<i className={ "fi fi-rr-comment primary-icon" }/>
+								<span>
+									<span className={ "caption" }>Basic Features</span>
+									<br/>
+									<span>Ask Questions</span>
+								</span>
+							</p>
+							
+							<div style={ { flex: 1, marginBlock: "var(--spacing)" } }/>
+							<h2>
+								Free.
+								<br/>
+								Forever.
+							</h2>
+						</div>
+						
+						<div className={ "divider fade-in" }/>
+						
+						<div className={ "plan fade-in" }>
+							<div style={ {
+								display: "flex",
+								flexDirection: "row",
+								alignItems: "center",
+								gap: "var(--spacing)",
+								background: "var(--background-color-secondary)",
+								margin: "calc(var(--spacing) * -1)",
+								padding: "var(--spacing)"
+							} }>
+								<h1>User</h1>
+							</div>
+							<hr style={ { opacity: 0 } }/>
+							<p>
+								<i className={ "fi fi-rr-comment primary-icon" }/>
+								<span>
+									<span className={ "caption" }>Basic Features</span>
+									<br/>
+									<span>Ask Questions</span>
+									<br/>
+									<span>Create Answers</span>
+								</span>
+							</p>
+							<hr/>
+							<p>
+								<i className={ "fi fi-rr-brain primary-icon" }/>
+								<span>
+									<span className={ "caption" }>AI Answers</span>
+									<br/>
+									<span>up to 3 / day</span>
+								</span>
+							</p>
+							
+							<div style={ { flex: 1, marginBlock: "var(--spacing)" } }/>
+							<h2>
+								Free.
+								<br/>
+								Forever.
+							</h2>
+						</div>
+						
+						<div className={ "divider fade-in" }/>
+						
+						<div className={ "plan fade-in" }>
+							<div style={ {
+								display: "flex",
+								flexDirection: "row",
+								alignItems: "center",
+								gap: "var(--spacing)",
+								background: "var(--background-color-secondary)",
+								margin: "calc(var(--spacing) * -1)",
+								padding: "var(--spacing)"
+							} }>
+								<h1>Pro</h1>
+								<span className={ "badge" }>Recommended</span>
+							</div>
+							<hr style={ { opacity: 0 } }/>
+							<p>
+								<i className={ "fi fi-rr-comment primary-icon" }/>
+								<span>
+									<span className={ "caption" }>Basic Features</span>
+									<br/>
+									<span>Ask Questions</span>
+									<br/>
+									<span>Create Answers</span>
+								</span>
+							</p>
+							<hr/>
+							<p>
+								<i className={ "fi fi-rr-brain primary-icon" }/>
+								<span>
+									<span className={ "caption" }>AI Answers</span>
+									<br/>
+									<span>unlimited</span>
+								</span>
+							</p>
+							
+							<div style={ { flex: 1, marginBlock: "var(--spacing)" } }/>
+							<h2>
+								2.99
+								<span className={ "caption" }> / mo.</span>
+							</h2>
+						</div>
+					</div>
+				</InView>
+			</section>
+			
 			<section className={ "page" }>
-				<p>© simpleQ 2024</p>
 				<div>
-					UIcons by <a href="https://www.flaticon.com/uicons">Flaticon</a>
+					<h2 className={ "page-title" }>Let's go!</h2>
+					<h1 className={ "page-subtitle" }>What are you waiting for?</h1>
+					<p className={ "page-summary" }>Instead of reading this, you could have already submitted your first
+						question to the community.</p>
+				</div>
+				<div style={ {
+					display: "flex",
+					flexDirection: "row",
+					alignItems: "flex-end",
+					borderTop: "var(--outline-width) solid var(--border-color)",
+					paddingBlock: "var(--spacing)"
+				} }>
+					<div style={ { flex: 1 } }>
+						<p>© simpleQ 2024</p>
+						<a href={ "mailto:mail@simpleq.simplepeople.com" }>mail@simpleq.simplepeople.com</a>
+					</div>
+					<div style={ { flex: 1 } }>
+						UIcons by <a href={ "https://www.flaticon.com/uicons" }
+									 target={ "_blank" } rel={ "noreferrer" }>Flaticon</a>
+					</div>
 				</div>
 			</section>
 		</main>

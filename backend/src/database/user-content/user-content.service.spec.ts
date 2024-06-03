@@ -1,6 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from '../prisma.service';
-import { UserContentService } from './user-content.service';
 import {
   testAnswer,
   testDiscussion,
@@ -12,6 +10,8 @@ import {
   testUserContentQuestionList,
   testVoteList,
 } from '../mockData';
+import { PrismaService } from '../prisma.service';
+import { UserContentService } from './user-content.service';
 import { mockPrisma } from '../mockedPrismaClient';
 
 describe('UserContentService', () => {
@@ -36,9 +36,9 @@ describe('UserContentService', () => {
     await expect(
       service.createQuestion(
         testUserContentQuestion.ownerID,
-        testUserContentQuestion.groupID,
         testUserContentQuestion.content,
         testQuestion.title,
+        testUserContentQuestion.groupID,
       ),
     ).resolves.toEqual({
       userContent: testUserContentQuestion,
@@ -62,7 +62,7 @@ describe('UserContentService', () => {
   });
 
   it('should get all tags of the question', async () => {
-    let questionWithTags: any = testUserContentQuestion;
+    const questionWithTags: any = testUserContentQuestion;
     questionWithTags.tag = testTagList;
     mockPrisma.userContent.findUnique.mockResolvedValueOnce(questionWithTags);
     await expect(
@@ -71,7 +71,7 @@ describe('UserContentService', () => {
   });
 
   it('should get likes and dislikes of the question', async () => {
-    let questionWithVotes: any = testUserContentQuestion;
+    const questionWithVotes: any = testUserContentQuestion;
     questionWithVotes.vote = testVoteList;
     mockPrisma.userContent.findUnique.mockResolvedValueOnce(questionWithVotes);
     await expect(
@@ -119,10 +119,10 @@ describe('UserContentService', () => {
     await expect(
       service.createDiscussion(
         testUserContentDiscussion.ownerID,
-        testUserContentDiscussion.groupID,
         testUserContentDiscussion.content,
         testDiscussion.title,
         testDiscussion.isPrivate,
+        testUserContentDiscussion.groupID,
       ),
     ).resolves.toEqual({
       userContent: testUserContentDiscussion,
