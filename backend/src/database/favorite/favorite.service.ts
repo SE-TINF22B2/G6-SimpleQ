@@ -20,7 +20,8 @@ export class FavoriteService {
         },
       },
     });
-  }  async delFavorite(
+  }
+  async delFavorite(
     favoriteUserID: string,
     contentID: string,
   ): Promise<Favorite> {

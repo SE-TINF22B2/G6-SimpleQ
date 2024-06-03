@@ -3,18 +3,16 @@ import {
   Controller,
   ForbiddenException,
   Get,
-  NotImplementedException,
   Param,
   ParseUUIDPipe,
   Put,
-  Req, ValidationPipe,
+  Req,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from '../../database/user/user.service';
 import { ExpertService } from '../../database/expert/expert.service';
 import { RequestsUserService } from './requests-user.service';
-import {UpdateUser} from "./dto/update-user.dto";
-
-
+import { UpdateUser } from './dto/update-user.dto';
 
 @Controller('profile')
 export class UserController {
@@ -33,7 +31,7 @@ export class UserController {
   @Get()
   async getBasicProfile(@Req() request: any) {
     const userId = request.userId;
-    return await this.requestsUserService.getProfileWrapper(userId)
+    return await this.requestsUserService.getProfileWrapper(userId);
   }
 
   /**
@@ -44,16 +42,19 @@ export class UserController {
    */
   @Get(':id')
   async getDetailedProfile(@Param('id', new ParseUUIDPipe()) userId: string) {
-    return await this.requestsUserService.getProfileWrapper(userId)
+    return await this.requestsUserService.getProfileWrapper(userId);
   }
 
   @Get()
-  async getAuthorizedUser(@Req() req: any){
+  async getAuthorizedUser(@Req() req: any) {
     return await this.requestsUserService.getProfileWrapper(req.userId);
   }
 
   @Put('update')
-  async updateProfile(@Req() req: any, @Body(new ValidationPipe()) data: UpdateUser) {
+  async updateProfile(
+    @Req() req: any,
+    @Body(new ValidationPipe()) data: UpdateUser,
+  ) {
     console.log(data);
     console.log(req.userId);
     return await this.requestsUserService.updateUser(req, data);
