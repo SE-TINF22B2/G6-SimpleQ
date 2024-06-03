@@ -12,6 +12,8 @@ import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import Search from "../../components/search/Search";
+import { axiosError } from "../../def/axios-error";
+import { useAlert } from "react-alert";
 
 // ory setup
 const basePath = "http://localhost:4000"
@@ -33,22 +35,42 @@ interface Props {
  * @param props.updateTheme Function used to update the theme of the entire app
  */
 export default function Dashboard(props: Props) {
+	const alert = useAlert();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const [session, setSession] = useState<Session | undefined>();
 	const [logoutUrl, setLogoutUrl] = useState<string | undefined>();
+	const [stats, setStats] = useState<{ streak: number, views: number, likes: number } | undefined>();
+	const [activeQuestionName, setActiveQuestionName] = useState<string | undefined>();
 	
 	const getUserName = (identity?: Identity) =>
 		identity?.traits.email || identity?.traits.username || t('dashboard.anonymous');
 	
 	useEffect(() => {
+		const fetchStats = () => {
+			global.axios.get("stats", { withCredentials: true })
+				  .then(res => console.log(res))
+				  .catch(err => axiosError(err, alert));
+			
+			if (window.location.pathname.includes("/question")) {
+				let questionId = window.location.pathname.split("/question/")[1].substring(0, 36);
+				global.axios.get("question/" + questionId + "/title")
+					  .then(res => console.log(res))
+					  .catch(err => axiosError(err, alert));
+			}
+		}
+		
 		ory.toSession()
 		   .then(({ data }) => {
+			   // Todo: check whether this makes sense
 			   if (localStorage.getItem("consent") === "true")
 				   setSession(data);
+			   
 			   ory.createBrowserLogoutFlow().then(({ data }) => {
 				   setLogoutUrl(data.logout_url);
 			   });
+			   
+			   fetchStats();
 		   })
 		   .catch((err) => {
 			   console.log("error logging in", err);
@@ -71,7 +93,7 @@ export default function Dashboard(props: Props) {
 		
 		document.addEventListener("keydown", onKeyDown);
 		return () => document.removeEventListener("keydown", onKeyDown);
-	}, []);
+	}, [alert]);
 	
 	const capitalizeFirstLetter = (string: string) => {
 		return string.charAt(0).toUpperCase() + string.slice(1);
@@ -271,11 +293,11 @@ export default function Dashboard(props: Props) {
 			</div>
 			
 			{ window.location.pathname.includes("/question") && <>
-                <NavLink to="question/1">
+                <NavLink to={ "question/1" }>
                     <i className={ "fi fi-sr-question-square" }/>
                     <p style={ { display: "flex", flexDirection: "column" } }>
                         <span className={ "caption" }>{ t('dashboard.nav.question.browsing') }</span>
-                        <span><Skeleton/></span>
+                        <span>{ activeQuestionName ?? <Skeleton/> }</span>
                     </p>
                 </NavLink>
                 
@@ -337,15 +359,15 @@ export default function Dashboard(props: Props) {
 				<div className={ "stats" }>
 					<div className={ "stats-column" }>
 						<i className={ "fi fi-rr-flame primary-icon" }/>
-						<span>253d</span>
+						<span>{ stats?.streak ?? <Skeleton width={ 20 }/> }</span>
 					</div>
 					<div className={ "stats-column" }>
 						<i className={ "fi fi-rr-eye primary-icon" }/>
-						<span>1.8k</span>
+						<span>{ stats?.views ?? <Skeleton width={ 20 }/> }</span>
 					</div>
 					<div className={ "stats-column" }>
 						<i className={ "fi fi-rr-social-network primary-icon" }/>
-						<span>1.1k</span>
+						<span>{ stats?.likes ?? <Skeleton width={ 20 }/> }</span>
 					</div>
 				</div>
 				
