@@ -3,7 +3,7 @@
 import {
   Body,
   Controller,
-  Get,
+  Get, NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
@@ -18,10 +18,15 @@ import {
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
+import {CreateAnswerDto} from "./dto/create-answer.dto";
+import {UserContentService} from "../../database/user-content/user-content.service";
 
 @Controller('question') // prefix: domain/question/...
 export class QuestionsController {
-  constructor(private readonly userContentService: UserContentRequestService) {} //     private readonly services
+  constructor(
+      private readonly userContentService: UserContentRequestService,
+      private readonly userContentDatabaseService: UserContentService
+      ) {} //     private readonly services
 
   /*
    * Get the currently must up voted, questions from the last seven days
@@ -68,7 +73,7 @@ export class QuestionsController {
     //@ts-ignore
     return await this.userContentService.getTitleOfQuestion(id);
   }
-  @Get(':id/answers')
+  @Get(':id/answers')   // TODO returns [], database is not implemented
   async getQuestionAnswers(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Query(new ValidationPipe()) query: QueryParameters,
@@ -80,10 +85,22 @@ export class QuestionsController {
     @Req() req: any,
     @Body(new ValidationPipe()) createQuestion: CreateQuestion,
   ): Promise<object> {
-    return await this.userContentService.createUserContent(
+    return await this.userContentService.createQuestionWrapper(
       createQuestion,
-      Type.QUESTION,
       req.userId,
     );
+  }
+
+  @Post(':id/answer')
+  async createAnswerToQuestion(
+      @Param('id', new ParseUUIDPipe()) id: string,
+      @Req() req: any,
+      @Body(new ValidationPipe()) createAnswer: CreateAnswerDto,
+  ): Promise<object>{
+    return await this.userContentService.createAnswerWrapper(
+        createAnswer,
+        id,
+        req.userId,
+    )
   }
 }

@@ -1,13 +1,15 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
-  NotFoundException,
+  InternalServerErrorException, NotAcceptableException,
+  NotFoundException, UnprocessableEntityException,
 } from '@nestjs/common';
 import { UserContentService } from '../../database/user-content/user-content.service';
 import { VoteService } from '../../database/vote/vote.service';
 import { QueryParameters } from '../questions/dto/query-params.dto';
 import { SearchQuery } from '../questions/dto/search.dto';
+import {TypeOfAI} from "@prisma/client";
+import {BlacklistService} from "../../database/blacklist/blacklist.service";
 
 export enum Type {
   QUESTION,
@@ -20,6 +22,7 @@ export class UserContentRequestService {
   constructor(
     private readonly userContentService: UserContentService,
     private readonly voteService: VoteService,
+    private readonly blacklistService: BlacklistService
   ) {}
 
   async getTrendingQuestions(req: any) {
@@ -125,13 +128,73 @@ export class UserContentRequestService {
       );
 
     const answers = [];
-
-    for (const answer of rawAnswers) {
+    for (const answer of rawAnswers){
       //@ts-ignore
-      answers.push(this.getUserContent(answer.userContentID, Type.ANSWER));
+      answers.push(await this.getUserContent(answer.userContentID, Type.ANSWER));
     }
 
     return answers ?? [];
+  }
+
+  /**
+   * Wrapper for creation of Questions,
+   * does Input validation and error handling
+   * throws:
+   *    UnprocessableEntityException
+   *    NotAcceptableException
+   * @param data
+   * @param userId
+   */
+  async createQuestionWrapper(data: any, userId: string): Promise<object> {
+    if (data == null || data.content == null || data.title == null) {
+      throw new UnprocessableEntityException("Payload is not sufficient!")
+    }
+    const forbiddenWords: string[] = await this.blacklistService.getBlacklistArray(); // TODO buffer
+    if (this.blacklistService.checkTextWithBlacklist(data.title, forbiddenWords)
+        || this.blacklistService.checkTextWithBlacklist(data.content, forbiddenWords)) {
+      throw new NotAcceptableException(null,
+          "you have used unappropriate words!\nThis is not Acceptable, incident will be reported!"
+      );
+    }
+    return await this.createUserContent(data, Type.QUESTION, userId)
+  }
+
+  /**
+   * Wrapper method to create Answers,
+   * does input validation and the error handling
+   * throws:
+   *    UnprocessableEntityException,
+   *    NotFoundException
+   *    NotAcceptableException
+   * @param data
+   * @param questionId
+   * @param userId
+   * @param typeOfAI
+   */
+  async createAnswerWrapper(data: any, questionId: string, userId: string, typeOfAI?:TypeOfAI): Promise<object>{
+    const cleaned_typeOfAI: TypeOfAI = typeOfAI==null? TypeOfAI.None: data.typeOfAI
+    const groupID = data.questionId
+    if (data == null || data.content == null){
+      throw new UnprocessableEntityException("Payload is not sufficient!")
+    }
+    const answer = await this.userContentService.getQuestion(questionId)
+    if(answer == null || answer.userContent == null || answer.userContent.groupID == null){
+      throw new NotFoundException("Question " + questionId + " doesn't exist!")
+    }
+    const groupId = answer.userContent.groupID;
+    const forbiddenWords: string[] = await this.blacklistService.getBlacklistArray(); // TODO buffer
+    if(this.blacklistService.checkTextWithBlacklist(data.content, forbiddenWords)){
+      throw new NotAcceptableException(null,
+          "you have used unappropriate words!\nThis is not Acceptable, incident will be reported!"
+      )
+    }
+    const answerData = {
+      groupId: groupId,
+      content: data.content,
+      typeOfAI: cleaned_typeOfAI,
+    }
+    console.log(answerData)
+    return await this.createUserContent(answerData, Type.ANSWER, userId)
   }
 
   /**
@@ -153,7 +216,7 @@ export class UserContentRequestService {
    * */
   async createUserContent(data: any, type: Type, userId: string) {
     try {
-      let result;
+      let result: any;
       switch (type) {
         case Type.QUESTION:
           result = await this.userContentService.createQuestion(
