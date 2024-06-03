@@ -77,7 +77,9 @@ export default function Editor(props: {}) {
 				<div style={ { display: "flex", gap: "var(--spacing)" } }>
 					<LiveInput placeholder={ t('dashboard.questionEditor.tags.placeholder') }
 							   onSuggestionSelected={ (s) => setTags([...tags, s]) }
-							   disabled={ hasBeenSubmitted || tags.length >= 5 }/>
+							   onSuggestionDeselected={ (s) => setTags(tags.filter(t => t !== s)) }
+							   disabled={ hasBeenSubmitted || tags.length >= 5 }
+							   selectedSuggestions={ tags }/>
 					<p className={ "tags tags-deletable" } style={ { alignSelf: "center" } }>
 						{ tags.map((tag, index) => (
 							<span key={ index }

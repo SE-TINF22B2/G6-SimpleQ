@@ -11,6 +11,9 @@ interface Props {
 	onSuggestionSelected?: (suggestion: string) => void;
 	placeholder?: string;
 	disabled?: boolean;
+	
+	selectedSuggestions?: string[];
+	onSuggestionDeselected?: (suggestion: string) => void;
 }
 
 /**
@@ -23,6 +26,7 @@ export default function LiveInput(props: Props) {
 	const { t } = useTranslation();
 	const [isLoading, setIsLoading] = useState(false);
 	const [suggestions, setSuggestions] = React.useState<string[]>([]);
+	const [input, setInput] = React.useState<HTMLInputElement | null>();
 	
 	const alert = useAlert();
 	
@@ -48,34 +52,59 @@ export default function LiveInput(props: Props) {
 			  .finally(() => setIsLoading(false));
 	}
 	
+	let renderedSelectedSuggestions = (props.selectedSuggestions ?? [])
+		.filter(s => s.includes(input?.value.toLowerCase() ?? ""));
+	
+	let renderedSuggestions = props.disabled ? [] : suggestions.filter(s => !props.selectedSuggestions?.includes(s));
+	
 	return <div className={ "live-input" }>
-		<input type={ "text" } disabled={ props.disabled }
+		<input type={ "text" } ref={ i => setInput(i) }
 			   placeholder={ props.placeholder ?? "" }
 			   onChange={ (event) => {
 				   const input = event.target.value;
 				   updateSuggestions(input);
 			   } }/>
 		
-		{ isLoading && <i className={ "fi fi-rr-spinner spin" }/> }
+		<p className={ "selection-count" }>{ (props.selectedSuggestions ?? []).length }</p>
+		
+		{ <i className={ "fi fi-rr-" + (isLoading ? "spinner spin" : "filter") + " selection-activity" }/> }
 		
 		<div className={ "suggestions" }>
-			{ suggestions.length > 0
-				? suggestions.map((suggestion, index) =>
+			{ renderedSelectedSuggestions.length === 0 && renderedSuggestions.length === 0
+				&& <p className={ "caption" }>{ t('components.liveInput.empty') }</p> }
+			
+			{ renderedSelectedSuggestions.length > 0 && <>
+                <span className={ "caption" }>{ t('components.liveInput.selected') }</span>
+				
+				{ renderedSelectedSuggestions.map((suggestion, index) =>
+					<button key={ index } onClick={ _ => {
+						input?.focus();
+						
+						if (props.onSuggestionDeselected)
+							props.onSuggestionDeselected(suggestion.toLowerCase());
+					} }>
+						<i className={ "fi fi-rr-check" } style={ { color: "var(--primary-color)" } }/>{ suggestion }
+					</button>
+				) }
+            </> }
+			
+			{ renderedSelectedSuggestions.length > 0 && renderedSuggestions.length > 0 && <hr/> }
+			
+			{ renderedSuggestions.length > 0 && <>
+                <span className={ "caption" }>{ t('components.liveInput.suggestions') }</span>
+				
+				{ renderedSuggestions.map((suggestion, index) =>
 					<button key={ index }
-							onClick={ (event) => {
-								if (props.onSuggestionSelected) {
-									props.onSuggestionSelected(suggestion);
-									
-									let input = (event.target as HTMLButtonElement).parentElement?.parentElement?.querySelector("input");
-									if (input) input.value = "";
-									setSuggestions([]);
-									
-									(event.target as HTMLButtonElement).blur();
-								}
+							onClick={ _ => {
+								input?.focus();
+								
+								if (props.onSuggestionSelected)
+									props.onSuggestionSelected(suggestion.toLowerCase());
 							} }>
+						<i className={ "fi fi-rr-plus" }/>
 						{ suggestion }
-					</button>)
-				: <button disabled>{ t('components.liveInput.empty') }</button> }
+					</button>) }
+            </> }
 		</div>
 	</div>
 }
