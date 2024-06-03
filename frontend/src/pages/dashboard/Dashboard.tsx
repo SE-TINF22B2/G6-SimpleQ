@@ -41,6 +41,7 @@ export default function Dashboard(props: Props) {
 	const [session, setSession] = useState<Session | undefined>();
 	const [logoutUrl, setLogoutUrl] = useState<string | undefined>();
 	const [stats, setStats] = useState<{ streak: number, views: number, likes: number } | undefined>();
+	const [history, setHistory] = useState<number[] | undefined>();
 	const [activeQuestionName, setActiveQuestionName] = useState<string | undefined>();
 	
 	const getUserName = (identity?: Identity) =>
@@ -375,9 +376,7 @@ export default function Dashboard(props: Props) {
 				<p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
 					{ t('dashboard.nav.activeDays') }
 				</p>
-				<BarChart data={
-					Array.from({ length: 30 }, () => Math.floor(Math.random() * 100))
-				}/>
+				<BarChart data={ history }/>
 			</div>
 		</nav>
 		
