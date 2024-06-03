@@ -13,11 +13,14 @@
 		position: sticky;
 		top: 0;
 
+		overflow-y: scroll;
+
 		> :first-child {
 			align-items: center;
 			background: var(--primary-color);
 			color: var(--primary-color-contrast);
 			display: flex;
+			min-height: var(--header-height);
 			height: var(--header-height);
 			justify-content: center;
 		}
@@ -30,6 +33,7 @@
 			flex-direction: row;
 			font-size: 0.9em;
 			gap: calc(var(--spacing) / 2);
+			min-height: 40px;
 			height: 40px;
 			justify-content: flex-start;
 			margin-left: var(--spacing);
