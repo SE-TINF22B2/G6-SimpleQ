@@ -3,7 +3,7 @@
 import {
   Body,
   Controller,
-  Get, NotFoundException,
+  Get,
   Param,
   ParseUUIDPipe,
   Post,
@@ -19,17 +19,15 @@ import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
 import {CreateAnswerDto} from "./dto/create-answer.dto";
-import {UserContentService} from "../../database/user-content/user-content.service";
 
 @Controller('question') // prefix: domain/question/...
 export class QuestionsController {
   constructor(
       private readonly userContentService: UserContentRequestService,
-      private readonly userContentDatabaseService: UserContentService
       ) {} //     private readonly services
 
   /*
-   * Get the currently must up voted, questions from the last seven days
+   * Get the currently most upvoted, questions from the last seven days
    * @Returns an array of trending questions
    * */
   @Get('trending')
@@ -73,6 +71,7 @@ export class QuestionsController {
     //@ts-ignore
     return await this.userContentService.getTitleOfQuestion(id);
   }
+
   @Get(':id/answers')   // TODO returns [], database is not implemented
   async getQuestionAnswers(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -80,6 +79,7 @@ export class QuestionsController {
   ): Promise<object> {
     return this.userContentService.getAnswersOfQuestion(id, query);
   }
+
   @Post('create')
   async createNewQuestion(
     @Req() req: any,

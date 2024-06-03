@@ -153,7 +153,7 @@ export class UserContentRequestService {
     if (this.blacklistService.checkTextWithBlacklist(data.title, forbiddenWords)
         || this.blacklistService.checkTextWithBlacklist(data.content, forbiddenWords)) {
       throw new NotAcceptableException(null,
-          "you have used unappropriate words!\nThis is not Acceptable, incident will be reported!"
+          "you have used unappropriated words!\nThis is not Acceptable, incident will be reported!"
       );
     }
     return await this.createUserContent(data, Type.QUESTION, userId)
@@ -173,8 +173,7 @@ export class UserContentRequestService {
    */
   async createAnswerWrapper(data: any, questionId: string, userId: string, typeOfAI?:TypeOfAI): Promise<object>{
     const cleaned_typeOfAI: TypeOfAI = typeOfAI==null? TypeOfAI.None: data.typeOfAI
-    const groupID = data.questionId
-    if (data == null || data.content == null){
+    if (data.content == null){
       throw new UnprocessableEntityException("Payload is not sufficient!")
     }
     const answer = await this.userContentService.getQuestion(questionId)
@@ -185,7 +184,7 @@ export class UserContentRequestService {
     const forbiddenWords: string[] = await this.blacklistService.getBlacklistArray(); // TODO buffer
     if(this.blacklistService.checkTextWithBlacklist(data.content, forbiddenWords)){
       throw new NotAcceptableException(null,
-          "you have used unappropriate words!\nThis is not Acceptable, incident will be reported!"
+          "you have used unappropriated words!\nThis is not Acceptable, incident will be reported!"
       )
     }
     const answerData = {
@@ -200,6 +199,7 @@ export class UserContentRequestService {
   /**
    * Fetches the questions for a given search criteria
    * @param query typeof SearchQuery
+   * @param req
    * @returns the questions meeting the criteria or an empty array
    * */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
