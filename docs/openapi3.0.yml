@@ -71,8 +71,8 @@ components:
     AItype:
       type: object
       properties:
-        type:
-          aiType: string
+        aiType:
+          type: string
           enum:
             - WolframAlpha
             - GPT
@@ -83,10 +83,14 @@ components:
         title:
           type: string
           nullable: false
+        tags:
+          type: array
+          items:
+            type: string
         content: 
           type: string
           nullable: false
-        genAI:
+        useAI:
           type: boolean
           description: Will be validated in the backend for user permission
           default: false
@@ -101,30 +105,6 @@ components:
         # userStatus TODO
     
     Profile:
-      allOf:
-        - $ref: '#/components/schemas/ProfileShort'
-      type: object
-      properties:
-        userStatistics:
-          type: object
-          description: 'statistics for user activity, can be used to create diagrams'
-          properties:
-            TODO:
-              type: integer
-              description: TODO
-        activityPoints: 
-          type: integer
-        expertTopics:
-          type: array
-          items:
-            type: object
-            properties:
-              tagName: 
-                type: string
-              points: 
-                type: integer
-
-    ProfileShort:
       type: object
       properties:
         name:
@@ -144,8 +124,23 @@ components:
         expertTopics:
           type: array
           items:
-            type: string
+            type: object
+            properties:
+              tagName: 
+                type: string
+              points: 
+                type: integer
           description: 'list of topics, where the individual user is expert'
+        userStatistics:
+          type: object
+          description: 'statistics for user activity, can be used to create diagrams'
+          properties:
+            TODO:
+              type: integer
+              description: TODO
+        activityPoints: 
+          type: integer
+
     Quest:
       type: object
       properties:
@@ -154,6 +149,8 @@ components:
         description:
           type: string
         points:
+          type: integer
+        maxPoints:
           type: integer
         done:
           type: boolean
@@ -293,13 +290,11 @@ paths:
           content:
             application/json: 
               schema: 
-                object:
-                  properties:
-                    title:
-                      type: string
+                properties:
+                  title:
+                    type: string
         '404':
           description: Not found
-        
           
   /question/{questionId}/answers:
     get: 
@@ -411,32 +406,26 @@ paths:
                 items: 
                   type: string
   
-  /profile/{userId}:
+  /profile:
     get:
       tags:
         - user
-      summary: 'basic information of users, can be used for overviews, can be seen by everybody'
-      parameters: 
-        - in: path
-          name: userId
-          required: true
-          schema:
-            type: string
+      summary: 'basic information of the user that is logged in'
       responses:
         '200':
           description: 'Ok'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProfileShort'
-        '404':
-          description: 'User does not exist'
-  /profile/{userId}/profile:
+                $ref: '#/components/schemas/Profile'
+        '401':
+          description: 'Unauthorized'
+  /profile/{userId}:
     get:
       tags:
         - user
-      summary: 'detailed information for one user, can be used for profiles, can be seen by everybody'
-      parameters:
+      summary: 'information of users, can be used for overviews, can be seen by everybody'
+      parameters: 
         - in: path
           name: userId
           required: true
@@ -451,7 +440,6 @@ paths:
                 $ref: '#/components/schemas/Profile'
         '404':
           description: 'User does not exist'
-  
   /profile/update:
     put: 
       tags:
@@ -570,7 +558,6 @@ paths:
         '401':  
           description: 'Unauthorized'
 
-
   /cookie:
     get:
       tags:
@@ -610,8 +597,3 @@ paths:
       responses:
         '418':
           description: 'Never gonna give you up'
-          
-          
-
-
-
