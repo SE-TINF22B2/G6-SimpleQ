@@ -94,7 +94,15 @@ components:
           type: boolean
           description: Will be validated in the backend for user permission
           default: false
-    
+
+    CreateAnswer:
+      type: object
+      properties:
+        content:
+          type: string
+          nullable: false
+
+
     UpdateUser:
       type: object
       properties:
@@ -193,9 +201,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Question'
-        '401':
-          description: User is not logged in
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
   
   /question/search/:
     get:
@@ -382,6 +390,42 @@ paths:
                       type: string
         '422':
           description: 'Unprocessable Entity: Payload is not sufficient'
+
+  /question/{questionId}/answer:
+    post:
+      tags:
+       - questions
+      summary: Create a answer for a question
+      parameters:
+        - in: path
+          name: questionId
+          required: true
+          description: UUID of a question
+          schema:
+            type: string
+      requestBody:
+        description: the data that needs to be send
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAnswer'
+      responses:
+        '200':
+          description: 'Answer successfully created'
+          content:
+            application/json:
+                schema:
+                  $ref: '#/components/schemas/Answer'
+        '422':
+          description: 'Unprocessable Entity: Payload is not sufficient'
+        '404':
+          description: 'Not Found'
+        '403':
+          description: 'Forbidden, user needs to be registered'
+        '406':
+          description: 'Not Acceptable, used forbidden words in request'
+
 
   /tags/find:
     get: 
