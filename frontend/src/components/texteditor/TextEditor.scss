@@ -49,6 +49,11 @@
 		outline: none;
 		overflow-y: scroll;
 
+		&:empty:not(:focus):before {
+			content: attr(data-placeholder);
+			opacity: 0.8;
+		}
+
 		img {
 			border-radius: var(--border-radius);
 			max-height: 100px;

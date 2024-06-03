@@ -113,9 +113,8 @@ export default function Editor(props: {}) {
 				<p>{ t('dashboard.questionEditor.description.hint') }</p>
 				<hr/>
 				
-				<TextEditor height={ "240px" } disabled={ hasBeenSubmitted } onInput={ setDescription }>
-					{ t('dashboard.questionEditor.description.placeholder') }
-				</TextEditor>
+				<TextEditor height={ "240px" } disabled={ hasBeenSubmitted } onInput={ setDescription }
+							placeholder={ t('dashboard.questionEditor.description.placeholder') }/>
 			</div>
 		</section>
 		

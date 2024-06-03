@@ -202,9 +202,7 @@ export default function QuestionView() {
 			
 			<section className={ "glass focus-indicator" }>
 				<h3>Answer this question</h3>
-				<TextEditor>
-					Write your answer here...
-				</TextEditor>
+				<TextEditor placeholder={ "Write your answer here..." }/>
 			</section>
 			
 			<hr style={ { margin: 0 } }/>
