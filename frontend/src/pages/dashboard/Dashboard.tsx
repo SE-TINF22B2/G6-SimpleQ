@@ -11,6 +11,7 @@ import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
 import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
+import Search from "../../components/search/Search";
 
 // ory setup
 const basePath = "http://localhost:4000"
@@ -402,27 +403,6 @@ export default function Dashboard(props: Props) {
 			<Outlet/>
 		</main>
 		
-		<div className={ "search glass" }
-			 onClick={ () => toggleSearch() }>
-			<div className={ "search-container" }>
-				<div onClick={ (e: any) => e.stopPropagation() }>
-					<i className={ "fi fi-rr-search" }/>
-					<input type={ "text" } placeholder={ t('dashboard.search.search') }/>
-				</div>
-				
-				<p className={ "search-info" }>
-					{ t('dashboard.search.info') }
-				</p>
-				
-				<p className={ "search-result" } tabIndex={ 0 }>
-					<i className={ "fi fi-rr-question badge" }/>
-					<span>How to use React?</span>
-					<i className={ "fi fi-rr-user" }
-					   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-					<span>Benni Loidl</span>
-					<span>Yesterday</span>
-				</p>
-			</div>
-		</div>
+		<Search toggleSearch={ toggleSearch }/>
 	</div>
 }
