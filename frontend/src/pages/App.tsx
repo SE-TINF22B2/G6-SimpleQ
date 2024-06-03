@@ -42,7 +42,6 @@ i18n.use(detector)
 const axiosInstance = axios.create();
 axiosInstance.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 axiosInstance.defaults.timeout = 6000;
-axiosInstance.defaults.withCredentials = true;
 global.axios = axiosInstance;
 
 /**
