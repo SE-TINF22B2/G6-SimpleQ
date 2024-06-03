@@ -11,6 +11,7 @@ import { Answer, Question } from "../../../def/Question";
 import { formatDate } from "../../../def/converter";
 import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
+import NoContent from "../../../components/NoContent";
 
 /**
  * Renders the question page
@@ -209,7 +210,9 @@ export default function QuestionView() {
 			<hr style={ { margin: 0 } }/>
 			
 			{ !answersLoading
-				? answers.map((answer, index) => renderAnswer(answer, index))
+				? answers.length > 0
+					? answers.map((answer, index) => renderAnswer(answer, index))
+					: <NoContent/>
 				: <>
 					{ renderAnswerSkeleton() }
 					{ renderAnswerSkeleton() }
