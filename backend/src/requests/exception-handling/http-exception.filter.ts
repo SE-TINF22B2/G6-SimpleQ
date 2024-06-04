@@ -1,7 +1,13 @@
-
-import {ExceptionFilter, Catch, ArgumentsHost, NotFoundException, HttpStatus, ImATeapotException} from '@nestjs/common';
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  NotFoundException,
+  HttpStatus,
+  ImATeapotException,
+} from '@nestjs/common';
 // import { Request, Response } from 'express';
-import {join} from "path";
+import { join } from 'path';
 
 /**
  * Filter NotFound Exceptions and give custom response
@@ -11,43 +17,43 @@ import {join} from "path";
  */
 @Catch(NotFoundException)
 export class NotFoundExceptionFilter implements ExceptionFilter {
-    catch(exception: NotFoundException, host: ArgumentsHost) {
-        const ctx = host.switchToHttp();
-        const request = ctx.getRequest<Request>();
-        const status = exception.getStatus();
-        const exceptionCause = exception.getResponse()
-        // logging
-        console.log({
-                    exceptionCause,
-                    statusCode: status,
-                    timestamp: new Date().toISOString(),
-                    path: request.url,
-                });
+  catch(exception: NotFoundException, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const request = ctx.getRequest<Request>();
+    const status = exception.getStatus();
+    const exceptionCause = exception.getResponse();
+    // logging
+    console.log({
+      exceptionCause,
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+    });
 
-        const response = ctx.getResponse();
-        if (typeof exceptionCause === 'object') {
-            const regexp = new RegExp(`^Cannot GET \\/[\\w\\/]*`)
-            // @ts-ignore
-            console.log(regexp.test(exceptionCause.message));
-            // @ts-ignore
-            if (!(typeof exceptionCause.message === 'undefined' || regexp.test(exceptionCause.message))){
-                // custom message detected -> returns JSON
-                response
-                    .status(HttpStatus.NOT_FOUND)
-                    .json(
-                        {
-                        ...exceptionCause,
-                        timestamp: new Date().toISOString(),
-                        path: request.url,
-                    });
-                return;
-            }
-        }
-        // ordinary message -> returns HTML site
-        response
-            .status(HttpStatus.NOT_FOUND)
-            .sendFile(join(`${process.cwd()}/static/404.html`));
+    const response = ctx.getResponse();
+    if (typeof exceptionCause == 'object') {
+      const regexp = new RegExp(`^Cannot GET \\/[\\w\\/]*`);
+      // @ts-ignore
+      console.log(regexp.test(exceptionCause.message));
+      // @ts-ignore
+      if (
+        // @ts-ignore
+        !(exceptionCause.message === 'undefined' || regexp.test(exceptionCause.message)) // eslint-disable-line
+      ) {
+        // custom message detected -> returns JSON
+        response.status(HttpStatus.NOT_FOUND).json({
+          ...exceptionCause,
+          timestamp: new Date().toISOString(),
+          path: request.url,
+        });
+        return;
+      }
     }
+    // ordinary message -> returns HTML site
+    response
+      .status(HttpStatus.NOT_FOUND)
+      .sendFile(join(`${process.cwd()}/static/404.html`));
+  }
 }
 
 /**
@@ -56,18 +62,18 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
  */
 @Catch(ImATeapotException)
 export class ImATeapotFilter implements ExceptionFilter {
-    catch(exception: ImATeapotException, host: ArgumentsHost) {
-        const ctx = host.switchToHttp();
-        const request = ctx.getRequest<Request>();
-        const status = exception.getStatus();
-        console.log({
-                    statusCode: status,
-                    timestamp: new Date().toISOString(),
-                    path: request.url,
-                });
-        const response = ctx.getResponse();
-        response
-            .status(HttpStatus.I_AM_A_TEAPOT)
-            .sendFile(join(`${process.cwd()}/static/418.html`));
-    }
+  catch(exception: ImATeapotException, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const request = ctx.getRequest<Request>();
+    const status = exception.getStatus();
+    console.log({
+      statusCode: status,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+    });
+    const response = ctx.getResponse();
+    response
+      .status(HttpStatus.I_AM_A_TEAPOT)
+      .sendFile(join(`${process.cwd()}/static/418.html`));
+  }
 }

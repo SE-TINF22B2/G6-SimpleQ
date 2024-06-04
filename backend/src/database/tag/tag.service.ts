@@ -38,9 +38,11 @@ export class TagService {
    * returns all Tags of this database, existing at this moment
    */
   async _getAllTags(): Promise<string[]> {
+    /* eslint-disable */
     return (
-        await this.prisma.tag.findMany({})
-    ).map(tag => tag.tagname);
+      await this.prisma.tag.findMany({})
+    ).map((tag) => tag.tagname);
+    /* eslint-enable */
   }
 
   /**
