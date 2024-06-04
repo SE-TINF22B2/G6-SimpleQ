@@ -11,6 +11,7 @@ import { SearchQuery } from '../questions/dto/search.dto';
 import {TypeOfAI} from "@prisma/client";
 import {BlacklistService} from "../../database/blacklist/blacklist.service";
 import {TagService} from "../../database/tag/tag.service";
+import {CreateQuestion} from "../questions/dto/create-question.dto";
 
 export enum Type {
   QUESTION,
@@ -44,6 +45,13 @@ export class UserContentRequestService {
     return results;
   }
 
+  /**
+   * Loads User Content
+   * @param id      # UUID
+   * @param type    # Type[Question, Answer, Discussion]
+   * @param userId  # UUID
+   * @throws NotFoundException
+   */
   async getUserContent(id: string, type: Type, userId?: string) {
     const result = await this.userContentService.getQuestion(id);
 
@@ -97,11 +105,23 @@ export class UserContentRequestService {
     );
   }
 
-  async getTitleOfQuestion(id: string) {
+  /**
+   * Get Title and userContentID of a question on basis on questionID
+   * @param id
+   * @throws NotFoundException
+   * @throws InternalServerErrorException
+   * @return {id, title}
+   */
+  async getTitleOfQuestion(
+      id: string
+  ): Promise<{id: string, title: string}> {
     const question = await this.userContentService.getQuestion(id);
     if (question == null)
       throw new NotFoundException('No question found with this id.');
 
+    if (question.question?.userContentID == null || question.question?.title == null){
+      throw new InternalServerErrorException(); // the question is not complete
+    }
     return {
       id: question.question?.userContentID,
       title: question.question?.title,
@@ -145,13 +165,15 @@ export class UserContentRequestService {
    * Wrapper for creation of Questions,
    * does Input validation and error handling
    * Tags are created if they do not exist in the database at the time the question is created
-   * throws:
-   *    UnprocessableEntityException
-   *    NotAcceptableException
    * @param data
    * @param userId
+   * @throws UnprocessableEntityException
+   * @throws NotAcceptableException
    */
-  async createQuestionWrapper(data: any, userId: string): Promise<object> {
+  async createQuestionWrapper(
+      data: CreateQuestion,
+      userId: string
+  ): Promise<object> {
     const forbiddenWords: string[] = await this.blacklistService.getBlacklistArray(); // TODO buffer
 
     // check basic data is present
@@ -161,17 +183,11 @@ export class UserContentRequestService {
 
     // handle tags, create Tags if they do not exist in the database
     if (data.tags !== undefined && data.tags !== null) {
-      const notIntersectedTags: string[] = await this.tagService.getNotInsertedTags(data.tags)
-      if (this.blacklistService.checkTextWithBlacklist(notIntersectedTags.join(" "), forbiddenWords)){
-        throw new NotFoundException(
-            "You have used unappropriated tags!\nThis is not Acceptable, incident will be reported!"
-        )
-      }
-      notIntersectedTags.forEach(tag => {
-            console.log("ADD " + tag) // TODO change with Logging service
-            this.tagService.createTag(tag);
-          }
-      )
+      await this.createTagsIfNotExist(data.tags, forbiddenWords);
+    }
+
+    if (data.useAI){
+      // TODO implement AI
     }
 
     // check text for restricted words
@@ -185,16 +201,39 @@ export class UserContentRequestService {
   }
 
   /**
+   * compares tags with existing Tags,
+   * creates new tags if they do not exist
+   * new tags are checked against forbidden words
+   * @param tags
+   * @param forbiddenWords
+   *
+   * @throws NotAcceptableException if new tags are in blocklist
+   */
+  public async createTagsIfNotExist(tags: string[], forbiddenWords: string[]): Promise<void> {
+    const notIntersectedTags: string[] = await this.tagService.getNotInsertedTags(tags)
+    if (this.blacklistService.checkTextWithBlacklist(notIntersectedTags.join(" "), forbiddenWords)) {
+      throw new NotAcceptableException(
+          "You have used unappropriated tags!\n" +
+          "This is not Acceptable, incident will be reported!"
+      )
+    }
+    notIntersectedTags.forEach(tag => {
+          console.log("ADD " + tag) // TODO change with Logging service
+          this.tagService.createTag(tag);
+        }
+    )
+  }
+
+  /**
    * Wrapper method to create Answers,
    * does input validation and the error handling
-   * throws:
-   *    UnprocessableEntityException,
-   *    NotFoundException
-   *    NotAcceptableException
    * @param data
    * @param questionId
    * @param userId
    * @param typeOfAI
+   * @throws UnprocessableEntityException,
+   * @throws NotFoundException
+   * @throws NotAcceptableException
    */
   async createAnswerWrapper(data: any, questionId: string, userId: string, typeOfAI?:TypeOfAI): Promise<object>{
     const cleaned_typeOfAI: TypeOfAI = typeOfAI==null? TypeOfAI.None: data.typeOfAI
