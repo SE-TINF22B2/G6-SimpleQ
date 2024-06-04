@@ -13,6 +13,38 @@ import {
 } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 
+export type SortOptions = {
+  sortBy: SortType;
+  sortDirection: SortDirection;
+  offset: number;
+  limit: number;
+};
+
+export enum SortType {
+  ldr, // like-dislike-ratio
+  likes,
+  dislikes,
+  timestamp,
+}
+export enum SortDirection {
+  desc,
+  asc,
+}
+
+export function createSortOptions(
+  sortBy: string = 'ldr',
+  sortDirection: string = 'desc',
+  offset: number = 0,
+  limit: number = 0,
+): SortOptions {
+  return {
+    sortBy: SortType[sortBy],
+    sortDirection: SortDirection[sortDirection],
+    offset: offset,
+    limit: limit,
+  };
+}
+
 @Injectable()
 export class UserContentService {
   constructor(private prisma: PrismaService) {}
@@ -87,13 +119,96 @@ export class UserContentService {
   }
 
   /**
-   * Search for questions in the database with given search criteria
-   * @param query typeof SearchQuery described in ./dto/search.dto.ts
-   * */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async search(query: any) {
-    // TODO: This method must be implemented
-    return [];
+   * Get all questions that contain one of the query words in their content or title.
+   * @param query String to search for
+   * @returns Array of UserContents with questions
+   */
+  async getAllQuestionsFromQuery(query: string): Promise<UserContent[] | null> {
+    return this.prisma.userContent.findMany({
+      where: {
+        type: UserContentType.Question,
+        OR: [
+          {
+            content: {
+              search: query,
+            },
+          },
+          {
+            question: {
+              title: {
+                search: query,
+              },
+            },
+          },
+        ],
+      },
+    });
+  }
+
+  /**
+   * Search for questions with a query string and searchOptions. The query is a string that
+   * has to be in the title or the content of the question.
+   * @param query String to search for
+   * @param sortOptions Object of type SortOptions
+   * @returns Array of sorted questions, or null if there are no questions containing the query
+   */
+  async searchForQuestions(
+    query: string,
+    sortOptions: SortOptions,
+  ): Promise<
+    | (UserContent & {
+        likes: number;
+        dislikes: number;
+      })[]
+    | null
+  > {
+    let allQuestions: UserContent[] | null =
+      await this.getAllQuestionsFromQuery(query);
+    // if no questions where found
+    if (null === allQuestions) {
+      return null;
+    }
+
+    // add the number of likes and dislikes to each question
+    let modifiedQuestions: (UserContent & {
+      likes: number;
+      dislikes: number;
+    })[] = await Promise.all(
+      allQuestions.map(async (q) => {
+        const rating = await this.getLikesAndDislikesOfUserContent(
+          q.userContentID,
+        );
+        return {
+          ...q,
+          likes: rating.likes,
+          dislikes: rating.dislikes,
+        };
+      }),
+    );
+
+    switch (sortOptions.sortBy) {
+      case SortType.ldr:
+        modifiedQuestions.sort((q) => {
+          return q.likes / q.dislikes;
+        });
+      case SortType.likes:
+        modifiedQuestions.sort((q) => {
+          return q.likes;
+        });
+      case SortType.dislikes:
+        modifiedQuestions.sort((q) => {
+          return q.likes;
+        });
+      case SortType.timestamp:
+        modifiedQuestions.sort((q) => {
+          return q.timeOfCreation.getTime();
+        });
+    }
+
+    if (sortOptions.sortDirection === SortDirection.desc) {
+      modifiedQuestions.reverse();
+    }
+    return modifiedQuestions;
   }
 
   /**
@@ -209,7 +324,7 @@ export class UserContentService {
    * @returns array with answers or an empty one if no anwers exist
    * */
   async getAnswersOfGroupID(
-    groupID: string | undefined,
+    groupID: string,
     sortCriteria: any,
   ): Promise<object[]> {
     // TODO: needs to be implemented

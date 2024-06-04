@@ -4,7 +4,10 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { UserContentService } from '../../database/user-content/user-content.service';
+import {
+  createSortOptions,
+  UserContentService,
+} from '../../database/user-content/user-content.service';
 import { VoteService } from '../../database/vote/vote.service';
 import { QueryParameters } from '../questions/dto/query-params.dto';
 import { SearchQuery } from '../questions/dto/search.dto';
@@ -108,11 +111,11 @@ export class UserContentRequestService {
    * */
   async getAnswersOfQuestion(id: string, sortCriteria: QueryParameters) {
     const question = await this.userContentService.getQuestion(id);
-    if (question == null)
+    if (null === question || null === question.userContent)
       throw new NotFoundException('No question found with this id.');
 
     const rawAnswers = await this.userContentService.getAnswersOfGroupID(
-      question?.userContent?.groupID,
+      question.userContent.groupID,
       sortCriteria,
     );
     if (rawAnswers == null)
@@ -138,7 +141,15 @@ export class UserContentRequestService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async search(query: SearchQuery, req: any) {
     console.log(req);
-    return await this.userContentService.search(query);
+    return await this.userContentService.searchForQuestions(
+      query.q,
+      createSortOptions(
+        query.sortBy,
+        query.sortDirection,
+        query.offset,
+        query.limit,
+      ),
+    );
   }
 
   /**

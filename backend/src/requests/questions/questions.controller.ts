@@ -15,7 +15,7 @@ import { UserContentRequestService } from '../user-content-request/user-content-
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
-import { UserContentType } from '@prisma/client';
+import { UserContent, UserContentType } from '@prisma/client';
 
 @Controller('question') // prefix: domain/question/...
 export class QuestionsController {
@@ -43,7 +43,13 @@ export class QuestionsController {
   getSearch(
     @Req() req: any,
     @Query(new ValidationPipe()) query: SearchQuery,
-  ): Promise<object> {
+  ): Promise<
+    | (UserContent & {
+        likes: number;
+        dislikes: number;
+      })[]
+    | null
+  > {
     return this.userContentService.search(query, req);
   }
 
