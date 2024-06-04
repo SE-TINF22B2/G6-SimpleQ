@@ -1,4 +1,4 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { User } from '@prisma/client';
 
@@ -50,15 +50,16 @@ export class UserService {
    * @return boolean
    */
   async isProUser(userId: string): Promise<boolean> {
-    const userData: {isPro: boolean} | null = await this.prisma.user.findUnique({
-      where: {
-        userID: userId
-      },
-      select: {
-        isPro: true,
-      }
-    });
-    if (userData == null){
+    const userData: { isPro: boolean } | null =
+      await this.prisma.user.findUnique({
+        where: {
+          userID: userId,
+        },
+        select: {
+          isPro: true,
+        },
+      });
+    if (userData == null) {
       throw new NotFoundException();
     }
     return userData.isPro;
@@ -71,15 +72,16 @@ export class UserService {
    * @return boolean
    */
   async isAdmin(userId: string): Promise<boolean> {
-    const userData: {isAdmin: boolean} | null = await this.prisma.user.findUnique({
-      where: {
-        userID: userId
-      },
-      select: {
-        isAdmin: true,
-      }
-    });
-    if (userData == null){
+    const userData: { isAdmin: boolean } | null =
+      await this.prisma.user.findUnique({
+        where: {
+          userID: userId,
+        },
+        select: {
+          isAdmin: true,
+        },
+      });
+    if (userData == null) {
       throw new NotFoundException();
     }
     return userData.isAdmin;
@@ -92,14 +94,14 @@ export class UserService {
    * @return boolean
    */
   async upgradeUser(userId: string): Promise<boolean> {
-    const result: {isPro: boolean} = await this.prisma.user.update({
+    const result: { isPro: boolean } = await this.prisma.user.update({
       data: {
         isPro: true,
       },
       where: { userID: userId },
       select: {
         isPro: true,
-      }
+      },
     });
     return result.isPro;
   }

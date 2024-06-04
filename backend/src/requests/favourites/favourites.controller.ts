@@ -10,9 +10,9 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-import {FavoriteService} from '../../database/favorite/favorite.service';
-import {Favorite} from '@prisma/client';
-import {UserContentService} from '../../database/user-content/user-content.service';
+import { FavoriteService } from '../../database/favorite/favorite.service';
+import { Favorite } from '@prisma/client';
+import { UserContentService } from '../../database/user-content/user-content.service';
 
 @Controller('favourites')
 export class FavouritesController {

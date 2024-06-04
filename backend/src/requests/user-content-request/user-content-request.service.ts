@@ -1,17 +1,19 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException, NotAcceptableException,
-  NotFoundException, UnprocessableEntityException,
+  InternalServerErrorException,
+  NotAcceptableException,
+  NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { UserContentService } from '../../database/user-content/user-content.service';
 import { VoteService } from '../../database/vote/vote.service';
 import { QueryParameters } from '../questions/dto/query-params.dto';
 import { SearchQuery } from '../questions/dto/search.dto';
-import {TypeOfAI} from "@prisma/client";
-import {BlacklistService} from "../../database/blacklist/blacklist.service";
-import {TagService} from "../../database/tag/tag.service";
-import {CreateQuestion} from "../questions/dto/create-question.dto";
+import { TypeOfAI } from '@prisma/client';
+import { BlacklistService } from '../../database/blacklist/blacklist.service';
+import { TagService } from '../../database/tag/tag.service';
+import { CreateQuestion } from '../questions/dto/create-question.dto';
 
 export enum Type {
   QUESTION,
@@ -25,7 +27,7 @@ export class UserContentRequestService {
     private readonly userContentService: UserContentService,
     private readonly voteService: VoteService,
     private readonly blacklistService: BlacklistService,
-    private readonly tagService: TagService
+    private readonly tagService: TagService,
   ) {}
 
   async getTrendingQuestions(req: any) {
@@ -112,14 +114,15 @@ export class UserContentRequestService {
    * @throws InternalServerErrorException
    * @return {id, title}
    */
-  async getTitleOfQuestion(
-      id: string
-  ): Promise<{id: string, title: string}> {
+  async getTitleOfQuestion(id: string): Promise<{ id: string; title: string }> {
     const question = await this.userContentService.getQuestion(id);
     if (question == null)
       throw new NotFoundException('No question found with this id.');
 
-    if (question.question?.userContentID == null || question.question?.title == null){
+    if (
+      question.question?.userContentID == null ||
+      question.question?.title == null
+    ) {
       throw new InternalServerErrorException(); // the question is not complete
     }
     return {
@@ -148,14 +151,16 @@ export class UserContentRequestService {
     );
     if (rawAnswers == null) {
       throw new InternalServerErrorException(
-          'There was an error fetching the answers.',
+        'There was an error fetching the answers.',
       );
     }
     // change results to openAPI schema
     const answers: object[] = [];
-    for (const answer of rawAnswers){
+    for (const answer of rawAnswers) {
       //@ts-ignore
-      answers.push(await this.getUserContent(answer.userContentID, Type.ANSWER));
+      answers.push(
+        await this.getUserContent(answer.userContentID, Type.ANSWER),
+      );
     }
 
     return answers ?? [];
@@ -171,14 +176,15 @@ export class UserContentRequestService {
    * @throws NotAcceptableException
    */
   async createQuestionWrapper(
-      data: CreateQuestion,
-      userId: string
+    data: CreateQuestion,
+    userId: string,
   ): Promise<object> {
-    const forbiddenWords: string[] = await this.blacklistService.getBlacklistArray(); // TODO buffer
+    const forbiddenWords: string[] =
+      await this.blacklistService.getBlacklistArray(); // TODO buffer
 
     // check basic data is present
     if (data == null || data.content == null || data.title == null) {
-      throw new UnprocessableEntityException("Payload is not sufficient!")
+      throw new UnprocessableEntityException('Payload is not sufficient!');
     }
 
     // handle tags, create Tags if they do not exist in the database
@@ -186,18 +192,24 @@ export class UserContentRequestService {
       await this.createTagsIfNotExist(data.tags, forbiddenWords);
     }
 
-    if (data.useAI){
+    if (data.useAI) {
       // TODO implement AI
     }
 
     // check text for restricted words
-    if (this.blacklistService.checkTextWithBlacklist(data.title, forbiddenWords)
-        || this.blacklistService.checkTextWithBlacklist(data.content, forbiddenWords)) {
-      throw new NotAcceptableException(null,
-          "you have used unappropriated words!\nThis is not Acceptable, incident will be reported!"
+    if (
+      this.blacklistService.checkTextWithBlacklist(
+        data.title,
+        forbiddenWords,
+      ) ||
+      this.blacklistService.checkTextWithBlacklist(data.content, forbiddenWords)
+    ) {
+      throw new NotAcceptableException(
+        null,
+        'you have used unappropriated words!\nThis is not Acceptable, incident will be reported!',
       );
     }
-    return await this.createUserContent(data, Type.QUESTION, userId)
+    return await this.createUserContent(data, Type.QUESTION, userId);
   }
 
   /**
@@ -209,19 +221,27 @@ export class UserContentRequestService {
    *
    * @throws NotAcceptableException if new tags are in blocklist
    */
-  public async createTagsIfNotExist(tags: string[], forbiddenWords: string[]): Promise<void> {
-    const notIntersectedTags: string[] = await this.tagService.getNotInsertedTags(tags)
-    if (this.blacklistService.checkTextWithBlacklist(notIntersectedTags.join(" "), forbiddenWords)) {
-      throw new NotAcceptableException(
-          "You have used unappropriated tags!\n" +
-          "This is not Acceptable, incident will be reported!"
+  public async createTagsIfNotExist(
+    tags: string[],
+    forbiddenWords: string[],
+  ): Promise<void> {
+    const notIntersectedTags: string[] =
+      await this.tagService.getNotInsertedTags(tags);
+    if (
+      this.blacklistService.checkTextWithBlacklist(
+        notIntersectedTags.join(' '),
+        forbiddenWords,
       )
+    ) {
+      throw new NotAcceptableException(
+        'You have used unappropriated tags!\n' +
+          'This is not Acceptable, incident will be reported!',
+      );
     }
-    notIntersectedTags.forEach(tag => {
-          console.log("ADD " + tag) // TODO change with Logging service
-          this.tagService.createTag(tag);
-        }
-    )
+    notIntersectedTags.forEach((tag) => {
+      console.log('ADD ' + tag); // TODO change with Logging service
+      this.tagService.createTag(tag);
+    });
   }
 
   /**
@@ -235,25 +255,39 @@ export class UserContentRequestService {
    * @throws NotFoundException
    * @throws NotAcceptableException
    */
-  async createAnswerWrapper(data: any, questionId: string, userId: string, typeOfAI?:TypeOfAI): Promise<object>{
-    const cleaned_typeOfAI: TypeOfAI = typeOfAI==null? TypeOfAI.None: data.typeOfAI
-    if (data.content == null){
-      throw new UnprocessableEntityException("Payload is not sufficient!")
+  async createAnswerWrapper(
+    data: any,
+    questionId: string,
+    userId: string,
+    typeOfAI?: TypeOfAI,
+  ): Promise<object> {
+    const cleaned_typeOfAI: TypeOfAI =
+      typeOfAI == null ? TypeOfAI.None : data.typeOfAI;
+    if (data.content == null) {
+      throw new UnprocessableEntityException('Payload is not sufficient!');
     }
 
     // check question exists
-    const answer = await this.userContentService.getQuestion(questionId)
-    if(answer == null || answer.userContent == null || answer.userContent.groupID == null){
-      throw new NotFoundException("Question " + questionId + " doesn't exist!")
+    const answer = await this.userContentService.getQuestion(questionId);
+    if (
+      answer == null ||
+      answer.userContent == null ||
+      answer.userContent.groupID == null
+    ) {
+      throw new NotFoundException('Question ' + questionId + " doesn't exist!");
     }
 
     // check text for forbidden words
     const groupId = answer.userContent.groupID;
-    const forbiddenWords: string[] = await this.blacklistService.getBlacklistArray(); // TODO buffer
-    if(this.blacklistService.checkTextWithBlacklist(data.content, forbiddenWords)){
-      throw new NotAcceptableException(null,
-          "your Answer includes unappropriated words!\nThis is not Acceptable, incident will be reported!"
-      )
+    const forbiddenWords: string[] =
+      await this.blacklistService.getBlacklistArray(); // TODO buffer
+    if (
+      this.blacklistService.checkTextWithBlacklist(data.content, forbiddenWords)
+    ) {
+      throw new NotAcceptableException(
+        null,
+        'your Answer includes unappropriated words!\nThis is not Acceptable, incident will be reported!',
+      );
     }
 
     // map data to fit requirements
@@ -261,9 +295,9 @@ export class UserContentRequestService {
       groupId: groupId,
       content: data.content,
       typeOfAI: cleaned_typeOfAI,
-    }
+    };
     // create answer
-    return await this.createUserContent(answerData, Type.ANSWER, userId)
+    return await this.createUserContent(answerData, Type.ANSWER, userId);
   }
 
   /**

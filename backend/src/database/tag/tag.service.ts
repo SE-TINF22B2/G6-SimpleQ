@@ -24,10 +24,10 @@ export class TagService {
   }
 
   async getNotInsertedTags(tagsToCheck: string[]): Promise<string[]> {
-    const allTags = await this._getAllTags() // TODO cache these tags
-    const notAddedTags: string[] = []
-    for(const tag of tagsToCheck) {
-      if (!allTags.includes(tag.toLowerCase())){
+    const allTags = await this._getAllTags(); // TODO cache these tags
+    const notAddedTags: string[] = [];
+    for (const tag of tagsToCheck) {
+      if (!allTags.includes(tag.toLowerCase())) {
         notAddedTags.push(tag);
       }
     }

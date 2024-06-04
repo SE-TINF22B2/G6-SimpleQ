@@ -22,14 +22,16 @@ export class BlacklistService {
     return this.prisma.blacklist.findMany();
   }
   async getBlacklistArray(): Promise<string[]> {
-    return (await this.getAllBlacklistItems()).map((blacklist:{name: string}) => blacklist.name)
+    return (await this.getAllBlacklistItems()).map(
+      (blacklist: { name: string }) => blacklist.name,
+    );
   }
 
   checkTextWithBlacklist(text: string, forbiddenWords: string[]): boolean {
-    const lowerText = text.toLowerCase()
+    const lowerText = text.toLowerCase();
     for (const word of forbiddenWords) {
-      if (lowerText.includes(word.toLowerCase())){
-        return true
+      if (lowerText.includes(word.toLowerCase())) {
+        return true;
       }
     }
     return false;

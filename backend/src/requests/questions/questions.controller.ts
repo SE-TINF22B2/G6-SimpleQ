@@ -18,13 +18,11 @@ import {
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
-import {CreateAnswerDto} from "./dto/create-answer.dto";
+import { CreateAnswerDto } from './dto/create-answer.dto';
 
 @Controller('question') // prefix: domain/question/...
 export class QuestionsController {
-  constructor(
-      private readonly userContentService: UserContentRequestService,
-      ) {} //     private readonly services
+  constructor(private readonly userContentService: UserContentRequestService) {} //     private readonly services
 
   /*
    * Get the currently most upvoted, questions from the last seven days
@@ -72,7 +70,7 @@ export class QuestionsController {
     return await this.userContentService.getTitleOfQuestion(id);
   }
 
-  @Get(':id/answers')   // TODO returns [], database is not implemented
+  @Get(':id/answers') // TODO returns [], database is not implemented
   async getQuestionAnswers(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Query(new ValidationPipe()) query: QueryParameters,
@@ -93,14 +91,14 @@ export class QuestionsController {
 
   @Post(':id/answer')
   async createAnswerToQuestion(
-      @Param('id', new ParseUUIDPipe()) id: string,
-      @Req() req: any,
-      @Body(new ValidationPipe()) createAnswer: CreateAnswerDto,
-  ): Promise<object>{
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Req() req: any,
+    @Body(new ValidationPipe()) createAnswer: CreateAnswerDto,
+  ): Promise<object> {
     return await this.userContentService.createAnswerWrapper(
-        createAnswer,
-        id,
-        req.userId,
-    )
+      createAnswer,
+      id,
+      req.userId,
+    );
   }
 }

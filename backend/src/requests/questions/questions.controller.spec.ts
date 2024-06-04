@@ -4,8 +4,8 @@ import { UserContentService as DBUserContentService } from '../../database/user-
 import { VoteService } from '../../database/vote/vote.service';
 import { UserContentRequestService } from '../user-content-request/user-content-request.service';
 import { QuestionsController } from './questions.controller';
-import {BlacklistService} from "../../database/blacklist/blacklist.service";
-import {TagService} from "../../database/tag/tag.service";
+import { BlacklistService } from '../../database/blacklist/blacklist.service';
+import { TagService } from '../../database/tag/tag.service';
 
 describe('QuestionsController', () => {
   let controller: QuestionsController;
@@ -19,7 +19,7 @@ describe('QuestionsController', () => {
         VoteService,
         PrismaService,
         BlacklistService,
-        TagService
+        TagService,
       ],
     }).compile();
 

@@ -4,7 +4,7 @@ import { DevelopmentService } from './development.service';
 import { AuthService } from '../../auth/auth.service';
 import { UserService } from '../../database/user/user.service';
 import { PrismaService } from '../../database/prisma.service';
-import {TagService} from "../../database/tag/tag.service";
+import { TagService } from '../../database/tag/tag.service';
 
 describe('DevelopmentController', () => {
   let controller: DevelopmentController;
@@ -13,11 +13,11 @@ describe('DevelopmentController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [DevelopmentController],
       providers: [
-          DevelopmentService,
+        DevelopmentService,
         AuthService,
         UserService,
         PrismaService,
-        TagService
+        TagService,
       ],
     }).compile();
 
