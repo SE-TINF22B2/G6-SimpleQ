@@ -22,6 +22,9 @@ export class UserContentRequestService {
 
   async getTrendingQuestions(req: any) {
     const questions = await this.userContentService.getTrendingQuestions();
+    if (null === questions) {
+      throw new InternalServerErrorException('No trending questions found.');
+    }
 
     const results: any[] = [];
     for (let i = 0; i < questions.length; i++) {
@@ -116,7 +119,13 @@ export class UserContentRequestService {
 
     const rawAnswers = await this.userContentService.getAnswersOfGroupID(
       question.userContent.groupID,
-      sortCriteria,
+      createSortOptions(
+        sortCriteria.sortBy,
+        sortCriteria.sortDirection,
+        sortCriteria.offset,
+        sortCriteria.limit,
+      ),
+      true, // TODO: add enableAI
     );
     if (rawAnswers == null)
       throw new InternalServerErrorException(
@@ -141,7 +150,7 @@ export class UserContentRequestService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async search(query: SearchQuery, req: any) {
     console.log(req);
-    return await this.userContentService.searchForQuestions(
+    return await this.userContentService.searchForQuestionsOrDiscussions(
       query.q,
       createSortOptions(
         query.sortBy,

@@ -45,6 +45,11 @@ export function createSortOptions(
   };
 }
 
+type UserContentWithRating = UserContent & {
+  likes: number;
+  dislikes: number;
+};
+
 @Injectable()
 export class UserContentService {
   constructor(private prisma: PrismaService) {}
@@ -101,7 +106,10 @@ export class UserContentService {
    * @param offset Number of questions that are skipped. Default: 0
    * @returns Array of UserContents with question
    */
-  async getTrendingQuestions(limit: number = 10, offset: number = 0) {
+  async getTrendingQuestions(
+    limit: number = 10,
+    offset: number = 0,
+  ): Promise<UserContent[] | null> {
     const time: Date = new Date();
     time.setDate(time.getDate() - 7);
     return this.prisma.userContent.findMany({
@@ -119,26 +127,46 @@ export class UserContentService {
   }
 
   /**
-   * Get all questions that contain one of the query words in their content or title.
+   * Get all questions or discussions that contain one of the query words in their content or title.
    * @param query String to search for
-   * @returns Array of UserContents with questions
+   * @returns Array of UserContents, or null if no UserContent contains the query
    */
-  async getAllQuestionsFromQuery(query: string): Promise<UserContent[] | null> {
+  async getUserContentsFromQuery(query: string): Promise<UserContent[] | null> {
     return this.prisma.userContent.findMany({
       where: {
-        type: UserContentType.Question,
-        OR: [
+        AND: [
           {
-            content: {
-              search: query,
-            },
+            OR: [
+              {
+                type: UserContentType.Question,
+              },
+              {
+                type: UserContentType.Discussion,
+              },
+            ],
           },
           {
-            question: {
-              title: {
-                search: query,
+            OR: [
+              {
+                content: {
+                  search: query,
+                },
               },
-            },
+              {
+                question: {
+                  title: {
+                    search: query,
+                  },
+                },
+              },
+              {
+                discussion: {
+                  title: {
+                    search: query,
+                  },
+                },
+              },
+            ],
           },
         ],
       },
@@ -146,35 +174,32 @@ export class UserContentService {
   }
 
   /**
-   * Search for questions with a query string and searchOptions. The query is a string that
+   * Search for questions or discussions with a query string and searchOptions. The query is a string that
    * has to be in the title or the content of the question.
    * @param query String to search for
    * @param sortOptions Object of type SortOptions
    * @returns Array of sorted questions, or null if there are no questions containing the query
    */
-  async searchForQuestions(
+  async searchForQuestionsOrDiscussions(
     query: string,
     sortOptions: SortOptions,
-  ): Promise<
-    | (UserContent & {
-        likes: number;
-        dislikes: number;
-      })[]
-    | null
-  > {
-    let allQuestions: UserContent[] | null =
-      await this.getAllQuestionsFromQuery(query);
-    // if no questions where found
-    if (null === allQuestions) {
+  ): Promise<UserContentWithRating[] | null> {
+    const userContents: UserContent[] | null =
+      await this.getUserContentsFromQuery(query);
+    // if no questions or discussions where found
+    if (null === userContents) {
       return null;
     }
 
-    // add the number of likes and dislikes to each question
-    let modifiedQuestions: (UserContent & {
-      likes: number;
-      dislikes: number;
-    })[] = await Promise.all(
-      allQuestions.map(async (q) => {
+    let modifiedQuestions = await this.addRatingToUserContents(userContents);
+    return this.sortBySortOptions(modifiedQuestions, sortOptions);
+  }
+
+  async addRatingToUserContents(
+    array: UserContent[],
+  ): Promise<UserContentWithRating[]> {
+    return await Promise.all(
+      array.map(async (q) => {
         const rating = await this.getLikesAndDislikesOfUserContent(
           q.userContentID,
         );
@@ -185,30 +210,32 @@ export class UserContentService {
         };
       }),
     );
+  }
 
+  sortBySortOptions(array: UserContentWithRating[], sortOptions: SortOptions) {
     switch (sortOptions.sortBy) {
       case SortType.ldr:
-        modifiedQuestions.sort((q) => {
+        array.sort((q) => {
           return q.likes / q.dislikes;
         });
       case SortType.likes:
-        modifiedQuestions.sort((q) => {
+        array.sort((q) => {
           return q.likes;
         });
       case SortType.dislikes:
-        modifiedQuestions.sort((q) => {
+        array.sort((q) => {
           return q.likes;
         });
       case SortType.timestamp:
-        modifiedQuestions.sort((q) => {
+        array.sort((q) => {
           return q.timeOfCreation.getTime();
         });
     }
 
     if (sortOptions.sortDirection === SortDirection.desc) {
-      modifiedQuestions.reverse();
+      array.reverse();
     }
-    return modifiedQuestions;
+    return array;
   }
 
   /**
@@ -319,16 +346,39 @@ export class UserContentService {
   }
 
   /**
-   * Should return all the answers to a corresponding question
-   * @param groupID the groupId of the question
-   * @returns array with answers or an empty one if no anwers exist
+   * Get all the answers of a corresponding question or discussion.
+   * @param groupID String with the groupID of the question or discussion
+   * @returns Array of Answer objects, or null if no anwers exist
    * */
   async getAnswersOfGroupID(
     groupID: string,
-    sortCriteria: any,
-  ): Promise<object[]> {
-    // TODO: needs to be implemented
-    return [];
+    sortOptions: SortOptions,
+    enableAI: boolean,
+  ): Promise<UserContentWithRating[] | null> {
+    let answers: UserContent[];
+    if (enableAI) {
+      answers = await this.prisma.userContent.findMany({
+        where: {
+          groupID: groupID,
+          type: UserContentType.Answer,
+        },
+      });
+    } else {
+      answers = await this.prisma.userContent.findMany({
+        where: {
+          groupID: groupID,
+          type: UserContentType.Answer,
+          answer: {
+            typeOfAI: TypeOfAI.None,
+          },
+        },
+      });
+    }
+    if (null === answers) {
+      return null;
+    }
+    let answersWithRating = await this.addRatingToUserContents(answers);
+    return this.sortBySortOptions(answersWithRating, sortOptions);
   }
 
   async getAnswer(
