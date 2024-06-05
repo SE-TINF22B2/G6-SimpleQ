@@ -1,4 +1,4 @@
-import {Controller, Get, NotFoundException, Param, ParseUUIDPipe, Req, Res} from '@nestjs/common';
+import {Controller, Get, NotFoundException, Req, Res} from '@nestjs/common';
 import { DevelopmentService } from './development.service';
 import { AuthService } from '../../auth/auth.service';
 import {UserService} from "../../database/user/user.service";
