@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { QuestsController } from './quests.controller';
-import {QuestService} from "../../database/quest/quest.service";
-import {PrismaService} from "../../database/prisma.service";
+import { PrismaService } from '../../database/prisma.service';
+import { UserQuestService } from '../../database/user-quest/user-quest.service';
 
 describe('QuestsController', () => {
   let controller: QuestsController;
@@ -10,7 +10,7 @@ describe('QuestsController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [QuestsController],
       providers: [
-          QuestService,
+          UserQuestService,
           PrismaService
       ]
     }).compile();

@@ -1,17 +1,13 @@
-import {Controller, Get, Req} from '@nestjs/common';
-import {QuestService} from "../../database/quest/quest.service";
+import { Controller, Get, Req } from '@nestjs/common';
+import { UserQuestService } from '../../database/user-quest/user-quest.service';
 
 @Controller('quests')
 export class QuestsController {
-  constructor(
-      private readonly questsService: QuestService
-  ) {}
+  constructor(private readonly userQuestService: UserQuestService) {}
 
   @Get()
-  async getQuests(
-      @Req() req: any,
-  ) {
+  async getQuests(@Req() req: any) {
     const userId: string = req.userId;
-    return await this.questsService.getUserQuests(userId)
+    return await this.userQuestService.getAllUserQuests(userId);
   }
 }
