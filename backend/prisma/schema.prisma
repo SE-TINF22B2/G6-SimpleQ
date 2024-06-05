@@ -37,7 +37,7 @@ model UserContent {
   owner          User?           @relation(fields: [ownerID], references: [userID])
   ownerID        String?
   groupID        String          @default(uuid())
-  content        String?
+  content        String?         @db.LongText
   timeOfCreation DateTime        @default(now())
   type           UserContentType
   question       Question?
@@ -149,7 +149,7 @@ model LoginAttempt {
 model Quest {
   questID     String      @id @default(uuid())
   name        String
-  description String?
+  description String?     @db.Text
   type        QuestType
   points      Int
   isSelected  Boolean
