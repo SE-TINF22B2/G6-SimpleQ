@@ -23,6 +23,7 @@ import { UserContentRequestService } from './user-content-request/user-content-r
 import { UserController } from './user/user.controller';
 import { RequestsUserService } from './user/requests-user.service';
 import { ExternalAPIModule } from '../externalAPI/externalAPI.module';
+import { UserQuestService } from '../database/user-quest/user-quest.service';
 
 @Module({})
 export class RequestsModule {
@@ -47,6 +48,7 @@ export class RequestsModule {
       LoginAttemptService,
       ModerationService,
       QuestService,
+      UserQuestService,
       TagService,
       UserService,
       UserContentService,
