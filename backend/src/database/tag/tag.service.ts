@@ -23,7 +23,13 @@ export class TagService {
     });
   }
 
-  async getNotInsertedTags(tagsToCheck: string[]): Promise<string[]> {
+  /**
+   * compare the tags with the tags in database
+   * get difference of tags not existent in database
+   * result = tagsToCheck \ tagsInDatabase
+   * @param tagsToCheck
+   */
+  async filterNotExistentTags(tagsToCheck: string[]): Promise<string[]> {
     const allTags = await this._getAllTags(); // TODO cache these tags
     const notAddedTags: string[] = [];
     for (const tag of tagsToCheck) {

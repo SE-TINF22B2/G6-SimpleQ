@@ -20,15 +20,7 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
   catch(exception: NotFoundException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<Request>();
-    const status = exception.getStatus();
     const exceptionCause = exception.getResponse();
-    // logging
-    console.log({
-      exceptionCause,
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-    });
 
     const response = ctx.getResponse();
     if (typeof exceptionCause == 'object') {

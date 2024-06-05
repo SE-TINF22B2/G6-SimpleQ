@@ -48,7 +48,6 @@ export class UserContentRequestService {
         ),
       );
     }
-
     return results;
   }
 
@@ -230,9 +229,13 @@ export class UserContentRequestService {
     groupId: string,
     isPro: boolean,
   ): Promise<void> {
-    this.externalAPIService.requestGPT(text, groupId).then();
-    if (isPro) {
+    try {
       this.externalAPIService.requestGPT(text, groupId).then();
+      if (isPro) {
+        this.externalAPIService.requestWolfram(text, groupId).then();
+      }
+    } catch (error) {
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -250,7 +253,7 @@ export class UserContentRequestService {
     forbiddenWords: string[],
   ): Promise<void> {
     const notIntersectedTags: string[] =
-      await this.tagService.getNotInsertedTags(tags);
+      await this.tagService.filterNotExistentTags(tags);
     if (
       this.blacklistService.checkTextWithBlacklist(
         notIntersectedTags.join(' '),

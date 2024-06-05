@@ -67,7 +67,25 @@ export class QuestionsController {
     return await this.userContentService.getTitleOfQuestion(id);
   }
 
-  @Get(':id/answers') // TODO returns [], database is not implemented
+  /**
+   * get answer of question obtained by question id
+   * @throws NotFoundError
+   * @param id
+   * @param query
+   * sortBy [
+   *  'ldr: like dislike ratio
+   *  'likes': number of likes
+   *  'dislikes': amount of dislikes
+   *  'timestamp': date
+   *  ]
+   * sortDirection [
+   *   'asc': ascending
+   *   'desc': decending
+   * ]
+   * offset: number of questions skipped form start
+   * limit: amount of returned questions
+   */
+  @Get(':id/answers')
   async getQuestionAnswers(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Query(new ValidationPipe()) query: QueryParameters,
