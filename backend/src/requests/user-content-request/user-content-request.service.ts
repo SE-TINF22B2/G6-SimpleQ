@@ -23,7 +23,7 @@ export class UserContentRequestService {
   async getTrendingQuestions(req: any) {
     const questions = await this.userContentService.getTrendingQuestions();
     if (null === questions) {
-      throw new InternalServerErrorException('No trending questions found.');
+      throw new NotFoundException('No trending questions found.');
     }
 
     const results: any[] = [];
