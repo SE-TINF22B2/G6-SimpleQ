@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import {
   Answer,
@@ -19,9 +20,9 @@ export class UserContentService {
   // Question
   async createQuestion(
     ownerID: string | null,
-    groupID: string,
     content: string | null,
     title: string,
+    groupID?: string,
   ): Promise<{ userContent: UserContent; question: Question }> {
     return this.prisma.$transaction(async (tx) => {
       const createdContent = await tx.userContent.create({
@@ -69,7 +70,7 @@ export class UserContentService {
    * @returns Array of UserContents with question
    */
   async getTrendingQuestions(limit: number = 10, offset: number = 0) {
-    let time: Date = new Date();
+    const time: Date = new Date();
     time.setDate(time.getDate() - 7);
     return this.prisma.userContent.findMany({
       where: {
@@ -83,6 +84,16 @@ export class UserContentService {
         question: true,
       },
     });
+  }
+
+  /**
+   * Search for questions in the database with given search criteria
+   * @param query typeof SearchQuery described in ./dto/search.dto.ts
+   * */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async search(query: any) {
+    // TODO: This method must be implemented
+    return [];
   }
 
   /**
@@ -111,7 +122,7 @@ export class UserContentService {
   async getLikesAndDislikesOfUserContent(
     userContentID: string,
   ): Promise<{ likes: number; dislikes: number }> {
-    let votes: Vote[] | null =
+    const votes: Vote[] | null =
       (
         await this.prisma.userContent.findUnique({
           where: { userContentID: userContentID },
@@ -190,6 +201,19 @@ export class UserContentService {
         answer: createdAnswer,
       };
     });
+  }
+
+  /**
+   * Should return all the answers to a corresponding question
+   * @param groupID the groupId of the question
+   * @returns array with answers or an empty one if no anwers exist
+   * */
+  async getAnswersOfGroupID(
+    groupID: string | undefined,
+    sortCriteria: any,
+  ): Promise<object[]> {
+    // TODO: needs to be implemented
+    return [];
   }
 
   async getAnswer(
@@ -282,10 +306,10 @@ export class UserContentService {
   // Discussion
   async createDiscussion(
     ownerID: string | null,
-    groupID: string,
     content: string | null,
     title: string,
     isPrivate: boolean,
+    groupID?: string,
   ): Promise<{ userContent: UserContent; discussion: Discussion }> {
     return this.prisma.$transaction(async (tx) => {
       const createdContent = await tx.userContent.create({

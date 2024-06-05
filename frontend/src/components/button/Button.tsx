@@ -2,9 +2,9 @@ import React from "react";
 import "./Button.scss";
 
 interface Props {
-	style?: "primary" | "glass",
+	buttonStyle?: "primary" | "glass",
 	icon?: string,
-	onClick?: () => void,
+	onClick?: () => Promise<void>,
 	children?: React.ReactNode,
 	disabled?: boolean,
 	placeIconRight?: boolean
@@ -12,7 +12,7 @@ interface Props {
 
 /**
  * Renders a button
- * @param props.style style of the button, default is "glass"
+ * @param props.buttonStyle style of the button, default is "glass"
  * @param props.icon icon of the button, optional
  * @param props.onClick() function to be executed once the button is pressed
  * @param props.children ReactNode as child of the button, automatically wrapped in <span></span>, used to render a text inside the button
@@ -23,14 +23,14 @@ export default function Button(props: Props) {
 	const [isLoading, setIsLoading] = React.useState(false);
 	
 	return (
-		<button className={ "btn btn-" + (props.style ?? "glass") }
+		<button className={ "btn btn-" + (props.buttonStyle ?? "glass") }
 				disabled={ props.disabled || isLoading }
-				onClick={ () => {
+				onClick={ async () => {
 					if (!props.onClick) return;
 					if (isLoading) return;
 					
 					setIsLoading(true);
-					props.onClick();
+					await props.onClick();
 					
 					setIsLoading(false);
 				} }>

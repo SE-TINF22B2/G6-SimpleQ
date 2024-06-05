@@ -33,4 +33,26 @@ export class LoginAttemptService {
       },
     });
   }
+
+  /**
+   * Returns the login attempts in range of minDate to maxDate
+   * @param loginUserID
+   * @param minDate
+   * @param maxDate
+   */
+  async getLoginAttemptRange(
+    loginUserID: string,
+    minDate: Date,
+    maxDate: Date,
+  ): Promise<LoginAttempt[] | null> {
+    return this.prisma.loginAttempt.findMany({
+      where: {
+        loginUserID: loginUserID,
+        timeOfLogin: {
+          gte: minDate,
+          lte: maxDate,
+        },
+      },
+    });
+  }
 }

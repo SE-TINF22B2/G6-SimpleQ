@@ -10,6 +10,7 @@ import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
 
 import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
 import { useTranslation } from "react-i18next";
+import Skeleton from "react-loading-skeleton";
 
 // ory setup
 const basePath = "http://localhost:4000"
@@ -49,6 +50,7 @@ export default function Dashboard(props: Props) {
 			   });
 		   })
 		   .catch((err) => {
+			   console.log("error logging in", err);
 			   // window.location.replace(`${ basePath }/ui/login`);
 		   });
 		
@@ -243,7 +245,7 @@ export default function Dashboard(props: Props) {
 						 height={ "100%" } width={ "100%" }
 						 style={ { objectFit: "contain" } }/>
 				</button>
-				<i className={ "fi fi-rr-x toggle-nav" }
+				<i className={ "fi fi-rr-circle-xmark toggle-nav" }
 				   style={ {
 					   fontSize: "1.5em",
 					   cursor: "pointer",
@@ -272,7 +274,7 @@ export default function Dashboard(props: Props) {
                     <i className={ "fi fi-sr-question-square" }/>
                     <p style={ { display: "flex", flexDirection: "column" } }>
                         <span className={ "caption" }>{ t('dashboard.nav.question.browsing') }</span>
-                        <span>How to execute..</span>
+                        <span><Skeleton/></span>
                     </p>
                 </NavLink>
                 

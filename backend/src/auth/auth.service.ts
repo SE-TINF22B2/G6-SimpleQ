@@ -21,7 +21,7 @@ export class AuthService {
     );
     if (!possibleUser) {
       await this.userService.createUser(
-        session.identity?.traits.username as string,
+        (session.identity?.traits?.username as string) ?? session.identity?.id,
         false,
         false,
         new Date(),

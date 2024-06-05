@@ -44,7 +44,7 @@
 
 	--box-shadow-elevated: 0 0 10px rgba(0, 0, 0, 0.2);
 	--box-shadow-elevated-light: 0 0 10px rgba(0, 0, 0, 0.2);
-	--box-shadow-elevated-dark: 0 0 10px rgba(150, 150, 150, 0.2);
+	--box-shadow-elevated-dark: 0 0 20px rgba(150, 150, 150, 0.4);
 
 	--header-height: 60px;
 	--border-radius: 10px;
@@ -209,4 +209,53 @@ i {
 
 .flipY {
 	transform: scaleY(-1);
+}
+
+a {
+	color: var(--primary-color);
+}
+
+hr {
+	background: var(--border-color);
+	border: none;
+	height: var(--outline-width);
+	margin: var(--spacing) auto;
+	max-width: var(--max-width);
+	width: 100%;
+	border-radius: var(--border-radius);
+}
+
+.alert {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: var(--spacing);
+	padding: var(--spacing);
+
+	border-radius: var(--border-radius);
+	box-shadow: var(--box-shadow);
+	filter: var(--bleed-shadow);
+
+	i {
+		font-size: 1.4em;
+	}
+
+	.alert-close {
+		cursor: pointer;
+	}
+
+	&.alert-info {
+		background: linear-gradient(45deg, var(--background-color-glass), transparent 200%), url(https://grainy-gradients.vercel.app/noise.svg);
+		color: var(--font-color);
+	}
+
+	&.alert-success {
+		background: linear-gradient(45deg, var(--primary-color), transparent 200%), url(https://grainy-gradients.vercel.app/noise.svg);
+		color: var(--primary-color-contrast);
+	}
+
+	&.alert-error {
+		background: linear-gradient(45deg, red, transparent 200%), url(https://grainy-gradients.vercel.app/noise.svg);
+		color: var(--primary-color-contrast);
+	}
 }

@@ -11,13 +11,11 @@ export default function Quests(props: {}) {
 	const [minutesUntilEndOfWeek, setMinutesUntilEndOfWeek] = useState<number>(0);
 	const [r, setR] = useState<number>(0.1);
 	
-	let interval: string | number | NodeJS.Timeout | undefined;
-	
 	useEffect(() => {
 		setR(50);
 		
 		updateMinutesUntilEndOfWeek();
-		interval = setInterval(updateMinutesUntilEndOfWeek, 1000);
+		let interval = setInterval(updateMinutesUntilEndOfWeek, 1000);
 		return () => clearInterval(interval);
 	}, []);
 	

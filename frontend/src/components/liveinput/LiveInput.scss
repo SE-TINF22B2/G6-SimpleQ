@@ -9,9 +9,19 @@
 		border: var(--outline-width) solid var(--border-color);
 		border-bottom: var(--outline-width) solid var(--border-color);
 		border-radius: var(--border-radius);
-		height: 40px;
-		padding: calc(var(--spacing) / 2) var(--spacing);
+		padding: calc(var(--spacing) / 2) 40px calc(var(--spacing) / 2) var(--spacing);
 		width: 100%;
+	}
+
+	input,
+	.spin {
+		height: 40px;
+	}
+
+	.spin {
+		position: absolute;
+		right: var(--spacing);
+		color: var(--primary-color);
 	}
 
 	.suggestions {

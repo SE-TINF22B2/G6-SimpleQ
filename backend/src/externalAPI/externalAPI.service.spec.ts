@@ -1,29 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ExternalAPIService } from './externalAPI.service';
-import { UserContentService } from '../database/user-content/user-content.service';
 import { HttpModule } from '@nestjs/axios';
 import { PrismaService } from '../database/prisma.service';
+import { UserContentService } from '../database/user-content/user-content.service';
 
 describe('ExternalAPIService', () => {
   let service: ExternalAPIService;
-  let userContentService: UserContentService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [HttpModule],
-      providers: [ExternalAPIService, PrismaService, UserContentService],
+      providers: [UserContentService, ExternalAPIService, PrismaService],
     }).compile();
 
     service = module.get<ExternalAPIService>(ExternalAPIService);
-    userContentService = module.get<UserContentService>(UserContentService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
-  });
-
-  it('should be defined', () => {
-    expect(userContentService).toBeDefined();
   });
 
   it('requestGPT should throw an error: prompt is empty', async () => {

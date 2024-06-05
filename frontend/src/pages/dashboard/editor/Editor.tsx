@@ -4,12 +4,15 @@ import LiveInput from "../../../components/liveinput/LiveInput";
 import Button from "../../../components/button/Button";
 import TextEditor from "../../../components/texteditor/TextEditor";
 import { useTranslation } from "react-i18next";
+import { useAlert } from "react-alert";
+import { axiosError } from "../../../def/axios-error";
 
 /**
  * Renders the editor page used to ask a new question
  */
 export default function Editor(props: {}) {
 	const { t } = useTranslation();
+	const alert = useAlert();
 	
 	const [title, setTitle] = React.useState("New Question");
 	const [tags, setTags] = React.useState<string[]>([]);
@@ -34,6 +37,7 @@ export default function Editor(props: {}) {
 					<i className={ "fi fi-rr-question" }/>
 					<span id={ "editor-question-title" }
 						  contentEditable={ hasBeenSubmitted ? false : "plaintext-only" }
+						  suppressContentEditableWarning={ true }
 						  onInput={ (e) => {
 							  let title = (e.target as HTMLSpanElement).innerText.trim();
 							  while (title.includes("  ")) title = title.replace("  ", " ");
@@ -178,14 +182,26 @@ export default function Editor(props: {}) {
 		
 		<div className={ "container editor-container transparent" } style={ { display: "flex" } }>
 			<div style={ { flex: 1 } }/>
-			<Button style={ "primary" } icon={ "fi fi-rr-paper-plane" }
-					onClick={ () => {
+			<Button buttonStyle={ "primary" } icon={ "fi fi-rr-paper-plane" }
+					onClick={ async () => {
 						setHasBeenSubmitted(true);
 						
-						// Todo: Remove this timeout
-						setTimeout(() => setHasBeenSubmitted(false), 1000);
+						await global.axios.post("question/create", {
+							title: title,
+							tags: tags,
+							content: description,
+							useAI: questionType === "simp"
+						})
+									.then(res => {
+										alert.info(res.status);
+										alert.info(res.data);
+										console.log(res.data);
+									})
+									.catch(err => axiosError(err, alert));
+						
+						setHasBeenSubmitted(false);
 					} }
-					disabled={ !isTitleValid || !isTagsValid || !isDescriptionValid }>
+					disabled={ !isTitleValid || !isTagsValid || !isDescriptionValid || hasBeenSubmitted }>
 				{ t('dashboard.questionEditor.submit') }
 			</Button>
 		</div>

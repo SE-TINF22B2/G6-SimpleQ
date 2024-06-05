@@ -20,6 +20,32 @@ export class FavoriteService {
         },
       },
     });
+  }  async delFavorite(
+    favoriteUserID: string,
+    contentID: string,
+  ): Promise<Favorite> {
+    return this.prisma.favorite.delete({
+      where: {
+        contentID_favoriteUserID: {
+          contentID,
+          favoriteUserID,
+        },
+      },
+    });
+  }
+
+  async deleteFavorite(
+    favoriteUserID: string,
+    contentID: string,
+  ): Promise<object> {
+    return this.prisma.favorite.delete({
+      where: {
+        contentID_favoriteUserID: {
+          contentID,
+          favoriteUserID,
+        },
+      },
+    });
   }
 
   async getFavorite(
@@ -32,6 +58,14 @@ export class FavoriteService {
           contentID: contentID,
           favoriteUserID: favoriteUserID,
         },
+      },
+    });
+  }
+
+  async getFavoriteOfUser(favoriteUserID: string) {
+    return this.prisma.favorite.findMany({
+      where: {
+        favoriteUserID: favoriteUserID,
       },
     });
   }

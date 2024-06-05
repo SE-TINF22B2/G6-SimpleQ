@@ -8,6 +8,9 @@ import QuestionPreviewSkeleton from "../../../components/questionpreview/Questio
 import Section from "../../../components/section/Section";
 import { Question } from "../../../def/Question";
 import Button from "../../../components/button/Button";
+import { formatDate } from "../../../def/converter";
+import { useAlert } from "react-alert";
+import { axiosError } from "../../../def/axios-error";
 
 /**
  * Renders the trending page, currently static
@@ -17,61 +20,34 @@ export default function Trending(props: {}) {
 	const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">("desc");
 	const [questions, setQuestions] = React.useState<Question[] | null>(null);
 	
+	const alert = useAlert();
+	
 	useEffect(() => {
-		setTimeout(() => setQuestions([
-			{
-				id: "1",
-				isDiscussion: false,
-				title: "How to rescue water damaged iPhone 12?",
-				created: "20.10.2023",
-				updated: "today",
-				tags: ["Smartphone", "Technical Support", "iPhone"],
-				likes: 7,
-				dislikes: 3,
-				answers: 2,
-				rating: "like",
-				author: {
-					id: "1",
-					name: "John Doe",
-					type: "user"
-				}
-			},
-			{
-				id: "2",
-				isDiscussion: true,
-				title: "What is the best way to learn React?",
-				created: "20.10.2023",
-				updated: "TODAY",
-				tags: ["Tag 1", "Tag 2", "Tag 3"],
-				likes: 123,
-				dislikes: 5122,
-				answers: 202,
-				rating: "none",
-				author: {
-					id: "1",
-					name: "John Doe",
-					type: "pro"
-				}
-			},
-			{
-				id: "3",
-				isDiscussion: false,
-				title: "How can I improve my CSS skills?",
-				created: "20.10.2023",
-				updated: "TODAY",
-				tags: ["Tag 1", "Tag 2", "Tag 3"],
-				likes: 124231,
-				dislikes: 123,
-				answers: 12412,
-				rating: "dislike",
-				author: {
-					id: "1",
-					name: "John Doe",
-					type: "user"
-				}
-			}
-		]), 1000);
-	}, []);
+		global.axios.get("question/trending")
+			  .then(res => {
+				  let _questions: Question[] = [];
+				  res.data.forEach((_question: any) => {
+					  if (!_question.id) return null;
+					  
+					  let question: Question = {
+						  answers: _question.numberOfAnswers ?? 0,
+						  author: _question.author ?? undefined,
+						  created: formatDate(_question.created ?? ""),
+						  dislikes: _question.dislikes ?? 0,
+						  id: _question.id,
+						  isDiscussion: _question.isDiscussion ?? false,
+						  likes: _question.likes ?? 0,
+						  rating: _question.rating ?? "none",
+						  tags: _question.tags ?? [],
+						  title: _question.title ?? "",
+						  updated: formatDate(_question.updated ?? "")
+					  }
+					  _questions.push(question);
+				  });
+				  setQuestions(_questions);
+			  })
+			  .catch(err => axiosError(err, alert));
+	}, [alert]);
 	
 	return <>
 		<Section>
