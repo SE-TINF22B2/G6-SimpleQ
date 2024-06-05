@@ -35,7 +35,7 @@ export class ExternalAPIService {
    * @param userID
    * @throws The prompt cannot be empty | Group ID not found | The environment variable for AI is undefined | An AI-generated answer with this groupID already exists
    */
-  private async checkParams(prompt: string, groupID: string, userID: string): Promise<boolean> {
+  private async checkParams(prompt: string, groupID: string): Promise<boolean> {
     if (prompt === '') {
       throw new Error('The prompt cannot be empty');
     } else if (!await this.databaseContentService.checkGroupIDExists(groupID)) {
@@ -70,7 +70,7 @@ export class ExternalAPIService {
   async requestWolfram(prompt: string, groupID: string, userID: string): Promise<string> {
     try {
       this.checkAllowed(userID);
-      const paramsCheck = await this.checkParams(prompt, groupID, userID);
+      const paramsCheck = await this.checkParams(prompt, groupID);
       if (paramsCheck) {
         const { data } = await firstValueFrom(
           this.httpService
@@ -114,7 +114,7 @@ export class ExternalAPIService {
 
     try {
       this.checkAllowed(userID);
-      const paramsCheck = await this.checkParams(prompt, groupID, userID);
+      const paramsCheck = await this.checkParams(prompt, groupID);
 
       if (paramsCheck) {
         const gptURL =
