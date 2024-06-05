@@ -37,4 +37,10 @@ export class UserQuestService {
       },
     });
   }
+
+  async getAllUserQuests(userID: string): Promise<UserQuest[]> {
+    // TODO implement
+    console.log(userID);
+    return [];
+  }
 }
