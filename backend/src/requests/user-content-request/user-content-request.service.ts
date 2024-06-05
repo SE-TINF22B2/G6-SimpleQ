@@ -7,22 +7,19 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { UserContentService } from '../../database/user-content/user-content.service';
+import {
+  createSortOptions,
+  UserContentService,
+} from '../../database/user-content/user-content.service';
 import { VoteService } from '../../database/vote/vote.service';
 import { QueryParameters } from '../questions/dto/query-params.dto';
 import { SearchQuery } from '../questions/dto/search.dto';
-import { TypeOfAI } from '@prisma/client';
+import { TypeOfAI, UserContentType } from '@prisma/client';
 import { BlacklistService } from '../../database/blacklist/blacklist.service';
 import { TagService } from '../../database/tag/tag.service';
 import { CreateQuestion } from '../questions/dto/create-question.dto';
 import { UserService } from '../../database/user/user.service';
 import { ExternalAPIService } from '../../externalAPI/externalAPI.service';
-
-export enum Type {
-  QUESTION,
-  ANSWER,
-  DISCUSSION,
-}
 
 @Injectable()
 export class UserContentRequestService {
@@ -37,13 +34,16 @@ export class UserContentRequestService {
 
   async getTrendingQuestions(req: any) {
     const questions = await this.userContentService.getTrendingQuestions();
+    if (null === questions) {
+      throw new NotFoundException('No trending questions found.');
+    }
 
     const results: any[] = [];
     for (let i = 0; i < questions.length; i++) {
       results.push(
         await this.getUserContent(
           questions[i].userContentID,
-          Type.QUESTION,
+          UserContentType.Question,
           req?.userId,
         ),
       );
@@ -54,16 +54,16 @@ export class UserContentRequestService {
   /**
    * Loads User Content
    * @param id      # UUID
-   * @param type    # Type[Question, Answer, Discussion]
+   * @param type    # UserContentType
    * @param userId  # UUID
    * @throws NotFoundException
    */
-  async getUserContent(id: string, type: Type, userId?: string) {
+  async getUserContent(id: string, type: UserContentType, userId?: string) {
     const result = await this.userContentService.getQuestion(id);
 
     if (result.userContent == null)
       throw new NotFoundException(
-        `No ${Type[type].toLowerCase()} found with this id.`,
+        `No ${type.toLowerCase()} found with this id.`,
       );
 
     const evaluation =
@@ -97,7 +97,10 @@ export class UserContentRequestService {
           type: creator?.isPro ? 'pro' : 'registered' ?? 'guest',
         },
       };
-      if (type === Type.QUESTION || type === Type.DISCUSSION) {
+      if (
+        type === UserContentType.Question ||
+        type === UserContentType.Discussion
+      ) {
         // @ts-ignore
         response.title = result.question?.title;
         // @ts-ignore
@@ -105,9 +108,7 @@ export class UserContentRequestService {
       }
       return response;
     }
-    throw new NotFoundException(
-      `No ${Type[type].toLowerCase()} found with this id.`,
-    );
+    throw new NotFoundException(`No ${type.toLowerCase()} found with this id.`);
   }
 
   /**
@@ -144,13 +145,19 @@ export class UserContentRequestService {
   async getAnswersOfQuestion(id: string, sortCriteria: QueryParameters) {
     // check question does exist
     const question = await this.userContentService.getQuestion(id);
-    if (question == null)
+    if (null === question || null === question.userContent)
       throw new NotFoundException('No question found with this id.');
 
     // fetch answers
     const rawAnswers = await this.userContentService.getAnswersOfGroupID(
-      question?.userContent?.groupID,
-      sortCriteria,
+      question.userContent.groupID,
+      createSortOptions(
+        sortCriteria.sortBy,
+        sortCriteria.sortDirection,
+        sortCriteria.offset,
+        sortCriteria.limit,
+      ),
+      true, // TODO: add enableAI
     );
     if (rawAnswers == null) {
       throw new InternalServerErrorException(
@@ -213,7 +220,11 @@ export class UserContentRequestService {
     }
 
     // create question
-    const question = await this.createUserContent(data, Type.QUESTION, userId);
+    const question = await this.createUserContent(
+      data,
+      UserContentType.Question,
+      userId,
+    );
 
     // generate AI answer
     if (data.useAI && userExist) {
@@ -323,7 +334,11 @@ export class UserContentRequestService {
       typeOfAI: cleaned_typeOfAI,
     };
     // create questionData
-    return await this.createUserContent(answerData, Type.ANSWER, userId);
+    return await this.createUserContent(
+      answerData,
+      UserContentType.Answer,
+      userId,
+    );
   }
 
   /**
@@ -331,8 +346,17 @@ export class UserContentRequestService {
    * @param query typeof SearchQuery
    * @returns the questions meeting the criteria or an empty array
    * */
-  async search(query: SearchQuery) {
-    return await this.userContentService.search(query);
+  async search(query: SearchQuery, req: any) {
+    console.log(req);
+    return await this.userContentService.searchForQuestionsOrDiscussions(
+      query.q,
+      createSortOptions(
+        query.sortBy,
+        query.sortDirection,
+        query.offset,
+        query.limit,
+      ),
+    );
   }
 
   /**
@@ -341,18 +365,18 @@ export class UserContentRequestService {
    * @param type the type of userContent, question, answer, discussion
    * @param userId the id of the user which creates this resource
    * */
-  async createUserContent(data: any, type: Type, userId: string) {
+  async createUserContent(data: any, type: UserContentType, userId: string) {
     try {
       let result: any;
       switch (type) {
-        case Type.QUESTION:
+        case UserContentType.Question:
           result = await this.userContentService.createQuestion(
             userId,
             data.content,
             data.title,
           );
           break;
-        case Type.DISCUSSION:
+        case UserContentType.Discussion:
           result = await this.userContentService.createDiscussion(
             userId,
             data.content,
@@ -360,7 +384,7 @@ export class UserContentRequestService {
             data.isPrivate,
           );
           break;
-        case Type.ANSWER:
+        case UserContentType.Answer:
           result = await this.userContentService.createAnswer(
             userId,
             data.groupId,

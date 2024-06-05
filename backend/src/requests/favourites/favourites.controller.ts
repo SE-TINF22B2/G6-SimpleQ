@@ -26,7 +26,7 @@ export class FavouritesController {
     //@IsUUID
     const userId = req.userId;
     const userFavorites: Favorite[] | null =
-      await this.favoriteService.getFavoriteOfUser(userId);
+      await this.favoriteService.getAllFavoritesOfUser(userId);
     if (null === userFavorites) {
       return [];
     }

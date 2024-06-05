@@ -11,13 +11,11 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
-import {
-  Type,
-  UserContentRequestService,
-} from '../user-content-request/user-content-request.service';
+import { UserContentRequestService } from '../user-content-request/user-content-request.service';
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
+import { UserContent, UserContentType } from '@prisma/client';
 import { CreateAnswerDto } from './dto/create-answer.dto';
 
 @Controller('question') // prefix: domain/question/...
@@ -43,8 +41,17 @@ export class QuestionsController {
    * limit - the limit of questions, defaults to 10
    * */
   @Get('search')
-  getSearch(@Query(new ValidationPipe()) query: SearchQuery): Promise<object> {
-    return this.userContentService.search(query);
+  getSearch(
+    @Req() req: any,
+    @Query(new ValidationPipe()) query: SearchQuery,
+  ): Promise<
+    | (UserContent & {
+        likes: number;
+        dislikes: number;
+      })[]
+    | null
+  > {
+    return this.userContentService.search(query, req);
   }
 
   @Get(':id')
@@ -54,7 +61,7 @@ export class QuestionsController {
   ): Promise<object> {
     return this.userContentService.getUserContent(
       id,
-      Type.QUESTION,
+      UserContentType.Question,
       request?.userId,
     );
   }
