@@ -15,7 +15,7 @@ import { PrismaService } from '../prisma.service';
 
 @Injectable()
 export class UserContentService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   // Question
   async createQuestion(
@@ -285,23 +285,36 @@ export class UserContentService {
    * @returns number - number of KI generated answers
    */
   async countAIAnswersForUser(
-    groupID: string
+    userID: string
   ): Promise<number> {
-    const count = await this.prisma.userContent.count({
+    const ownQuestion = await this.prisma.userContent.findMany({
       where: {
-        groupID: groupID,
+        ownerID: userID,
+        type: {
+          in: [UserContentType.Question, UserContentType.Discussion]
+        },
+      },
+      select: {
+        groupID: true,
+      }
+    });
+
+    let count = await this.prisma.userContent.count({
+      where: {
+        groupID: {
+          in: ownQuestion.map((q) => q.groupID)
+        },
         type: UserContentType.Answer,
         answer: {
           typeOfAI: {
-            in: [TypeOfAI.GPT, TypeOfAI.WolframAlpha],
+            not: TypeOfAI.None,
           },
         },
       },
     });
-  
     return count;
   }
-  
+
 
   // Discussion
   async createDiscussion(
