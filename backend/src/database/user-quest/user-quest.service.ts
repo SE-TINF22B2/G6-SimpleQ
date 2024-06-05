@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { Quest, UserQuest } from '@prisma/client';
+import { UserQuest } from '@prisma/client';
 
 @Injectable()
 export class UserQuestService {
@@ -38,7 +38,7 @@ export class UserQuestService {
     });
   }
 
-  async getAllUserQuests(userID: string): Promise<Quest[]> {
+  async getAllUserQuests(userID: string): Promise<UserQuest[]> {
     // TODO implement
     console.log(userID);
     return [];
