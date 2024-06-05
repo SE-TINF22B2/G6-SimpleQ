@@ -35,6 +35,7 @@ export class UserService {
   }
 
   async userIdExists(userId: string): Promise<boolean> {
+    if (userId === undefined) return false;
     const userData: object | null = await this.prisma.user.findFirst({
       where: { userID: userId },
     });

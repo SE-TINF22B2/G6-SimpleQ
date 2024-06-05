@@ -14,7 +14,7 @@ export class ExternalAPIService {
   private async checkParams(prompt: string, groupID: string): Promise<boolean> {
     if (prompt === '') {
       throw new Error('prompt is empty');
-    } else if (await this.databaseService.checkGroupIDExists(groupID)) {
+    } else if (!await this.databaseService.checkGroupIDExists(groupID)) {
       throw new Error('groupID does not exist');
     } else if (process.env.NODE_ENV === 'dev') {
       return false;

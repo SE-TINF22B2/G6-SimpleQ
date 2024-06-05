@@ -5,6 +5,9 @@ import { VoteService } from '../../database/vote/vote.service';
 import { UserContentRequestService } from './user-content-request.service';
 import { BlacklistService } from '../../database/blacklist/blacklist.service';
 import { TagService } from '../../database/tag/tag.service';
+import { UserService } from '../../database/user/user.service';
+import { QuestionsController } from '../questions/questions.controller';
+import { ExternalAPIModule } from '../../externalAPI/externalAPI.module';
 
 describe('UserContentRequestService', () => {
   let service: UserContentRequestService;
@@ -18,7 +21,10 @@ describe('UserContentRequestService', () => {
         VoteService,
         BlacklistService,
         TagService,
+        UserService,
+        QuestionsController,
       ],
+      imports: [ExternalAPIModule]
     }).compile();
 
     service = module.get<UserContentRequestService>(UserContentRequestService);

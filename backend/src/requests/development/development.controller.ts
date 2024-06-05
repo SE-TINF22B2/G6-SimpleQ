@@ -3,6 +3,7 @@ import { DevelopmentService } from './development.service';
 import { AuthService } from '../../auth/auth.service';
 import { UserService } from '../../database/user/user.service';
 import { TagService } from '../../database/tag/tag.service';
+import { UserContentService } from '../../database/user-content/user-content.service';
 
 @Controller()
 export class DevelopmentController {
@@ -12,6 +13,7 @@ export class DevelopmentController {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly tagService: TagService,
+    private readonly userContentService: UserContentService,
   ) {}
 
   /**
@@ -63,6 +65,10 @@ export class DevelopmentController {
       profile,
       cookie,
     };
+  }
+  @Get('dev/questions')
+  async questions(@Req() req: any): Promise<object> {
+    return this.userContentService.getTrendingQuestions(50, 0);
   }
 
   /**

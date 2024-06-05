@@ -241,13 +241,12 @@ export class UserContentService {
     const contentExists = await this.prisma.userContent.findFirst({
       where: {
         groupID: groupID,
-        type: UserContentType.Question,
+        // type: UserContentType.Question,
       },
       select: {
         userContentID: true,
       },
     });
-
     return contentExists != null;
   }
 

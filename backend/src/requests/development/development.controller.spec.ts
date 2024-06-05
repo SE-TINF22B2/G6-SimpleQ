@@ -5,6 +5,7 @@ import { AuthService } from '../../auth/auth.service';
 import { UserService } from '../../database/user/user.service';
 import { PrismaService } from '../../database/prisma.service';
 import { TagService } from '../../database/tag/tag.service';
+import { UserContentService } from '../../database/user-content/user-content.service';
 
 describe('DevelopmentController', () => {
   let controller: DevelopmentController;
@@ -18,6 +19,7 @@ describe('DevelopmentController', () => {
         UserService,
         PrismaService,
         TagService,
+        UserContentService
       ],
     }).compile();
 

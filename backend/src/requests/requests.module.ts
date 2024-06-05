@@ -22,6 +22,7 @@ import { TagController } from './tag/tag.controller';
 import { UserContentRequestService } from './user-content-request/user-content-request.service';
 import { UserController } from './user/user.controller';
 import { RequestsUserService } from './user/requests-user.service';
+import { ExternalAPIModule } from '../externalAPI/externalAPI.module';
 
 @Module({})
 export class RequestsModule {
@@ -65,6 +66,7 @@ export class RequestsModule {
       module: RequestsModule,
       providers: providers,
       controllers: controllers,
+      imports: [ExternalAPIModule]
     };
   }
 }

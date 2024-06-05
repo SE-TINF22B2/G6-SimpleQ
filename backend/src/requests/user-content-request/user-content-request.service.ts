@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
   NotAcceptableException,
   NotFoundException,
+  UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { UserContentService } from '../../database/user-content/user-content.service';
@@ -14,6 +15,8 @@ import { TypeOfAI } from '@prisma/client';
 import { BlacklistService } from '../../database/blacklist/blacklist.service';
 import { TagService } from '../../database/tag/tag.service';
 import { CreateQuestion } from '../questions/dto/create-question.dto';
+import { UserService } from '../../database/user/user.service';
+import { ExternalAPIService } from '../../externalAPI/externalAPI.service';
 
 export enum Type {
   QUESTION,
@@ -28,6 +31,8 @@ export class UserContentRequestService {
     private readonly voteService: VoteService,
     private readonly blacklistService: BlacklistService,
     private readonly tagService: TagService,
+    private readonly userService: UserService,
+    private readonly externalAPIService: ExternalAPIService,
   ) {}
 
   async getTrendingQuestions(req: any) {
@@ -74,8 +79,7 @@ export class UserContentRequestService {
     const creator = await this.userContentService.getAuthorOfUserContent(
       result?.userContent?.userContentID as string,
     );
-    console.log(userId);
-    if (result) {
+        if (result) {
       const response: object = {
         id: result.userContent.userContentID,
 
@@ -158,9 +162,7 @@ export class UserContentRequestService {
     const answers: object[] = [];
     for (const answer of rawAnswers) {
       //@ts-ignore
-      answers.push(
-        await this.getUserContent(answer.userContentID, Type.ANSWER),
-      );
+      answers.push(await this.getUserContent(answer.userContentID, Type.ANSWER));
     }
 
     return answers ?? [];
@@ -179,21 +181,16 @@ export class UserContentRequestService {
     data: CreateQuestion,
     userId: string,
   ): Promise<object> {
-    const forbiddenWords: string[] =
+        const forbiddenWords: string[] =
       await this.blacklistService.getBlacklistArray(); // TODO buffer
 
     // check basic data is present
     if (data == null || data.content == null || data.title == null) {
       throw new UnprocessableEntityException('Payload is not sufficient!');
     }
-
-    // handle tags, create Tags if they do not exist in the database
-    if (data.tags !== undefined && data.tags !== null) {
-      await this.createTagsIfNotExist(data.tags, forbiddenWords);
-    }
-
-    if (data.useAI) {
-      // TODO implement AI
+    const userExist: boolean = await this.userService.userIdExists(userId);
+    if (!userExist) {
+      throw new UnauthorizedException()
     }
 
     // check text for restricted words
@@ -209,7 +206,27 @@ export class UserContentRequestService {
         'you have used unappropriated words!\nThis is not Acceptable, incident will be reported!',
       );
     }
-    return await this.createUserContent(data, Type.QUESTION, userId);
+    // handle tags, create Tags if they do not exist in the database
+    if (data.tags !== undefined && data.tags !== null) {
+      await this.createTagsIfNotExist(data.tags, forbiddenWords);
+    }
+
+    // create question
+    const question = await this.createUserContent(data, Type.QUESTION, userId);
+
+    // generate AI answer
+    if (data.useAI && userExist) {
+        const isPro = await this.userService.isProUser(userId);
+        this.requestAI(data.content, question.groupId, isPro).then()
+    }
+    return question;
+  }
+
+  private async requestAI(text:string, groupId:string, isPro: boolean): Promise<void> {
+    this.externalAPIService.requestGPT(text, groupId).then();
+      if (isPro) {
+        this.externalAPIService.requestGPT(text, groupId).then();
+      }
   }
 
   /**
@@ -347,6 +364,7 @@ export class UserContentRequestService {
       }
       return {
         id: result.userContent.userContentID,
+        groupId: result.userContent.groupID,
       };
     } catch (e) {
       throw new BadRequestException(e);
