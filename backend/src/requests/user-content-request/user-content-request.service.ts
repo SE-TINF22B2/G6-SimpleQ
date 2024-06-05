@@ -220,7 +220,11 @@ export class UserContentRequestService {
     }
 
     // create question
-    const question = await this.createUserContent(data, Type.QUESTION, userId);
+    const question = await this.createUserContent(
+      data,
+      UserContentType.Question,
+      userId,
+    );
 
     // generate AI answer
     if (data.useAI && userExist) {
@@ -330,7 +334,11 @@ export class UserContentRequestService {
       typeOfAI: cleaned_typeOfAI,
     };
     // create questionData
-    return await this.createUserContent(answerData, Type.ANSWER, userId);
+    return await this.createUserContent(
+      answerData,
+      UserContentType.Answer,
+      userId,
+    );
   }
 
   /**

@@ -4,6 +4,7 @@ import { AuthService } from '../../auth/auth.service';
 import { UserService } from '../../database/user/user.service';
 import { TagService } from '../../database/tag/tag.service';
 import { UserContentService } from '../../database/user-content/user-content.service';
+import { UserContent } from '@prisma/client';
 
 @Controller()
 export class DevelopmentController {
@@ -67,7 +68,7 @@ export class DevelopmentController {
     };
   }
   @Get('dev/questions')
-  async questions(): Promise<object> {
+  async questions(): Promise<UserContent[] | null> {
     return this.userContentService.getTrendingQuestions(50, 0);
   }
 

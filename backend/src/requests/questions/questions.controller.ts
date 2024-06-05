@@ -107,7 +107,6 @@ export class QuestionsController {
   ): Promise<object> {
     return await this.userContentService.createQuestionWrapper(
       createQuestion,
-      UserContentType.Question,
       req.userId,
     );
   }

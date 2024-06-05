@@ -71,6 +71,7 @@ export class UserService {
       },
     });
     return userData;
+  }
 
   /**
    * Returns whether a user is a pro-user
