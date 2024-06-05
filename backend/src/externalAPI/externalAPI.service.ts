@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { UserContentService } from '../database/user-content/user-content.service';
 import { TypeOfAI, User } from '@prisma/client';
-import { UserService } from 'src/database/user/user.service';
+import { UserService } from '../database/user/user.service';
 
 @Injectable()
 export class ExternalAPIService {
@@ -38,7 +38,7 @@ export class ExternalAPIService {
   private async checkParams(prompt: string, groupID: string, userID: string): Promise<boolean> {
     if (prompt === '') {
       throw new Error('The prompt cannot be empty');
-    } else if (await this.databaseContentService.checkGroupIDExists(groupID)) {
+    } else if (!await this.databaseContentService.checkGroupIDExists(groupID)) {
       throw new Error('Group ID not found');
     } else if (process.env.NODE_ENV === 'dev') {
       return false;
