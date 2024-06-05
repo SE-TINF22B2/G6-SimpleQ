@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { UserContentService } from '../database/user-content/user-content.service';
 import { TypeOfAI, User } from '@prisma/client';
 import { UserService } from '../database/user/user.service';
-import { AI_LIMIT } from 'config';
+import { AI_LIMIT } from '../../config';
 
 @Injectable()
 export class ExternalAPIService {
