@@ -52,6 +52,8 @@
 		&:empty:not(:focus):before {
 			content: attr(data-placeholder);
 			opacity: 0.8;
+			user-select: none;
+			pointer-events: none;
 		}
 
 		img {
