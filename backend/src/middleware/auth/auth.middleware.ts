@@ -18,7 +18,6 @@ export class AuthMiddleware implements NestMiddleware {
       result = await global.ory.toSession({
         cookie: req.header('cookie'),
       });
-      //console.log(result);
       if (result) {
         if (result.data?.identity?.id) {
           await this.authService.checkUser(result.data as unknown as Session);
@@ -27,7 +26,8 @@ export class AuthMiddleware implements NestMiddleware {
         }
       }
     } catch (e) {
-      if (allowedRequests.some((a) => req.baseUrl.includes(a))) {
+      // Check wether the current path is excluded from the authentication check
+      if (allowedRequests.some((a) => new RegExp(a).test(req.baseUrl))) {
         next();
         return;
       }

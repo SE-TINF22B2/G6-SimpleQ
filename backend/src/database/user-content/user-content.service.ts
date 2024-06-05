@@ -102,7 +102,7 @@ export class UserContentService {
 
   /**
    * Get the most voted questions of the last seven days.
-   * @param limit Maximum amount of questions that are returned. Default: 10
+   * @param limit Maximum number of questions that are returned. Default: 10
    * @param offset Number of questions that are skipped. Default: 0
    * @returns Array of UserContents with question
    */
@@ -257,7 +257,7 @@ export class UserContentService {
   }
 
   /**
-   * Get the amount of likes and dislikes of an UserContent.
+   * Get the amount of likes and dislikes of a UserContent.
    * @param userContentID ID of the UserContent
    * @returns object containing likes and dislikes as numbers
    */
@@ -397,7 +397,7 @@ export class UserContentService {
   }
 
   /**
-   * Check if an UserContent with the given groupID exists.
+   * Check if a UserContent with the given groupID exists.
    * @param groupID ID of the Group the UserContent should be in
    * @returns true if an UserContent exist
    */
@@ -405,13 +405,11 @@ export class UserContentService {
     const contentExists = await this.prisma.userContent.findFirst({
       where: {
         groupID: groupID,
-        type: UserContentType.Question,
       },
       select: {
         userContentID: true,
       },
     });
-
     return contentExists != null;
   }
 
@@ -441,6 +439,41 @@ export class UserContentService {
     });
 
     return aiAnswer != null;
+  }
+
+  /**
+   * Counts the number of KI generated answers for a user
+   * MAX number of KI generated answer for not prime user: 15
+   * @param groupID ID of the group from the Question/Discussion the Answer belongs to
+   * @returns number - number of KI generated answers
+   */
+  async countAIAnswersForUser(userID: string): Promise<number> {
+    const ownQuestion = await this.prisma.userContent.findMany({
+      where: {
+        ownerID: userID,
+        type: {
+          in: [UserContentType.Question, UserContentType.Discussion],
+        },
+      },
+      select: {
+        groupID: true,
+      },
+    });
+
+    const count = await this.prisma.userContent.count({
+      where: {
+        groupID: {
+          in: ownQuestion.map((q) => q.groupID),
+        },
+        type: UserContentType.Answer,
+        answer: {
+          typeOfAI: {
+            not: TypeOfAI.None,
+          },
+        },
+      },
+    });
+    return count;
   }
 
   // Discussion
