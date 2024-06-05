@@ -8,7 +8,12 @@ import { UserService } from '../database/user/user.service';
 
 @Module({
   imports: [HttpModule, ConfigModule.forRoot()],
-  providers: [ExternalAPIService, PrismaService, UserContentService, UserService],
+  providers: [
+    ExternalAPIService,
+    PrismaService,
+    UserContentService,
+    UserService,
+  ],
   exports: [ExternalAPIService],
 })
 export class ExternalAPIModule {}

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { User } from '@prisma/client';
 
@@ -61,7 +61,7 @@ export class UserService {
         },
       });
     if (userData == null) {
-      throw new NotFoundException();
+      return false;
     }
     return userData.isPro;
   }
@@ -83,7 +83,7 @@ export class UserService {
         },
       });
     if (userData == null) {
-      throw new NotFoundException();
+      return false;
     }
     return userData.isAdmin;
   }

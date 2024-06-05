@@ -111,7 +111,7 @@ export class UserContentRequestService {
   }
 
   /**
-   * Get Title and userContentID of a question on basis on questionID
+   * Get Title and userContentID of a question on a basis on questionID
    * @param id
    * @throws NotFoundException
    * @throws InternalServerErrorException
@@ -198,10 +198,9 @@ export class UserContentRequestService {
     // check text for restricted words
     if (
       this.blacklistService.checkTextWithBlacklist(
-        data.title,
+        data.title.concat(' ').concat(data.content),
         forbiddenWords,
-      ) ||
-      this.blacklistService.checkTextWithBlacklist(data.content, forbiddenWords)
+      )
     ) {
       throw new NotAcceptableException(
         null,
@@ -219,7 +218,7 @@ export class UserContentRequestService {
     // generate AI answer
     if (data.useAI && userExist) {
       const isPro = await this.userService.isProUser(userId);
-      this.requestAI(data.content, question.groupId, isPro).then();
+      this.requestAI(data.content, question.groupId, userId, isPro).then();
     }
     return question;
   }
@@ -227,12 +226,13 @@ export class UserContentRequestService {
   private async requestAI(
     text: string,
     groupId: string,
+    userId: string,
     isPro: boolean,
   ): Promise<void> {
     try {
-      this.externalAPIService.requestGPT(text, groupId).then();
+      this.externalAPIService.requestGPT(text, groupId, userId).then();
       if (isPro) {
-        this.externalAPIService.requestWolfram(text, groupId).then();
+        this.externalAPIService.requestWolfram(text, groupId, userId).then();
       }
     } catch (error) {
       throw new InternalServerErrorException(error);
@@ -294,17 +294,17 @@ export class UserContentRequestService {
     }
 
     // check question exists
-    const answer = await this.userContentService.getQuestion(questionId);
+    const questionData = await this.userContentService.getQuestion(questionId);
     if (
-      answer == null ||
-      answer.userContent == null ||
-      answer.userContent.groupID == null
+      questionData == null ||
+      questionData.userContent == null ||
+      questionData.userContent.groupID == null
     ) {
       throw new NotFoundException('Question ' + questionId + " doesn't exist!");
     }
 
     // check text for forbidden words
-    const groupId = answer.userContent.groupID;
+    const groupId = questionData.userContent.groupID;
     const forbiddenWords: string[] =
       await this.blacklistService.getBlacklistArray(); // TODO buffer
     if (
@@ -322,7 +322,7 @@ export class UserContentRequestService {
       content: data.content,
       typeOfAI: cleaned_typeOfAI,
     };
-    // create answer
+    // create questionData
     return await this.createUserContent(answerData, Type.ANSWER, userId);
   }
 

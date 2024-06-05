@@ -11,7 +11,12 @@ describe('ExternalAPIService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [HttpModule],
-      providers: [UserContentService, ExternalAPIService, PrismaService, UserService],
+      providers: [
+        UserContentService,
+        ExternalAPIService,
+        PrismaService,
+        UserService,
+      ],
     }).compile();
 
     service = module.get<ExternalAPIService>(ExternalAPIService);
@@ -22,7 +27,9 @@ describe('ExternalAPIService', () => {
   });
 
   it('requestGPT should throw an error: The prompt cannot be empty', async () => {
-    await expect(service.requestGPT('', '', '')).rejects.toThrow('The prompt cannot be empty');
+    await expect(service.requestGPT('', '', '')).rejects.toThrow(
+      'The prompt cannot be empty',
+    );
   });
 
   it('requestWolfram should throw an error: The prompt cannot be empty', async () => {
