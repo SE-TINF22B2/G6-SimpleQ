@@ -1,15 +1,15 @@
-import {Injectable} from '@nestjs/common';
-import {UserService} from "../../database/user/user.service";
-import {NotModifiedException} from "../exception-handling/NotModifiedException";
-import {PrismaService} from "../../database/prisma.service";
+import { Injectable } from '@nestjs/common';
+import { UserService } from '../../database/user/user.service';
+import { NotModifiedException } from '../exception-handling/NotModifiedException';
+import { PrismaService } from '../../database/prisma.service';
 
 @Injectable()
 export class DevelopmentService {
   constructor(
-     private readonly userService: UserService,
+    private readonly userService: UserService,
 
-     // database services only used for development
-     private prisma: PrismaService,
+    // database services only used for development
+    private prisma: PrismaService,
   ) {}
 
   getLoginResponse() {
@@ -17,21 +17,21 @@ export class DevelopmentService {
   }
 
   async upgradeUser(userId: string): Promise<boolean> {
-    if (await this.userService.isProUser(userId)){
+    if (await this.userService.isProUser(userId)) {
       throw new NotModifiedException();
     }
     return this.userService.upgradeUser(userId);
   }
 
   async unsetIsProUser(userId: string): Promise<boolean> {
-    if (!(await this.userService.isProUser(userId))){
+    if (!(await this.userService.isProUser(userId))) {
       throw new NotModifiedException();
     }
     return this.downgradeUser(userId);
   }
 
-  async setAdmin(userId: string, admin:boolean): Promise<object> {
-    if (!(await this.userService.isAdmin(userId))){
+  async setAdmin(userId: string, admin: boolean): Promise<object> {
+    if (!(await this.userService.isAdmin(userId))) {
       throw new NotModifiedException();
     }
     return this.setAdminAttribute(userId, admin);
@@ -49,14 +49,14 @@ export class DevelopmentService {
    * @return boolean
    */
   async downgradeUser(userId: string): Promise<boolean> {
-    const result: {isPro: boolean} = await this.prisma.user.update({
+    const result: { isPro: boolean } = await this.prisma.user.update({
       data: {
         isPro: false,
       },
       where: { userID: userId },
       select: {
         isPro: true,
-      }
+      },
     });
     return result.isPro;
   }
@@ -66,7 +66,7 @@ export class DevelopmentService {
       data: {
         isAdmin: admin,
       },
-      where: {userID: userId},
+      where: { userID: userId },
     });
   }
 }

@@ -1,7 +1,9 @@
-import {Controller, Get, NotFoundException, Req, Res} from '@nestjs/common';
+import { Controller, Get, NotFoundException, Req, Res } from '@nestjs/common';
 import { DevelopmentService } from './development.service';
 import { AuthService } from '../../auth/auth.service';
-import {UserService} from "../../database/user/user.service";
+import { UserService } from '../../database/user/user.service';
+import { TagService } from '../../database/tag/tag.service';
+import { UserContentService } from '../../database/user-content/user-content.service';
 
 @Controller()
 export class DevelopmentController {
@@ -10,6 +12,8 @@ export class DevelopmentController {
     private readonly devService: DevelopmentService,
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    private readonly tagService: TagService,
+    private readonly userContentService: UserContentService,
   ) {}
 
   /**
@@ -18,44 +22,53 @@ export class DevelopmentController {
    * @param req
    */
   @Get('upgrade')
-  async upgradeThisUser(@Req() req: any):Promise<boolean> {
+  async upgradeThisUser(@Req() req: any): Promise<boolean> {
     return await this.userService.upgradeUser(req.userId);
   }
 
   /**********/
   @Get('dev/isPro')
-  async isProUser(@Req() req: any):Promise<boolean> {
+  async isProUser(@Req() req: any): Promise<boolean> {
     return await this.userService.isProUser(req.userId);
   }
 
   @Get('dev/unsetProUser')
-  async unsetProUser(@Req() req: any):Promise<boolean> {
+  async unsetProUser(@Req() req: any): Promise<boolean> {
     return await this.devService.unsetIsProUser(req.userId);
   }
   @Get('dev/setProUser')
-  async setProUser(@Req() req: any):Promise<boolean> {
+  async setProUser(@Req() req: any): Promise<boolean> {
     return await this.userService.upgradeUser(req.userId);
   }
 
   @Get('dev/setAdmin')
-  async setAdmin(@Req() req: any):Promise<object> {
+  async setAdmin(@Req() req: any): Promise<object> {
     return await this.devService.setAdminAttribute(req.userId, true);
   }
 
+  @Get('dev/tags')
+  async getTags() {
+    return await this.tagService._getAllTags();
+  }
+
   @Get('dev/unsetAdmin')
-  async unsetAdmin(@Req() req: any):Promise<object> {
+  async unsetAdmin(@Req() req: any): Promise<object> {
     return await this.devService.setAdminAttribute(req.userId, false);
   }
   @Get('dev/profile')
-  async profile(@Req() req: any):Promise<object> {
+  async profile(@Req() req: any): Promise<object> {
     const profile = await this.userService.getUser(req.userId);
     const cookie = req.headers.cookie;
 
-    if(profile == null) throw new NotFoundException('User not found');
+    if (profile == null) throw new NotFoundException('User not found');
     return {
       profile,
-      cookie
+      cookie,
     };
+  }
+  @Get('dev/questions')
+  async questions(): Promise<object> {
+    return this.userContentService.getTrendingQuestions(50, 0);
   }
 
   /**

@@ -17,7 +17,7 @@ export class AuthMiddleware implements NestMiddleware {
     try {
       result = await global.ory.toSession({
         cookie: req.header('cookie'),
-      })
+      });
       if (result) {
         if (result.data?.identity?.id) {
           await this.authService.checkUser(result.data as unknown as Session);

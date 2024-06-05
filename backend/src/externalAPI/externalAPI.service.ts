@@ -12,7 +12,7 @@ export class ExternalAPIService {
     private readonly httpService: HttpService,
     private readonly databaseContentService: UserContentService,
     private readonly databaseUserService: UserService,
-  ) { }
+  ) {}
 
   /**
    * This function should check if a user is allowed to use the AI answer generation.
@@ -20,14 +20,17 @@ export class ExternalAPIService {
    * @throws user ID not found | You have reached the limit for free AI responses
    */
   private async checkAllowed(userID: string) {
-    let user: User | null = await this.databaseUserService.getUser(userID);
+    const user: User | null = await this.databaseUserService.getUser(userID);
     if (user == null) {
       throw new Error('User ID not found');
-    } else if (user.isPro == false && await this.databaseContentService.countAIAnswersForUser(userID) >= AI_LIMIT) {
+    } else if (
+      user.isPro == false &&
+      (await this.databaseContentService.countAIAnswersForUser(userID)) >=
+        AI_LIMIT
+    ) {
       throw new Error('You have reached the limit for free AI responses');
     }
   }
-
 
   /**
    * This function should check the params for the AI functions.
@@ -39,7 +42,9 @@ export class ExternalAPIService {
   private async checkParams(prompt: string, groupID: string): Promise<boolean> {
     if (prompt === '') {
       throw new Error('The prompt cannot be empty');
-    } else if (!await this.databaseContentService.checkGroupIDExists(groupID)) {
+    } else if (
+      !(await this.databaseContentService.checkGroupIDExists(groupID))
+    ) {
       throw new Error('Group ID not found');
     } else if (process.env.NODE_ENV === 'dev') {
       return false;
@@ -60,7 +65,6 @@ export class ExternalAPIService {
     }
   }
 
-
   /**
    * This function should generates an AI answer with the Wolfram Alpha API.
    * @param prompt
@@ -68,7 +72,11 @@ export class ExternalAPIService {
    * @param userID
    * @returns Promise<string>
    */
-  async requestWolfram(prompt: string, groupID: string, userID: string): Promise<string> {
+  async requestWolfram(
+    prompt: string,
+    groupID: string,
+    userID: string,
+  ): Promise<string> {
     try {
       this.checkAllowed(userID);
       const paramsCheck = await this.checkParams(prompt, groupID);
@@ -94,7 +102,6 @@ export class ExternalAPIService {
     }
   }
 
-
   /**
    * This function should generates an AI answer with the LLM API.
    * @param prompt
@@ -102,7 +109,11 @@ export class ExternalAPIService {
    * @param userID
    * @returns Promise<string>
    */
-  async requestGPT(prompt: string, groupID: string, userID: string): Promise<string> {
+  async requestGPT(
+    prompt: string,
+    groupID: string,
+    userID: string,
+  ): Promise<string> {
     const body = {
       prompt: prompt,
     };
