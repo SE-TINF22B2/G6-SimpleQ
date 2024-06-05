@@ -29,7 +29,7 @@ describe('QuestionsController', () => {
         UserContentService,
         QuestionsController,
       ],
-      imports: [ExternalAPIModule]
+      imports: [ExternalAPIModule],
     }).compile();
 
     controller = module.get<QuestionsController>(QuestionsController);

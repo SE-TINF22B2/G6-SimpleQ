@@ -79,7 +79,7 @@ export class UserContentRequestService {
     const creator = await this.userContentService.getAuthorOfUserContent(
       result?.userContent?.userContentID as string,
     );
-        if (result) {
+    if (result) {
       const response: object = {
         id: result.userContent.userContentID,
 
@@ -162,7 +162,10 @@ export class UserContentRequestService {
     const answers: object[] = [];
     for (const answer of rawAnswers) {
       //@ts-ignore
-      answers.push(await this.getUserContent(answer.userContentID, Type.ANSWER));
+      answers.push(
+        //@ts-ignore
+        await this.getUserContent(answer.userContentID, Type.ANSWER),
+      );
     }
 
     return answers ?? [];
@@ -181,7 +184,7 @@ export class UserContentRequestService {
     data: CreateQuestion,
     userId: string,
   ): Promise<object> {
-        const forbiddenWords: string[] =
+    const forbiddenWords: string[] =
       await this.blacklistService.getBlacklistArray(); // TODO buffer
 
     // check basic data is present
@@ -190,7 +193,7 @@ export class UserContentRequestService {
     }
     const userExist: boolean = await this.userService.userIdExists(userId);
     if (!userExist) {
-      throw new UnauthorizedException()
+      throw new UnauthorizedException();
     }
 
     // check text for restricted words
@@ -216,17 +219,21 @@ export class UserContentRequestService {
 
     // generate AI answer
     if (data.useAI && userExist) {
-        const isPro = await this.userService.isProUser(userId);
-        this.requestAI(data.content, question.groupId, isPro).then()
+      const isPro = await this.userService.isProUser(userId);
+      this.requestAI(data.content, question.groupId, isPro).then();
     }
     return question;
   }
 
-  private async requestAI(text:string, groupId:string, isPro: boolean): Promise<void> {
+  private async requestAI(
+    text: string,
+    groupId: string,
+    isPro: boolean,
+  ): Promise<void> {
     this.externalAPIService.requestGPT(text, groupId).then();
-      if (isPro) {
-        this.externalAPIService.requestGPT(text, groupId).then();
-      }
+    if (isPro) {
+      this.externalAPIService.requestGPT(text, groupId).then();
+    }
   }
 
   /**
@@ -256,7 +263,7 @@ export class UserContentRequestService {
       );
     }
     notIntersectedTags.forEach((tag) => {
-            this.tagService.createTag(tag);
+      this.tagService.createTag(tag);
     });
   }
 
@@ -322,7 +329,7 @@ export class UserContentRequestService {
    * @returns the questions meeting the criteria or an empty array
    * */
   async search(query: SearchQuery) {
-        return await this.userContentService.search(query);
+    return await this.userContentService.search(query);
   }
 
   /**

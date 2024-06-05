@@ -15,15 +15,14 @@ export class AuthMiddleware implements NestMiddleware {
   async use(req: Request, res: any, next: () => void) {
     let result: { data: Session } | null = null;
     try {
-            result = await global.ory.toSession({
+      result = await global.ory.toSession({
         cookie: req.header('cookie'),
       });
       if (result) {
-                if (result.data?.identity?.id) {
-                    await this.authService.checkUser(result.data as unknown as Session);
+        if (result.data?.identity?.id) {
+          await this.authService.checkUser(result.data as unknown as Session);
           //@ts-ignore
           req.userId = result.data.identity.id;
-
         }
       }
     } catch (e) {

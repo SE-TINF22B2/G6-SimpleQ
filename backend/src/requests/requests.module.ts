@@ -66,7 +66,7 @@ export class RequestsModule {
       module: RequestsModule,
       providers: providers,
       controllers: controllers,
-      imports: [ExternalAPIModule]
+      imports: [ExternalAPIModule],
     };
   }
 }

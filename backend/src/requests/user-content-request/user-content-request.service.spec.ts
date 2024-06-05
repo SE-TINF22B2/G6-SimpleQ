@@ -24,7 +24,7 @@ describe('UserContentRequestService', () => {
         UserService,
         QuestionsController,
       ],
-      imports: [ExternalAPIModule]
+      imports: [ExternalAPIModule],
     }).compile();
 
     service = module.get<UserContentRequestService>(UserContentRequestService);

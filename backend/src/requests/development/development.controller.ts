@@ -67,7 +67,7 @@ export class DevelopmentController {
     };
   }
   @Get('dev/questions')
-  async questions(@Req() req: any): Promise<object> {
+  async questions(): Promise<object> {
     return this.userContentService.getTrendingQuestions(50, 0);
   }
 

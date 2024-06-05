@@ -19,7 +19,7 @@ describe('DevelopmentController', () => {
         UserService,
         PrismaService,
         TagService,
-        UserContentService
+        UserContentService,
       ],
     }).compile();
 
