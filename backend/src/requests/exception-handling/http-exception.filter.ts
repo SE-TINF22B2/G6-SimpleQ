@@ -33,9 +33,6 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse();
     if (typeof exceptionCause == 'object') {
       const regexp = new RegExp(`^Cannot GET \\/[\\w\\/]*`);
-      // @ts-ignore
-      console.log(regexp.test(exceptionCause.message));
-      // @ts-ignore
       if (
         // @ts-ignore
         !(exceptionCause.message === 'undefined' || regexp.test(exceptionCause.message)) // eslint-disable-line
@@ -62,15 +59,9 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
  */
 @Catch(ImATeapotException)
 export class ImATeapotFilter implements ExceptionFilter {
-  catch(exception: ImATeapotException, host: ArgumentsHost) {
+  // @ts-ignore
+  catch(_exception: ImATeapotException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const request = ctx.getRequest<Request>();
-    const status = exception.getStatus();
-    console.log({
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-    });
     const response = ctx.getResponse();
     response
       .status(HttpStatus.I_AM_A_TEAPOT)

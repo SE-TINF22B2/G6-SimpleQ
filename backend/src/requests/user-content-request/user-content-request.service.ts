@@ -256,8 +256,7 @@ export class UserContentRequestService {
       );
     }
     notIntersectedTags.forEach((tag) => {
-      console.log('ADD ' + tag); // TODO change with Logging service
-      this.tagService.createTag(tag);
+            this.tagService.createTag(tag);
     });
   }
 
@@ -320,13 +319,10 @@ export class UserContentRequestService {
   /**
    * Fetches the questions for a given search criteria
    * @param query typeof SearchQuery
-   * @param req
    * @returns the questions meeting the criteria or an empty array
    * */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async search(query: SearchQuery, req: any) {
-    console.log(req);
-    return await this.userContentService.search(query);
+  async search(query: SearchQuery) {
+        return await this.userContentService.search(query);
   }
 
   /**
