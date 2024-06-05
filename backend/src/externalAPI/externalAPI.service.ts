@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { UserContentService } from '../database/user-content/user-content.service';
 import { TypeOfAI, User } from '@prisma/client';
 import { UserService } from '../database/user/user.service';
+import { AI_LIMIT } from 'config';
 
 @Injectable()
 export class ExternalAPIService {
@@ -22,7 +23,7 @@ export class ExternalAPIService {
     let user: User | null = await this.databaseUserService.getUser(userID);
     if (user == null) {
       throw new Error('User ID not found');
-    } else if (user.isPro == false && await this.databaseContentService.countAIAnswersForUser(userID) >= 15) {
+    } else if (user.isPro == false && await this.databaseContentService.countAIAnswersForUser(userID) >= AI_LIMIT) {
       throw new Error('You have reached the limit for free AI responses');
     }
   }
