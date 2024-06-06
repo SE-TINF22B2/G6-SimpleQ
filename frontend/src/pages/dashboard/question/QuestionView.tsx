@@ -13,6 +13,7 @@ import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
 import NoContent from "../../../components/NoContent";
 import QuestionStats from "./QuestionStats";
+import QuestionAnswerSkeleton from "./QuestionAnswerSkeleton";
 
 /**
  * Renders the question page
@@ -147,37 +148,6 @@ export default function QuestionView() {
 		</div>
 	}
 	
-	const renderAnswerSkeleton = () => {
-		return <div className={ "container transparent question-answer" }>
-			<div className={ "question-answer-author" }>
-				<Skeleton height={ 40 } width={ 40 }/>
-				
-				<p>
-					<Skeleton height={ 20 } width={ 100 }/>
-				</p>
-				
-				<span className={ "caption" }><Skeleton width={ 60 }/></span>
-			</div>
-			
-			<div className={ "question-answer-text" }>
-				<div className={ "glass" }>
-					<p>
-						<Skeleton count={ 3 }/>
-					</p>
-				</div>
-				
-				<div className={ "question-answer-actions" }>
-					<Skeleton height={ 20 } width={ 100 }/>
-					<Skeleton height={ 20 } width={ 100 }/>
-					
-					<div style={ { flex: 1 } }/>
-					
-					<Skeleton height={ 20 } width={ 200 }/>
-				</div>
-			</div>
-		</div>
-	}
-	
 	return <SplitSection className={ "question-main" }>
 		<div style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)", flexGrow: 1 } }>
 			<section className={ "glass question-content" }>
@@ -212,10 +182,7 @@ export default function QuestionView() {
 				? answers.length > 0
 					? answers.map((answer, index) => renderAnswer(answer, index))
 					: <NoContent/>
-				: <>
-					{ renderAnswerSkeleton() }
-					{ renderAnswerSkeleton() }
-				</> }
+				: <QuestionAnswerSkeleton count={ 2 }/> }
 			
 			<div style={ {
 				display: "flex",
