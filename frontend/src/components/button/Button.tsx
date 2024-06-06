@@ -1,5 +1,6 @@
 import React from "react";
 import "./Button.scss";
+import { animateBlob } from "../../def/cool-blobs";
 
 interface Props {
 	buttonStyle?: "primary" | "glass",
@@ -7,7 +8,8 @@ interface Props {
 	onClick?: () => Promise<void>,
 	children?: React.ReactNode,
 	disabled?: boolean,
-	placeIconRight?: boolean
+	placeIconRight?: boolean,
+	type?: "button" | "reset" | "submit"
 }
 
 /**
@@ -24,8 +26,11 @@ export default function Button(props: Props) {
 	
 	return (
 		<button className={ "btn btn-" + (props.buttonStyle ?? "glass") }
+				type={ props.type }
 				disabled={ props.disabled || isLoading }
-				onClick={ async () => {
+				onClick={ async (e) => {
+					animateBlob(e);
+					
 					if (!props.onClick) return;
 					if (isLoading) return;
 					
@@ -39,6 +44,8 @@ export default function Button(props: Props) {
 			<span>{ props.children }</span>
 			{ props.icon && props.placeIconRight && <i className={ isLoading ? "fi fi-rr-spinner spin" : props.icon }
                                                        style={ { marginLeft: "var(--spacing)" } }/> }
+			
+			<span className={ "button-blob" }/>
 		</button>
 	);
 }

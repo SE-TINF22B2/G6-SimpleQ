@@ -15,6 +15,7 @@ import Search from "../../components/search/Search";
 import { axiosError } from "../../def/axios-error";
 import { useAlert } from "react-alert";
 import Avatar from "../../components/avatar/Avatar";
+import { animateBlob } from "../../def/cool-blobs";
 
 // ory setup
 const basePath = "http://localhost:4000"
@@ -256,14 +257,21 @@ export default function Dashboard(props: Props) {
 	
 	return <div className={ "dashboard" }>
 		<nav>
-			<div style={ { position: "relative" } }>
-				<button className={ "btn btn-primary" }
-						style={ { outlineColor: "var(--primary-color-contrast)" } }
-						onClick={ () => navigate("/") }>
+			<div style={ { position: "relative", overflow: "hidden" } }>
+				<NavLink to={ "/" }
+						 style={ {
+							 maxHeight: "80%",
+							 maxWidth: "80%",
+							 outlineColor: "var(--primary-color-contrast)",
+							 borderRadius: "var(--border-radius)",
+							 display: "grid",
+							 placeItems: "center"
+						 } }>
 					<img src={ logoTodoMakeStatic } alt={ "Logo" }
-						 height={ "100%" } width={ "100%" }
+						 height={ "80%" } width={ "80%" }
 						 style={ { objectFit: "contain" } }/>
-				</button>
+				</NavLink>
+				
 				<i className={ "fi fi-rr-circle-xmark toggle-nav" }
 				   style={ {
 					   fontSize: "1.5em",
@@ -289,12 +297,13 @@ export default function Dashboard(props: Props) {
 			</div>
 			
 			{ window.location.pathname.includes("/question") && <>
-                <NavLink to={ "question/1" }>
+                <NavLink to={ "question/1" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
                     <i className={ "fi fi-sr-question-square" }/>
                     <p style={ { display: "flex", flexDirection: "column" } }>
                         <span className={ "caption" }>{ t('dashboard.nav.question.browsing') }</span>
                         <span>{ activeQuestionName ?? <Skeleton/> }</span>
                     </p>
+                    <span className={ "button-blob" }/>
                 </NavLink>
                 
                 <div style={ { paddingInline: "var(--spacing)" } }>
@@ -302,46 +311,53 @@ export default function Dashboard(props: Props) {
                 </div>
             </> }
 			
-			<NavLink to={ "trending" }>
+			<NavLink to={ "trending" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-file-chart-line" }/>
-					{ t('dashboard.nav.trending') }
+					<span>{ t('dashboard.nav.trending') }</span>
+					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "new" }>
+			<NavLink to={ "new" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-edit" }/>
-					{ t('dashboard.nav.question.create') }
+					<span>{ t('dashboard.nav.question.create') }</span>
+					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "activity" }>
+			<NavLink to={ "activity" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-vertical-history" }/>
-					{ t('dashboard.nav.activity') }
+					<span>{ t('dashboard.nav.activity') }</span>
+					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "my" }>
+			<NavLink to={ "my" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-list" }/>
-					{ t('dashboard.nav.my') }
+					<span>{ t('dashboard.nav.my') }</span>
+					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "b" }>
+			<NavLink to={ "b" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-star" }/>
-					{ t('dashboard.nav.favorites') }
+					<span>{ t('dashboard.nav.favorites') }</span>
+					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "quests" }>
+			<NavLink to={ "quests" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-treasure-chest" }/>
-					{ t('dashboard.nav.quests') }
+					<span>{ t('dashboard.nav.quests') }</span>
+					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "d" }>
+			<NavLink to={ "d" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-envelope" }/>
-					{ t('dashboard.nav.inbox') }
+					<span>{ t('dashboard.nav.inbox') }</span>
+					<span className={ "button-blob" }/>
 					<span className={ "badge" }>3</span>
 				</> }
 			</NavLink>

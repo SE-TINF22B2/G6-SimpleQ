@@ -98,6 +98,7 @@
 			border: none;
 			cursor: pointer;
 			display: flex;
+			gap: var(--spacing);
 			padding: var(--spacing);
 			width: 100%;
 
@@ -113,18 +114,12 @@
 			}
 
 			> i:first-child {
-				margin-inline-end: var(--spacing);
 				text-align: center;
 				width: 20px;
 			}
 
-			> i:last-child {
-				margin-inline-start: var(--spacing);
-			}
-
 			> span:first-of-type {
 				flex: 1;
-				padding-inline-end: calc(var(--spacing) * 2);
 			}
 
 			.shortcut {

@@ -1,5 +1,6 @@
 import React from "react";
 import "./Dropdown.scss";
+import { animateBlob } from "../../def/cool-blobs";
 
 interface Item {
 	label: string,
@@ -60,7 +61,9 @@ export default function Dropdown(props: {
 				{ item.header && <div className={ "dropdown-menu-header" }>{ item.header }</div> }
 				
 				<button className={ "dropdown-menu-item" }
-						onClick={ () => {
+						onClick={ (e) => {
+							animateBlob(e);
+							
 							setItems(items.map(i => {
 								return {
 									...i,
@@ -79,6 +82,8 @@ export default function Dropdown(props: {
 					
 					{ (item.items && item.items.length > 0) &&
                         <i className={ "fi fi-rr-angle-down" + (item.expanded ? " expanded" : "") }/> }
+					
+					<span className={ "button-blob" }/>
 				</button>
 				
 				{ item.expanded && item.items && item.items.length > 0 && renderItems(item.items, level + 1,
