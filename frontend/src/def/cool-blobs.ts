@@ -19,7 +19,7 @@ export const animateBlob = (e: React.MouseEvent) => {
 	const toRightLimit = (buttonRect.width - toLeftLimit);
 	let toX = x < toLeftLimit ? toLeftLimit : x > toRightLimit ? toRightLimit : x;
 	
-	blob.animate([
+	if (blob.animate) blob.animate([
 		{ opacity: 1, width: "60px", height: "80%", top: "10%", transform: "translateX(calc(" + fromX + "px - 50%))" },
 		{ opacity: 0, width: "120px", height: "100%", top: 0, transform: "translateX(calc(" + toX + "px - 50%))" }
 	], {
