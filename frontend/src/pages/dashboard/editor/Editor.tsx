@@ -195,6 +195,8 @@ export default function Editor(props: {}) {
 							tags: tags,
 							content: description,
 							useAI: questionType === "simp"
+						}, {
+							withCredentials: true
 						})
 									.then(res => {
 										alert.info(res.status);
