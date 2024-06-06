@@ -6,5 +6,5 @@ export type SortBy = 'ldr' | 'likes' | 'dislikes' | 'timestamp';
 export class SearchQuery extends QueryParameters {
   @IsString()
   @IsNotEmpty()
-  q: string;
+  q: string;  // TODO set limits and parameter
 }

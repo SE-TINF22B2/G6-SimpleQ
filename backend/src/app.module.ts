@@ -12,14 +12,14 @@ import { RequestsModule } from './requests/requests.module';
 import { APP_FILTER } from '@nestjs/core';
 import {
   ImATeapotFilter,
-  NotFoundExceptionFilter,
+  // NotFoundExceptionFilter,
 } from './requests/exception-handling/http-exception.filter';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    ExternalAPIModule,
     RequestsModule.register(),
+    ExternalAPIModule,
   ],
   controllers: [AppController],
   providers: [
@@ -28,10 +28,10 @@ import {
     PrismaService,
     AuthService,
     TagService,
-    {
-      provide: APP_FILTER,
-      useClass: NotFoundExceptionFilter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: NotFoundExceptionFilter,
+    // },
     {
       provide: APP_FILTER,
       useClass: ImATeapotFilter,

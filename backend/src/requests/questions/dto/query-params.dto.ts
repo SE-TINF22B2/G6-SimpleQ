@@ -1,7 +1,5 @@
-import { IsIn, IsOptional, IsPositive, IsString } from 'class-validator';
-
-export const SortBy = ['ldr', 'likes', 'dislikes', 'timestamp'];
-export const SortDirection = ['asc', 'desc'];
+import { IsIn, IsOptional, IsPositive, IsString, Max, Min } from 'class-validator';
+import { EXPORT_LIMIT, SortBy, SortDirection } from '../../../../config';
 
 export class QueryParameters {
   @IsOptional()
@@ -19,5 +17,7 @@ export class QueryParameters {
   offset: number;
 
   @IsOptional()
+  @Min(1)
+  @Max(EXPORT_LIMIT)
   limit: number;
 }
