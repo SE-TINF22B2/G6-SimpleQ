@@ -126,11 +126,7 @@ export default function Trending(props: {}) {
 				? questions.map((question, index) =>
 					<QuestionPreview question={ question } index={ index } key={ index }/>)
 				: <NoContent/>
-			: <>
-				<QuestionPreviewSkeleton/>
-				<QuestionPreviewSkeleton/>
-				<QuestionPreviewSkeleton/>
-			</>
+			: <QuestionPreviewSkeleton count={ 2 }/>
 		}
 	</>;
 }
