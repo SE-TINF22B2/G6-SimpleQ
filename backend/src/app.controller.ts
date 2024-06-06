@@ -44,7 +44,11 @@ export class AppController {
 
   // tag/search/?q=
   @Get('tag/search/')
-  searchTags(@Query() query: { q: string }): Promise<Tag[] | null> {
-    return this.tagService.searchTags(query.q);
+  async searchTags(@Query() query: { q: string }){
+    const tags = await this.tagService.searchTags(query.q);
+    if (!tags) {
+      return { tags: [] };
+    }
+    return { tags: tags.map((tag) => tag.tagname) };
   }
 }
