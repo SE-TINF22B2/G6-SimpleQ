@@ -26,5 +26,5 @@ export interface Answer {
 interface Author {
 	id: string;
 	name: string;
-	type: "user" | "pro" | "ai";
+	type: "guest" | "user" | "pro" | "admin" | "ai";
 }
