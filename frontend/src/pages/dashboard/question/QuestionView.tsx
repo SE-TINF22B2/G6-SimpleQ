@@ -14,6 +14,7 @@ import { axiosError } from "../../../def/axios-error";
 import NoContent from "../../../components/NoContent";
 import QuestionStats from "./QuestionStats";
 import QuestionAnswerSkeleton from "./QuestionAnswerSkeleton";
+import QuestionAnswer from "../../../components/questionpreview/QuestionAnswer";
 
 /**
  * Renders the question page
@@ -86,68 +87,6 @@ export default function QuestionView() {
 		}
 	}
 	
-	const renderAnswer = (answer: Answer, index: number) => {
-		return <div key={ index } className={ "container transparent question-answer" }>
-			<div className={ "question-answer-author" }
-				 style={ {
-					 paddingTop: answer.author.type === "ai" ? "var(--spacing)" : 0,
-					 paddingInline: answer.author.type === "ai" ? "var(--spacing)" : 0
-				 } }>
-				{ answer.author.type === "ai" ? <>
-					<i className={ "fi fi-sr-brain" }
-					   style={ {
-						   fontSize: "2em",
-						   height: "auto",
-						   color: "var(--primary-color)",
-						   filter: "drop-shadow(0 0 5px rgba(0, 0, 0, 0.2))"
-					   } }/>
-					
-					<p style={ { paddingTop: "calc(var(--spacing) * 0.5)" } }>
-						<span>Simp</span>
-					</p>
-				</> : <div className={ "question-answer-author-user" } tabIndex={ 0 }>
-					<img className={ "avatar" } src={ answer.author.id } alt={ "Answer Author" }/>
-					
-					<p>
-						<span>{ answer.author.name }</span>
-						<span className={ "badge" }>{ answer.author.type.toUpperCase() }</span>
-					</p>
-				</div> }
-				
-				<span className={ "caption" }>replied { answer.created }</span>
-			</div>
-			
-			<div className={ "question-answer-text" }>
-				<div className={ "glass" + (answer.author.type === "ai" ? " glass-simp" : "") }>
-					<p>{ answer.content }</p>
-				</div>
-				
-				<div className={ "question-answer-actions" }>
-					<div
-						className={ "question-answer-actions-rate" + (answer.opinion === "like" ? " rating" : "") }>
-						<i className={ "fi fi-rr-social-network primary-icon" } tabIndex={ 0 }/>
-						<span className={ "question-figure" }>{ answer.likes }</span>
-						<span className={ "question-unit" }>likes</span>
-					</div>
-					
-					<div
-						className={ "question-answer-actions-rate" + (answer.opinion === "dislike" ? " rating" : "") }>
-						<i className={ "fi fi-rr-social-network flipY primary-icon" } tabIndex={ 0 }/>
-						<span className={ "question-figure" }>{ answer.dislikes }</span>
-						<span className={ "question-unit" }>dislikes</span>
-					</div>
-					
-					<div style={ { flex: 1 } }/>
-					
-					<button className={ "question-report" }>
-						<i className={ "fi fi-rr-flag" }/>
-						Report answer
-					</button>
-				</div>
-			</div>
-		</div>
-	}
-	
 	return <SplitSection className={ "question-main" }>
 		<div style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)", flexGrow: 1 } }>
 			<section className={ "glass question-content" }>
@@ -180,7 +119,7 @@ export default function QuestionView() {
 			
 			{ !answersLoading
 				? answers.length > 0
-					? answers.map((answer, index) => renderAnswer(answer, index))
+					? answers.map((answer, index) => <QuestionAnswer answer={ answer } index={ index }/>)
 					: <NoContent/>
 				: <QuestionAnswerSkeleton count={ 2 }/> }
 			
