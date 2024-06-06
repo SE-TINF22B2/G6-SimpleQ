@@ -43,7 +43,7 @@ export default function QuestionView() {
 					  id: id ?? "",
 					  isDiscussion: res.data.isDiscussion ?? false,
 					  likes: res.data.likes ?? 0,
-					  rating: res.data.rating ?? "none",
+					  rating: res.data.opinion ?? "none",
 					  tags: res.data.tags ?? [],
 					  title: res.data.title ?? "",
 					  updated: formatDate(res.data.updated ?? "")
@@ -272,7 +272,7 @@ export default function QuestionView() {
 						</div>
 						
 						<div
-							className={ "question-stat" /* + (question.stats.rating === "like" ? " rating" : "") */ }>
+							className={ "question-stat" + (question.rating === "like" ? " rating" : "") }>
 							<i className={ "fi fi-rr-social-network primary-icon" } tabIndex={ 0 }/>
 							<span
 								className={ "question-figure" }>{ question.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
@@ -280,7 +280,7 @@ export default function QuestionView() {
 						</div>
 						
 						<div
-							className={ "question-stat" /* + (question.stats.rating === "dislike" ? " rating" : "") */ }>
+							className={ "question-stat" + (question.rating === "dislike" ? " rating" : "") }>
 							<i className={ "fi fi-rr-social-network flipY primary-icon" } tabIndex={ 0 }/>
 							<span
 								className={ "question-figure" }>{ question.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
