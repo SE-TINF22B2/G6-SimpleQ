@@ -90,6 +90,14 @@
 				}
 			},
 			"submit": "Post your Question"
+		},
+		"questionView": {
+			"answer": {
+				"creationDate": "replied {{answerCreationDate}}",
+				"likes": "likes",
+				"dislikes": "dislikes",
+				"report": "Report answer"
+			}
 		}
 	}
 }
