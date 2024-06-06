@@ -1,5 +1,7 @@
 import {
   ArrayMaxSize,
+  ArrayNotEmpty,
+  IsArray,
   IsBoolean,
   IsNotEmpty,
   IsString,
@@ -23,10 +25,12 @@ export class CreateQuestion {
   @MaxLength(TEXT_LENGTH)
   content: string;
 
-  @IsString({ each: true })
+  @IsArray()
   @IsNotEmpty()
+  @ArrayNotEmpty()
   @ArrayMaxSize(TAG_LIMIT)
-  // @MaxLength(TAG_LENGTH)
+  @IsString({ each: true })
+  @MaxLength(TAG_LENGTH, { each: true })
   tags: string[];
 
   @IsBoolean()
