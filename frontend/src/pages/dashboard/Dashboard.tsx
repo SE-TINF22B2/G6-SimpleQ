@@ -297,7 +297,8 @@ export default function Dashboard(props: Props) {
 			</div>
 			
 			{ window.location.pathname.includes("/question") && <>
-                <NavLink to={ "question/1" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+                <NavLink to={ window.location.pathname } className={ "active navigate" }
+                         onClick={ (e) => animateBlob(e) }>
                     <i className={ "fi fi-sr-question-square" }/>
                     <p style={ { display: "flex", flexDirection: "column" } }>
                         <span className={ "caption" }>{ t('dashboard.nav.question.browsing') }</span>
