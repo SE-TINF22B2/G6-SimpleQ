@@ -38,7 +38,7 @@ describe('UserContentService', () => {
         testUserContentQuestion.ownerID,
         testUserContentQuestion.content,
         testQuestion.title,
-        testUserContentQuestion.groupID,
+        testTagList.map((t) => t.tagname),
       ),
     ).resolves.toEqual({
       userContent: testUserContentQuestion,
@@ -63,7 +63,7 @@ describe('UserContentService', () => {
 
   it('should get all tags of the question', async () => {
     const questionWithTags: any = testUserContentQuestion;
-    questionWithTags.tag = testTagList;
+    questionWithTags.tags = testTagList;
     mockPrisma.userContent.findUnique.mockResolvedValueOnce(questionWithTags);
     await expect(
       service.getTagsOfUserContent(testUserContentQuestion.userContentID),
@@ -72,7 +72,7 @@ describe('UserContentService', () => {
 
   it('should get likes and dislikes of the question', async () => {
     const questionWithVotes: any = testUserContentQuestion;
-    questionWithVotes.vote = testVoteList;
+    questionWithVotes.votes = testVoteList;
     mockPrisma.userContent.findUnique.mockResolvedValueOnce(questionWithVotes);
     await expect(
       service.getLikesAndDislikesOfUserContent(
@@ -122,7 +122,7 @@ describe('UserContentService', () => {
         testUserContentDiscussion.content,
         testDiscussion.title,
         testDiscussion.isPrivate,
-        testUserContentDiscussion.groupID,
+        testTagList.map((t) => t.tagname),
       ),
     ).resolves.toEqual({
       userContent: testUserContentDiscussion,

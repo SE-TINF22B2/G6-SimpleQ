@@ -22,14 +22,14 @@ model User {
   timeOfRegistration DateTime       @default(now())
   activityPoints     Int            @default(0)
   email              String?
-  createdContent     UserContent[]
-  vote               Vote[]
-  favorite           Favorite[]
-  expert             Expert[]
-  userTimeout        UserTimeout[]
-  moderation         Moderation[]
-  loginAttempt       LoginAttempt[]
-  userQuest          UserQuest[]
+  createdContents    UserContent[]
+  votes              Vote[]
+  favorites          Favorite[]
+  experts            Expert[]
+  userTimeouts       UserTimeout[]
+  moderations        Moderation[]
+  loginAttempts      LoginAttempt[]
+  userQuests         UserQuest[]
 }
 
 model UserContent {
@@ -43,9 +43,9 @@ model UserContent {
   question       Question?
   answer         Answer?
   discussion     Discussion?
-  vote           Vote[]
-  favorite       Favorite[]
-  tag            Tag[]
+  votes          Vote[]
+  favorites      Favorite[]
+  tags           Tag[]
 }
 
 model Question {
@@ -71,8 +71,8 @@ model Discussion {
   userContentID String        @id
   title         String
   isPrivate     Boolean       @default(false)
-  userTimeout   UserTimeout[]
-  moderation    Moderation[]
+  userTimeouts  UserTimeout[]
+  moderations   Moderation[]
 }
 
 enum UserContentType {
@@ -99,7 +99,7 @@ model Moderation {
   moderatorID  String
   discussion   Discussion    @relation(fields: [discussionID], references: [userContentID])
   discussionID String
-  userTimeout  UserTimeout[]
+  userTimeouts UserTimeout[]
 }
 
 model Vote {
@@ -122,9 +122,9 @@ model Favorite {
 }
 
 model Tag {
-  tagname String        @id @unique
-  expert  Expert[]
-  content UserContent[]
+  tagname  String        @id @unique
+  experts  Expert[]
+  contents UserContent[]
 }
 
 model Expert {
@@ -153,7 +153,7 @@ model Quest {
   type        QuestType
   points      Int
   isSelected  Boolean
-  userQuest   UserQuest[]
+  userQuests  UserQuest[]
 }
 
 enum QuestType {
