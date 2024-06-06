@@ -43,7 +43,7 @@ export default function QuestionView() {
 					  id: id ?? "",
 					  isDiscussion: res.data.isDiscussion ?? false,
 					  likes: res.data.likes ?? 0,
-					  rating: res.data.opinion ?? "none",
+					  opinion: res.data.opinion ?? "none",
 					  tags: res.data.tags ?? [],
 					  title: res.data.title ?? "",
 					  updated: formatDate(res.data.updated ?? "")
@@ -122,14 +122,14 @@ export default function QuestionView() {
 				
 				<div className={ "question-answer-actions" }>
 					<div
-						className={ "question-answer-actions-rate" + (answer.rating === "like" ? " rating" : "") }>
+						className={ "question-answer-actions-rate" + (answer.opinion === "like" ? " rating" : "") }>
 						<i className={ "fi fi-rr-social-network primary-icon" } tabIndex={ 0 }/>
 						<span className={ "question-figure" }>{ answer.likes }</span>
 						<span className={ "question-unit" }>likes</span>
 					</div>
 					
 					<div
-						className={ "question-answer-actions-rate" + (answer.rating === "dislike" ? " rating" : "") }>
+						className={ "question-answer-actions-rate" + (answer.opinion === "dislike" ? " rating" : "") }>
 						<i className={ "fi fi-rr-social-network flipY primary-icon" } tabIndex={ 0 }/>
 						<span className={ "question-figure" }>{ answer.dislikes }</span>
 						<span className={ "question-unit" }>dislikes</span>
@@ -272,7 +272,7 @@ export default function QuestionView() {
 						</div>
 						
 						<div
-							className={ "question-stat" + (question.rating === "like" ? " rating" : "") }>
+							className={ "question-stat" + (question.opinion === "like" ? " rating" : "") }>
 							<i className={ "fi fi-rr-social-network primary-icon" } tabIndex={ 0 }/>
 							<span
 								className={ "question-figure" }>{ question.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
@@ -280,7 +280,7 @@ export default function QuestionView() {
 						</div>
 						
 						<div
-							className={ "question-stat" + (question.rating === "dislike" ? " rating" : "") }>
+							className={ "question-stat" + (question.opinion === "dislike" ? " rating" : "") }>
 							<i className={ "fi fi-rr-social-network flipY primary-icon" } tabIndex={ 0 }/>
 							<span
 								className={ "question-figure" }>{ question.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
