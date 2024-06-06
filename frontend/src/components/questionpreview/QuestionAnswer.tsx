@@ -1,6 +1,10 @@
 import { Answer } from "../../def/Question";
 import React from "react";
 
+/**
+ * Renders an answer to be displayed in QuestionView
+ * @param props holds the answer and an index
+ */
 export default function QuestionAnswer(props: { answer: Answer, index: number }) {
 	return <div key={ props.index } className={ "container transparent question-answer" }>
 		<div className={ "question-answer-author" }

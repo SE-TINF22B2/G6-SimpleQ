@@ -1,6 +1,10 @@
 import Skeleton from "react-loading-skeleton";
 import React from "react";
 
+/**
+ * Displays the skeleton for QuestionAnswer while the data is being fetched
+ * @param props optional count of how many skeletons should be displayed
+ */
 export default function QuestionAnswerSkeleton(props: { count?: number }) {
 	const { count = 1 } = props;
 	const skeletonArray = Array.from({ length: count });
