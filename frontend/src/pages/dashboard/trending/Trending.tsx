@@ -11,6 +11,7 @@ import Button from "../../../components/button/Button";
 import { formatDate } from "../../../def/converter";
 import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
+import NoContent from "../../../components/NoContent";
 
 /**
  * Renders the trending page, currently static
@@ -121,8 +122,10 @@ export default function Trending(props: {}) {
 		</Section>
 		
 		{ questions
-			? questions.map((question, index) =>
-				<QuestionPreview question={ question } index={ index } key={ index }/>)
+			? questions.length > 0
+				? questions.map((question, index) =>
+					<QuestionPreview question={ question } index={ index } key={ index }/>)
+				: <NoContent/>
 			: <>
 				<QuestionPreviewSkeleton/>
 				<QuestionPreviewSkeleton/>

@@ -11,6 +11,7 @@ import { Answer, Question } from "../../../def/Question";
 import { formatDate } from "../../../def/converter";
 import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
+import NoContent from "../../../components/NoContent";
 
 /**
  * Renders the question page
@@ -21,6 +22,7 @@ export default function QuestionView() {
 	
 	const [question, setQuestion] = React.useState<Question | undefined>(undefined);
 	const [answers, setAnswers] = React.useState<Answer[]>([]);
+	const [answersLoading, setAnswersLoading] = React.useState(true);
 	const [sortBy, setSortBy] = React.useState<"ldr" | "likes" | "dislikes" | "timestamp">("ldr");
 	const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">("desc");
 	const [enableAI, setEnableAI] = React.useState(true);
@@ -30,9 +32,8 @@ export default function QuestionView() {
 	const alert = useAlert();
 	
 	useEffect(() => {
-		global.axios.get("question/" + encodeURIComponent(id ?? ""), { withCredentials: true })
+		global.axios.get("question/" + encodeURIComponent(id ?? ""))
 			  .then(res => {
-				  console.log(res);
 				  let _question: Question = {
 					  answers: res.data.numberOfAnswers ?? 0,
 					  author: res.data.author ?? undefined,
@@ -50,6 +51,24 @@ export default function QuestionView() {
 				  setQuestion(_question);
 			  })
 			  .catch(err => axiosError(err, alert));
+		
+		global.axios.get("question/" + encodeURIComponent(id ?? "") + "/answers")
+			  .then(res => {
+				  let _answers: Answer[] = res.data.map((_answer: any) => {
+					  return {
+						  id: _answer.id ?? "",
+						  content: _answer.content ?? "",
+						  created: formatDate(_answer.created ?? ""),
+						  likes: _answer.likes ?? 0,
+						  dislikes: _answer.dislikes ?? 0,
+						  rating: "none",
+						  author: _answer.author ?? undefined
+					  }
+				  });
+				  setAnswers(_answers);
+			  })
+			  .catch(err => axiosError(err, alert))
+			  .finally(() => setAnswersLoading(false));
 	}, [id, navigate, alert]);
 	
 	const getSortByIcon = () => {
@@ -183,15 +202,15 @@ export default function QuestionView() {
 			
 			<section className={ "glass focus-indicator" }>
 				<h3>Answer this question</h3>
-				<TextEditor>
-					Write your answer here...
-				</TextEditor>
+				<TextEditor placeholder={ "Write your answer here..." }/>
 			</section>
 			
 			<hr style={ { margin: 0 } }/>
 			
-			{ question
-				? answers.map((answer, index) => renderAnswer(answer, index))
+			{ !answersLoading
+				? answers.length > 0
+					? answers.map((answer, index) => renderAnswer(answer, index))
+					: <NoContent/>
 				: <>
 					{ renderAnswerSkeleton() }
 					{ renderAnswerSkeleton() }
@@ -203,14 +222,14 @@ export default function QuestionView() {
 				justifyContent: "flex-end",
 				gap: "var(--spacing)"
 			} }>
-				<Button icon={ "fi fi-rr-arrow-left" } onClick={ () => {
+				<Button icon={ "fi fi-rr-arrow-left" } onClick={ async () => {
 				} }>
 					Previous
 				</Button>
 				
 				<p>Page 1 of 10</p>
 				
-				<Button icon={ "fi fi-rr-arrow-right" } onClick={ () => {
+				<Button icon={ "fi fi-rr-arrow-right" } onClick={ async () => {
 				} } placeIconRight={ true }>
 					Next
 				</Button>

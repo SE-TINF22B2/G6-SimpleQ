@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Profile.scss";
 import completing from "../../../illustrations/completing.svg";
+import { useAlert } from "react-alert";
+import { axiosError } from "../../../def/axios-error";
 
 /**
  * Renders the profile page, currently static
  */
 export default function Profile(props: {}) {
+	const alert = useAlert();
+	
+	useEffect(() => {
+		global.axios.get("profile", { withCredentials: true })
+			  .then(res => console.log(res))
+			  .catch(err => axiosError(err, alert));
+	}, [alert]);
+	
 	return <>
 		<div className={ "container profile-main" }>
 			<div style={ { display: "flex", gap: "var(--spacing)" } }>

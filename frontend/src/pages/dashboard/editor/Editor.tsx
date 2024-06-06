@@ -43,6 +43,9 @@ export default function Editor(props: {}) {
 							  while (title.includes("  ")) title = title.replace("  ", " ");
 							  setTitle(title);
 						  } }
+						  onFocus={ (e) => {
+							  window.setTimeout(() => document.execCommand('selectAll', false, undefined), 1);
+						  } }
 						  onBlur={ (e) => {
 							  let elem = document.getElementById("editor-question-title");
 							  if (elem) elem.innerText = title;
@@ -77,7 +80,9 @@ export default function Editor(props: {}) {
 				<div style={ { display: "flex", gap: "var(--spacing)" } }>
 					<LiveInput placeholder={ t('dashboard.questionEditor.tags.placeholder') }
 							   onSuggestionSelected={ (s) => setTags([...tags, s]) }
-							   disabled={ hasBeenSubmitted || tags.length >= 5 }/>
+							   onSuggestionDeselected={ (s) => setTags(tags.filter(t => t !== s)) }
+							   disabled={ hasBeenSubmitted || tags.length >= 5 }
+							   selectedSuggestions={ tags }/>
 					<p className={ "tags tags-deletable" } style={ { alignSelf: "center" } }>
 						{ tags.map((tag, index) => (
 							<span key={ index }
@@ -111,9 +116,8 @@ export default function Editor(props: {}) {
 				<p>{ t('dashboard.questionEditor.description.hint') }</p>
 				<hr/>
 				
-				<TextEditor height={ "240px" } disabled={ hasBeenSubmitted } onInput={ setDescription }>
-					{ t('dashboard.questionEditor.description.placeholder') }
-				</TextEditor>
+				<TextEditor height={ "240px" } disabled={ hasBeenSubmitted } onInput={ setDescription }
+							placeholder={ t('dashboard.questionEditor.description.placeholder') }/>
 			</div>
 		</section>
 		
