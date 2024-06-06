@@ -1,0 +1,94 @@
+{
+  "components": {
+    "consentBanner": {
+      "title": "Nous utilisons des cookies",
+      "content": "Nous utilisons des cookies et un stockage local pour vous garantir la meilleure expérience sur notre site Web. ",
+      "accept": "Accepter",
+      "decline": "Déclin"
+    },
+    "liveInput": {
+      "empty": "Veuillez commencer à taper.."
+    },
+    "textEditor": {
+      "wordCount": "Vous avez écrit {{count}} mots."
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "trending": "Questions tendances",
+      "question": {
+        "create": "Créer une question",
+        "browsing": "Navigation dans les questions/discussions"
+      },
+      "activity": "Activité",
+      "my": "Mes questions",
+      "favorites": "Favoris",
+      "quests": "Quêtes hebdomadaires",
+      "inbox": "Boîte de réception",
+      "stats": "Statistiques",
+      "activeDays": "Activité récente"
+    },
+    "search": {
+      "search": "Recherche..",
+      "info": "Naviguez en utilisant ↑ et ↓ ou ↹. "
+    },
+    "login": "Se connecter",
+    "logout": "Se déconnecter",
+    "appearance": {
+      "appearance": "Apparence",
+      "language": {
+        "language": "Langue",
+        "english": "Anglais",
+        "german": "Allemand",
+        "french": "Francais"
+      },
+      "theme": {
+        "theme": "Thème",
+        "system": "Système",
+        "dark": "Sombre",
+        "light": "Lumière"
+      }
+    },
+    "questionEditor": {
+      "title": {
+        "caption": "Titre",
+        "placeholder": "Nouvelle question",
+        "hint": "Quelle est votre question de programmation ? "
+      },
+      "tags": {
+        "title": "Mots clés",
+        "caption": "Mots clés",
+        "placeholder": "Ajouter une balise",
+        "hint": "Ajoutez jusqu'à 5 balises pour décrire le sujet de votre question."
+      },
+      "description": {
+        "title": "Description",
+        "caption": "Description",
+        "placeholder": "Décrivez votre question en détail.",
+        "hint": "Incluez toutes les informations dont quelqu’un aurait besoin pour répondre à votre question."
+      },
+      "type": {
+        "caption": "Personnaliser les réponses",
+        "simp": {
+          "title": "Activer SIMP",
+          "hint": "Les utilisateurs, ainsi que notre chatbot IA interne, pourront répondre à votre question pour vous fournir la meilleure aide possible."
+        },
+        "users": {
+          "title": "Uniquement les utilisateurs",
+          "hint": "Seuls les utilisateurs pourront télécharger des réponses à votre question."
+        }
+      },
+      "validate": {
+        "title": "Vérifiez votre question",
+        "caption": "Valider",
+        "hint": "Vérifiez que vous avez créé correctement votre question.",
+        "checks": {
+          "title": "Un titre valide",
+          "tags": "Au moins une balise",
+          "description": "Une description détaillée d'au moins 20 mots"
+        }
+      },
+      "submit": "Postez votre question"
+    }
+  }
+}

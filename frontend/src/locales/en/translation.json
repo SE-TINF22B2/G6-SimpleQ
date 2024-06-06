@@ -41,7 +41,8 @@
 			"language": {
 				"language": "Language",
 				"english": "English",
-				"german": "German"
+				"german": "German",
+				"french": "French"
 			},
 			"theme": {
 				"theme": "Theme",
