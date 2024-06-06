@@ -12,6 +12,7 @@ import { formatDate } from "../../../def/converter";
 import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
 import NoContent from "../../../components/NoContent";
+import QuestionStats from "./QuestionStats";
 
 /**
  * Renders the question page
@@ -261,45 +262,7 @@ export default function QuestionView() {
 				
 				<hr style={ { marginBlock: "calc(var(--spacing) / 2)" } }/>
 				
-				<span className={ "caption" }>Question Stats</span>
-				<div className={ "question-stats" }>
-					{ question ? <>
-						<div className={ "question-stat" }>
-							<i className={ "fi fi-rr-eye primary-icon" }/>
-							<span
-								className={ "question-figure" }>{ "0".replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-							<span className={ "question-unit" }>views</span>
-						</div>
-						
-						<div
-							className={ "question-stat" + (question.opinion === "like" ? " rating" : "") }>
-							<i className={ "fi fi-rr-social-network primary-icon" } tabIndex={ 0 }/>
-							<span
-								className={ "question-figure" }>{ question.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-							<span className={ "question-unit" }>likes</span>
-						</div>
-						
-						<div
-							className={ "question-stat" + (question.opinion === "dislike" ? " rating" : "") }>
-							<i className={ "fi fi-rr-social-network flipY primary-icon" } tabIndex={ 0 }/>
-							<span
-								className={ "question-figure" }>{ question.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-							<span className={ "question-unit" }>dislikes</span>
-						</div>
-						
-						<div className={ "question-stat" }>
-							<i className={ "fi fi-rr-comment-dots primary-icon" }/>
-							<span
-								className={ "question-figure" }>{ question.answers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-							<span className={ "question-unit" }>answers</span>
-						</div>
-					</> : <>
-						<Skeleton containerClassName={ "question-stat" } width={ 80 }/>
-						<Skeleton containerClassName={ "question-stat" } width={ 80 }/>
-						<Skeleton containerClassName={ "question-stat" } width={ 80 }/>
-						<Skeleton containerClassName={ "question-stat" } width={ 80 }/>
-					</> }
-				</div>
+				<QuestionStats question={ question }/>
 				
 				<hr style={ { marginBottom: "calc(var(--spacing) / 2)" } }/>
 				
