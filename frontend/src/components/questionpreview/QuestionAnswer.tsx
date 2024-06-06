@@ -1,5 +1,6 @@
 import { Answer } from "../../def/Question";
 import React from "react";
+import Avatar from "../avatar/Avatar";
 
 /**
  * Renders an answer to be displayed in QuestionView
@@ -25,7 +26,7 @@ export default function QuestionAnswer(props: { answer: Answer, index: number })
 					<span>Simp</span>
 				</p>
 			</> : <div className={ "question-answer-author-user" } tabIndex={ 0 }>
-				<img className={ "avatar" } src={ props.answer.author.id } alt={ "Answer Author" }/>
+				<Avatar userId={ props.answer.author.id }/>
 				
 				<p>
 					<span>{ props.answer.author.name }</span>

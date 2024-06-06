@@ -15,6 +15,7 @@ import NoContent from "../../../components/NoContent";
 import QuestionStats from "./QuestionStats";
 import QuestionAnswerSkeleton from "./QuestionAnswerSkeleton";
 import QuestionAnswer from "../../../components/questionpreview/QuestionAnswer";
+import Avatar from "../../../components/avatar/Avatar";
 
 /**
  * Renders the question page
@@ -147,7 +148,7 @@ export default function QuestionView() {
 			<section className={ "glass" }>
 				<div className={ "question-author" } tabIndex={ 0 }>
 					{ question
-						? <img className={ "avatar" } src={ question.author.id } alt={ "Question Author" }/>
+						? <Avatar userId={ question.author.id }/>
 						: <Skeleton height={ 40 } width={ 40 }/> }
 					
 					<div className={ "question-author-info" }>

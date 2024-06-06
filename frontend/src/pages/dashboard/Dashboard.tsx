@@ -14,6 +14,7 @@ import Skeleton from "react-loading-skeleton";
 import Search from "../../components/search/Search";
 import { axiosError } from "../../def/axios-error";
 import { useAlert } from "react-alert";
+import Avatar from "../../components/avatar/Avatar";
 
 // ory setup
 const basePath = "http://localhost:4000"
@@ -168,13 +169,7 @@ export default function Dashboard(props: Props) {
 			boxShadow: "var(--box-shadow)"
 		} }
 									   tabIndex={ 0 }>
-			<img className={ "avatar" }
-				 src={ session !== undefined ? "https://benniloidl.de/static/media/me.6c5597f7d72f68a1e83c.jpeg" : "" }
-				 alt={ "Avatar" }
-				 onError={ ({ currentTarget }) => {
-					 currentTarget.onerror = null; // prevents looping
-					 currentTarget.src = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50";
-				 } }/>
+			<Avatar userId={ session?.identity?.id }/>
 		</div> }
 						 items={ [
 							 {

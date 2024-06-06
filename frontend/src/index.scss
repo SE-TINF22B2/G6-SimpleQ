@@ -95,15 +95,6 @@ code {
 	}
 }
 
-.avatar {
-	border-radius: 50%;
-	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
-	height: 40px !important;
-	object-fit: cover;
-	pointer-events: none;
-	width: 40px !important;
-}
-
 ::selection {
 	background-color: var(--primary-color);
 	color: var(--primary-color-contrast);
