@@ -56,7 +56,7 @@ export default function Dashboard(props: Props) {
 			if (window.location.pathname.includes("/question")) {
 				let questionId = window.location.pathname.split("/question/")[1].substring(0, 36);
 				global.axios.get("question/" + questionId + "/title")
-					  .then(res => console.log(res))
+					  .then(res => setActiveQuestionName(res.data.title))
 					  .catch(err => axiosError(err, alert));
 			}
 		}
