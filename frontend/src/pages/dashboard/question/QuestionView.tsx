@@ -254,7 +254,7 @@ export default function QuestionView() {
 								</span>
 								
 								{ question.author.type !== "user" &&
-                                    <span className={ "badge" }>{ question.author.type.toUpperCase() }</span>}
+                                    <span className={ "badge" }>{ question.author.type.toUpperCase() }</span> }
 							</> : <Skeleton width={ 120 }/> }
 						</p>
 					</div>
