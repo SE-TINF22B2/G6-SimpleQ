@@ -99,7 +99,7 @@ export default function QuestionPreview(props: Props) {
 				<img className={ "avatar" } src={ "https://www.w3schools.com/w3images/avatar2.png" } alt={ "Avatar" }/>
 				<p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
 					<span className={ "caption" }>Asked by</span>
-					<span>{ props.question.author.name }</span>
+					<span>{ props.question.author.name.substring(0, import.meta.env.VITE_AUTHOR_NAME_MAX_LENGTH) }</span>
 				</p>
 			</div>
 		</div>
