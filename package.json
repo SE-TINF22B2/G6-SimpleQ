@@ -9,7 +9,8 @@
     "setup": "cd ./backend && yarn install && yarn prisma ; cd ../frontend && yarn",
     "tunnel": "cd ./backend && yarn tunnel",
     "start-backend": "cd backend && yarn start:dev",
-    "start-frontend": "cd frontend && yarn start"
+    "start-frontend": "cd frontend && yarn start",
+    "test": "cd backend && yarn test && cd ../frontend && yarn test"
   }
 
 }
