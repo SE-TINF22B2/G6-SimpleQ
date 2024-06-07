@@ -199,7 +199,15 @@ export class UserContentService {
     return this.sortBySortOptions(modifiedQuestions, sortOptions);
   }
 
-  async addRatingToUserContents(
+  // private async addAITypeToAnswer(
+  //   array: UserContent[]
+  // ){
+  //   return await array.filter((question) => {
+  //     const typeOfAI = await this
+  //   })
+  // }
+
+  private async addRatingToUserContents(
     array: UserContent[],
   ): Promise<UserContentWithRating[]> {
     return await Promise.all(

@@ -7,10 +7,7 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import {
-  createSortOptions,
-  UserContentService,
-} from '../../database/user-content/user-content.service';
+import { createSortOptions, UserContentService } from '../../database/user-content/user-content.service';
 import { VoteService } from '../../database/vote/vote.service';
 import { QueryParameters } from '../questions/dto/query-params.dto';
 import { SearchQuery } from '../questions/dto/search.dto';
@@ -97,6 +94,11 @@ export class UserContentRequestService {
           type: creator?.isPro ? 'pro' : 'registered' ?? 'guest',
         },
       };
+      if (type === UserContentType.Answer) {
+        // @ts-ignore
+        response.content = result.userContent.content;
+      }
+
       if (
         type === UserContentType.Question ||
         type === UserContentType.Discussion
@@ -167,11 +169,12 @@ export class UserContentRequestService {
     // change results to openAPI schema
     const answers: object[] = [];
     for (const answer of rawAnswers) {
-      //@ts-ignore
       answers.push(
-        //@ts-ignore
-        await this.getUserContent(answer.userContentID, Type.ANSWER),
+        await this.getUserContent(answer.userContentID, UserContentType.Answer),
       );
+    }
+    if (!answers) {
+      return [];
     }
 
     return answers ?? [];
