@@ -532,4 +532,13 @@ export class UserContentService {
       discussion: discussion,
     };
   }
+
+  async getQuestionsOfUser(userId: any) {
+    return this.prisma.userContent.findMany({
+      where: {
+        ownerID: userId,
+        type: UserContentType.Question,
+      },
+    });
+  }
 }

@@ -35,7 +35,7 @@ export class FavouritesController {
   @Post(':questionID')
   async addFavourite(
     @Req() req: any,
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('questionID', new ParseUUIDPipe()) id: string,
   ) {
     const userId = req.userId;
 
@@ -50,8 +50,20 @@ export class FavouritesController {
     }
   }
   @Delete(':id')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  removeFavourite(@Param('id', new ParseUUIDPipe()) id: string) {
-    throw new NotImplementedException(); // TODO implement
+  async removeFavourite(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Req() req: any,
+  ) {
+    const userId = req.userId;
+
+    if ((await this.usercontentService.getAnswer(id)) == null) {
+      throw new NotFoundException('Question not found!');
+    }
+
+    try {
+      return await this.favoriteService.deleteFavorite(userId, id);
+    } catch (Exception) {
+      throw new InternalServerErrorException();
+    }
   }
 }
