@@ -60,7 +60,7 @@ export class UserService {
     activityPoints?: number,
     email?: string,
   ): Promise<User | null> {
-    const userData = await this.prisma.user.update({
+    return this.prisma.user.update({
       where: { userID: userID },
       data: {
         username: newUsername,
@@ -70,7 +70,6 @@ export class UserService {
         email: email,
       },
     });
-    return userData;
   }
 
   /**

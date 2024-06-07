@@ -4,7 +4,6 @@ import {
   Get,
   InternalServerErrorException,
   NotFoundException,
-  NotImplementedException,
   Param,
   ParseUUIDPipe,
   Post,
