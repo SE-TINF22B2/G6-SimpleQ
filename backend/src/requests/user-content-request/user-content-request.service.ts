@@ -53,6 +53,13 @@ export class UserContentRequestService {
     return results;
   }
 
+  async getQuestionsOfUser(userId: string): Promise<object[]> {
+    if (!userId || !(await this.userService.userIdExists(userId))) {
+      throw new NotFoundException('User id does not exist.');
+    }
+    return this.userContentService.getQuestionsOfUser(userId);
+  }
+
   /**
    * Loads User Content
    * @param id      # UUID
