@@ -1,0 +1,15 @@
+{
+  "name": "global",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "setup": "cd ./backend && yarn install && yarn prisma ; cd ../frontend && yarn",
+    "tunnel": "cd ./backend && yarn tunnel",
+    "start-backend": "cd backend && yarn start:dev",
+    "start-frontend": "cd frontend && yarn start"
+  }
+
+}
