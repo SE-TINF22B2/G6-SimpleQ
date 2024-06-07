@@ -26,7 +26,7 @@ export class FavouritesController {
     //@IsUUID
     const userId = req.userId;
     const userFavorites: Favorite[] | null =
-      await this.favoriteService.getFavoriteOfUser(userId);
+      await this.favoriteService.getAllFavoritesOfUser(userId);
     if (null === userFavorites) {
       return [];
     }
@@ -44,8 +44,7 @@ export class FavouritesController {
     }
 
     try {
-      const result = await this.favoriteService.createFavorite(userId, id);
-      return result;
+      return await this.favoriteService.createFavorite(userId, id);
     } catch (Exception) {
       throw new InternalServerErrorException();
     }
@@ -53,6 +52,6 @@ export class FavouritesController {
   @Delete(':id')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   removeFavourite(@Param('id', new ParseUUIDPipe()) id: string) {
-    throw new NotImplementedException();
+    throw new NotImplementedException(); // TODO implement
   }
 }

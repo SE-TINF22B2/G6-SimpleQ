@@ -32,4 +32,4 @@ Um die Nutzerinteraktivität zu fördern, bieten wir verschiedene Rollen an. Die
 - `README.md`: Dieses Dokument.
 - `/docs`: Ist ein Ordner für Dokumentationsspezifische Dateien
 - `/backend`: Ordner für die Backend-Applikation, [README-Backend](https://github.com/SE-TINF22B2/G6-SimpleQ/blob/main/backend/README.md)
-- `/frondend`: Ordner für die Frontend-Applikation, [README-Frontend](https://github.com/SE-TINF22B2/G6-SimpleQ/blob/main/frontend/README.md)
+- `/frontend`: Ordner für die Frontend-Applikation, [README-Frontend](https://github.com/SE-TINF22B2/G6-SimpleQ/blob/main/frontend/README.md)

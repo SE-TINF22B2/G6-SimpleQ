@@ -24,6 +24,34 @@ export class TagService {
   }
 
   /**
+   * compare the tags with the tags in database
+   * get difference of tags not existent in database
+   * result = tagsToCheck \ tagsInDatabase
+   * @param tagsToCheck
+   */
+  async filterNotExistentTags(tagsToCheck: string[]): Promise<string[]> {
+    const allTags = await this._getAllTags(); // TODO cache these tags
+    const notAddedTags: string[] = [];
+    for (const tag of tagsToCheck) {
+      if (!allTags.includes(tag.toLowerCase())) {
+        notAddedTags.push(tag);
+      }
+    }
+    return notAddedTags;
+  }
+
+  /**
+   * returns all Tags of this database, existing at this moment
+   */
+  async _getAllTags(): Promise<string[]> {
+    /* eslint-disable */
+    return (
+      await this.prisma.tag.findMany({})
+    ).map((tag) => tag.tagname);
+    /* eslint-enable */
+  }
+
+  /**
    * Returns up to 5 (TAG_LIMIT in config.ts) tags containing the query string.
    * If a tag starts with the query, it has a higher priority and is first in the return array.
    * @param query String to search for similar tags

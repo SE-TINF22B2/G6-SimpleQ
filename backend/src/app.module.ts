@@ -9,8 +9,11 @@ import { AuthMiddleware } from './middleware/auth/auth.middleware';
 import { AppService } from './app.service';
 import { TagService } from './database/tag/tag.service';
 import { RequestsModule } from './requests/requests.module';
-import {APP_FILTER} from "@nestjs/core";
-import {ImATeapotFilter, NotFoundExceptionFilter} from "./requests/filters/http-exception.filter";
+import { APP_FILTER } from '@nestjs/core';
+import {
+  ImATeapotFilter,
+  NotFoundExceptionFilter,
+} from './requests/exception-handling/http-exception.filter';
 
 @Module({
   imports: [
@@ -20,19 +23,19 @@ import {ImATeapotFilter, NotFoundExceptionFilter} from "./requests/filters/http-
   ],
   controllers: [AppController],
   providers: [
-      AppService,
+    AppService,
     UserService,
     PrismaService,
     AuthService,
     TagService,
     {
       provide: APP_FILTER,
-      useClass: NotFoundExceptionFilter
+      useClass: NotFoundExceptionFilter,
     },
     {
       provide: APP_FILTER,
-      useClass: ImATeapotFilter
-    }
+      useClass: ImATeapotFilter,
+    },
   ],
 })
 export class AppModule implements NestModule {
