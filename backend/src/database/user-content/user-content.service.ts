@@ -195,7 +195,7 @@ export class UserContentService {
       return null;
     }
 
-    let modifiedQuestions = await this.addRatingToUserContents(userContents);
+    const modifiedQuestions = await this.addRatingToUserContents(userContents);
     return this.sortBySortOptions(modifiedQuestions, sortOptions);
   }
 
@@ -295,7 +295,7 @@ export class UserContentService {
    * @returns number of answers
    */
   async getNumberOfAnswersFromGroupID(groupID: string): Promise<number | null> {
-    return await this.prisma.userContent.count({
+    return this.prisma.userContent.count({
       where: { groupID: groupID, type: UserContentType.Answer },
     });
   }
@@ -352,6 +352,8 @@ export class UserContentService {
   /**
    * Get all the answers of a corresponding question or discussion.
    * @param groupID String with the groupID of the question or discussion
+   * @param sortOptions
+   * @param enableAI
    * @returns Array of Answer objects, or null if no anwers exist
    * */
   async getAnswersOfGroupID(
@@ -381,7 +383,7 @@ export class UserContentService {
     if (null === answers) {
       return null;
     }
-    let answersWithRating = await this.addRatingToUserContents(answers);
+    const answersWithRating = await this.addRatingToUserContents(answers);
     return this.sortBySortOptions(answersWithRating, sortOptions);
   }
 
@@ -448,8 +450,8 @@ export class UserContentService {
   /**
    * Counts the number of KI generated answers for a user
    * MAX number of KI generated answer for not prime user: 15
-   * @param groupID ID of the group from the Question/Discussion the Answer belongs to
    * @returns number - number of KI generated answers
+   * @param userID
    */
   async countAIAnswersForUser(userID: string): Promise<number> {
     const ownQuestion = await this.prisma.userContent.findMany({
@@ -464,7 +466,7 @@ export class UserContentService {
       },
     });
 
-    const count = await this.prisma.userContent.count({
+    return this.prisma.userContent.count({
       where: {
         groupID: {
           in: ownQuestion.map((q) => q.groupID),
@@ -477,7 +479,6 @@ export class UserContentService {
         },
       },
     });
-    return count;
   }
 
   // Discussion

@@ -354,8 +354,7 @@ export class UserContentRequestService {
    * @param query typeof SearchQuery
    * @returns the questions meeting the criteria or an empty array
    * */
-  async search(query: SearchQuery, req: any) {
-    console.log(req);
+  async search(query: SearchQuery) {
     return await this.userContentService.searchForQuestionsOrDiscussions(
       query.q,
       createSortOptions(
