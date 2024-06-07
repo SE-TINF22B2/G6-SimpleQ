@@ -89,6 +89,14 @@
         }
       },
       "submit": "Postez votre question"
+    },
+    "questionView": {
+      "answer": {
+        "creationDate": "a répondu {{answerCreationDate}}",
+        "likes": "aime",
+        "dislikes": "n'aime pas",
+        "report": "Signaler la réponse"
+      }
     }
   }
 }

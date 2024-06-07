@@ -89,6 +89,14 @@
         }
       },
       "submit": "Posten Sie Ihre Frage"
+    },
+  "questionView": {
+    "answer": {
+      "creationDate": "geantwortet am {{answerCreationDate}}",
+      "likes": "Likes",
+      "dislikes": "mag nicht",
+      "report": "Antwort melden"
+      }
     }
   }
 }
