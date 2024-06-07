@@ -17,6 +17,7 @@ import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
 import { UserContent, UserContentType } from '@prisma/client';
 import { CreateAnswerDto } from './dto/create-answer.dto';
+import { VoteDto } from './dto/vote.dto';
 
 @Controller('question') // prefix: domain/question/...
 export class QuestionsController {
@@ -122,5 +123,25 @@ export class QuestionsController {
       id,
       req.userId,
     );
+  }
+  @Post(':id/vote')
+  async voteForQuestion(
+    @Param('id', new ParseUUIDPipe()) userContentId: string,
+    @Req() req: any,
+    @Body(new ValidationPipe()) vote: VoteDto,
+  ) {
+    return await this.userContentService.updateUserVote(
+      vote,
+      userContentId,
+      req.userId,
+    );
+  }
+
+  @Get(':id/vote')
+  async getVoteOfQuestion(
+    @Param('id', new ParseUUIDPipe()) userContentId: string,
+    @Req() req: any,
+  ) {
+    return await this.userContentService.getUserVote(userContentId, req.userId);
   }
 }

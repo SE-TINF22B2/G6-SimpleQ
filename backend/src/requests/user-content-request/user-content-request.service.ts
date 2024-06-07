@@ -14,12 +14,14 @@ import {
 import { VoteService } from '../../database/vote/vote.service';
 import { QueryParameters } from '../questions/dto/query-params.dto';
 import { SearchQuery } from '../questions/dto/search.dto';
-import { TypeOfAI, UserContentType } from '@prisma/client';
+import { TypeOfAI, UserContentType, Vote } from '@prisma/client';
 import { BlacklistService } from '../../database/blacklist/blacklist.service';
 import { TagService } from '../../database/tag/tag.service';
 import { CreateQuestion } from '../questions/dto/create-question.dto';
 import { UserService } from '../../database/user/user.service';
 import { ExternalAPIService } from '../../externalAPI/externalAPI.service';
+import { VoteDto } from '../questions/dto/vote.dto';
+import { VOTE_OPTIONS_ENUM } from '../../../config';
 
 @Injectable()
 export class UserContentRequestService {
@@ -169,8 +171,7 @@ export class UserContentRequestService {
     for (const answer of rawAnswers) {
       //@ts-ignore
       answers.push(
-        //@ts-ignore
-        await this.getUserContent(answer.userContentID, Type.ANSWER),
+        await this.getUserContent(answer.userContentID, UserContentType.Answer),
       );
     }
 
@@ -401,5 +402,64 @@ export class UserContentRequestService {
     } catch (e) {
       throw new BadRequestException(e);
     }
+  }
+
+  /**
+   * set vote for one userContentId for one user,
+   * removes the vote if the parameter vote is set to 'none'
+   * @param vote
+   * @param userContentId
+   * @param userId
+   *
+   * @throws NotFoundException
+   */
+  async updateUserVote(
+    vote: VoteDto,
+    userContentId: string,
+    userId: string,
+  ): Promise<Vote | null> {
+    // check question exists
+    const author =
+      await this.userContentService.getAuthorOfUserContent(userContentId);
+    if (author == null) {
+      throw new NotFoundException(
+        'User content ' + userContentId + " doesn't exist!",
+      );
+    }
+
+    const oldVote = await this.voteService.getVote(userContentId, userId);
+    if (!!oldVote) {
+      // old vote exist
+      const oldVoteName = oldVote.isPositive
+        ? VOTE_OPTIONS_ENUM.LIKE
+        : VOTE_OPTIONS_ENUM.DISLIKE;
+      if (vote.id == oldVoteName) return null;
+      // remove old vote
+      await this.voteService.deleteVote(userContentId, userId);
+      if (vote.id == VOTE_OPTIONS_ENUM.NONE) return null;
+    }
+    // set (new) vote
+    const isPositive = vote.id == VOTE_OPTIONS_ENUM.LIKE;
+    return await this.voteService.createVote(userContentId, userId, isPositive);
+  }
+
+  /**
+   * get vote for one user-content-item for one user
+   * @param userContentId
+   * @param userId
+   * @throws NotFoundException
+   */
+  async getUserVote(
+    userContentId: string,
+    userId: string,
+  ): Promise<Vote | null> {
+    if (
+      !(await this.userContentService.getAuthorOfUserContent(userContentId))
+    ) {
+      throw new NotFoundException(
+        'User content ' + userContentId + " doesn't exist!",
+      );
+    }
+    return this.voteService.getVote(userContentId, userId);
   }
 }

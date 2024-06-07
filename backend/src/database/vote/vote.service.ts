@@ -23,6 +23,16 @@ export class VoteService {
       },
     });
   }
+  async deleteVote(contentID: string, votingUserID: string) {
+    return this.prisma.vote.delete({
+      where: {
+        contentID_votingUserID: {
+          contentID: contentID,
+          votingUserID: votingUserID,
+        },
+      },
+    });
+  }
 
   async getVote(contentID: string, votingUserID: string): Promise<Vote | null> {
     return this.prisma.vote.findUnique({
