@@ -38,7 +38,7 @@ export default function Trending(props: {}) {
 						  id: _question.id,
 						  isDiscussion: _question.isDiscussion ?? false,
 						  likes: _question.likes ?? 0,
-						  rating: _question.rating ?? "none",
+						  opinion: _question.opinion ?? "none",
 						  tags: _question.tags ?? [],
 						  title: _question.title ?? "",
 						  updated: formatDate(_question.updated ?? "")
@@ -126,11 +126,7 @@ export default function Trending(props: {}) {
 				? questions.map((question, index) =>
 					<QuestionPreview question={ question } index={ index } key={ index }/>)
 				: <NoContent/>
-			: <>
-				<QuestionPreviewSkeleton/>
-				<QuestionPreviewSkeleton/>
-				<QuestionPreviewSkeleton/>
-			</>
+			: <QuestionPreviewSkeleton count={ 2 }/>
 		}
 	</>;
 }

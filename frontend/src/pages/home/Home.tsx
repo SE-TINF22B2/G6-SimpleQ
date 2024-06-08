@@ -140,9 +140,9 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					<p className={ "page-summary fade-in" }>
 						We offer a wide range of features to help you with your daily tasks.
 					</p>
-					<button className={ "btn btn-primary fade-in" }>
-						<span>Try Yourself!</span>
-					</button>
+					<Button buttonStyle={ "primary" }>
+						Try Yourself!
+					</Button>
 					
 					<div className={ "cards" }>
 						<div className={ "card fade-in" }>
