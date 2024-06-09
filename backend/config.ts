@@ -10,5 +10,15 @@ export const TAG_SEARCH_LENGTH_LIMIT: number = 10; // letters in request
 export const EXPORT_LIMIT: number = 20; // max amount of questions in request
 
 // sort parameters
-export const SortBy = ['ldr', 'likes', 'dislikes', 'timestamp'];
-export const SortDirection = ['asc', 'desc'];
+
+export enum SORT_BY {
+  LDR = 'ldr',
+  LIKES = 'likes',
+  DISLIKES = 'dislikes',
+  TIMESTAMP = 'timestamp',
+}
+
+export enum SORT_DIRECTION {
+  ASC = 'asc',
+  DESC = 'desc',
+}
