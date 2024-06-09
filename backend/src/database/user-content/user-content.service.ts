@@ -195,10 +195,15 @@ export class UserContentService {
       return null;
     }
 
-    let modifiedQuestions = await this.addRatingToUserContents(userContents);
+    const modifiedQuestions = await this.addRatingToUserContents(userContents);
     return this.sortBySortOptions(modifiedQuestions, sortOptions);
   }
 
+  /**
+   * Adds the number of likes and dislikes to all UserContents in the array.
+   * @param array Array of UserContent objects
+   * @returns Array of objects of type UserContentWithRating
+   */
   async addRatingToUserContents(
     array: UserContent[],
   ): Promise<UserContentWithRating[]> {
@@ -216,7 +221,17 @@ export class UserContentService {
     );
   }
 
-  sortBySortOptions(array: UserContentWithRating[], sortOptions: SortOptions) {
+  /**
+   * Sorts an array of UserContents by the options provided in sortOptions. The UserContents have to be
+   * UserContentWithRating objects.
+   * @param array Array of objects of type UserContentWithRating
+   * @param sortOptions Options to sort the array
+   * @returns Array of sorted UserContentWithRating objects
+   */
+  sortBySortOptions(
+    array: UserContentWithRating[],
+    sortOptions: SortOptions,
+  ): UserContentWithRating[] {
     switch (sortOptions.sortBy) {
       case SortType.ldr:
         array.sort((q) => {
@@ -239,6 +254,11 @@ export class UserContentService {
     if (sortOptions.sortDirection === SortDirection.desc) {
       array.reverse();
     }
+
+    array.splice(0, sortOptions.offset);
+    // decrease limit by 1 because the array starts at index 0
+    sortOptions.limit--;
+    array.splice(sortOptions.limit, array.length - sortOptions.limit);
     return array;
   }
 
@@ -381,7 +401,7 @@ export class UserContentService {
     if (null === answers) {
       return null;
     }
-    let answersWithRating = await this.addRatingToUserContents(answers);
+    const answersWithRating = await this.addRatingToUserContents(answers);
     return this.sortBySortOptions(answersWithRating, sortOptions);
   }
 

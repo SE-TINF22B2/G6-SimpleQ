@@ -9,10 +9,7 @@ describe('QuestsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [QuestsController],
-      providers: [
-          UserQuestService,
-          PrismaService
-      ]
+      providers: [UserQuestService, PrismaService],
     }).compile();
 
     controller = module.get<QuestsController>(QuestsController);
