@@ -397,25 +397,18 @@ export class UserContentService {
     sortOptions: SortOptions,
     enableAI: boolean,
   ): Promise<UserContentWithRating[] | null> {
-    let answers: UserContent[];
-    if (enableAI) {
-      answers = await this.prisma.userContent.findMany({
+    const answers: UserContent[] | null =
+      await this.prisma.userContent.findMany({
         where: {
           groupID: groupID,
           type: UserContentType.Answer,
+          answer: enableAI
+            ? {}
+            : {
+                typeOfAI: TypeOfAI.None,
+              },
         },
       });
-    } else {
-      answers = await this.prisma.userContent.findMany({
-        where: {
-          groupID: groupID,
-          type: UserContentType.Answer,
-          answer: {
-            typeOfAI: TypeOfAI.None,
-          },
-        },
-      });
-    }
     if (null === answers) {
       return null;
     }
