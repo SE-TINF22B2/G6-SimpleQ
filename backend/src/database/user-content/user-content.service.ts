@@ -12,7 +12,12 @@ import {
   Vote,
 } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
-import { SORT_BY, SORT_DIRECTION } from '../../../config';
+import {
+  DEFAULT_USER_CONTENT_LIMIT,
+  DEFAULT_USER_CONTENT_OFFSET,
+  SORT_BY,
+  SORT_DIRECTION,
+} from '../../../config';
 
 export type SortOptions = {
   sortBy: SortType;
@@ -35,8 +40,8 @@ export enum SortDirection {
 export function createSortOptions(
   sortBy: string = SORT_BY.LDR,
   sortDirection: string = SORT_DIRECTION.DESC,
-  offset: number = 0,
-  limit: number = 0,
+  offset: number = DEFAULT_USER_CONTENT_OFFSET,
+  limit: number = DEFAULT_USER_CONTENT_LIMIT,
 ): SortOptions {
   return {
     sortBy: SortType[sortBy],
@@ -261,9 +266,7 @@ export class UserContentService {
         });
         break;
       case SortType.likes:
-        array.sort((q) => {
-          return q.likes;
-        });
+        array = array.sort((q) => q.likes);
         break;
       case SortType.dislikes:
         array.sort((q) => {
@@ -280,11 +283,7 @@ export class UserContentService {
     if (sortOptions.sortDirection === SortDirection.desc) {
       array.reverse();
     }
-
-    array.splice(0, sortOptions.offset);
-    // decrease limit by 1 because the array starts at index 0
-    sortOptions.limit--;
-    array.splice(sortOptions.limit, array.length - sortOptions.limit);
+    array = array.slice(sortOptions.offset, sortOptions.limit);
     return array;
   }
 

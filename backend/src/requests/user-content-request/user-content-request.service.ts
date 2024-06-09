@@ -7,7 +7,10 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { createSortOptions, UserContentService } from '../../database/user-content/user-content.service';
+import {
+  createSortOptions,
+  UserContentService,
+} from '../../database/user-content/user-content.service';
 import { VoteService } from '../../database/vote/vote.service';
 import { QueryParameters } from '../questions/dto/query-params.dto';
 import { SearchQuery } from '../questions/dto/search.dto';
@@ -87,12 +90,12 @@ export class UserContentRequestService {
               result.userContent.userContentID,
               userId,
             )
-          : 'dislike',
-        author: {
-          id: creator?.userID,
-          name: creator?.username ?? 'Guest',
-          type: creator?.isPro ? 'pro' : 'registered' ?? 'guest',
-        },
+          : 'None',
+        author: await this.parseCreator(
+          creator,
+          type,
+          result.userContent.userContentID,
+        ),
         content: result.userContent.content,
       };
 
@@ -399,6 +402,38 @@ export class UserContentRequestService {
       };
     } catch (e) {
       throw new BadRequestException(e);
+    }
+  }
+
+  /**
+   * Parse creator information to differentiate between guest, registered and ai users
+   * @param creator - the creator of a question
+   * @param type - the UserContentType
+   * @param userContentId - the id of the UserContent
+   * @returns the creator with its id, name and type
+   * */
+  private async parseCreator(
+    creator: any,
+    type: UserContentType,
+    userContentId: string,
+  ) {
+    switch (type) {
+      case 'Answer':
+        const answer = await this.userContentService.getAnswer(userContentId);
+        return {
+          id: answer.answer?.typeOfAI != 'None' ? null : creator.id,
+          name:
+            answer.answer?.typeOfAI != 'None'
+              ? answer?.answer?.typeOfAI
+              : creator.name,
+          type: answer.answer?.typeOfAI != 'None' ? 'ai' : 'Registered',
+        };
+      default:
+        return {
+          id: creator?.userID,
+          name: creator?.username ?? 'Guest',
+          type: creator?.isPro ? 'pro' : 'registered' ?? 'guest',
+        };
     }
   }
 }

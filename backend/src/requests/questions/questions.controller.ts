@@ -41,9 +41,7 @@ export class QuestionsController {
    * limit - the limit of questions, defaults to 10
    * */
   @Get('search')
-  getSearch(
-    @Query(new ValidationPipe()) query: SearchQuery,
-  ): Promise<
+  getSearch(@Query(new ValidationPipe()) query: SearchQuery): Promise<
     | (UserContent & {
         likes: number;
         dislikes: number;
