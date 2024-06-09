@@ -1,4 +1,12 @@
-import { IsEnum, IsNumber, IsOptional, IsPositive, IsString, Max, Min } from 'class-validator';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  Max,
+  Min,
+} from 'class-validator';
 import { EXPORT_LIMIT, SORT_BY, SORT_DIRECTION } from '../../../../config';
 import { Type } from 'class-transformer';
 
