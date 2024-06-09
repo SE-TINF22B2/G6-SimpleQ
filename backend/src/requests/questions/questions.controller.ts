@@ -42,9 +42,7 @@ export class QuestionsController {
    * limit - the limit of questions, defaults to 10
    * */
   @Get('search')
-  getSearch(
-    @Query(new ValidationPipe()) query: SearchQuery,
-  ): Promise<
+  getSearch(@Query(new ValidationPipe()) query: SearchQuery): Promise<
     | (UserContent & {
         likes: number;
         dislikes: number;
@@ -55,8 +53,11 @@ export class QuestionsController {
   }
 
   @Get('my')
-  getMyQuestions(@Req() request: any): Promise<object[]> {
-    return this.userContentService.getQuestionsOfUser(request.userId);
+  getMyQuestions(
+    @Req() request: any,
+    @Query(new ValidationPipe()) query: QueryParameters,
+  ): Promise<object[] | null> {
+    return this.userContentService.getQuestionsOfUser(request.userId, query);
   }
 
   @Get(':id')
