@@ -93,11 +93,8 @@ export class UserContentRequestService {
           name: creator?.username ?? 'Guest',
           type: creator?.isPro ? 'pro' : 'registered' ?? 'guest',
         },
+        content: result.userContent.content,
       };
-      if (type === UserContentType.Answer) {
-        // @ts-ignore
-        response.content = result.userContent.content;
-      }
 
       if (
         type === UserContentType.Question ||
