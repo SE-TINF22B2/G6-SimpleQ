@@ -106,6 +106,27 @@ export class UserContentService {
   }
 
   /**
+   * Get all questions of a user.
+   * @param userID ID of the user
+   * @param sortOptions Options to sort the returned questions
+   * @returns Array of UserContent objects
+   */
+  async getQuestionsOfUser(
+    userID: string,
+    sortOptions: SortOptions,
+  ): Promise<UserContentWithRating[] | null> {
+    const questions = await this.prisma.userContent.findMany({
+      where: { ownerID: userID },
+    });
+    if (null === questions) {
+      return null;
+    }
+
+    const questionsWithRating = await this.addRatingToUserContents(questions);
+    return this.sortBySortOptions(questionsWithRating, sortOptions);
+  }
+
+  /**
    * Get the most voted questions of the last seven days.
    * @param limit Maximum number of questions that are returned. Default: 10
    * @param offset Number of questions that are skipped. Default: 0
@@ -195,11 +216,16 @@ export class UserContentService {
     if (null === userContents) {
       return null;
     }
-
-    const modifiedQuestions = await this.addRatingToUserContents(userContents);
-    return this.sortBySortOptions(modifiedQuestions, sortOptions);
+    const questionsWithRating =
+      await this.addRatingToUserContents(userContents);
+    return this.sortBySortOptions(questionsWithRating, sortOptions);
   }
 
+  /**
+   * Adds the number of likes and dislikes to all UserContents in the array.
+   * @param array Array of UserContent objects
+   * @returns Array of objects of type UserContentWithRating
+   */
   private async addRatingToUserContents(
     array: UserContent[],
   ): Promise<UserContentWithRating[]> {
@@ -217,7 +243,17 @@ export class UserContentService {
     );
   }
 
-  sortBySortOptions(array: UserContentWithRating[], sortOptions: SortOptions) {
+  /**
+   * Sorts an array of UserContents by the options provided in sortOptions. The UserContents have to be
+   * UserContentWithRating objects.
+   * @param array Array of objects of type UserContentWithRating
+   * @param sortOptions Options to sort the array
+   * @returns Array of sorted UserContentWithRating objects
+   */
+  sortBySortOptions(
+    array: UserContentWithRating[],
+    sortOptions: SortOptions,
+  ): UserContentWithRating[] {
     switch (sortOptions.sortBy) {
       case SortType.ldr:
         array.sort((q) => {
@@ -244,6 +280,11 @@ export class UserContentService {
     if (sortOptions.sortDirection === SortDirection.desc) {
       array.reverse();
     }
+
+    array.splice(0, sortOptions.offset);
+    // decrease limit by 1 because the array starts at index 0
+    sortOptions.limit--;
+    array.splice(sortOptions.limit, array.length - sortOptions.limit);
     return array;
   }
 
@@ -366,25 +407,18 @@ export class UserContentService {
     sortOptions: SortOptions,
     enableAI: boolean,
   ): Promise<UserContentWithRating[] | null> {
-    let answers: UserContent[];
-    if (enableAI) {
-      answers = await this.prisma.userContent.findMany({
+    const answers: UserContent[] | null =
+      await this.prisma.userContent.findMany({
         where: {
           groupID: groupID,
           type: UserContentType.Answer,
+          answer: enableAI
+            ? {}
+            : {
+                typeOfAI: TypeOfAI.None,
+              },
         },
       });
-    } else {
-      answers = await this.prisma.userContent.findMany({
-        where: {
-          groupID: groupID,
-          type: UserContentType.Answer,
-          answer: {
-            typeOfAI: TypeOfAI.None,
-          },
-        },
-      });
-    }
     if (null === answers) {
       return null;
     }

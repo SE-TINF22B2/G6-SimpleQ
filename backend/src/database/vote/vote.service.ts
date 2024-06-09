@@ -58,4 +58,21 @@ export class VoteService {
       )?.isPositive || null
     );
   }
+
+  /**
+   * Delete the vote of a User for a specific UserContent.
+   * @param contentID ID of the UserContent
+   * @param votingUserID ID of the User
+   * @returns the deleted vote object
+   */
+  async deleteVote(contentID: string, votingUserID: string): Promise<Vote> {
+    return this.prisma.vote.delete({
+      where: {
+        contentID_votingUserID: {
+          contentID: contentID,
+          votingUserID: votingUserID,
+        },
+      },
+    });
+  }
 }
