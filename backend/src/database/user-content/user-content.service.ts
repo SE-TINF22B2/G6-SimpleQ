@@ -12,6 +12,7 @@ import {
   Vote,
 } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
+import { SORT_BY, SORT_DIRECTION } from '../../../config';
 
 export type SortOptions = {
   sortBy: SortType;
@@ -32,8 +33,8 @@ export enum SortDirection {
 }
 
 export function createSortOptions(
-  sortBy: string = 'ldr',
-  sortDirection: string = 'desc',
+  sortBy: string = SORT_BY.LDR,
+  sortDirection: string = SORT_DIRECTION.DESC,
   offset: number = 0,
   limit: number = 0,
 ): SortOptions {
@@ -117,7 +118,7 @@ export class UserContentService {
         type: UserContentType.Question,
         timeOfCreation: { gte: time },
       },
-      orderBy: { vote: { _count: 'desc' } }, // impossible to order by the last upvoted questions with isPositive=true
+      orderBy: { vote: { _count: SORT_DIRECTION.DESC } }, // impossible to order by the last upvote questions with isPositive=true
       take: limit,
       skip: offset,
       include: {
@@ -191,7 +192,7 @@ export class UserContentService {
       return null;
     }
 
-    let modifiedQuestions = await this.addRatingToUserContents(userContents);
+    const modifiedQuestions = await this.addRatingToUserContents(userContents);
     return this.sortBySortOptions(modifiedQuestions, sortOptions);
   }
 
@@ -218,18 +219,22 @@ export class UserContentService {
         array.sort((q) => {
           return q.likes / q.dislikes;
         });
+        break;
       case SortType.likes:
         array.sort((q) => {
           return q.likes;
         });
+        break;
       case SortType.dislikes:
         array.sort((q) => {
           return q.likes;
         });
+        break;
       case SortType.timestamp:
         array.sort((q) => {
           return q.timeOfCreation.getTime();
         });
+        break;
     }
 
     if (sortOptions.sortDirection === SortDirection.desc) {
@@ -257,7 +262,7 @@ export class UserContentService {
   }
 
   /**
-   * Get the amount of likes and dislikes of a UserContent.
+   * Get the number of likes and dislikes of a UserContent.
    * @param userContentID ID of the UserContent
    * @returns object containing likes and dislikes as numbers
    */
@@ -291,7 +296,7 @@ export class UserContentService {
    * @returns number of answers
    */
   async getNumberOfAnswersFromGroupID(groupID: string): Promise<number | null> {
-    return await this.prisma.userContent.count({
+    return this.prisma.userContent.count({
       where: { groupID: groupID, type: UserContentType.Answer },
     });
   }
@@ -348,7 +353,9 @@ export class UserContentService {
   /**
    * Get all the answers of a corresponding question or discussion.
    * @param groupID String with the groupID of the question or discussion
-   * @returns Array of Answer objects, or null if no anwers exist
+   * @param sortOptions
+   * @param enableAI
+   * @returns Array of Answer objects, or null if no answers exist
    * */
   async getAnswersOfGroupID(
     groupID: string,
@@ -377,7 +384,7 @@ export class UserContentService {
     if (null === answers) {
       return null;
     }
-    let answersWithRating = await this.addRatingToUserContents(answers);
+    const answersWithRating = await this.addRatingToUserContents(answers);
     return this.sortBySortOptions(answersWithRating, sortOptions);
   }
 
@@ -460,7 +467,7 @@ export class UserContentService {
       },
     });
 
-    const count = await this.prisma.userContent.count({
+    return this.prisma.userContent.count({
       where: {
         groupID: {
           in: ownQuestion.map((q) => q.groupID),
@@ -473,7 +480,6 @@ export class UserContentService {
         },
       },
     });
-    return count;
   }
 
   // Discussion

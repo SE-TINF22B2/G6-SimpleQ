@@ -1,5 +1,6 @@
-import { IsEnum, IsOptional, IsPositive, IsString, Max, Min } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsPositive, IsString, Max, Min } from 'class-validator';
 import { EXPORT_LIMIT, SORT_BY, SORT_DIRECTION } from '../../../../config';
+import { Type } from 'class-transformer';
 
 export class QueryParameters {
   @IsOptional()
@@ -13,10 +14,14 @@ export class QueryParameters {
   sortDirection: string;
 
   @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
   @IsPositive()
   offset: number;
 
   @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
   @Min(1)
   @Max(EXPORT_LIMIT)
   limit: number;
