@@ -122,7 +122,7 @@ export class UserContentService {
         type: UserContentType.Question,
         timeOfCreation: { gte: time },
       },
-      orderBy: { vote: { _count: SORT_DIRECTION.DESC } }, // impossible to order by the last upvote questions with isPositive=true
+      orderBy: { votes: { _count: SORT_DIRECTION.DESC } }, // impossible to order by the last upvote questions with isPositive=true
       take: limit,
       skip: offset,
       include: {
