@@ -42,7 +42,6 @@ export class QuestionsController {
    * */
   @Get('search')
   getSearch(
-    @Req() req: any,
     @Query(new ValidationPipe()) query: SearchQuery,
   ): Promise<
     | (UserContent & {
@@ -51,7 +50,7 @@ export class QuestionsController {
       })[]
     | null
   > {
-    return this.userContentService.search(query, req);
+    return this.userContentService.search(query);
   }
 
   @Get(':id')
