@@ -226,11 +226,6 @@ export class UserContentService {
    * @param array Array of UserContent objects
    * @returns Array of objects of type UserContentWithRating
    */
-  async addRatingToUserContents(
-    const modifiedQuestions = await this.addRatingToUserContents(userContents);
-    return this.sortBySortOptions(modifiedQuestions, sortOptions);
-  }
-
   private async addRatingToUserContents(
     array: UserContent[],
   ): Promise<UserContentWithRating[]> {
