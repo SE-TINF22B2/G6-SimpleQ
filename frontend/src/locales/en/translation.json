@@ -7,7 +7,9 @@
 			"decline": "Decline"
 		},
 		"liveInput": {
-			"empty": "Please start typing.."
+			"empty": "Please start typing..",
+			"selected": "Selected",
+			"suggestions": "Suggestions"
 		},
 		"textEditor": {
 			"wordCount": "You have written {{count}} words."
@@ -57,7 +59,7 @@
 			"tags": {
 				"title": "Tags",
 				"caption": "Tags",
-				"placeholder": "Add a tag",
+				"placeholder": "Select tags",
 				"hint": "Add up to 5 tags to describe what your question is about."
 			},
 			"description": {
@@ -88,6 +90,14 @@
 				}
 			},
 			"submit": "Post your Question"
+		},
+		"questionView": {
+			"answer": {
+				"creationDate": "replied {{answerCreationDate}}",
+				"likes": "likes",
+				"dislikes": "dislikes",
+				"report": "Report answer"
+			}
 		}
 	}
 }

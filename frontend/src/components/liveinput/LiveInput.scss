@@ -4,24 +4,69 @@
 	width: 200px;
 	z-index: 200;
 
+	&:focus-within {
+		input {
+			outline-style: solid;
+		}
+
+		.selection-count {
+			opacity: 0;
+		}
+
+		.selection-activity {
+			opacity: 1;
+		}
+	}
+
 	input {
 		background: var(--background-color-glass);
 		border: var(--outline-width) solid var(--border-color);
 		border-bottom: var(--outline-width) solid var(--border-color);
+		border-right: 40px solid var(--border-color);
+		margin-right: 40px;
 		border-radius: var(--border-radius);
-		padding: calc(var(--spacing) / 2) 40px calc(var(--spacing) / 2) var(--spacing);
+		padding: calc(var(--spacing) / 2) var(--spacing);
 		width: 100%;
 	}
 
-	input,
-	.spin {
+	.selection-count {
+		position: absolute;
+		top: 0;
+		right: 0;
 		height: 40px;
+		width: 40px;
+		display: grid;
+		place-items: center;
+
+		pointer-events: none;
+		user-select: none;
+
+		transition: var(--transition);
 	}
 
-	.spin {
+	input,
+	.selection-activity,
+	.selection-count {
+		height: 40px;
+		z-index: 201;
+	}
+
+	.selection-activity,
+	.selection-count {
+		width: 40px;
+	}
+
+	.selection-activity {
 		position: absolute;
-		right: var(--spacing);
+		top: 0;
+		right: 0;
 		color: var(--primary-color);
+
+		pointer-events: none;
+		user-select: none;
+
+		opacity: 0;
+		transition: var(--transition);
 	}
 
 	.suggestions {
@@ -36,6 +81,9 @@
 		top: calc(100% + var(--outline-width));
 
 		button {
+			display: inline-flex;
+			align-items: center;
+			gap: var(--spacing);
 			background: transparent;
 			border: none;
 			border-radius: var(--border-radius);
@@ -44,9 +92,21 @@
 			text-align: left;
 			width: 100%;
 
+			outline-offset: calc(var(--outline-width) * -1);
+
 			&:hover {
 				background: var(--background-color-secondary);
 			}
+		}
+
+		hr {
+			margin-block: calc(var(--spacing) / 2);
+		}
+
+		.caption {
+			font-weight: 600;
+			align-self: flex-start;
+			padding-inline: var(--spacing);
 		}
 	}
 

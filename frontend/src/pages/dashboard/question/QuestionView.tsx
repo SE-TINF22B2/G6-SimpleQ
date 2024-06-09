@@ -11,6 +11,11 @@ import { Answer, Question } from "../../../def/Question";
 import { formatDate } from "../../../def/converter";
 import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
+import NoContent from "../../../components/NoContent";
+import QuestionStats from "./QuestionStats";
+import QuestionAnswerSkeleton from "./QuestionAnswerSkeleton";
+import QuestionAnswer from "../../../components/questionpreview/QuestionAnswer";
+import Avatar from "../../../components/avatar/Avatar";
 
 /**
  * Renders the question page
@@ -21,6 +26,7 @@ export default function QuestionView() {
 	
 	const [question, setQuestion] = React.useState<Question | undefined>(undefined);
 	const [answers, setAnswers] = React.useState<Answer[]>([]);
+	const [answersLoading, setAnswersLoading] = React.useState(true);
 	const [sortBy, setSortBy] = React.useState<"ldr" | "likes" | "dislikes" | "timestamp">("ldr");
 	const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">("desc");
 	const [enableAI, setEnableAI] = React.useState(true);
@@ -30,9 +36,8 @@ export default function QuestionView() {
 	const alert = useAlert();
 	
 	useEffect(() => {
-		global.axios.get("question/" + encodeURIComponent(id ?? ""), { withCredentials: true })
+		global.axios.get("question/" + encodeURIComponent(id ?? ""))
 			  .then(res => {
-				  console.log(res);
 				  let _question: Question = {
 					  answers: res.data.numberOfAnswers ?? 0,
 					  author: res.data.author ?? undefined,
@@ -42,7 +47,7 @@ export default function QuestionView() {
 					  id: id ?? "",
 					  isDiscussion: res.data.isDiscussion ?? false,
 					  likes: res.data.likes ?? 0,
-					  rating: res.data.rating ?? "none",
+					  opinion: res.data.opinion ?? "none",
 					  tags: res.data.tags ?? [],
 					  title: res.data.title ?? "",
 					  updated: formatDate(res.data.updated ?? "")
@@ -50,6 +55,24 @@ export default function QuestionView() {
 				  setQuestion(_question);
 			  })
 			  .catch(err => axiosError(err, alert));
+		
+		global.axios.get("question/" + encodeURIComponent(id ?? "") + "/answers")
+			  .then(res => {
+				  let _answers: Answer[] = res.data.map((_answer: any) => {
+					  return {
+						  id: _answer.id ?? "",
+						  content: _answer.content ?? "",
+						  created: formatDate(_answer.created ?? ""),
+						  likes: _answer.likes ?? 0,
+						  dislikes: _answer.dislikes ?? 0,
+						  rating: "none",
+						  author: _answer.author ?? undefined
+					  }
+				  });
+				  setAnswers(_answers);
+			  })
+			  .catch(err => axiosError(err, alert))
+			  .finally(() => setAnswersLoading(false));
 	}, [id, navigate, alert]);
 	
 	const getSortByIcon = () => {
@@ -63,99 +86,6 @@ export default function QuestionView() {
 			case "timestamp":
 				return "fi fi-rr-time-past";
 		}
-	}
-	
-	const renderAnswer = (answer: Answer, index: number) => {
-		return <div key={ index } className={ "container transparent question-answer" }>
-			<div className={ "question-answer-author" }
-				 style={ {
-					 paddingTop: answer.author.type === "ai" ? "var(--spacing)" : 0,
-					 paddingInline: answer.author.type === "ai" ? "var(--spacing)" : 0
-				 } }>
-				{ answer.author.type === "ai" ? <>
-					<i className={ "fi fi-sr-brain" }
-					   style={ {
-						   fontSize: "2em",
-						   height: "auto",
-						   color: "var(--primary-color)",
-						   filter: "drop-shadow(0 0 5px rgba(0, 0, 0, 0.2))"
-					   } }/>
-					
-					<p style={ { paddingTop: "calc(var(--spacing) * 0.5)" } }>
-						<span>Simp</span>
-					</p>
-				</> : <div className={ "question-answer-author-user" } tabIndex={ 0 }>
-					<img className={ "avatar" } src={ answer.author.id } alt={ "Answer Author" }/>
-					
-					<p>
-						<span>{ answer.author.name }</span>
-						<span className={ "badge" }>{ answer.author.type.toUpperCase() }</span>
-					</p>
-				</div> }
-				
-				<span className={ "caption" }>replied { answer.created }</span>
-			</div>
-			
-			<div className={ "question-answer-text" }>
-				<div className={ "glass" + (answer.author.type === "ai" ? " glass-simp" : "") }>
-					<p>{ answer.content }</p>
-				</div>
-				
-				<div className={ "question-answer-actions" }>
-					<div
-						className={ "question-answer-actions-rate" + (answer.rating === "like" ? " rating" : "") }>
-						<i className={ "fi fi-rr-social-network primary-icon" } tabIndex={ 0 }/>
-						<span className={ "question-figure" }>{ answer.likes }</span>
-						<span className={ "question-unit" }>likes</span>
-					</div>
-					
-					<div
-						className={ "question-answer-actions-rate" + (answer.rating === "dislike" ? " rating" : "") }>
-						<i className={ "fi fi-rr-social-network flipY primary-icon" } tabIndex={ 0 }/>
-						<span className={ "question-figure" }>{ answer.dislikes }</span>
-						<span className={ "question-unit" }>dislikes</span>
-					</div>
-					
-					<div style={ { flex: 1 } }/>
-					
-					<button className={ "question-report" }>
-						<i className={ "fi fi-rr-flag" }/>
-						Report answer
-					</button>
-				</div>
-			</div>
-		</div>
-	}
-	
-	const renderAnswerSkeleton = () => {
-		return <div className={ "container transparent question-answer" }>
-			<div className={ "question-answer-author" }>
-				<Skeleton height={ 40 } width={ 40 }/>
-				
-				<p>
-					<Skeleton height={ 20 } width={ 100 }/>
-				</p>
-				
-				<span className={ "caption" }><Skeleton width={ 60 }/></span>
-			</div>
-			
-			<div className={ "question-answer-text" }>
-				<div className={ "glass" }>
-					<p>
-						<Skeleton count={ 3 }/>
-					</p>
-				</div>
-				
-				<div className={ "question-answer-actions" }>
-					<Skeleton height={ 20 } width={ 100 }/>
-					<Skeleton height={ 20 } width={ 100 }/>
-					
-					<div style={ { flex: 1 } }/>
-					
-					<Skeleton height={ 20 } width={ 200 }/>
-				</div>
-			</div>
-		</div>
 	}
 	
 	return <SplitSection className={ "question-main" }>
@@ -183,19 +113,16 @@ export default function QuestionView() {
 			
 			<section className={ "glass focus-indicator" }>
 				<h3>Answer this question</h3>
-				<TextEditor>
-					Write your answer here...
-				</TextEditor>
+				<TextEditor placeholder={ "Write your answer here..." }/>
 			</section>
 			
 			<hr style={ { margin: 0 } }/>
 			
-			{ question
-				? answers.map((answer, index) => renderAnswer(answer, index))
-				: <>
-					{ renderAnswerSkeleton() }
-					{ renderAnswerSkeleton() }
-				</> }
+			{ !answersLoading
+				? answers.length > 0
+					? answers.map((answer, index) => <QuestionAnswer answer={ answer } index={ index }/>)
+					: <NoContent/>
+				: <QuestionAnswerSkeleton count={ 2 }/> }
 			
 			<div style={ {
 				display: "flex",
@@ -203,14 +130,14 @@ export default function QuestionView() {
 				justifyContent: "flex-end",
 				gap: "var(--spacing)"
 			} }>
-				<Button icon={ "fi fi-rr-arrow-left" } onClick={ () => {
+				<Button icon={ "fi fi-rr-arrow-left" } onClick={ async () => {
 				} }>
 					Previous
 				</Button>
 				
 				<p>Page 1 of 10</p>
 				
-				<Button icon={ "fi fi-rr-arrow-right" } onClick={ () => {
+				<Button icon={ "fi fi-rr-arrow-right" } onClick={ async () => {
 				} } placeIconRight={ true }>
 					Next
 				</Button>
@@ -221,7 +148,7 @@ export default function QuestionView() {
 			<section className={ "glass" }>
 				<div className={ "question-author" } tabIndex={ 0 }>
 					{ question
-						? <img className={ "avatar" } src={ question.author.id } alt={ "Question Author" }/>
+						? <Avatar userId={ question.author.id }/>
 						: <Skeleton height={ 40 } width={ 40 }/> }
 					
 					<div className={ "question-author-info" }>
@@ -229,8 +156,12 @@ export default function QuestionView() {
 						
 						<p>
 							{ question ? <>
-								<span>{ question.author.name }</span>
-								<span className={ "badge" }>{ question.author.type.toUpperCase() }</span>
+								<span>
+									{ question.author.name.substring(0, import.meta.env.VITE_AUTHOR_NAME_MAX_LENGTH) }
+								</span>
+								
+								{ question.author.type !== "user" &&
+                                    <span className={ "badge" }>{ question.author.type.toUpperCase() }</span> }
 							</> : <Skeleton width={ 120 }/> }
 						</p>
 					</div>
@@ -238,45 +169,7 @@ export default function QuestionView() {
 				
 				<hr style={ { marginBlock: "calc(var(--spacing) / 2)" } }/>
 				
-				<span className={ "caption" }>Question Stats</span>
-				<div className={ "question-stats" }>
-					{ question ? <>
-						<div className={ "question-stat" }>
-							<i className={ "fi fi-rr-eye primary-icon" }/>
-							<span
-								className={ "question-figure" }>{ "0".replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-							<span className={ "question-unit" }>views</span>
-						</div>
-						
-						<div
-							className={ "question-stat" /* + (question.stats.rating === "like" ? " rating" : "") */ }>
-							<i className={ "fi fi-rr-social-network primary-icon" } tabIndex={ 0 }/>
-							<span
-								className={ "question-figure" }>{ question.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-							<span className={ "question-unit" }>likes</span>
-						</div>
-						
-						<div
-							className={ "question-stat" /* + (question.stats.rating === "dislike" ? " rating" : "") */ }>
-							<i className={ "fi fi-rr-social-network flipY primary-icon" } tabIndex={ 0 }/>
-							<span
-								className={ "question-figure" }>{ question.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-							<span className={ "question-unit" }>dislikes</span>
-						</div>
-						
-						<div className={ "question-stat" }>
-							<i className={ "fi fi-rr-comment-dots primary-icon" }/>
-							<span
-								className={ "question-figure" }>{ question.answers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-							<span className={ "question-unit" }>answers</span>
-						</div>
-					</> : <>
-						<Skeleton containerClassName={ "question-stat" } width={ 80 }/>
-						<Skeleton containerClassName={ "question-stat" } width={ 80 }/>
-						<Skeleton containerClassName={ "question-stat" } width={ 80 }/>
-						<Skeleton containerClassName={ "question-stat" } width={ 80 }/>
-					</> }
-				</div>
+				<QuestionStats question={ question }/>
 				
 				<hr style={ { marginBottom: "calc(var(--spacing) / 2)" } }/>
 				

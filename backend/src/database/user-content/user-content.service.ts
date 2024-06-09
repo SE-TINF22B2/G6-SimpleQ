@@ -60,15 +60,19 @@ export class UserContentService {
     ownerID: string | null,
     content: string | null,
     title: string,
-    groupID?: string,
+    tagnames: string[],
   ): Promise<{ userContent: UserContent; question: Question }> {
     return this.prisma.$transaction(async (tx) => {
       const createdContent = await tx.userContent.create({
         data: {
           ownerID: ownerID,
-          groupID: groupID,
           content: content,
           type: UserContentType.Question,
+          tags: {
+            connect: tagnames.map((tag) => {
+              return { tagname: tag };
+            }),
+          },
         },
       });
       const createdQuestion = await tx.question.create({
@@ -254,10 +258,10 @@ export class UserContentService {
         await this.prisma.userContent.findUnique({
           where: { userContentID: userContentID },
           select: {
-            tag: true,
+            tags: true,
           },
         })
-      )?.tag || null
+      )?.tags || null
     );
   }
 
@@ -274,10 +278,10 @@ export class UserContentService {
         await this.prisma.userContent.findUnique({
           where: { userContentID: userContentID },
           select: {
-            vote: true,
+            votes: true,
           },
         })
-      )?.vote || null;
+      )?.votes || null;
     let likes: number = 0;
     let dislikes: number = 0;
     votes?.forEach((vote) => {
@@ -488,15 +492,19 @@ export class UserContentService {
     content: string | null,
     title: string,
     isPrivate: boolean,
-    groupID?: string,
+    tagnames: string[],
   ): Promise<{ userContent: UserContent; discussion: Discussion }> {
     return this.prisma.$transaction(async (tx) => {
       const createdContent = await tx.userContent.create({
         data: {
           ownerID: ownerID,
-          groupID: groupID,
           content: content,
-          type: UserContentType.Answer,
+          type: UserContentType.Discussion,
+          tags: {
+            connect: tagnames.map((tag) => {
+              return { tagname: tag };
+            }),
+          },
         },
       });
       const createdDiscussion = await tx.discussion.create({

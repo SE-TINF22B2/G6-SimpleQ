@@ -373,6 +373,7 @@ export class UserContentRequestService {
             userId,
             data.content,
             data.title,
+            [], // TODO: add tags
           );
           break;
         case UserContentType.Discussion:
@@ -381,6 +382,7 @@ export class UserContentRequestService {
             data.content,
             data.title,
             data.isPrivate,
+            [], // TODO: add tags
           );
           break;
         case UserContentType.Answer:

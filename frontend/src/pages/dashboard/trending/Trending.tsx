@@ -11,6 +11,7 @@ import Button from "../../../components/button/Button";
 import { formatDate } from "../../../def/converter";
 import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
+import NoContent from "../../../components/NoContent";
 
 /**
  * Renders the trending page, currently static
@@ -37,7 +38,7 @@ export default function Trending(props: {}) {
 						  id: _question.id,
 						  isDiscussion: _question.isDiscussion ?? false,
 						  likes: _question.likes ?? 0,
-						  rating: _question.rating ?? "none",
+						  opinion: _question.opinion ?? "none",
 						  tags: _question.tags ?? [],
 						  title: _question.title ?? "",
 						  updated: formatDate(_question.updated ?? "")
@@ -121,13 +122,11 @@ export default function Trending(props: {}) {
 		</Section>
 		
 		{ questions
-			? questions.map((question, index) =>
-				<QuestionPreview question={ question } index={ index } key={ index }/>)
-			: <>
-				<QuestionPreviewSkeleton/>
-				<QuestionPreviewSkeleton/>
-				<QuestionPreviewSkeleton/>
-			</>
+			? questions.length > 0
+				? questions.map((question, index) =>
+					<QuestionPreview question={ question } index={ index } key={ index }/>)
+				: <NoContent/>
+			: <QuestionPreviewSkeleton count={ 2 }/>
 		}
 	</>;
 }

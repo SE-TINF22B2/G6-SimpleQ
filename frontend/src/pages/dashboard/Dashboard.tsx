@@ -11,6 +11,11 @@ import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
 import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
+import Search from "../../components/search/Search";
+import { axiosError } from "../../def/axios-error";
+import { useAlert } from "react-alert";
+import Avatar from "../../components/avatar/Avatar";
+import { animateBlob } from "../../def/cool-blobs";
 
 // ory setup
 const basePath = "http://localhost:4000"
@@ -32,22 +37,43 @@ interface Props {
  * @param props.updateTheme Function used to update the theme of the entire app
  */
 export default function Dashboard(props: Props) {
+	const alert = useAlert();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const [session, setSession] = useState<Session | undefined>();
 	const [logoutUrl, setLogoutUrl] = useState<string | undefined>();
+	const [stats, setStats] = useState<{ streak: number, views: number, likes: number } | undefined>();
+	const [history, setHistory] = useState<number[] | undefined>();
+	const [activeQuestionName, setActiveQuestionName] = useState<string | undefined>();
 	
 	const getUserName = (identity?: Identity) =>
 		identity?.traits.email || identity?.traits.username || t('dashboard.anonymous');
 	
 	useEffect(() => {
+		const fetchStats = () => {
+			global.axios.get("stats", { withCredentials: true })
+				  .then(res => console.log(res))
+				  .catch(err => axiosError(err, alert));
+			
+			if (window.location.pathname.includes("/question")) {
+				let questionId = window.location.pathname.split("/question/")[1].substring(0, 36);
+				global.axios.get("question/" + questionId + "/title")
+					  .then(res => setActiveQuestionName(res.data.title))
+					  .catch(err => axiosError(err, alert));
+			}
+		}
+		
 		ory.toSession()
 		   .then(({ data }) => {
+			   // Todo: check whether this makes sense
 			   if (localStorage.getItem("consent") === "true")
 				   setSession(data);
+			   
 			   ory.createBrowserLogoutFlow().then(({ data }) => {
 				   setLogoutUrl(data.logout_url);
 			   });
+			   
+			   fetchStats();
 		   })
 		   .catch((err) => {
 			   console.log("error logging in", err);
@@ -70,7 +96,7 @@ export default function Dashboard(props: Props) {
 		
 		document.addEventListener("keydown", onKeyDown);
 		return () => document.removeEventListener("keydown", onKeyDown);
-	}, []);
+	}, [alert]);
 	
 	const capitalizeFirstLetter = (string: string) => {
 		return string.charAt(0).toUpperCase() + string.slice(1);
@@ -144,13 +170,7 @@ export default function Dashboard(props: Props) {
 			boxShadow: "var(--box-shadow)"
 		} }
 									   tabIndex={ 0 }>
-			<img className={ "avatar" }
-				 src={ session !== undefined ? "https://benniloidl.de/static/media/me.6c5597f7d72f68a1e83c.jpeg" : "" }
-				 alt={ "Avatar" }
-				 onError={ ({ currentTarget }) => {
-					 currentTarget.onerror = null; // prevents looping
-					 currentTarget.src = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50";
-				 } }/>
+			<Avatar userId={ session?.identity?.id }/>
 		</div> }
 						 items={ [
 							 {
@@ -237,14 +257,21 @@ export default function Dashboard(props: Props) {
 	
 	return <div className={ "dashboard" }>
 		<nav>
-			<div style={ { position: "relative" } }>
-				<button className={ "btn btn-primary" }
-						style={ { outlineColor: "var(--primary-color-contrast)" } }
-						onClick={ () => navigate("/") }>
+			<div style={ { position: "relative", overflow: "hidden" } }>
+				<NavLink to={ "/" }
+						 style={ {
+							 maxHeight: "80%",
+							 maxWidth: "80%",
+							 outlineColor: "var(--primary-color-contrast)",
+							 borderRadius: "var(--border-radius)",
+							 display: "grid",
+							 placeItems: "center"
+						 } }>
 					<img src={ logoTodoMakeStatic } alt={ "Logo" }
-						 height={ "100%" } width={ "100%" }
+						 height={ "80%" } width={ "80%" }
 						 style={ { objectFit: "contain" } }/>
-				</button>
+				</NavLink>
+				
 				<i className={ "fi fi-rr-circle-xmark toggle-nav" }
 				   style={ {
 					   fontSize: "1.5em",
@@ -270,12 +297,14 @@ export default function Dashboard(props: Props) {
 			</div>
 			
 			{ window.location.pathname.includes("/question") && <>
-                <NavLink to="question/1">
+                <NavLink to={ window.location.pathname } className={ "active navigate" }
+                         onClick={ (e) => animateBlob(e) }>
                     <i className={ "fi fi-sr-question-square" }/>
                     <p style={ { display: "flex", flexDirection: "column" } }>
                         <span className={ "caption" }>{ t('dashboard.nav.question.browsing') }</span>
-                        <span><Skeleton/></span>
+                        <span>{ activeQuestionName ?? <Skeleton/> }</span>
                     </p>
+                    <span className={ "button-blob" }/>
                 </NavLink>
                 
                 <div style={ { paddingInline: "var(--spacing)" } }>
@@ -283,46 +312,53 @@ export default function Dashboard(props: Props) {
                 </div>
             </> }
 			
-			<NavLink to={ "trending" }>
+			<NavLink to={ "trending" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-file-chart-line" }/>
-					{ t('dashboard.nav.trending') }
+					<span>{ t('dashboard.nav.trending') }</span>
+					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "new" }>
+			<NavLink to={ "new" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-edit" }/>
-					{ t('dashboard.nav.question.create') }
+					<span>{ t('dashboard.nav.question.create') }</span>
+					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "activity" }>
+			<NavLink to={ "activity" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-vertical-history" }/>
-					{ t('dashboard.nav.activity') }
+					<span>{ t('dashboard.nav.activity') }</span>
+					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "my" }>
+			<NavLink to={ "my" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-list" }/>
-					{ t('dashboard.nav.my') }
+					<span>{ t('dashboard.nav.my') }</span>
+					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "b" }>
+			<NavLink to={ "b" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-star" }/>
-					{ t('dashboard.nav.favorites') }
+					<span>{ t('dashboard.nav.favorites') }</span>
+					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "quests" }>
+			<NavLink to={ "quests" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-treasure-chest" }/>
-					{ t('dashboard.nav.quests') }
+					<span>{ t('dashboard.nav.quests') }</span>
+					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "d" }>
+			<NavLink to={ "d" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-envelope" }/>
-					{ t('dashboard.nav.inbox') }
+					<span>{ t('dashboard.nav.inbox') }</span>
+					<span className={ "button-blob" }/>
 					<span className={ "badge" }>3</span>
 				</> }
 			</NavLink>
@@ -336,15 +372,15 @@ export default function Dashboard(props: Props) {
 				<div className={ "stats" }>
 					<div className={ "stats-column" }>
 						<i className={ "fi fi-rr-flame primary-icon" }/>
-						<span>253d</span>
+						<span>{ stats?.streak ?? <Skeleton width={ 20 }/> }</span>
 					</div>
 					<div className={ "stats-column" }>
 						<i className={ "fi fi-rr-eye primary-icon" }/>
-						<span>1.8k</span>
+						<span>{ stats?.views ?? <Skeleton width={ 20 }/> }</span>
 					</div>
 					<div className={ "stats-column" }>
 						<i className={ "fi fi-rr-social-network primary-icon" }/>
-						<span>1.1k</span>
+						<span>{ stats?.likes ?? <Skeleton width={ 20 }/> }</span>
 					</div>
 				</div>
 				
@@ -352,9 +388,7 @@ export default function Dashboard(props: Props) {
 				<p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
 					{ t('dashboard.nav.activeDays') }
 				</p>
-				<BarChart data={
-					Array.from({ length: 30 }, () => Math.floor(Math.random() * 100))
-				}/>
+				<BarChart data={ history }/>
 			</div>
 		</nav>
 		
@@ -402,27 +436,6 @@ export default function Dashboard(props: Props) {
 			<Outlet/>
 		</main>
 		
-		<div className={ "search glass" }
-			 onClick={ () => toggleSearch() }>
-			<div className={ "search-container" }>
-				<div onClick={ (e: any) => e.stopPropagation() }>
-					<i className={ "fi fi-rr-search" }/>
-					<input type={ "text" } placeholder={ t('dashboard.search.search') }/>
-				</div>
-				
-				<p className={ "search-info" }>
-					{ t('dashboard.search.info') }
-				</p>
-				
-				<p className={ "search-result" } tabIndex={ 0 }>
-					<i className={ "fi fi-rr-question badge" }/>
-					<span>How to use React?</span>
-					<i className={ "fi fi-rr-user" }
-					   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-					<span>Benni Loidl</span>
-					<span>Yesterday</span>
-				</p>
-			</div>
-		</div>
+		<Search toggleSearch={ toggleSearch }/>
 	</div>
 }

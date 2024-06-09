@@ -95,15 +95,6 @@ code {
 	}
 }
 
-.avatar {
-	border-radius: 50%;
-	filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
-	height: 40px !important;
-	object-fit: cover;
-	pointer-events: none;
-	width: 40px !important;
-}
-
 ::selection {
 	background-color: var(--primary-color);
 	color: var(--primary-color-contrast);
@@ -257,5 +248,25 @@ hr {
 	&.alert-error {
 		background: linear-gradient(45deg, red, transparent 200%), url(https://grainy-gradients.vercel.app/noise.svg);
 		color: var(--primary-color-contrast);
+	}
+}
+
+*:has(> span.button-blob) {
+	position: relative;
+
+	* {
+		z-index: 10;
+	}
+
+	span.button-blob {
+		position: absolute;
+		height: 100%;
+		width: 60px;
+		top: 0;
+		left: 0;
+		border-radius: var(--border-radius);
+		background: var(--border-color);
+		z-index: 1;
+		opacity: 0;
 	}
 }
