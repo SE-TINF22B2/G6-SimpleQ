@@ -107,19 +107,22 @@ export class UserContentService {
   /**
    * Get all questions of a user.
    * @param userID ID of the user
-   * @param limit Number of elements to take
-   * @param offset Number of elements to skip
-   * @returns Array of UserContent objects with questions
+   * @param sortOptions Options to sort the returned questions
+   * @returns Array of UserContent objects
    */
-  async getQuestionsOfUser(userID: string, limit: number, offset: number) {
-    return this.prisma.userContent.findMany({
+  async getQuestionsOfUser(
+    userID: string,
+    sortOptions: SortOptions,
+  ): Promise<UserContentWithRating[] | null> {
+    const questions = await this.prisma.userContent.findMany({
       where: { ownerID: userID },
-      include: {
-        question: true,
-      },
-      take: limit,
-      skip: offset,
     });
+    if (null === questions) {
+      return null;
+    }
+
+    const questionsWithRating = await this.addRatingToUserContents(questions);
+    return this.sortBySortOptions(questionsWithRating, sortOptions);
   }
 
   /**
@@ -213,8 +216,9 @@ export class UserContentService {
       return null;
     }
 
-    const modifiedQuestions = await this.addRatingToUserContents(userContents);
-    return this.sortBySortOptions(modifiedQuestions, sortOptions);
+    const questionsWithRating =
+      await this.addRatingToUserContents(userContents);
+    return this.sortBySortOptions(questionsWithRating, sortOptions);
   }
 
   /**
