@@ -100,6 +100,9 @@ src
 |= app.module.ts
 |= app.service.ts
 |= main.ts
+
+config.ts
+.env
 ```
 | Ordner/Datei                | Beschreibung                                                |
 |-----------------------------|-------------------------------------------------------------|
@@ -109,11 +112,16 @@ src
 | `auth/`                     | Services zur Authentifizierungen                            |
 | `request/request.module.ts` | Modul der Verarbeitung von Anfragen                         |
 | `main.ts`                   | Einstieg der Applikation, verweist direkt auf das AppModule |
+| `.env`                      | Systemvariablen                                             |
+| `config.ts`                 | Konstanten                                                  |
 
 
 
 Der Einstieg der Applikation liegt in der `main.ts`, welche direkt auf das `AppModule` in `app.module.ts` verweist.
 Alle Anfragen in `request/` wurden entsprechend der _OpenAPI_ Spezifikation in separate Controller aufgeteilt.
+
+Konstanten in `config.ts` sind eingestellt und werden zur Laufzeit überprüft.
+Diese geben z.B. die Längen von Texten in Anfragen vor.
 
 Für jeden Service und Controller ist eine Testdatei angelegt (`*.spec.ts`), 
 welche jeweils direkt bei der Logikkomponente liegt. 
@@ -125,8 +133,9 @@ die CLI legt ein Grundgerüst einer Komponente zusammen mit einem Test in dem gg
 Als Paketmanager wird [_yarn_](https://classic.yarnpkg.com/lang/en/docs/) in der Version 1 verwendet.
 
 ### Versionen auf denen entwickelt wurde
-| Werkzeug   | Version |
-|------------|---------|
-| yarn       | 1.22    |
-| NestJS     | 10      |
-| ory-client | 1.9     |
+| Werkzeug      | Version |
+|---------------|---------|
+| yarn          | 1.22    |
+| NestJS        | 10      |
+| ory-client    | 1.9     |
+| prisma-client | 5.14    |

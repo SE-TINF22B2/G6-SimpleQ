@@ -18,8 +18,8 @@ import {
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    ExternalAPIModule,
     RequestsModule.register(),
+    ExternalAPIModule,
   ],
   controllers: [AppController],
   providers: [

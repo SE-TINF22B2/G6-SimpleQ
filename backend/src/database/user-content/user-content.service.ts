@@ -12,6 +12,7 @@ import {
   Vote,
 } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
+import { SORT_BY, SORT_DIRECTION } from '../../../config';
 
 export type SortOptions = {
   sortBy: SortType;
@@ -32,8 +33,8 @@ export enum SortDirection {
 }
 
 export function createSortOptions(
-  sortBy: string = 'ldr',
-  sortDirection: string = 'desc',
+  sortBy: string = SORT_BY.LDR,
+  sortDirection: string = SORT_DIRECTION.DESC,
   offset: number = 0,
   limit: number = 0,
 ): SortOptions {
@@ -105,6 +106,27 @@ export class UserContentService {
   }
 
   /**
+   * Get all questions of a user.
+   * @param userID ID of the user
+   * @param sortOptions Options to sort the returned questions
+   * @returns Array of UserContent objects
+   */
+  async getQuestionsOfUser(
+    userID: string,
+    sortOptions: SortOptions,
+  ): Promise<UserContentWithRating[] | null> {
+    const questions = await this.prisma.userContent.findMany({
+      where: { ownerID: userID },
+    });
+    if (null === questions) {
+      return null;
+    }
+
+    const questionsWithRating = await this.addRatingToUserContents(questions);
+    return this.sortBySortOptions(questionsWithRating, sortOptions);
+  }
+
+  /**
    * Get the most voted questions of the last seven days.
    * @param limit Maximum number of questions that are returned. Default: 10
    * @param offset Number of questions that are skipped. Default: 0
@@ -121,7 +143,7 @@ export class UserContentService {
         type: UserContentType.Question,
         timeOfCreation: { gte: time },
       },
-      orderBy: { votes: { _count: 'desc' } }, // impossible to order by the last upvoted questions with isPositive=true
+      orderBy: { votes: { _count: SORT_DIRECTION.DESC } }, // impossible to order by the last upvote questions with isPositive=true
       take: limit,
       skip: offset,
       include: {
@@ -195,11 +217,17 @@ export class UserContentService {
       return null;
     }
 
-    const modifiedQuestions = await this.addRatingToUserContents(userContents);
-    return this.sortBySortOptions(modifiedQuestions, sortOptions);
+    const questionsWithRating =
+      await this.addRatingToUserContents(userContents);
+    return this.sortBySortOptions(questionsWithRating, sortOptions);
   }
 
-  async addRatingToUserContents(
+  /**
+   * Adds the number of likes and dislikes to all UserContents in the array.
+   * @param array Array of UserContent objects
+   * @returns Array of objects of type UserContentWithRating
+   */
+  private async addRatingToUserContents(
     array: UserContent[],
   ): Promise<UserContentWithRating[]> {
     return await Promise.all(
@@ -216,29 +244,48 @@ export class UserContentService {
     );
   }
 
-  sortBySortOptions(array: UserContentWithRating[], sortOptions: SortOptions) {
+  /**
+   * Sorts an array of UserContents by the options provided in sortOptions. The UserContents have to be
+   * UserContentWithRating objects.
+   * @param array Array of objects of type UserContentWithRating
+   * @param sortOptions Options to sort the array
+   * @returns Array of sorted UserContentWithRating objects
+   */
+  sortBySortOptions(
+    array: UserContentWithRating[],
+    sortOptions: SortOptions,
+  ): UserContentWithRating[] {
     switch (sortOptions.sortBy) {
       case SortType.ldr:
         array.sort((q) => {
           return q.likes / q.dislikes;
         });
+        break;
       case SortType.likes:
         array.sort((q) => {
           return q.likes;
         });
+        break;
       case SortType.dislikes:
         array.sort((q) => {
           return q.likes;
         });
+        break;
       case SortType.timestamp:
         array.sort((q) => {
           return q.timeOfCreation.getTime();
         });
+        break;
     }
 
     if (sortOptions.sortDirection === SortDirection.desc) {
       array.reverse();
     }
+
+    array.splice(0, sortOptions.offset);
+    // decrease limit by 1 because the array starts at index 0
+    sortOptions.limit--;
+    array.splice(sortOptions.limit, array.length - sortOptions.limit);
     return array;
   }
 
@@ -261,7 +308,7 @@ export class UserContentService {
   }
 
   /**
-   * Get the amount of likes and dislikes of a UserContent.
+   * Get the number of likes and dislikes of a UserContent.
    * @param userContentID ID of the UserContent
    * @returns object containing likes and dislikes as numbers
    */
@@ -354,32 +401,25 @@ export class UserContentService {
    * @param groupID String with the groupID of the question or discussion
    * @param sortOptions
    * @param enableAI
-   * @returns Array of Answer objects, or null if no anwers exist
+   * @returns Array of Answer objects, or null if no answers exist
    * */
   async getAnswersOfGroupID(
     groupID: string,
     sortOptions: SortOptions,
     enableAI: boolean,
   ): Promise<UserContentWithRating[] | null> {
-    let answers: UserContent[];
-    if (enableAI) {
-      answers = await this.prisma.userContent.findMany({
+    const answers: UserContent[] | null =
+      await this.prisma.userContent.findMany({
         where: {
           groupID: groupID,
           type: UserContentType.Answer,
+          answer: enableAI
+            ? {}
+            : {
+                typeOfAI: TypeOfAI.None,
+              },
         },
       });
-    } else {
-      answers = await this.prisma.userContent.findMany({
-        where: {
-          groupID: groupID,
-          type: UserContentType.Answer,
-          answer: {
-            typeOfAI: TypeOfAI.None,
-          },
-        },
-      });
-    }
     if (null === answers) {
       return null;
     }

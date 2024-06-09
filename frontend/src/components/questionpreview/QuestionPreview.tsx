@@ -2,6 +2,7 @@ import "./QuestionPreview.scss";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Question } from "../../def/Question";
+import Avatar from "../avatar/Avatar";
 
 interface Props {
 	question: Question;
@@ -63,7 +64,7 @@ export default function QuestionPreview(props: Props) {
 		<div className={ "question-details-wrapper" }>
 			<div className={ "question-stats" }>
 				<div
-					className={ "question-stat" + (props.question.rating === "like" ? " rating" : "") }>
+					className={ "question-stat" + (props.question.opinion === "like" ? " rating" : "") }>
 					<i className={ "fi fi-rr-social-network primary-icon" }/>
 					<span
 						className={ "question-figure" }>{ props.question.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
@@ -71,7 +72,7 @@ export default function QuestionPreview(props: Props) {
 				</div>
 				
 				<div
-					className={ "question-stat" + (props.question.rating === "dislike" ? " rating" : "") }>
+					className={ "question-stat" + (props.question.opinion === "dislike" ? " rating" : "") }>
 					<i className={ "fi fi-rr-social-network primary-icon flipY" }/>
 					<span
 						className={ "question-figure" }>{ props.question.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
@@ -96,10 +97,10 @@ export default function QuestionPreview(props: Props) {
 			</div>
 			
 			<div className={ "author" }>
-				<img className={ "avatar" } src={ "https://www.w3schools.com/w3images/avatar2.png" } alt={ "Avatar" }/>
+				<Avatar userId={ props.question.author.id }/>
 				<p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
 					<span className={ "caption" }>Asked by</span>
-					<span>{ props.question.author.name }</span>
+					<span>{ props.question.author.name.substring(0, import.meta.env.VITE_AUTHOR_NAME_MAX_LENGTH) }</span>
 				</p>
 			</div>
 		</div>

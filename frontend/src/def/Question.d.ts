@@ -6,7 +6,7 @@ export interface Question {
 	tags: string[];
 	likes: number;
 	dislikes: number;
-	rating: "like" | "dislike" | "none";
+	opinion: "like" | "dislike" | "none";
 	answers: number;
 	created: string;
 	updated: string;
@@ -19,12 +19,12 @@ export interface Answer {
 	created: string;
 	likes: number;
 	dislikes: number;
-	rating: "like" | "dislike" | "none";
+	opinion: "like" | "dislike" | "none";
 	author: Author;
 }
 
 interface Author {
 	id: string;
 	name: string;
-	type: "user" | "pro" | "ai";
+	type: "guest" | "user" | "pro" | "admin" | "ai";
 }
