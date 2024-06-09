@@ -105,6 +105,24 @@ export class UserContentService {
   }
 
   /**
+   * Get all questions of a user.
+   * @param userID ID of the user
+   * @param limit Number of elements to take
+   * @param offset Number of elements to skip
+   * @returns Array of UserContent objects with questions
+   */
+  async getQuestionsOfUser(userID: string, limit: number, offset: number) {
+    return this.prisma.userContent.findMany({
+      where: { ownerID: userID },
+      include: {
+        question: true,
+      },
+      take: limit,
+      skip: offset,
+    });
+  }
+
+  /**
    * Get the most voted questions of the last seven days.
    * @param limit Maximum number of questions that are returned. Default: 10
    * @param offset Number of questions that are skipped. Default: 0
