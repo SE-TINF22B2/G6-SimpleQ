@@ -211,12 +211,6 @@ paths:
         - questions
       parameters:
         - in: query
-          name: q # searchString
-          description: The string to search for
-          required: true
-          schema:
-            type: string
-        - in: query
           name: sortBy
           required: false
           description: Sort the answer by given criteria
