@@ -199,7 +199,7 @@ export class UserContentService {
     return this.sortBySortOptions(modifiedQuestions, sortOptions);
   }
 
-  async addRatingToUserContents(
+  private async addRatingToUserContents(
     array: UserContent[],
   ): Promise<UserContentWithRating[]> {
     return await Promise.all(
