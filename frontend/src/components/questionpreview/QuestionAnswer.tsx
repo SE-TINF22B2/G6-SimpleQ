@@ -52,7 +52,7 @@ export default function QuestionAnswer(props: { answer?: Answer }) {
 						? <span style={ { display: "inline-flex" } }>
 							<i className={ "fi fi-rr-clock" }
 							   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-							Created: { formatDate(props.answer.created) }
+							{ t('dashboard.questionView.answer.creationDate', { answerCreationDate: formatDate(props.answer.created) }) }
 						</span>
 						: <Skeleton width={ 40 }/>
 					}
