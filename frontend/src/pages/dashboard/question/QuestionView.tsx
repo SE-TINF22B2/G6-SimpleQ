@@ -13,8 +13,11 @@ import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
 import NoContent from "../../../components/NoContent";
 import QuestionStats from "./QuestionStats";
-import QuestionAnswerSkeleton from "./QuestionAnswerSkeleton";
-import QuestionAnswer from "../../../components/questionpreview/QuestionAnswer";
+import QuestionAnswer, {
+	QuestionAnswerDivider,
+	QuestionAnswerNext,
+	QuestionAnswerPrev
+} from "../../../components/questionpreview/QuestionAnswer";
 import Avatar from "../../../components/avatar/Avatar";
 
 /**
@@ -118,30 +121,20 @@ export default function QuestionView() {
 			
 			<hr style={ { margin: 0 } }/>
 			
+			<QuestionAnswerPrev/>
+			<QuestionAnswerDivider/>
+			
 			{ !answersLoading
 				? answers.length > 0
 					? answers.map((answer, index) => <QuestionAnswer answer={ answer } key={ index }/>)
 					: <NoContent/>
-				: <QuestionAnswerSkeleton count={ 2 }/> }
+				: <>
+					<QuestionAnswer/>
+					<QuestionAnswer/>
+				</> }
 			
-			<div style={ {
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "flex-end",
-				gap: "var(--spacing)"
-			} }>
-				<Button icon={ "fi fi-rr-arrow-left" } onClick={ async () => {
-				} }>
-					Previous
-				</Button>
-				
-				<p>Page 1 of 10</p>
-				
-				<Button icon={ "fi fi-rr-arrow-right" } onClick={ async () => {
-				} } placeIconRight={ true }>
-					Next
-				</Button>
-			</div>
+			<QuestionAnswerDivider/>
+			<QuestionAnswerNext/>
 		</div>
 		
 		<div style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)" } }>
