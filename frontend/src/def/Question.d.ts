@@ -17,9 +17,9 @@ export interface Answer {
 	id: string;
 	content: string;
 	created: string;
-	likes: number;
-	dislikes: number;
-	opinion: "like" | "dislike" | "none";
+	// likes: number;
+	// dislikes: number;
+	// opinion: "like" | "dislike" | "none";
 	author: Author;
 }
 
