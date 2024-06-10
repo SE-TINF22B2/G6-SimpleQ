@@ -20,10 +20,11 @@ interface Props {
 export default function TextEditor(props: Props) {
 	const { t } = useTranslation();
 	
+	const [editorRef, setEditorRef] = React.useState<HTMLParagraphElement | undefined>(undefined);
 	const [wordCount, setWordCount] =
 		React.useState(props.children ? (props.children as string).split(" ").length : 0);
 	
-	return <div className={ "text-editor" }>
+	return <div className={ "text-editor" } onClick={ _ => editorRef?.focus() }>
 		<div className={ "text-editor-buttons" }>
 			<button title={ "Bold" } onClick={ () => document.execCommand("bold", false) }>
 				<i className={ "fi fi-rr-bold" }/></button>
@@ -33,14 +34,6 @@ export default function TextEditor(props: Props) {
 				<i className={ "fi fi-rr-underline" }/></button>
 			<button title={ "Strikethrough" } onClick={ () => document.execCommand("strikeThrough", false) }>
 				<i className={ "fi fi-rr-strikethrough" }/></button>
-			
-			<span/>
-			
-			<button title={ "Insert Ordered List" } onClick={ () => document.execCommand("insertOrderedList", false) }>
-				<i className={ "fi fi-rr-list" }/></button>
-			<button title={ "Insert Unordered List" }
-					onClick={ () => document.execCommand("insertUnorderedList", false) }>
-				<i className={ "fi fi-rr-bars-sort" }/></button>
 			
 			<span/>
 			
@@ -62,7 +55,8 @@ export default function TextEditor(props: Props) {
 		
 		</div>
 		
-		<p className={ "text-editor-content" }
+		<p ref={ (_p) => _p && setEditorRef(_p) }
+		   className={ "text-editor-content" }
 		   contentEditable={ !(props.disabled) }
 		   suppressContentEditableWarning={ true }
 		   data-placeholder={ props.placeholder }
@@ -70,7 +64,8 @@ export default function TextEditor(props: Props) {
 			   setWordCount((e.target as HTMLSpanElement).innerText.split(" ").length);
 			   if (props.onInput) props.onInput((e.target as HTMLSpanElement).innerHTML);
 		   } }
-		   style={ { height: props.height ?? "auto" } }>
+		   style={ { height: props.height ?? "auto" } }
+		   onClick={ (e) => e.stopPropagation() }>
 			{ props.children }
 		</p>
 		
