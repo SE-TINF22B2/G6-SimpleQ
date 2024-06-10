@@ -37,6 +37,12 @@ export default function LiveInput(props: Props) {
 		
 		cancelToken = axios.CancelToken.source();
 		
+		input = input.trim();
+		if (input.length < 1) {
+			setSuggestions([]);
+			return;
+		}
+		
 		global.axios.get("tags/find?tag=" + encodeURIComponent(input.toLowerCase()), { cancelToken: cancelToken.token })
 			  .then(res => {
 				  let tags = res.data.tags;
