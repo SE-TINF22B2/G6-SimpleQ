@@ -5,12 +5,12 @@ import { useTranslation } from "react-i18next";
 
 /**
  * Renders an answer to be displayed in QuestionView
- * @param props holds the answer and an index
+ * @param props holds the answer
  */
-export default function QuestionAnswer(props: { answer: Answer, index: number }) {
+export default function QuestionAnswer(props: { answer: Answer }) {
 	const { t } = useTranslation();
 	
-	return <div key={ props.index } className={ "container transparent question-answer" }>
+	return <div className={ "container transparent question-answer" }>
 		<div className={ "question-answer-author" }
 			 style={ {
 				 paddingTop: props.answer.author.type === "ai" ? "var(--spacing)" : 0,

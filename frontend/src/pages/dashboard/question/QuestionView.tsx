@@ -120,7 +120,7 @@ export default function QuestionView() {
 			
 			{ !answersLoading
 				? answers.length > 0
-					? answers.map((answer, index) => <QuestionAnswer answer={ answer } index={ index }/>)
+					? answers.map((answer, index) => <QuestionAnswer answer={ answer } key={ index }/>)
 					: <NoContent/>
 				: <QuestionAnswerSkeleton count={ 2 }/> }
 			
