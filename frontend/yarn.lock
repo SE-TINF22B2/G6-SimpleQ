@@ -5221,10 +5221,10 @@ w3c-xmlserializer@^5.0.0:
   dependencies:
     xml-name-validator "^5.0.0"
 
-web-vitals@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.npmjs.org/web-vitals/-/web-vitals-4.0.1.tgz"
-  integrity sha512-AW6qT/vXK3pbf+WgVcEBXY//AWCpXjVKgdb6rt0cARSUdtT+NUtZCOeo+CSLUX7PjSQ275DmxfkAs7QlPbtR6w==
+web-vitals@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/web-vitals/-/web-vitals-4.1.0.tgz#27074f32f4cc672260814c20d89d6ace1465c6bf"
+  integrity sha512-wz5ubPZK7DSKrlQvjsaCqdfa+9AjAYoUzj9GDzUmBTdfyfyl1fOIjfTh46DGKM8MdN+lcbNY8ObXo6TmHqRzVw==
 
 webidl-conversions@^7.0.0:
   version "7.0.0"
