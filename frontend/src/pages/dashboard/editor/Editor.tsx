@@ -14,7 +14,7 @@ export default function Editor(props: {}) {
 	const { t } = useTranslation();
 	const alert = useAlert();
 	
-	const [title, setTitle] = React.useState("New Question");
+	const [title, setTitle] = React.useState("");
 	const [tags, setTags] = React.useState<string[]>([]);
 	const [description, setDescription] = React.useState("Describe your question in more detail.");
 	const [questionType, setQuestionType] = React.useState<"simp" | "users">("simp");
@@ -35,29 +35,17 @@ export default function Editor(props: {}) {
 			<div className={ "glass" }>
 				<h2>
 					<i className={ "fi fi-rr-question" }/>
-					<span id={ "editor-question-title" }
-						  contentEditable={ hasBeenSubmitted ? false : "plaintext-only" }
-						  suppressContentEditableWarning={ true }
-						  onInput={ (e) => {
-							  let title = (e.target as HTMLSpanElement).innerText.trim();
-							  while (title.includes("  ")) title = title.replace("  ", " ");
-							  setTitle(title);
-						  } }
-						  onFocus={ (e) => {
-							  window.setTimeout(() => document.execCommand('selectAll', false, undefined), 1);
-						  } }
-						  onBlur={ (e) => {
-							  let elem = document.getElementById("editor-question-title");
-							  if (elem) elem.innerText = title;
-						  } }
-						  defaultValue={ "New Question" }
-						  style={ {
-							  borderRadius: "var(--border-radius)",
-							  outlineOffset: "var(--outline-width)"
-						  } }>
-                            { t('dashboard.questionEditor.title.placeholder') }
-                    </span>
-					?
+					<input type={ "text" } id={ "editor-question-title" }
+						   onInput={ (e) => {
+							   let title = (e.target as HTMLInputElement).value.trim();
+							   while (title.includes("  ")) title = title.replace("  ", " ");
+							   setTitle(title);
+						   } }
+						   onFocus={ (e) => {
+							   window.setTimeout(() => document.execCommand('selectAll', false, undefined), 1);
+						   } }
+						   onBlur={ (e) => e.currentTarget.value = title }
+						   placeholder={ t('dashboard.questionEditor.title.placeholder') }/>
 				</h2>
 				<p style={ { marginBottom: "calc(var(--spacing) / 2)" } }>{ t('dashboard.questionEditor.title.hint') }</p>
 			</div>
