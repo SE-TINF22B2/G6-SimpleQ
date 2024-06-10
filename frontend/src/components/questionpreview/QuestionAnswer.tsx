@@ -17,7 +17,7 @@ export default function QuestionAnswer(props: { answer?: Answer }) {
 		<div style={ { display: "flex", flexDirection: "column", alignItems: "center" } }>
 			{ props.answer
 				? props.answer.author.type === 'ai'
-					? <i className={ "fi fi-sr-brain avatar" }
+					? <i className={ "fi fi-rr-brain avatar" }
 						 style={ {
 							 fontSize: "1.4em",
 							 color: "var(--primary-color-contrast)",
@@ -86,7 +86,7 @@ export function QuestionAnswerDivider(props: {}) {
 export function QuestionAnswerPrev(props: {}) {
 	return <Section className={ "transparent" } style={ { alignItems: "stretch" } }>
 		<div>
-			<i className={ "fi fi-sr-arrow-up avatar" }
+			<i className={ "fi fi-rr-arrow-up avatar" }
 			   style={ {
 				   fontSize: "1.2em",
 				   color: "var(--primary-color-contrast)",
@@ -103,7 +103,7 @@ export function QuestionAnswerPrev(props: {}) {
 export function QuestionAnswerNext(props: {}) {
 	return <Section className={ "transparent" } style={ { alignItems: "stretch" } }>
 		<div style={ { display: "flex", flexDirection: "column", alignItems: "center" } }>
-			<i className={ "fi fi-sr-arrow-down avatar" }
+			<i className={ "fi fi-rr-arrow-down avatar" }
 			   style={ {
 				   fontSize: "1.2em",
 				   color: "var(--primary-color-contrast)",
