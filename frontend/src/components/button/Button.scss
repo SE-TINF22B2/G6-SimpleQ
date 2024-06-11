@@ -61,7 +61,7 @@
 
 	&.btn-glass {
 		background: var(--background-color-glass);
-		border: var(--outline-width) solid var(--border-color);
+		// border: var(--outline-width) solid var(--border-color);
 		box-shadow: var(--box-shadow);
 
 		&:focus-within {

@@ -9,7 +9,8 @@ interface Props {
 	children?: React.ReactNode,
 	disabled?: boolean,
 	placeIconRight?: boolean,
-	type?: "button" | "reset" | "submit"
+	type?: "button" | "reset" | "submit",
+	className?: string,
 }
 
 /**
@@ -20,12 +21,16 @@ interface Props {
  * @param props.children ReactNode as child of the button, automatically wrapped in <span></span>, used to render a text inside the button
  * @param props.disabled optionally disable clicking the button
  * @param props.placeIconRight optionally change the icon placement to the right side of the button
+ * @param props.type optionally set the html button type
+ * @param props.className optionally add classes to the button
  * */
 export default function Button(props: Props) {
 	const [isLoading, setIsLoading] = React.useState(false);
 	
 	return (
-		<button className={ "btn btn-" + (props.buttonStyle ?? "glass") }
+		<button className={
+			"btn btn-" + (props.buttonStyle ?? "glass") + (props.className ? " " + props.className : "")
+		}
 				type={ props.type }
 				disabled={ props.disabled || isLoading }
 				onClick={ async (e) => {

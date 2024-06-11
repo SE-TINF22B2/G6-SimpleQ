@@ -1,11 +1,11 @@
 import "./QuestionPreview.scss";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Question } from "../../def/Question";
+import { QuestionDef } from "../../def/QuestionDef";
 import Avatar from "../avatar/Avatar";
 
 interface Props {
-	question: Question;
+	question: QuestionDef;
 	index: number;
 }
 

@@ -1,4 +1,4 @@
-export interface Question {
+export interface QuestionDef {
 	id: string;
 	isDiscussion: boolean;
 	title: string;
@@ -10,20 +10,20 @@ export interface Question {
 	answers: number;
 	created: string;
 	updated: string;
-	author: Author;
+	author: AuthorDef;
 }
 
-export interface Answer {
+export interface AnswerDef {
 	id: string;
 	content: string;
 	created: string;
 	// likes: number;
 	// dislikes: number;
 	// opinion: "like" | "dislike" | "none";
-	author: Author;
+	author: AuthorDef;
 }
 
-interface Author {
+interface AuthorDef {
 	id: string;
 	name: string;
 	type: "guest" | "user" | "pro" | "admin" | "ai";

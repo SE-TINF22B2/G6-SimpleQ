@@ -92,11 +92,19 @@
 			"submit": "Post your Question"
 		},
 		"questionView": {
+			"question": {
+				"creationDate": "created: {{questionCreationDate}} · last updated: {{questionUpdatedDate}}"
+			},
 			"answer": {
-				"creationDate": "replied {{answerCreationDate}}",
-				"likes": "likes",
-				"dislikes": "dislikes",
-				"report": "Report answer"
+				"creationDate": "replied {{answerCreationDate}}"
+			},
+			"pagination": {
+				"previous": "Previous Page",
+				"next": "Next Page"
+			},
+			"answerEditor": {
+				"title": "Answer this question",
+				"placeholder": "Answer this question"
 			}
 		}
 	}

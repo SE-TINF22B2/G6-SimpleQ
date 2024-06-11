@@ -270,3 +270,30 @@ hr {
 		opacity: 0;
 	}
 }
+
+.inline-link {
+	border-radius: var(--border-radius);
+
+	cursor: pointer;
+	color: var(--font-color);
+	text-decoration: none;
+
+	&:hover {
+		color: var(--primary-color);
+		text-decoration: underline;
+	}
+}
+
+.modal-modal {
+	width: calc(100% - var(--spacing) * 2);
+	max-width: var(--max-width);
+	border-radius: var(--border-radius);
+	background: var(--background-color-glass) !important;
+	box-shadow: var(--box-shadow-elevated) !important;
+	backdrop-filter: blur(10px);
+	padding: var(--spacing) !important;
+
+	button.modal-close {
+		border-radius: 50%;
+	}
+}

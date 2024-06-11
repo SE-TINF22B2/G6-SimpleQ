@@ -1,8 +1,9 @@
 import "./Avatar.scss";
-import React from "react";
+import React, { CSSProperties } from "react";
 
-export default function Avatar(props: { userId?: string }) {
+export default function Avatar(props: { userId?: string, style?: CSSProperties }) {
 	return <img className={ "avatar" }
+				style={ props.style }
 				src={ "" }
 				alt={ "Avatar" }
 				onError={ ({ currentTarget }) => {
