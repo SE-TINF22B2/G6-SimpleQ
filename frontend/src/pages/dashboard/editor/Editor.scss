@@ -57,7 +57,7 @@
 	#editor-question-title {
 		background: var(--background-color-glass);
 		border: var(--outline-width) solid var(--border-color);
-		height: 40px;
+		height: var(--ui-spacing);
 		padding-inline: var(--spacing);
 		border-radius: var(--border-radius);
 	}

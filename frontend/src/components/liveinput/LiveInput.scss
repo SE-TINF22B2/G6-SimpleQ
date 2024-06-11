@@ -22,8 +22,8 @@
 		background: var(--background-color-glass);
 		border: var(--outline-width) solid var(--border-color);
 		border-bottom: var(--outline-width) solid var(--border-color);
-		border-right: 40px solid var(--border-color);
-		margin-right: 40px;
+		border-right: var(--ui-spacing) solid var(--border-color);
+		margin-right: var(--ui-spacing);
 		border-radius: var(--border-radius);
 		padding: calc(var(--spacing) / 2) var(--spacing);
 		width: 100%;
@@ -33,8 +33,8 @@
 		position: absolute;
 		top: 0;
 		right: 0;
-		height: 40px;
-		width: 40px;
+		height: var(--ui-spacing);
+		width: var(--ui-spacing);
 		display: grid;
 		place-items: center;
 
@@ -47,13 +47,13 @@
 	input,
 	.selection-activity,
 	.selection-count {
-		height: 40px;
+		height: var(--ui-spacing);
 		z-index: 201;
 	}
 
 	.selection-activity,
 	.selection-count {
-		width: 40px;
+		width: var(--ui-spacing);
 	}
 
 	.selection-activity {

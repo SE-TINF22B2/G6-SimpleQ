@@ -12,7 +12,7 @@ export default function QuestionAnswerSkeleton(props: { count?: number }) {
 	return skeletonArray.map((_, i) => {
 		return <div className={ "container transparent question-answer" } key={ i }>
 			<div className={ "question-answer-author" }>
-				<Skeleton height={ 40 } width={ 40 }/>
+				<Skeleton height={ "var(--ui-spacing)" } width={ "var(--ui-spacing)" }/>
 				
 				<p>
 					<Skeleton height={ 20 } width={ 100 }/>

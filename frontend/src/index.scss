@@ -50,7 +50,8 @@
 	--border-radius: 10px;
 	--max-width: 1200px;
 	--outline-width: 2px;
-	--form-element-height: 40px;
+	--ui-spacing: 40px;
+	--form-element-height: var(--ui-spacing);
 }
 
 * {

@@ -25,7 +25,7 @@ export default function QuestionAnswerEditor(props: { onSubmit?: (content: strin
 			
 			<div style={ {
 				flex: 1,
-				marginTop: "calc(-40px - var(--spacing))",
+				marginTop: "calc(-1 * var(--ui-spacing) - var(--spacing))",
 				width: "var(--outline-width)",
 				background: "var(--border-color)",
 				borderRadius: "var(--border-radius)"

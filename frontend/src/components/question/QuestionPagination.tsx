@@ -33,7 +33,7 @@ export function QuestionPaginationPrev(props: Props) {
 		
 		<div style={ {
 			flex: 1,
-			height: "40px",
+			height: "var(--ui-spacing)",
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "space-between"
@@ -67,7 +67,7 @@ export function QuestionPaginationNext(props: Props) {
 			
 			<div style={ {
 				flex: 1,
-				marginTop: "calc(-40px - var(--spacing))",
+				marginTop: "calc(-1 * var(--ui-spacing) - var(--spacing))",
 				width: "var(--outline-width)",
 				background: "var(--border-color)",
 				borderRadius: "var(--border-radius)"
@@ -76,7 +76,7 @@ export function QuestionPaginationNext(props: Props) {
 		
 		<div style={ {
 			flex: 1,
-			height: "40px",
+			height: "var(--ui-spacing)",
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "space-between"

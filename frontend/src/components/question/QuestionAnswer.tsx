@@ -25,12 +25,12 @@ export default function QuestionAnswer(props: { answer?: AnswerDef, setActivePro
 							 background: "var(--primary-color)"
 						 } }/>
 					: <Avatar userId={ "" }/>
-				: <Skeleton height={ 40 } width={ 40 }/>
+				: <Skeleton height={ "var(--ui-spacing)" } width={ "var(--ui-spacing)" }/>
 			}
 			
 			<div style={ {
 				flex: 1,
-				marginTop: "calc(-40px - var(--spacing))",
+				marginTop: "calc(-1 * var(--ui-spacing) - var(--spacing) * 2)",
 				width: "var(--outline-width)",
 				background: "var(--border-color)",
 				borderRadius: "var(--border-radius)"
@@ -51,7 +51,7 @@ export default function QuestionAnswer(props: { answer?: AnswerDef, setActivePro
 				{ props.answer?.author?.type
 					? props.answer.author.type !== 'user' &&
                     <span className={ "badge" }>{ props.answer.author.type }</span>
-					: <Skeleton width={ 40 }/> }
+					: <Skeleton width={ "var(--ui-spacing)" }/> }
 				
 				<span style={ { flex: 1 } }/>
 				

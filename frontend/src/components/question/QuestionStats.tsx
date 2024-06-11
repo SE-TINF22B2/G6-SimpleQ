@@ -19,7 +19,7 @@ export default function QuestionStats(props: { question?: QuestionDef }) {
 			
 			<div style={ {
 				flex: 1,
-				marginTop: "calc(-40px - var(--spacing))",
+				marginTop: "calc(-1 * var(--ui-spacing) - var(--spacing))",
 				width: "var(--outline-width)",
 				background: "var(--border-color)",
 				borderRadius: "var(--border-radius)"
@@ -28,7 +28,7 @@ export default function QuestionStats(props: { question?: QuestionDef }) {
 		
 		<div style={ {
 			flex: 1,
-			height: "40px",
+			height: "var(--ui-spacing)",
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "space-evenly"
@@ -66,10 +66,10 @@ export default function QuestionStats(props: { question?: QuestionDef }) {
 					</div>
 				</>
 				: <>
-					<Skeleton width={ 40 }/>
-					<Skeleton width={ 40 }/>
-					<Skeleton width={ 40 }/>
-					<Skeleton width={ 40 }/>
+					<Skeleton width={ "var(--ui-spacing)" }/>
+					<Skeleton width={ "var(--ui-spacing)" }/>
+					<Skeleton width={ "var(--ui-spacing)" }/>
+					<Skeleton width={ "var(--ui-spacing)" }/>
 				</>
 			}
 		</div>

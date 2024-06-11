@@ -149,17 +149,17 @@ export default function Editor(props: {}) {
 					<tbody>
 					<tr>
 						<td><i className={ "fi fi-rr-" + (isTitleValid ? "check" : "x") }
-							   style={ { width: "40px", textAlign: "center" } }/></td>
+							   style={ { width: "var(--ui-spacing)", textAlign: "center" } }/></td>
 						<td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>{ t('dashboard.questionEditor.validate.checks.title') }</td>
 					</tr>
 					<tr>
 						<td><i className={ "fi fi-rr-" + (isTagsValid ? "check" : "x") }
-							   style={ { width: "40px", textAlign: "center" } }/></td>
+							   style={ { width: "var(--ui-spacing)", textAlign: "center" } }/></td>
 						<td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>{ t('dashboard.questionEditor.validate.checks.tags') }</td>
 					</tr>
 					<tr>
 						<td><i className={ "fi fi-rr-" + (isDescriptionValid ? "check" : "x") }
-							   style={ { width: "40px", textAlign: "center" } }/></td>
+							   style={ { width: "var(--ui-spacing)", textAlign: "center" } }/></td>
 						<td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>{ t('dashboard.questionEditor.validate.checks.description') }</td>
 					</tr>
 					</tbody>

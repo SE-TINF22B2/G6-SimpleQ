@@ -21,12 +21,12 @@ export default function Question(props: {
 		<div style={ { display: "flex", flexDirection: "column", alignItems: "center" } }>
 			{ props.question
 				? <Avatar userId={ "" }/>
-				: <Skeleton height={ 40 } width={ 40 }/>
+				: <Skeleton height={ "var(--ui-spacing)" } width={ "var(--ui-spacing)" }/>
 			}
 			
 			<div style={ {
 				flex: 1,
-				marginTop: "calc(-40px - var(--spacing))",
+				marginTop: "calc(-1 * var(--ui-spacing) - var(--spacing))",
 				width: "var(--outline-width)",
 				background: "var(--border-color)",
 				borderRadius: "var(--border-radius)"
@@ -47,7 +47,7 @@ export default function Question(props: {
 				{ props.question?.author?.type
 					? props.question.author.type !== 'user' &&
                     <span className={ "badge" }>{ props.question.author.type }</span>
-					: <Skeleton width={ 40 }/> }
+					: <Skeleton width={ "var(--ui-spacing)" }/> }
 				
 				<span style={ { flex: 1 } }/>
 				

@@ -18,7 +18,7 @@
 		padding: calc(var(--spacing) / 2);
 
 		margin: calc(var(--spacing) / 2);
-		height: 40px;
+		height: var(--ui-spacing);
 
 		button {
 			background: transparent;
@@ -81,7 +81,7 @@
 		padding: var(--spacing);
 
 		margin: calc(var(--spacing) / 2);
-		height: 40px;
+		height: var(--ui-spacing);
 
 		user-select: none;
 		pointer-events: none;

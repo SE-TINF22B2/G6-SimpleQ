@@ -9,10 +9,10 @@ export function QuestionSectionTitle(props: { children?: JSX.Element | JSX.Eleme
 		width: "100%",
 		display: "flex",
 		alignItems: "stretch",
-		gap: "calc((40px - var(--outline-width)) / 2 + var(--spacing))"
+		gap: "calc((var(--ui-spacing) - var(--outline-width)) / 2 + var(--spacing))"
 	} }>
 		<div style={ {
-			width: "calc((40px + var(--outline-width)) / 2)",
+			width: "calc((var(--ui-spacing) + var(--outline-width)) / 2)",
 			marginBlock: "calc(var(--spacing) * -1)",
 			backgroundImage: "linear-gradient(var(--border-color) 50%, transparent 0%)",
 			backgroundPosition: "right top",
