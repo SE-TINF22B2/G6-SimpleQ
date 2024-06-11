@@ -2,7 +2,6 @@ import {
   IsEnum,
   IsNumber,
   IsOptional,
-  IsPositive,
   IsString,
   Max,
   Min,
@@ -24,7 +23,7 @@ export class QueryParameters {
   @IsOptional()
   @IsNumber()
   @Type(() => Number)
-  @IsPositive()
+  @Min(0)
   offset: number;
 
   @IsOptional()

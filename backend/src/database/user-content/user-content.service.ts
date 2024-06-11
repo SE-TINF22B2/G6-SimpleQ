@@ -221,6 +221,7 @@ export class UserContentService {
     if (null === userContents) {
       return null;
     }
+
     const questionsWithRating =
       await this.addRatingToUserContents(userContents);
     return this.sortBySortOptions(questionsWithRating, sortOptions);
@@ -488,8 +489,8 @@ export class UserContentService {
   /**
    * Counts the number of KI generated answers for a user
    * MAX number of KI generated answer for not prime user: 15
-   * @param groupID ID of the group from the Question/Discussion the Answer belongs to
    * @returns number - number of KI generated answers
+   * @param userID
    */
   async countAIAnswersForUser(userID: string): Promise<number> {
     const ownQuestion = await this.prisma.userContent.findMany({

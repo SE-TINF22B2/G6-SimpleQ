@@ -46,12 +46,16 @@ model UserContent {
   votes          Vote[]
   favorites      Favorite[]
   tags           Tag[]
+
+  @@fulltext([content])
 }
 
 model Question {
   userContent   UserContent @relation(fields: [userContentID], references: [userContentID])
   userContentID String      @id
   title         String
+
+  @@fulltext([title])
 }
 
 model Answer {
@@ -73,6 +77,8 @@ model Discussion {
   isPrivate     Boolean       @default(false)
   userTimeouts  UserTimeout[]
   moderations   Moderation[]
+
+  @@fulltext([title])
 }
 
 enum UserContentType {
