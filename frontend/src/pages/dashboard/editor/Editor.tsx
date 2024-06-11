@@ -6,6 +6,7 @@ import TextEditor from "../../../components/texteditor/TextEditor";
 import { useTranslation } from "react-i18next";
 import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Renders the editor page used to ask a new question
@@ -13,6 +14,7 @@ import { axiosError } from "../../../def/axios-error";
 export default function Editor(props: {}) {
 	const { t } = useTranslation();
 	const alert = useAlert();
+	const navigate = useNavigate();
 	
 	const [title, setTitle] = React.useState("");
 	const [tags, setTags] = React.useState<string[]>([]);
@@ -23,7 +25,7 @@ export default function Editor(props: {}) {
 	
 	const isTitleValid = title.length > 5;
 	const isTagsValid = tags.length > 0 && tags.length <= 5;
-	const isDescriptionValid = description.split(" ").length >= 20;
+	const isDescriptionValid = description.split(" ").length >= 0;
 	
 	return <>
 		<section className={ "container editor-container transparent focus-indicator" }>
@@ -179,11 +181,7 @@ export default function Editor(props: {}) {
 						}, {
 							withCredentials: true
 						})
-									.then(res => {
-										alert.info(res.status);
-										alert.info(res.data);
-										console.log(res.data);
-									})
+									.then(res => navigate("/dashboard/question/" + res.data.id))
 									.catch(err => axiosError(err, alert));
 						
 						setHasBeenSubmitted(false);
