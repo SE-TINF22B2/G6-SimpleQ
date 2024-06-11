@@ -1,21 +1,24 @@
 import { QuestionDef } from "../../def/QuestionDef";
 import Skeleton from "react-loading-skeleton";
 import React from "react";
+import Button from "../button/Button";
 
 /**
  * Renders the title section of the question view
  * @param props question
  */
-export default function QuestionTitle(props: { question?: QuestionDef }) {
+export default function QuestionTitle(props: { question?: QuestionDef, toggleFavorite: () => Promise<void> }) {
 	return <section style={ { width: "100%", display: "flex", flexDirection: "column", alignItems: "stretch" } }>
 		<div style={ { display: "flex", alignItems: "center", marginBottom: "calc(var(--spacing) / 2)" } }>
-			<h1>
+			<h1 style={ { flex: 1 } }>
 				{ props.question?.title ?? <Skeleton width={ 300 }/> }
 			</h1>
 			
-			<div style={ { flex: 1 } }/>
-			
-			{ props.question && <i className={ "fi fi-rr-star" } style={ { fontSize: "1.4em" } } tabIndex={ 0 }/> }
+			{ props.question && <Button icon={ props.question?.isFavorite ? "fi fi-sr-star" : "fi fi-rr-star" }
+                                        iconStyle={ props.question?.isFavorite ? { color: "var(--primary-color)" } : {} }
+                                        onClick={ async () => await props.toggleFavorite() }>
+                Favorite
+            </Button> }
 		</div>
 		
 		<p className={ "tags" }>

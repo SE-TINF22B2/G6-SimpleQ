@@ -11,6 +11,7 @@ export interface QuestionDef {
 	created: string;
 	updated: string;
 	author: AuthorDef;
+	isFavorite: boolean;
 }
 
 export interface AnswerDef {

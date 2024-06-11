@@ -62,7 +62,8 @@ export default function QuestionView() {
 					  opinion: res.data.opinion ?? "none",
 					  tags: ["st1", "st2", "st3"],
 					  title: res.data.title ?? "",
-					  updated: res.data.updated ?? ""
+					  updated: res.data.updated ?? "",
+					  isFavorite: res.data.isFavorite ?? false
 				  }
 				  setQuestion(_question);
 			  })
@@ -106,11 +107,25 @@ export default function QuestionView() {
 		}
 	}
 	
+	const toggleFavorite = async () => {
+		if (!question) return;
+		
+		if (question.isFavorite)
+			await global.axios.delete("favourites/" + id, { withCredentials: true })
+						.then(_ => setQuestion({ ...question, ...{ isFavorite: false } }))
+						.catch(err => axiosError(err, alert));
+		else
+			await global.axios.post("favourites/" + id, {}, { withCredentials: true })
+						.then(_ => setQuestion({ ...question, ...{ isFavorite: true } }))
+						.catch(err => axiosError(err, alert));
+	}
+	
 	return <div className={ "container transparent" }
 				style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)", alignItems: "flex-start" } }>
 		<ActiveProfileModal activeProfileId={ activeAuthorId } closeModal={ () => setActiveAuthorId(undefined) }/>
 		
-		<QuestionTitle question={ question }/>
+		<QuestionTitle question={ question }
+					   toggleFavorite={ toggleFavorite }/>
 		
 		<hr style={ { margin: 0 } }/>
 		

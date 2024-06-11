@@ -41,7 +41,8 @@ export default function Trending(props: {}) {
 						  opinion: _question.opinion ?? "none",
 						  tags: _question.tags ?? [],
 						  title: _question.title ?? "",
-						  updated: formatDate(_question.updated ?? "")
+						  updated: formatDate(_question.updated ?? ""),
+						  isFavorite: _question.isFavorite ?? false
 					  }
 					  _questions.push(question);
 				  });
