@@ -25,7 +25,7 @@ export class FavoriteService {
   async deleteFavorite(
     favoriteUserID: string,
     contentID: string,
-  ): Promise<{ favoriteUserID: string, contentID: string }> {
+  ): Promise<{ favoriteUserID: string; contentID: string }> {
     return this.prisma.favorite.delete({
       where: {
         contentID_favoriteUserID: {
