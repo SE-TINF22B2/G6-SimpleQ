@@ -8,6 +8,7 @@
 
 	--primary-color: #109E63;
 	--primary-color-contrast: #fff;
+	--primary-color-50p: rgba(16, 158, 99, 0.5);
 
 	--background-color-glass: rgba(255, 255, 255, .6);
 	--background-color-glass-dark: rgba(0, 0, 0, .6);
@@ -33,10 +34,8 @@
 	--background-color-secondary-dark: #141414;
 	--background-color-secondary-light: #f5f5f5;
 
-	--bleed-shadow: drop-shadow(0 0 60px var(--primary-color));
-	--bleed-shadow-light: drop-shadow(0 0 60px var(--primary-color));
-	--bleed-shadow-dark: drop-shadow(0 0 100px var(--primary-color));
-	--bleed-shadow-highlight: drop-shadow(0 0 60px rgba(255, 225, 255, 1));
+	--bleed-shadow: drop-shadow(0 0 var(--spacing) var(--primary-color-50p));
+	--bleed-shadow-highlight: drop-shadow(0 0 var(--spacing) rgba(255, 225, 255, 1));
 
 	--box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 	--box-shadow-light: 0 0 5px rgba(0, 0, 0, 0.1);

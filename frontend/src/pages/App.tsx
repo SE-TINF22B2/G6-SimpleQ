@@ -72,7 +72,6 @@ export default function App() {
 				"--border-color",
 				"--box-shadow",
 				"--box-shadow-elevated",
-				"--bleed-shadow",
 				"--background-bleed-opacity"
 			];
 			
