@@ -1,4 +1,4 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import "./Button.scss";
 import { animateBlob } from "../../def/cool-blobs";
 
@@ -11,6 +11,8 @@ interface Props {
 	placeIconRight?: boolean,
 	type?: "button" | "reset" | "submit",
 	className?: string,
+	style?: CSSProperties,
+	iconStyle?: CSSProperties
 }
 
 /**
@@ -23,6 +25,8 @@ interface Props {
  * @param props.placeIconRight optionally change the icon placement to the right side of the button
  * @param props.type optionally set the html button type
  * @param props.className optionally add classes to the button
+ * @param props.style optionally add custom inline styles for the whole button component
+ * @param props.iconStyle optionally add custom inline styles for the icon
  * */
 export default function Button(props: Props) {
 	const [isLoading, setIsLoading] = React.useState(false);
@@ -31,6 +35,7 @@ export default function Button(props: Props) {
 		<button className={
 			"btn btn-" + (props.buttonStyle ?? "glass") + (props.className ? " " + props.className : "")
 		}
+				style={ props.style }
 				type={ props.type }
 				disabled={ props.disabled || isLoading }
 				onClick={ async (e) => {
@@ -45,10 +50,10 @@ export default function Button(props: Props) {
 					setIsLoading(false);
 				} }>
 			{ props.icon && !props.placeIconRight && <i className={ isLoading ? "fi fi-rr-spinner spin" : props.icon }
-                                                        style={ { marginRight: "var(--spacing)" } }/> }
+                                                        style={ { ...{ marginLeft: "calc(var(--spacing) * -0.75)" }, ...props.iconStyle } }/> }
 			<span>{ props.children }</span>
 			{ props.icon && props.placeIconRight && <i className={ isLoading ? "fi fi-rr-spinner spin" : props.icon }
-                                                       style={ { marginLeft: "var(--spacing)" } }/> }
+                                                       style={ { ...{ marginRight: "calc(var(--spacing) * -0.75)" }, ...props.iconStyle } }/> }
 			
 			<span className={ "button-blob" }/>
 		</button>
