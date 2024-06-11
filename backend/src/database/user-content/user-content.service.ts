@@ -442,6 +442,14 @@ export class UserContentService {
     };
   }
 
+  async checkUserContentIDExists(userContentID: string): Promise<boolean> {
+    const userContent = this.prisma.userContent.findUnique({
+      where: { userContentID: userContentID },
+      select: { userContentID: true },
+    });
+    return userContent != null;
+  }
+
   /**
    * Check if a UserContent with the given groupID exists.
    * @param groupID ID of the Group the UserContent should be in
