@@ -26,11 +26,11 @@ export default function Trending(props: {}) {
 	useEffect(() => {
 		global.axios.get("question/trending")
 			  .then(res => {
-				  let _questions: Question[] = [];
+				  let _questions: QuestionDef[] = [];
 				  res.data.forEach((_question: any) => {
 					  if (!_question.id) return null;
 					  
-					  let question: Question = {
+					  let question: QuestionDef = {
 						  answers: _question.numberOfAnswers ?? 0,
 						  author: _question.author ?? undefined,
 						  created: formatDate(_question.created ?? ""),
