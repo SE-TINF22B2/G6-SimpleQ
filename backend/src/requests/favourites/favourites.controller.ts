@@ -1,13 +1,14 @@
 import {
   Controller,
   Delete,
-  Get, HttpStatus,
+  Get,
+  HttpStatus,
   InternalServerErrorException,
   NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
-  Req, Res,
+  Req,
 } from '@nestjs/common';
 import { FavoriteService } from '../../database/favorite/favorite.service';
 import { Favorite } from '@prisma/client';
@@ -19,11 +20,16 @@ export class FavouritesController {
   constructor(
     //     private readonly services
     private readonly favoriteService: FavoriteService,
-    private readonly usercontentService: UserContentService,
+    private readonly userContentService: UserContentService,
   ) {}
+
+  /**
+   * Get favourites of the user
+   * @param req
+   * @returns Promise<Favorite[]>
+   */
   @Get()
-  async getFavourites(@Req() req: any) {
-    //@IsUUID
+  async getFavourites(@Req() req: any): Promise<Favorite[]> {
     const userId = req.userId;
     const userFavorites: Favorite[] | null =
       await this.favoriteService.getAllFavoritesOfUser(userId);
@@ -48,7 +54,7 @@ export class FavouritesController {
   ) {
     const userId = req.userId;
 
-    if (!(await this.usercontentService.checkUserContentIDExists(questionID))) {
+    if (!(await this.userContentService.checkUserContentIDExists(questionID))) {
       throw new NotFoundException('Question not found!');
     }
     if (null != (await this.favoriteService.getFavorite(userId, questionID))) {
@@ -74,9 +80,9 @@ export class FavouritesController {
   async removeFavourite(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Req() req: any,
-  ) {
+  ): Promise<{ favoriteUserID: string; contentID: string }> {
     const userId = req.userId;
-    if (!(await this.usercontentService.checkUserContentIDExists(id))) {
+    if (!(await this.userContentService.checkUserContentIDExists(id))) {
       throw new NotFoundException('Question not found!');
     }
     if (null == (await this.favoriteService.getFavorite(userId, id))) {
