@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import "./Home.scss";
 import { useNavigate } from "react-router-dom";
-import { InView } from "react-intersection-observer";
 
 import mockup from "../../images/macbook-mockup.png";
 
@@ -21,15 +20,6 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 	const navigate = useNavigate();
 	const [currentThemeOnlyDisplay, setCurrentThemeOnlyDisplay] =
 		React.useState<"dark" | "light" | "system">((localStorage.getItem("theme") as "dark" | "light" || "system"));
-	
-	const inViewOnChange = (inView: any, entry: any) => {
-		entry.target.querySelectorAll(".fade-in").forEach((el: any, i: any) => {
-			setTimeout(() => {
-				if (inView) el.classList.add("fade-in-visible");
-				else el.classList.remove("fade-in-visible");
-			}, (i + 1) * 100);
-		});
-	}
 	
 	useEffect(() => {
 		const animateBlobs = () => {
@@ -134,13 +124,13 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 			</section>
 			
 			<section className={ "page" } id={ "features" }>
-				<InView as={ "div" } onChange={ inViewOnChange }>
+				<div>
 					<h2 className={ "page-title fade-in" }>Features</h2>
 					<h1 className={ "page-subtitle fade-in" }>What We Offer</h1>
 					<p className={ "page-summary fade-in" }>
 						We offer a wide range of features to help you with your daily tasks.
 					</p>
-					<Button buttonStyle={ "primary" }>
+					<Button buttonStyle={ "primary" } className={ "fade-in" }>
 						Try Yourself!
 					</Button>
 					
@@ -166,11 +156,11 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 							<p>Stay Active.</p>
 						</div>
 					</div>
-				</InView>
+				</div>
 			</section>
 			
-			<section className={ "page" } id={ "developers" }>
-				<InView as={ "div" } onChange={ inViewOnChange }>
+			<section className={ "page bg-secondary" } id={ "developers" }>
+				<div>
 					<h2 className={ "page-title fade-in" }>Developers</h2>
 					<h1 className={ "page-subtitle fade-in" }>Meet our Team</h1>
 					<p className={ "page-summary fade-in" }>
@@ -258,11 +248,11 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 							</div>
 						</div>
 					</div>
-				</InView>
+				</div>
 			</section>
 			
 			<section className={ "page" } id={ "development" }>
-				<InView as={ "div" } onChange={ inViewOnChange }>
+				<div>
 					<h2 className={ "page-title fade-in" }>Development</h2>
 					<h1 className={ "page-subtitle fade-in" }>Follow and take part in the process</h1>
 					<p className={ "page-summary fade-in" }>
@@ -316,11 +306,11 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						<i className={ "fi fi-rr-arrow-right" } style={ { marginRight: "var(--spacing)" } }/>
 						<span>For further information, please have a look at the Wiki linked in our GitHub Repository.</span>
 					</a>
-				</InView>
+				</div>
 			</section>
 			
-			<section className={ "page" } id={ "plans" }>
-				<InView as={ "div" } onChange={ inViewOnChange }>
+			<section className={ "page bg-secondary" } id={ "plans" }>
+				<div>
 					<h2 className={ "page-title fade-in" }>Meet our Plans</h2>
 					<h1 className={ "page-subtitle fade-in" }>Take the next step</h1>
 					<p className={ "page-summary fade-in" }>Take a look at our convenient plans that intend to improve
@@ -444,7 +434,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 							</h2>
 						</div>
 					</div>
-				</InView>
+				</div>
 			</section>
 			
 			<section className={ "page" }>

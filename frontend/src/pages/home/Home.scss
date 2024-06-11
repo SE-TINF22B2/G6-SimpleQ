@@ -65,7 +65,8 @@
 	main {
 		height: 100vh;
 		overflow-y: scroll;
-		scroll-snap-type: y mandatory;
+		// scroll-snap-type: y mandatory;
+		scroll-behavior: smooth;
 
 		.home-bg-blob {
 			position: absolute;
@@ -79,9 +80,9 @@
 
 			display: flex;
 			flex-direction: column;
-			height: 100vh;
+			// height: 100vh;
 			justify-content: space-evenly;
-			padding: calc(var(--header-height) + var(--spacing)) var(--spacing);
+			padding: calc(var(--header-height) + 4 * var(--spacing)) var(--spacing);
 			scroll-snap-align: start;
 			width: 100%;
 
@@ -105,7 +106,7 @@
 				z-index: 1;
 			}
 
-			&:nth-child(even) {
+			&.bg-secondary {
 				background-color: var(--background-color-secondary);
 
 				&::after {
@@ -114,11 +115,18 @@
 			}
 
 			.fade-in {
-				opacity: 0;
-				transform: translateX(-20px) scale(0.98);
-				transition: all var(--transition) !important;
+				animation: fadeIn ease-in-out;
+				animation-timeline: view();
+				animation-range: entry 0% cover 30%;
+			}
 
-				&.fade-in-visible {
+			@keyframes fadeIn {
+				from {
+					opacity: 0;
+					transform: translateX(calc(-0.1 * max(100vw, var(--max-width))));
+				}
+
+				to {
 					opacity: 1;
 					transform: none;
 				}
