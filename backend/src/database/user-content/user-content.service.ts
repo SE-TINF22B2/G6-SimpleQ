@@ -284,7 +284,10 @@ export class UserContentService {
     if (sortOptions.sortDirection === SortDirection.desc) {
       array.reverse();
     }
-    array = array.slice(sortOptions.offset, sortOptions.limit);
+    array = array.slice(
+      sortOptions.offset,
+      sortOptions.offset + sortOptions.limit,
+    );
     return array;
   }
 
