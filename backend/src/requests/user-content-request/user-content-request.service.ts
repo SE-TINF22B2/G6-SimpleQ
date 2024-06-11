@@ -456,8 +456,8 @@ export class UserContentRequestService {
           type: creator?.isPro ? 'pro' : 'registered' ?? 'guest',
         };
     }
-    
-   /*
+  }
+  /*
    * set vote for one userContentId for one user,
    * removes the vote if the parameter vote is set to 'none'
    * @param vote
