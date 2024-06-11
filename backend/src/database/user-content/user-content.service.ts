@@ -427,6 +427,11 @@ export class UserContentService {
     return this.sortBySortOptions(answersWithRating, sortOptions);
   }
 
+  /**
+   * get Answer of ID
+   * @param answerID
+   * @returns userContent and answer object
+   */
   async getAnswer(
     answerID: string,
   ): Promise<{ userContent: UserContent | null; answer: Answer | null }> {
@@ -442,11 +447,17 @@ export class UserContentService {
     };
   }
 
+  /**
+   * check if user content does exist
+   * @param userContentID
+   * @returns Promise<boolean>
+   */
   async checkUserContentIDExists(userContentID: string): Promise<boolean> {
-    const userContent = this.prisma.userContent.findUnique({
-      where: { userContentID: userContentID },
-      select: { userContentID: true },
-    });
+    const userContent: { userContentID: string } | null =
+      await this.prisma.userContent.findUnique({
+        where: { userContentID: userContentID },
+        select: { userContentID: true },
+      });
     return userContent != null;
   }
 
