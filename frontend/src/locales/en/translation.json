@@ -63,10 +63,8 @@
 				"hint": "Add up to 5 tags to describe what your question is about."
 			},
 			"description": {
-				"title": "Description",
 				"caption": "Description",
-				"placeholder": "Describe your question in detail.",
-				"hint": "Include all the information someone would need to answer your question."
+				"placeholder": "Describe your question in detail."
 			},
 			"type": {
 				"caption": "Customize Answers",

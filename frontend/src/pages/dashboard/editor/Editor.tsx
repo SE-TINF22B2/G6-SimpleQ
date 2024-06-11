@@ -96,14 +96,7 @@ export default function Editor(props: {}) {
 				<span className={ "caption" }>{ t('dashboard.questionEditor.description.caption') }</span>
 			</div>
 			
-			<div className={ "glass" }>
-				<h2>
-					<i className={ "fi fi-rr-align-left" }/>
-					{ t('dashboard.questionEditor.description.title') }
-				</h2>
-				<p>{ t('dashboard.questionEditor.description.hint') }</p>
-				<hr/>
-				
+			<div style={ { flex: 1 } }>
 				<TextEditor height={ "240px" } disabled={ hasBeenSubmitted } onInput={ setDescription }
 							placeholder={ t('dashboard.questionEditor.description.placeholder') }/>
 			</div>
