@@ -78,14 +78,14 @@ export class FavouritesController {
    */
   @Delete(':questionID')
   async removeFavourite(
-    @Param('id', new ParseUUIDPipe()) questionID: string,
+    @Param('questionID', new ParseUUIDPipe()) questionID: string,
     @Req() req: any,
   ): Promise<{ favoriteUserID: string; contentID: string }> {
     const userId = req.userId;
     if (!(await this.userContentService.checkUserContentIDExists(questionID))) {
       throw new NotFoundException('Question not found!');
     }
-    if (await this.favoriteService.isFavouriteOfUser(userId, questionID)) {
+    if (!(await this.favoriteService.isFavouriteOfUser(userId, questionID))) {
       throw new HttpException('Not Modified', HttpStatus.NOT_MODIFIED);
     }
     try {

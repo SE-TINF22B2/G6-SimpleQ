@@ -22,6 +22,7 @@ import { UserService } from '../../database/user/user.service';
 import { ExternalAPIService } from '../../externalAPI/externalAPI.service';
 import { VoteDto } from '../questions/dto/vote.dto';
 import { VOTE_OPTIONS_ENUM } from '../../../config';
+import { FavoriteService } from '../../database/favorite/favorite.service';
 
 @Injectable()
 export class UserContentRequestService {
@@ -32,6 +33,7 @@ export class UserContentRequestService {
     private readonly tagService: TagService,
     private readonly userService: UserService,
     private readonly externalAPIService: ExternalAPIService,
+    private readonly favouriteService: FavoriteService,
   ) {}
 
   async getTrendingQuestions(req: any) {
@@ -74,13 +76,16 @@ export class UserContentRequestService {
 
   /**
    * Loads User Content
-   * @param id      # UUID
-   * @param type    # UserContentType
-   * @param userId  # UUID
+   * @param userContentId - UUID of user content
+   * @param type - type of UserContentType
+   * @param userId  - UUID of user
+   * @param includeFavouriteTag - switch parameter,
+   * should the object include the property, telling content is favourite?
    * @throws NotFoundException
    */
-  async getUserContent(id: string, type: UserContentType, userId?: string) {
-    const result = await this.userContentService.getQuestion(id);
+  async getUserContent(userContentId: string, type: UserContentType, userId?: string, includeFavouriteTag?: boolean) {
+    const result = await this.userContentService.getQuestion(userContentId);
+    includeFavouriteTag = !!includeFavouriteTag;
 
     if (result.userContent == null)
       throw new NotFoundException(
@@ -127,8 +132,14 @@ export class UserContentRequestService {
         // @ts-ignore
         response.title = result.question?.title;
         // @ts-ignore
-        response.tags = await this.userContentService.getTagsOfUserContent(id);
+        response.tags = await this.userContentService.getTagsOfUserContent(userContentId);
       }
+
+      if (includeFavouriteTag) {
+        // @ts-ignore
+        response.isFavourite = await this.favouriteService.isFavouriteOfUser(userId, userContentId)
+      }
+
       return response;
     }
     throw new NotFoundException(`No ${type.toLowerCase()} found with this id.`);
