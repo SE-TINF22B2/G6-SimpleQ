@@ -284,10 +284,8 @@ export class UserContentService {
     if (sortOptions.sortDirection === SortDirection.desc) {
       array.reverse();
     }
-    array = array.slice(
-      sortOptions.offset,
-      sortOptions.offset + sortOptions.limit,
-    );
+    // Put the "deleted" items inside the array to return the filtered items
+    array = array.splice(sortOptions.offset, sortOptions.limit);
     return array;
   }
 
