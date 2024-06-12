@@ -8,9 +8,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { LoginAttempt } from '@prisma/client';
+import { ExpertService } from '../../database/expert/expert.service';
 import { LoginAttemptService } from '../../database/login-attempt/login-attempt.service';
 import { UserService } from '../../database/user/user.service';
-import { ExpertService } from '../../database/expert/expert.service';
 import { UpdateUser } from './dto/update-user.dto';
 
 enum Registration { // TODO extract
@@ -69,7 +69,6 @@ export class RequestsUserService {
     const user = await this.userService.getUser(req.userId);
     if (user == null) throw new NotFoundException('No user found with this id');
 
-    console.log(data);
     if (user.username == data.name || Object.keys(data).length == 0)
       throw new HttpException(
         'Nothing will be changed',

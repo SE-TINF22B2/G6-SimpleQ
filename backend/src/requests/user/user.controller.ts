@@ -5,28 +5,22 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
-  Put,
+  Post,
   Req,
   ValidationPipe,
 } from '@nestjs/common';
-import { UserService } from '../../database/user/user.service';
-import { ExpertService } from '../../database/expert/expert.service';
-import { RequestsUserService } from './requests-user.service';
 import { UpdateUser } from './dto/update-user.dto';
+import { RequestsUserService } from './requests-user.service';
 
 @Controller('profile')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly expertService: ExpertService,
-    private readonly requestsUserService: RequestsUserService,
-  ) {}
+  constructor(private readonly requestsUserService: RequestsUserService) {}
 
   /**
    * Returns basic information of users, can be used for overviews
    * and can be _seen by everybody_
-   * return 404 if user not found or user object
    * @param request
+   * @throws NotFoundException if the user is not found
    */
   @Get()
   async getBasicProfile(@Req() request: any) {
@@ -37,26 +31,39 @@ export class UserController {
   /**
    * Returns detailed information for one user, can be used for profiles and
    * can be requested by everybody
-   * returns 404 if id is invalid
    * @param userId
+   * @throws NotFoundException if the user is not found
    */
   @Get(':id')
   async getDetailedProfile(@Param('id', new ParseUUIDPipe()) userId: string) {
     return await this.requestsUserService.getProfileWrapper(userId);
   }
 
+  /***
+   * Get the logged in user
+   * @param req the request including the users id
+   * @returns user
+   * @throws NotFoundException if the user is not stored in the db
+   * @throws UnauthorizedException if the user is not logged in
+   */
   @Get()
   async getAuthorizedUser(@Req() req: any) {
     return await this.requestsUserService.getProfileWrapper(req.userId);
   }
 
-  @Put('update')
+  /**
+   * Update specific information of the user (in this case)
+   * @param req the request including the usersId
+   * @param data the payload that updates the user information
+   * @returns the updated user
+   * @throws NotFoundException if the user is not found
+   * @throws UnauthorizedException if the user is not logged in
+   */
+  @Post('update')
   async updateProfile(
     @Req() req: any,
     @Body(new ValidationPipe()) data: UpdateUser,
   ) {
-    console.log(data);
-    console.log(req.userId);
     return await this.requestsUserService.updateUser(req, data);
   }
 
