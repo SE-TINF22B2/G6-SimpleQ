@@ -324,8 +324,13 @@ paths:
           description: Successfully fetched a single question
           content:
             application/json: 
-              schema: 
-                $ref: '#/components/schemas/Question'
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Question'
+                  - type: object
+                    properties:
+                      isFavourite:
+                        type: boolean
         '404':
           description: Not found
     delete:
