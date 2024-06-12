@@ -53,8 +53,7 @@
 		"questionEditor": {
 			"title": {
 				"caption": "Title",
-				"placeholder": "New Question",
-				"hint": "What's your programming question? Be specific."
+				"placeholder": "New Question"
 			},
 			"tags": {
 				"title": "Tags",
