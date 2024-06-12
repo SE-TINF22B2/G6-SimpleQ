@@ -10,9 +10,9 @@ export const VOTE_OPTIONS = [VOTE_OPTIONS_ENUM.LIKE, VOTE_OPTIONS_ENUM.DISLIKE, 
 export const TAG_LIMIT: number = 5; // number of tags per question
 export const AI_LIMIT: number = 15;
 
-export const TEXT_LENGTH: number = 1000; // letters per request
+export const TEXT_LENGTH: number = 100; // letters per request
 export const TAG_LENGTH: number = 10; //  letters per text
-export const TITLE_LENGTH: number = 50; //  letters per text
+export const TITLE_LENGTH: number = 15; //  letters per text
 
 export const TAG_SEARCH_LENGTH_LIMIT: number = 10; // letters in request
 
