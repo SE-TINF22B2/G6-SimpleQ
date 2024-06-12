@@ -4,6 +4,7 @@ import { HttpModule } from '@nestjs/axios';
 import { PrismaService } from '../database/prisma.service';
 import { UserContentService } from '../database/user-content/user-content.service';
 import { UserService } from '../database/user/user.service';
+import { mockPrisma } from '../database/mockedPrismaClient';
 
 describe('ExternalAPIService', () => {
   let service: ExternalAPIService;
@@ -17,7 +18,10 @@ describe('ExternalAPIService', () => {
         PrismaService,
         UserService,
       ],
-    }).compile();
+    })
+      .overrideProvider(PrismaService)
+      .useValue(mockPrisma)
+      .compile();
 
     service = module.get<ExternalAPIService>(ExternalAPIService);
   });
