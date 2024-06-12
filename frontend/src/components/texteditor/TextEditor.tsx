@@ -7,6 +7,7 @@ interface Props {
 	disabled?: boolean;
 	children?: React.ReactNode;
 	onInput?: (value: string) => void;
+	placeholder?: string;
 }
 
 /**
@@ -64,6 +65,7 @@ export default function TextEditor(props: Props) {
 		<p className={ "text-editor-content" }
 		   contentEditable={ !(props.disabled) }
 		   suppressContentEditableWarning={ true }
+		   data-placeholder={ props.placeholder }
 		   onInput={ (e) => {
 			   setWordCount((e.target as HTMLSpanElement).innerText.split(" ").length);
 			   if (props.onInput) props.onInput((e.target as HTMLSpanElement).innerHTML);

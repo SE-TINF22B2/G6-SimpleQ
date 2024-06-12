@@ -1,6 +1,7 @@
 import { Component } from "react";
 import "./Login.scss";
 import MacbookMockup from "../../images/macbook-mockup.png";
+import Button from "../../components/button/Button";
 
 export default class Login extends Component<{}, {}> {
 	render() {
@@ -28,7 +29,7 @@ export default class Login extends Component<{}, {}> {
 				<form>
 					<input type={ "email" } placeholder={ "john.doe@mail.com" } className={ "form-input" } required/>
 					
-					<button type={ "submit" } className={ "btn btn-primary" }><span>Continue</span></button>
+					<Button buttonStyle={ "primary" } type={ "submit" }>Continue</Button>
 				</form>
 				
 				<div className={ "form-divider" }>
@@ -38,14 +39,8 @@ export default class Login extends Component<{}, {}> {
 				</div>
 				
 				<div className={ "login-social" }>
-					<button className={ "btn btn-secondary" }>
-						<i className={ "fi fi-brands-apple" }/>
-						<span>Apple</span>
-					</button>
-					<button className={ "btn btn-secondary" }>
-						<i className={ "fi fi-brands-google" }/>
-						<span>Google</span>
-					</button>
+					<Button icon={ "fi fi-brands-apple" }>Apple</Button>
+					<Button icon={ "fi fi-brands-google" }>Google</Button>
 				</div>
 			</main>
 		</div>

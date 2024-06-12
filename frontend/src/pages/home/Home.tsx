@@ -79,12 +79,14 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					<a href={ "#plans" }>Plans</a>
 				</div>
 				
-				<Button icon={ "fi fi-rr-sign-in-alt" } onClick={ () => window.location.href = "/login" }>Login</Button>
-				<Button icon={ "fi fi-rr-angle-right" } onClick={ () => navigate("dashboard") }>Dashboard</Button>
+				<Button icon={ "fi fi-rr-sign-in-alt" } onClick={ async () => {
+					window.location.href = "/login";
+				} }>Login</Button>
+				<Button icon={ "fi fi-rr-angle-right" } onClick={ async () => navigate("dashboard") }>Dashboard</Button>
 				
 				<Button
 					icon={ "fi fi-rr-" + (currentThemeOnlyDisplay === "system" ? "insight-alt" : currentThemeOnlyDisplay === "dark" ? "moon" : "sun") }
-					onClick={ () => {
+					onClick={ async () => {
 						let theme: "dark" | "light" | "system" = (localStorage.getItem("theme") as "dark" | "light" || "system");
 						theme = theme === "dark" ? "light" : theme === "light" ? "system" : "dark";
 						setCurrentThemeOnlyDisplay(theme);
@@ -122,7 +124,9 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						<h2>You don't believe us?</h2>
 						<Button buttonStyle={ "primary" }>Try Yourself!</Button>
 						<Button icon={ "fi fi-brands-github" }
-								onClick={ () => window.open("https://github.com/SE-TINF22B2/G6-SimpleQ", "_blank") }>
+								onClick={ async () => {
+									window.open("https://github.com/SE-TINF22B2/G6-SimpleQ", "_blank");
+								} }>
 							Learn More on GitHub
 						</Button>
 					</div>
@@ -136,9 +140,9 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					<p className={ "page-summary fade-in" }>
 						We offer a wide range of features to help you with your daily tasks.
 					</p>
-					<button className={ "btn btn-primary fade-in" }>
-						<span>Try Yourself!</span>
-					</button>
+					<Button buttonStyle={ "primary" }>
+						Try Yourself!
+					</Button>
 					
 					<div className={ "cards" }>
 						<div className={ "card fade-in" }>

@@ -26,7 +26,8 @@ export class AuthMiddleware implements NestMiddleware {
         }
       }
     } catch (e) {
-      if (allowedRequests.some((a) => req.baseUrl.includes(a))) {
+      // Check wether the current path is excluded from the authentication check
+      if (allowedRequests.some((a) => new RegExp(a).test(req.baseUrl))) {
         next();
         return;
       }

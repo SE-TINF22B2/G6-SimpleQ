@@ -83,9 +83,7 @@ export class RequestsUserService {
     }
 
     try {
-      return await this.userService.updateUser(req.userId, {
-        name: data.name,
-      });
+      return await this.userService.updateUser(req.userId, data.name);
     } catch (e) {
       throw new InternalServerErrorException(e);
     }

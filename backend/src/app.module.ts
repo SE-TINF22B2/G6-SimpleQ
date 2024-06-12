@@ -13,13 +13,13 @@ import { APP_FILTER } from '@nestjs/core';
 import {
   ImATeapotFilter,
   NotFoundExceptionFilter,
-} from './requests/filters/http-exception.filter';
+} from './requests/exception-handling/http-exception.filter';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    ExternalAPIModule,
     RequestsModule.register(),
+    ExternalAPIModule,
   ],
   controllers: [AppController],
   providers: [

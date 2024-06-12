@@ -3,21 +3,29 @@ import SplitSection from "../../../components/section/SplitSection";
 import CircularProgress from "../../../components/CircularProgress";
 import Section from "../../../components/section/Section";
 import { useEffect, useState } from "react";
+import { axiosError } from "../../../def/axios-error";
+import { useAlert } from "react-alert";
 
 /**
  * Renders the quests page, currently static
  */
 export default function Quests(props: {}) {
+	const alert = useAlert();
+	
 	const [minutesUntilEndOfWeek, setMinutesUntilEndOfWeek] = useState<number>(0);
 	const [r, setR] = useState<number>(0.1);
 	
 	useEffect(() => {
+		global.axios.get("quests", { withCredentials: true })
+			  .then(res => console.log(res))
+			  .catch(err => axiosError(err, alert));
+		
 		setR(50);
 		
 		updateMinutesUntilEndOfWeek();
 		let interval = setInterval(updateMinutesUntilEndOfWeek, 1000);
 		return () => clearInterval(interval);
-	}, []);
+	}, [alert]);
 	
 	const updateMinutesUntilEndOfWeek = () => {
 		const now = new Date();

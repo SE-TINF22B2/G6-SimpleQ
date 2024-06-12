@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Tag, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { AuthService } from './auth/auth.service';
 import { UserService } from './database/user/user.service';
 import { TagService } from './database/tag/tag.service';
@@ -44,7 +44,11 @@ export class AppController {
 
   // tag/search/?q=
   @Get('tag/search/')
-  searchTags(@Query() query: { q: string }): Promise<Tag[] | null> {
-    return this.tagService.searchTags(query.q);
+  async searchTags(@Query() query: { q: string }) {
+    const tags = await this.tagService.searchTags(query.q);
+    if (!tags) {
+      return { tags: [] };
+    }
+    return { tags: tags.map((tag) => tag.tagname) };
   }
 }

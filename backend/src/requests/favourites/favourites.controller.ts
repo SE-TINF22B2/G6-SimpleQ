@@ -4,7 +4,6 @@ import {
   Get,
   InternalServerErrorException,
   NotFoundException,
-  NotImplementedException,
   Param,
   ParseUUIDPipe,
   Post,
@@ -26,7 +25,7 @@ export class FavouritesController {
     //@IsUUID
     const userId = req.userId;
     const userFavorites: Favorite[] | null =
-      await this.favoriteService.getFavoriteOfUser(userId);
+      await this.favoriteService.getAllFavoritesOfUser(userId);
     if (null === userFavorites) {
       return [];
     }
@@ -35,7 +34,7 @@ export class FavouritesController {
   @Post(':questionID')
   async addFavourite(
     @Req() req: any,
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('questionID', new ParseUUIDPipe()) id: string,
   ) {
     const userId = req.userId;
 
@@ -44,15 +43,26 @@ export class FavouritesController {
     }
 
     try {
-      const result = await this.favoriteService.createFavorite(userId, id);
-      return result;
+      return await this.favoriteService.createFavorite(userId, id);
     } catch (Exception) {
       throw new InternalServerErrorException();
     }
   }
   @Delete(':id')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  removeFavourite(@Param('id', new ParseUUIDPipe()) id: string) {
-    throw new NotImplementedException();
+  async removeFavourite(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Req() req: any,
+  ) {
+    const userId = req.userId;
+
+    if ((await this.usercontentService.getAnswer(id)) == null) {
+      throw new NotFoundException('Question not found!');
+    }
+
+    try {
+      return await this.favoriteService.deleteFavorite(userId, id);
+    } catch (Exception) {
+      throw new InternalServerErrorException();
+    }
   }
 }

@@ -12,7 +12,7 @@ export class SpecialController {
   @Get('/whatWasMyPassword/:id')
   @HttpCode(418)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async revealuserPassword(@Res() res: Response) {
+  async revealUserPassword(@Res() res: Response) {
     throw new ImATeapotException();
   }
 }
