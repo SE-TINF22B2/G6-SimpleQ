@@ -14,7 +14,6 @@ import Skeleton from "react-loading-skeleton";
 import Avatar from "../../../components/avatar/Avatar";
 import QuestionTitle from "../../../components/question/QuestionTitle";
 import Question from "../../../components/question/Question";
-import QuestionStats from "../../../components/question/QuestionStats";
 import { QuestionSectionTitle } from "../../../components/question/QuestionSectionTitle";
 import { QuestionPaginationNext, QuestionPaginationPrev } from "../../../components/question/QuestionPagination";
 import QuestionDivider from "../../../components/question/QuestionDivider";
@@ -60,7 +59,7 @@ export default function QuestionView() {
 					  isDiscussion: res.data.isDiscussion ?? false,
 					  likes: res.data.likes ?? 0,
 					  opinion: res.data.opinion ?? "none",
-					  tags: ["st1", "st2", "st3"],
+					  tags: res.data.tags ?? [],
 					  title: res.data.title ?? "",
 					  updated: res.data.updated ?? "",
 					  isFavorite: res.data.isFavorite ?? false
@@ -120,119 +119,171 @@ export default function QuestionView() {
 						.catch(err => axiosError(err, alert));
 	}
 	
+	const submitVote = async (_opinion: "like" | "dislike", _id?: string) => {
+		if (!question || !id) return;
+		
+		let __opinion: "like" | "dislike" | "none" = question.opinion === _opinion ? "none" : _opinion;
+		
+		if (!_id)
+			await global.axios.post("question/" + encodeURIComponent(id) + "/vote",
+				{ body: _opinion }, { withCredentials: true })
+						.then(_ => {
+							let likes = question.likes;
+							let dislikes = question.dislikes;
+							
+							if (__opinion === "like") question.likes++;
+							else if (__opinion === "dislike") question.dislikes++;
+							else if (_opinion === "like") question.likes--;
+							else question.dislikes--;
+							
+							setQuestion({
+								...question,
+								...{ opinion: __opinion, likes, dislikes }
+							});
+							alert.success("Vote updated!");
+						})
+						.catch(err => axiosError(err, alert));
+		else
+			await global.axios.post("question/" + encodeURIComponent(_id) + "/vote",
+				{ body: _opinion }, { withCredentials: true })
+						.then(_ => {
+							let _answers = answers.map(answer => {
+								if (answer.id === _id) {
+									answer.opinion = __opinion;
+									if (__opinion === "like") answer.likes++;
+									else if (__opinion === "dislike") answer.dislikes++;
+									else if (_opinion === "like") answer.likes--;
+									else answer.dislikes--;
+								}
+								return answer;
+							});
+							setAnswers(_answers);
+							alert.success("Vote updated!");
+						})
+						.catch(err => axiosError(err, alert));
+	}
+	
 	return <div className={ "container transparent" }
 				style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)", alignItems: "flex-start" } }>
 		<ActiveProfileModal activeProfileId={ activeAuthorId } closeModal={ () => setActiveAuthorId(undefined) }/>
 		
 		<QuestionTitle question={ question }
-					   toggleFavorite={ toggleFavorite }/>
+					   toggleFavorite={ toggleFavorite }
+					   postVote={ async (vote) => await submitVote(vote) }/>
 		
 		<hr style={ { margin: 0 } }/>
 		
 		<Question question={ question } setActiveProfile={ setActiveAuthorId }/>
 		
-		<QuestionStats question={ question }/>
+		{ /* <QuestionStats question={ question }/> */ }
 		
-		<QuestionSectionTitle/>
-		<QuestionPaginationPrev setAnswersPage={ () => setAnswersPage(answersPage - 1) }
-								enabled={ answersPage > 0 }
-								inlineElement={
-									<Dropdown button={ <Button icon={ "fi fi-rr-filter" }>
-										Adjust answers
-									</Button> }
-											  direction={ "left" }
-											  items={ [
-												  {
-													  icon: "fi fi-rr-sort",
-													  label: "Sort by",
-													  items: [
-														  {
-															  icon: "fi fi-rr-equality",
-															  label: "Like-Dislike Ratio",
-															  shortcut: sortBy === "ldr" ?
-																  <i className={ "fi fi-rr-check" }/> : undefined,
-															  onClick: () => setSortBy("ldr")
-														  },
-														  {
-															  icon: "fi fi-rr-social-network",
-															  label: "Most likes",
-															  shortcut: sortBy === "likes" ?
-																  <i className={ "fi fi-rr-check" }/> : undefined,
-															  onClick: () => setSortBy("likes")
-														  },
-														  {
-															  icon: "fi fi-rr-social-network flipY",
-															  label: "Most dislikes",
-															  shortcut: sortBy === "dislikes" ?
-																  <i className={ "fi fi-rr-check" }/> : undefined,
-															  onClick: () => setSortBy("dislikes")
-														  },
-														  {
-															  icon: "fi fi-rr-time-past",
-															  label: "Timestamp",
-															  shortcut: sortBy === "timestamp" ?
-																  <i className={ "fi fi-rr-check" }/> : undefined,
-															  onClick: () => setSortBy("timestamp")
-														  }
-													  ],
-													  shortcut: <i className={ getSortByIcon() }/>
-												  },
-												  {
-													  icon: "fi fi-rr-sort-amount-down",
-													  label: "Direction",
-													  items: [
-														  {
-															  icon: "fi fi-rr-arrow-trend-up",
-															  label: "Ascending",
-															  shortcut: sortDirection === "asc" ?
-																  <i className={ "fi fi-rr-check" }/> : undefined,
-															  onClick: () => setSortDirection("asc")
-														  },
-														  {
-															  icon: "fi fi-rr-arrow-trend-down",
-															  label: "Descending",
-															  shortcut: sortDirection === "desc" ?
-																  <i className={ "fi fi-rr-check" }/> : undefined,
-															  onClick: () => setSortDirection("desc")
-														  }
-													  ],
-													  shortcut: <i
-														  className={ "fi fi-rr-arrow-trend-" + (sortDirection === "asc" ? "up" : "down") }/>
-												  },
-												  {
-													  icon: "fi fi-rr-brain",
-													  label: "Enable AI",
-													  shortcut: <input type={ "checkbox" }
-																	   style={ {
-																		   userSelect: "none",
-																		   pointerEvents: "none"
-																	   } }
-																	   checked={ enableAI } tabIndex={ -1 }/>,
-													  onClick: () => setEnableAI(!enableAI)
-												  }
-											  ] }/>
-								}/>
-		<QuestionDivider/>
+		{ (question?.answers ?? 1) > 0 && <>
+            <QuestionSectionTitle/>
+            <QuestionPaginationPrev setAnswersPage={ () => setAnswersPage(answersPage - 1) }
+                                    enabled={ answersPage > 0 }
+                                    inlineElement={
+										<Dropdown button={ <Button icon={ "fi fi-rr-filter" }>
+											Adjust answers
+										</Button> }
+												  direction={ "left" }
+												  items={ [
+													  {
+														  icon: "fi fi-rr-sort",
+														  label: "Sort by",
+														  items: [
+															  {
+																  icon: "fi fi-rr-equality",
+																  label: "Like-Dislike Ratio",
+																  shortcut: sortBy === "ldr" ?
+																	  <i className={ "fi fi-rr-check" }/> : undefined,
+																  onClick: () => setSortBy("ldr")
+															  },
+															  {
+																  icon: "fi fi-rr-social-network",
+																  label: "Most likes",
+																  shortcut: sortBy === "likes" ?
+																	  <i className={ "fi fi-rr-check" }/> : undefined,
+																  onClick: () => setSortBy("likes")
+															  },
+															  {
+																  icon: "fi fi-rr-social-network flipY",
+																  label: "Most dislikes",
+																  shortcut: sortBy === "dislikes" ?
+																	  <i className={ "fi fi-rr-check" }/> : undefined,
+																  onClick: () => setSortBy("dislikes")
+															  },
+															  {
+																  icon: "fi fi-rr-time-past",
+																  label: "Timestamp",
+																  shortcut: sortBy === "timestamp" ?
+																	  <i className={ "fi fi-rr-check" }/> : undefined,
+																  onClick: () => setSortBy("timestamp")
+															  }
+														  ],
+														  shortcut: <i className={ getSortByIcon() }/>
+													  },
+													  {
+														  icon: "fi fi-rr-sort-amount-down",
+														  label: "Direction",
+														  items: [
+															  {
+																  icon: "fi fi-rr-arrow-trend-up",
+																  label: "Ascending",
+																  shortcut: sortDirection === "asc" ?
+																	  <i className={ "fi fi-rr-check" }/> : undefined,
+																  onClick: () => setSortDirection("asc")
+															  },
+															  {
+																  icon: "fi fi-rr-arrow-trend-down",
+																  label: "Descending",
+																  shortcut: sortDirection === "desc" ?
+																	  <i className={ "fi fi-rr-check" }/> : undefined,
+																  onClick: () => setSortDirection("desc")
+															  }
+														  ],
+														  shortcut: <i
+															  className={ "fi fi-rr-arrow-trend-" + (sortDirection === "asc" ? "up" : "down") }/>
+													  },
+													  {
+														  icon: "fi fi-rr-brain",
+														  label: "Enable AI",
+														  shortcut: <input type={ "checkbox" }
+																		   style={ {
+																			   userSelect: "none",
+																			   pointerEvents: "none"
+																		   } }
+																		   checked={ enableAI } tabIndex={ -1 }/>,
+														  onClick: () => setEnableAI(!enableAI)
+													  }
+												  ] }/>
+									}/>
+            <QuestionDivider/>
+        </> }
 		
 		{ !answersLoading
 			? answers.map((answer, index) =>
 				<QuestionAnswer answer={ answer } key={ index }
-								setActiveProfile={ setActiveAuthorId }/>)
+								setActiveProfile={ setActiveAuthorId }
+								postVote={ async (vote) => await submitVote(vote, answer.id) }/>)
 			: <>
 				<QuestionAnswer/>
 				<QuestionAnswer/>
 				<QuestionAnswer/>
 			</> }
 		
-		<QuestionDivider/>
-		<QuestionPaginationNext setAnswersPage={ () => setAnswersPage(answersPage + 1) }
-								enabled={ (answersPage + 1) * ANSWERS_PAGE_SIZE < (question?.answers ?? 0) }
-								inlineElement={
-									<p>
-										Showing page { answersPage + 1 + " " }
-										of { Math.ceil((question?.answers ?? 0) / ANSWERS_PAGE_SIZE) }
-									</p>
-								}/>
+		{ (question?.answers ?? 1) > 0 && <>
+            <QuestionDivider/>
+            <QuestionPaginationNext setAnswersPage={ () => setAnswersPage(answersPage + 1) }
+                                    enabled={ (answersPage + 1) * ANSWERS_PAGE_SIZE < (question?.answers ?? 0) }
+                                    inlineElement={
+										<p className={ "caption" } style={ { alignSelf: "flex-start" } }>
+											Showing
+											answers { answersPage * ANSWERS_PAGE_SIZE + 1 } to { (answersPage + 1) * ANSWERS_PAGE_SIZE + " " }
+											(page { answersPage + 1 + " " }
+											of { Math.ceil((question?.answers ?? 0) / ANSWERS_PAGE_SIZE) })
+										</p>
+									}/>
+        </> }
 		
 		<QuestionSectionTitle/>
 		<QuestionAnswerEditor onSubmit={ async (content) => {
@@ -270,7 +321,7 @@ function ActiveProfileModal(props: { activeProfileId: string | undefined, closeM
 	}, [alert, props.activeProfileId]);
 	
 	return <Modal open={ props.activeProfileId !== undefined } onClose={ props.closeModal }
-				  classNames={ { modal: "modal-modal", closeButton: "modal-close" } } center>
+				  classNames={ { overlay: "modal-overlay", modal: "modal-modal", closeButton: "modal-close" } } center>
 		<div style={ { width: "100%", display: "grid", placeItems: "center" } }>
 			{ activeProfile
 				? <Avatar style={ { height: 100, width: 100 } }/>
