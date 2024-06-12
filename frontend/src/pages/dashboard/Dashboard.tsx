@@ -11,11 +11,12 @@ import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
 import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
-import Search from "../../components/search/Search";
 import { axiosError } from "../../def/axios-error";
 import { useAlert } from "react-alert";
 import Avatar from "../../components/avatar/Avatar";
 import { animateBlob } from "../../def/cool-blobs";
+import Modal from "react-responsive-modal";
+import Search from "../../components/search/Search";
 
 // ory setup
 const basePath = "http://localhost:4000"
@@ -46,10 +47,25 @@ export default function Dashboard(props: Props) {
 	const [history, setHistory] = useState<number[] | undefined>();
 	const [activeQuestionName, setActiveQuestionName] = useState<string | undefined>();
 	
+	const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+	const [updateUsernamePrompt, setUpdateUsernamePrompt] = useState<string | undefined>(undefined);
+	
+	const getId = (identity?: Identity) => identity?.id;
+	
 	const getUserName = (identity?: Identity) =>
 		identity?.traits.email || identity?.traits.username || t('dashboard.anonymous');
 	
 	useEffect(() => {
+		const fetchProfile = () => {
+			global.axios.get("profile", { withCredentials: true })
+				  .then(res => {
+					  console.log(res);
+				  })
+				  .catch(err => axiosError(err, alert));
+			
+			setUpdateUsernamePrompt("default username");
+		}
+		
 		const fetchStats = () => {
 			global.axios.get("stats", { withCredentials: true })
 				  .then(res => console.log(res))
@@ -73,6 +89,7 @@ export default function Dashboard(props: Props) {
 				   setLogoutUrl(data.logout_url);
 			   });
 			   
+			   fetchProfile();
 			   fetchStats();
 		   })
 		   .catch((err) => {
@@ -82,15 +99,8 @@ export default function Dashboard(props: Props) {
 		
 		const onKeyDown = (e: any) => {
 			if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-				toggleSearch();
+				setIsSearchModalOpen(_isSearchModalOpen => !_isSearchModalOpen);
 				e.preventDefault();
-			}
-			
-			if (e.key === "Escape") {
-				const search = document.querySelector(".search");
-				if (search && search.classList.contains("active")) {
-					toggleSearch();
-				}
 			}
 		}
 		
@@ -100,48 +110,6 @@ export default function Dashboard(props: Props) {
 	
 	const capitalizeFirstLetter = (string: string) => {
 		return string.charAt(0).toUpperCase() + string.slice(1);
-	}
-	
-	const toggleSearch = () => {
-		const search = document.querySelector(".search");
-		if (search) {
-			let isActive = search.classList.contains("active");
-			search.classList.toggle("active");
-			
-			let keyframes = [
-				{ transform: "scale(125%)" },
-				{ transform: "scale(100%)" }
-			]
-			
-			let duration = 200;
-			let easing = "ease-in-out";
-			
-			if (isActive) {
-				search.querySelector("div.search-container")!.animate(keyframes.reverse(), {
-					duration,
-					easing,
-					fill: "both"
-				}).onfinish = () => {
-					// @ts-ignore
-					search.style.display = "none"
-				};
-				
-				const searchBar = document.getElementById("search-bar");
-				if (searchBar) searchBar.focus();
-			} else {
-				// @ts-ignore
-				search.style.display = "flex";
-				
-				search.querySelector("div.search-container")!.animate(keyframes, {
-					duration,
-					easing,
-					fill: "both"
-				});
-				
-				const input = search.querySelector("input");
-				if (input) input.focus();
-			}
-		}
 	}
 	
 	const getSearchShortcut = () => {
@@ -256,6 +224,15 @@ export default function Dashboard(props: Props) {
 	}
 	
 	return <div className={ "dashboard" }>
+		
+		
+		<UpdateUsernamePrompt identity={ session?.identity } currentUsername={ updateUsernamePrompt }
+							  closeModal={ () => setUpdateUsernamePrompt(undefined) }/>
+		
+		
+		<Search isOpen={ isSearchModalOpen } closeModal={ () => setIsSearchModalOpen(false) }/>
+		
+		
 		<nav>
 			<div style={ { position: "relative", overflow: "hidden" } }>
 				<NavLink to={ "/" }
@@ -416,11 +393,11 @@ export default function Dashboard(props: Props) {
 				
 				<p className={ "glass" }
 				   onKeyDown={ (e) => {
-					   if (e.key === "Enter") toggleSearch();
+					   if (e.key === "Enter") setIsSearchModalOpen(true);
 				   } }
 				   id={ "search-bar" }
 				   tabIndex={ 0 }
-				   onClick={ () => toggleSearch() }>
+				   onClick={ () => setIsSearchModalOpen(true) }>
 					<i className={ "fi fi-rr-search" }/>
 					<span style={ {
 						display: "flex",
@@ -435,7 +412,20 @@ export default function Dashboard(props: Props) {
 			
 			<Outlet/>
 		</main>
-		
-		<Search toggleSearch={ toggleSearch }/>
 	</div>
+}
+
+/**
+ * Todo: do
+ */
+function UpdateUsernamePrompt(props: { identity?: Identity, currentUsername?: string, closeModal: () => void }) {
+	const alert = useAlert();
+	
+	return <Modal open={ /* props.currentUsername !== undefined */ false } onClose={ props.closeModal }
+				  classNames={ { overlay: "modal-overlay", modal: "modal-modal", closeButton: "modal-close" } } center>
+		<div style={ { width: "100%", display: "grid", placeItems: "center" } }>
+			<h1>Hello</h1>
+			<p>Current username: { props.currentUsername }</p>
+		</div>
+	</Modal>
 }

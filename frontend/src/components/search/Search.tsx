@@ -4,10 +4,16 @@ import { useAlert } from "react-alert";
 import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
 import { axiosError } from "../../def/axios-error";
+import Modal from "react-responsive-modal";
 
 let cancelToken: CancelTokenSource;
 
-export default function Search(props: { toggleSearch: () => void }) {
+/**
+ * Todo: Do
+ * @param props
+ * @constructor
+ */
+export default function Search(props: { isOpen: boolean, closeModal: () => void }) {
 	const alert = useAlert();
 	const { t } = useTranslation();
 	
@@ -17,13 +23,14 @@ export default function Search(props: { toggleSearch: () => void }) {
 		if (cancelToken) cancelToken.cancel("Operation canceled due to new request.");
 		cancelToken = axios.CancelToken.source();
 		
-		global.axios.get("question/search", {
+		global.axios.get<any>("question/search", {
 			params: {
 				q: query
 			},
 			cancelToken: cancelToken.token
 		})
 			  .then(res => {
+				  console.log(res, res.data);
 				  setSuggestions(res.data);
 			  })
 			  .catch(err => {
@@ -33,34 +40,38 @@ export default function Search(props: { toggleSearch: () => void }) {
 			  });
 	}
 	
-	return <div className={ "search glass" }
-				onClick={ props.toggleSearch }
-				onBlur={ (e: any) => {
-					let isFocusWithin = e.currentTarget.contains(e.relatedTarget);
-					if (!isFocusWithin) props.toggleSearch();
-				} }>
-		<div className={ "search-container" }>
-			<div onClick={ (e: any) => e.stopPropagation() }>
-				<i className={ "fi fi-rr-search" }/>
-				<input type={ "text" } placeholder={ t('dashboard.search.search') } onInput={ e => {
-					const value = (e.target as HTMLInputElement).value.trim();
-					if (value.length > 0) updateSuggestions(value);
-					else setSuggestions([]);
-				} }/>
-			</div>
+	return <Modal open={ props.isOpen } onClose={ props.closeModal }
+				  classNames={ {
+					  overlay: "modal-overlay",
+					  modal: "modal-modal modal-no-padding",
+					  closeButton: "modal-close"
+				  } }
+				  styles={ { modal: { marginTop: "var(--spacing)" } } }>
+		<div style={ { width: "100%", display: "flex", flexDirection: "column", alignItems: "stretch" } }>
+			<input type={ "text" } placeholder={ t('dashboard.search.search') }
+				   style={ {
+					   padding: "var(--spacing)",
+					   paddingRight: "calc(var(--spacing) * 3)",
+					   borderRadius: "var(--border-radius) var(--border-radius) 0 0",
+					   border: "none",
+					   background: "var(--background-color-primary)",
+					   fontSize: "2em",
+					   fontWeight: 700
+				   } }
+				   onInput={ e => {
+					   const value = (e.target as HTMLInputElement).value.trim();
+					   if (value.length > 0) updateSuggestions(value);
+					   else setSuggestions([]);
+				   } }
+				   spellCheck={ false }/>
 			
-			<p className={ "search-info" }>
-				{ t('dashboard.search.info') }
+			<div style={ { height: "var(--outline-width)" } }/>
+			
+			<p style={ { textAlign: "center", background: "var(--background-color-primary)" } }>
+				<span className={ "caption" }>{ t('dashboard.search.info') }</span>
 			</p>
 			
-			<p className={ "search-result" } tabIndex={ 0 }>
-				<i className={ "fi fi-rr-question badge" }/>
-				<span>How to use React? - { suggestions.length }</span>
-				<i className={ "fi fi-rr-user" }
-				   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-				<span>Benni Loidl</span>
-				<span>Yesterday</span>
-			</p>
+			<p>{ suggestions.length } suggestions.</p>
 		</div>
-	</div>
+	</Modal>
 }

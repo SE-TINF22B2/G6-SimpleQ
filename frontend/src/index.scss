@@ -1,5 +1,5 @@
 :root {
-	--spacing: 1em;
+	--spacing: 1rem;
 	--transition: 0.2s ease-in-out;
 
 	--background-bleed-opacity: 0.4;
@@ -51,6 +51,7 @@
 	--outline-width: 2px;
 	--ui-spacing: 40px;
 	--form-element-height: var(--ui-spacing);
+	--form-element-height-slim: 32px;
 }
 
 * {
@@ -284,6 +285,10 @@ hr {
 	}
 }
 
+.modal-overlay {
+	backdrop-filter: blur(2px);
+}
+
 .modal-modal {
 	width: calc(100% - var(--spacing) * 2);
 	max-width: var(--max-width);
@@ -292,6 +297,12 @@ hr {
 	box-shadow: var(--box-shadow-elevated) !important;
 	backdrop-filter: blur(10px);
 	padding: var(--spacing) !important;
+
+	overflow: visible !important;
+
+	&.modal-no-padding {
+		padding: 0 !important;
+	}
 
 	button.modal-close {
 		border-radius: 50%;
