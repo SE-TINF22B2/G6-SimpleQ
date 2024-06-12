@@ -35,7 +35,7 @@ Um die Nutzerinteraktivität zu fördern, bieten wir verschiedene Rollen an. Die
 - `/frontend`: Ordner für die Frontend-Applikation, [README-Frontend](https://github.com/SE-TINF22B2/G6-SimpleQ/blob/main/frontend/README.md)
 
 ## 🧾 Starten des Projektes - Entwicklung
+- `yarn setup`: Ausführung des Setups, installiert die benötigten Pakete für das Frontend und Backend, sowie die Datenbank 
 - `yarn start tunnel`: Startet den ORY-Tunnel für die Authentifizierung [Siehe](./backend/README.md)
 - `yarn start-backend`: Startet den Webserver für das Backend im [Entwicklungsmodus](./backend/README.md)
 - `yarn start-frontend`: Startet den Webserver, der das Frontend liefert
-- `yarn setup`: Ausführung des Setups, installiert die benötigten Pakete für das Frontend und Backend, sowie die Datenbank 
