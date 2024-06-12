@@ -1,4 +1,4 @@
-import { VOTE_OPTIONS_ENUM } from '../../../config';
+import { VOTE_OPTIONS_ENUM } from '../../../../config';
 
 export interface IUserContent {
   id: string;

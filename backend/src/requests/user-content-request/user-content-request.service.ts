@@ -32,7 +32,7 @@ import { FavoriteService } from '../../database/favorite/favorite.service';
 import {
   IAnswer,
   IQuestion,
-} from '../../database/user-content/user-content-interface';
+} from '../questions/dto/user-content-interface';
 
 @Injectable()
 export class UserContentRequestService {
