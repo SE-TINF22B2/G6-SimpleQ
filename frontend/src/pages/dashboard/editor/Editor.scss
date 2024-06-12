@@ -22,6 +22,7 @@
 			position: absolute;
 			top: 50%;
 			transform: translateY(-50%);
+			transition: var(--transition);
 			z-index: 4;
 		}
 
@@ -46,8 +47,12 @@
 	&:focus-within,
 	&:hover {
 		.editor-hints {
+			.hint-number {
+				transform: translateY(-75%);
+			}
+
 			.caption {
-				margin-top: calc(var(--spacing) * 2);
+				margin-top: calc(var(--spacing));
 				max-height: 100px;
 				opacity: 1;
 			}
@@ -55,11 +60,20 @@
 	}
 
 	#editor-question-title {
-		background: var(--background-color-glass);
+		flex: 1;
 		border: var(--outline-width) solid var(--border-color);
-		height: var(--ui-spacing);
+		height: calc(2 * var(--ui-spacing));
 		padding-inline: var(--spacing);
 		border-radius: var(--border-radius);
+		font-size: 2em;
+		font-weight: 700;
+
+		background: var(--background-color-glass);
+		transition: background-color var(--transition);
+
+		&:focus {
+			background: var(--background-color-primary);
+		}
 	}
 
 	.editor-question-type-select {

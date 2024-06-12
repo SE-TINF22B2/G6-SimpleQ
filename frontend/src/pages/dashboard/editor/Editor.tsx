@@ -34,23 +34,17 @@ export default function Editor(props: {}) {
 				<span className={ "caption" }>{ t('dashboard.questionEditor.title.caption') }</span>
 			</div>
 			
-			<div className={ "glass" }>
-				<h2>
-					<i className={ "fi fi-rr-question" }/>
-					<input type={ "text" } id={ "editor-question-title" }
-						   onInput={ (e) => {
-							   let title = (e.target as HTMLInputElement).value.trim();
-							   while (title.includes("  ")) title = title.replace("  ", " ");
-							   setTitle(title);
-						   } }
-						   onFocus={ (e) => {
-							   window.setTimeout(() => document.execCommand('selectAll', false, undefined), 1);
-						   } }
-						   onBlur={ (e) => e.currentTarget.value = title }
-						   placeholder={ t('dashboard.questionEditor.title.placeholder') }/>
-				</h2>
-				<p style={ { marginBottom: "calc(var(--spacing) / 2)" } }>{ t('dashboard.questionEditor.title.hint') }</p>
-			</div>
+			<input type={ "text" } id={ "editor-question-title" }
+				   onInput={ (e) => {
+					   let title = (e.target as HTMLInputElement).value.trim();
+					   while (title.includes("  ")) title = title.replace("  ", " ");
+					   setTitle(title);
+				   } }
+				   onFocus={ (e) => {
+					   window.setTimeout(() => document.execCommand('selectAll', false, undefined), 1);
+				   } }
+				   onBlur={ (e) => e.currentTarget.value = title }
+				   placeholder={ t('dashboard.questionEditor.title.placeholder') }/>
 		</section>
 		
 		<section className={ "container editor-container transparent focus-indicator" }>
