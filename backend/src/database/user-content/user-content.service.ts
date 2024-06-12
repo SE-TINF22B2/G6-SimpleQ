@@ -283,8 +283,6 @@ export class UserContentService {
     }
 
     array.splice(0, sortOptions.offset);
-    // decrease limit by 1 because the array starts at index 0
-    sortOptions.limit--;
     array.splice(sortOptions.limit, array.length - sortOptions.limit);
     return array;
   }
