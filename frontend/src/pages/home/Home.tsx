@@ -323,7 +323,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 								flexDirection: "row",
 								alignItems: "center",
 								gap: "var(--spacing)",
-								background: "var(--background-color-secondary)",
+								background: "var(--background-color-primary)",
 								margin: "calc(var(--spacing) * -1)",
 								padding: "var(--spacing)"
 							} }>
@@ -356,7 +356,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 								flexDirection: "row",
 								alignItems: "center",
 								gap: "var(--spacing)",
-								background: "var(--background-color-secondary)",
+								background: "var(--background-color-primary)",
 								margin: "calc(var(--spacing) * -1)",
 								padding: "var(--spacing)"
 							} }>
@@ -399,7 +399,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 								flexDirection: "row",
 								alignItems: "center",
 								gap: "var(--spacing)",
-								background: "var(--background-color-secondary)",
+								background: "var(--background-color-primary)",
 								margin: "calc(var(--spacing) * -1)",
 								padding: "var(--spacing)"
 							} }>
