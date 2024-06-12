@@ -4,6 +4,7 @@ import { animateBlob } from "../../def/cool-blobs";
 
 interface Props {
 	buttonStyle?: "primary" | "glass",
+	slim?: boolean,
 	icon?: string,
 	onClick?: () => Promise<void>,
 	children?: React.ReactNode,
@@ -18,6 +19,7 @@ interface Props {
 /**
  * Renders a button
  * @param props.buttonStyle style of the button, default is "glass"
+ * @param props.slim make the button slim
  * @param props.icon icon of the button, optional
  * @param props.onClick() function to be executed once the button is pressed
  * @param props.children ReactNode as child of the button, automatically wrapped in <span></span>, used to render a text inside the button
@@ -33,7 +35,10 @@ export default function Button(props: Props) {
 	
 	return (
 		<button className={
-			"btn btn-" + (props.buttonStyle ?? "glass") + (props.className ? " " + props.className : "")
+			"btn btn-" +
+			(props.buttonStyle ?? "glass") +
+			(props.className ? " " + props.className : "") +
+			(props.slim ? " btn-slim" : "")
 		}
 				style={ props.style }
 				type={ props.type }

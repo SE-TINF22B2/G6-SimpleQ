@@ -4,6 +4,10 @@
 	font-size: 0.9em;
 	height: var(--form-element-height);
 
+	&.btn-slim {
+		height: var(--form-element-height-slim);
+	}
+
 	align-items: center;
 	border: none;
 	cursor: pointer;
@@ -21,7 +25,6 @@
 	&.btn-primary {
 		background: var(--primary-color);
 		color: var(--primary-color-contrast);
-		font-weight: 600;
 		outline-offset: var(--outline-width);
 
 		overflow: hidden;
