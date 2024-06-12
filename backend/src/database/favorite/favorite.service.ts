@@ -50,6 +50,19 @@ export class FavoriteService {
     });
   }
 
+  /**
+   * checks in if favourite exist for one user
+   * returns true if it exists, returns false otherwise
+   * @param favoriteUserID
+   * @param contentID
+   */
+  async isFavouriteOfUser(
+    favoriteUserID: string,
+    contentID: string,
+  ): Promise<boolean> {
+    return !!(await this.getFavorite(favoriteUserID, contentID));
+  }
+
   async getAllFavoritesOfUser(favoriteUserID: string) {
     return this.prisma.favorite.findMany({
       where: {
