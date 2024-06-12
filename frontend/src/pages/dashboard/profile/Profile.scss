@@ -10,24 +10,3 @@
 
 .profile-expert-topics {
 }
-
-.profile-memberships {
-	table {
-		tr td {
-			padding-block: calc(var(--spacing) / 2);
-		}
-
-		i {
-			width: var(--ui-spacing);
-			text-align: center;
-		}
-
-		td:first-child i {
-			margin-inline-end: calc(var(--spacing) / 2);
-		}
-
-		td.plan {
-			border-radius: var(--border-radius);
-		}
-	}
-}
