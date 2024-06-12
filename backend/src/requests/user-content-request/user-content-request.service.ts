@@ -7,21 +7,22 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import {
-  createSortOptions,
-  UserContentService,
-} from '../../database/user-content/user-content.service';
-import { VoteService } from '../../database/vote/vote.service';
-import { QueryParameters } from '../questions/dto/query-params.dto';
-import { SearchQuery } from '../questions/dto/search.dto';
 import { TypeOfAI, UserContentType, Vote } from '@prisma/client';
+import { VOTE_OPTIONS_ENUM } from '../../../config';
 import { BlacklistService } from '../../database/blacklist/blacklist.service';
 import { TagService } from '../../database/tag/tag.service';
-import { CreateQuestion } from '../questions/dto/create-question.dto';
+import {
+  UserContentService,
+  createSortOptions,
+} from '../../database/user-content/user-content.service';
 import { UserService } from '../../database/user/user.service';
+import { VoteService } from '../../database/vote/vote.service';
 import { ExternalAPIService } from '../../externalAPI/externalAPI.service';
+import { AnswerFilter } from '../questions/dto/answer-filter.dto';
+import { CreateQuestion } from '../questions/dto/create-question.dto';
+import { QueryParameters } from '../questions/dto/query-params.dto';
+import { SearchQuery } from '../questions/dto/search.dto';
 import { VoteDto } from '../questions/dto/vote.dto';
-import { VOTE_OPTIONS_ENUM } from '../../../config';
 
 @Injectable()
 export class UserContentRequestService {
@@ -165,7 +166,7 @@ export class UserContentRequestService {
    * @returns the corresponding answers in an array, if they exist
    * @throws NotFoundException if no question is found with that id
    * */
-  async getAnswersOfQuestion(id: string, sortCriteria: QueryParameters) {
+  async getAnswersOfQuestion(id: string, sortCriteria: AnswerFilter) {
     // check question does exist
     const question = await this.userContentService.getQuestion(id);
     if (null === question || null === question.userContent)
@@ -180,7 +181,7 @@ export class UserContentRequestService {
         sortCriteria.offset,
         sortCriteria.limit,
       ),
-      true, // TODO: add enableAI
+      sortCriteria.enableAI,
     );
     if (rawAnswers == null) {
       throw new InternalServerErrorException(
@@ -397,7 +398,7 @@ export class UserContentRequestService {
             userId,
             data.content,
             data.title,
-            [], // TODO: add tags
+            data.tags,
           );
           break;
         case UserContentType.Discussion:
@@ -406,7 +407,7 @@ export class UserContentRequestService {
             data.content,
             data.title,
             data.isPrivate,
-            [], // TODO: add tags
+            data.tags,
           );
           break;
         case UserContentType.Answer:

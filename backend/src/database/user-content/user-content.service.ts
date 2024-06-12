@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import {
@@ -11,8 +12,8 @@ import {
   UserContentType,
   Vote,
 } from '@prisma/client';
-import { PrismaService } from '../prisma.service';
 import { SORT_BY, SORT_DIRECTION } from '../../../config';
+import { PrismaService } from '../prisma.service';
 
 export type SortOptions = {
   sortBy: SortType;
@@ -258,6 +259,9 @@ export class UserContentService {
     switch (sortOptions.sortBy) {
       case SortType.ldr:
         array.sort((q) => {
+          if(q.likes == 0 && q.dislikes == 0) return 0;
+          if(q.likes == 0) return -1;
+          if(q.dislikes == 0) return 1;          
           return q.likes / q.dislikes;
         });
         break;
