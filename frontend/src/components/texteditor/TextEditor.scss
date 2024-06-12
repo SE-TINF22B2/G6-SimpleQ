@@ -79,6 +79,8 @@
 		border-radius: var(--border-radius);
 		background: var(--background-color-secondary);
 		padding: var(--spacing);
+		display: flex;
+		align-items: center;
 
 		margin: calc(var(--spacing) / 2);
 		height: var(--ui-spacing);
