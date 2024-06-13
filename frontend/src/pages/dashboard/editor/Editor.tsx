@@ -23,9 +23,7 @@ export default function Editor(props: {}) {
 	
 	const [hasBeenSubmitted, setHasBeenSubmitted] = React.useState(false);
 	
-	const isTitleValid = title.length > 5;
 	const isTagsValid = tags.length > 0 && tags.length <= 5;
-	const isDescriptionValid = description.split(" ").length >= 0;
 	
 	return <>
 		<section className={ "container editor-container transparent focus-indicator" }>
@@ -35,6 +33,7 @@ export default function Editor(props: {}) {
 			</div>
 			
 			<input type={ "text" } id={ "editor-question-title" }
+				   minLength={ 4 } maxLength={ 50 } required
 				   onInput={ (e) => {
 					   let title = (e.target as HTMLInputElement).value.trim();
 					   while (title.includes("  ")) title = title.replace("  ", " ");
@@ -125,42 +124,6 @@ export default function Editor(props: {}) {
 			</div>
 		</section>
 		
-		<section className={ "container editor-container transparent" }>
-			<div className={ "editor-hints" }>
-				<span className={ "hint-number" }>5.</span>
-				<span className={ "caption" }>{ t('dashboard.questionEditor.validate.caption') }</span>
-			</div>
-			
-			<div className={ "glass" }>
-				<h2>
-					<i className={ "fi fi-rr-check" }/>
-					{ t('dashboard.questionEditor.validate.title') }
-				</h2>
-				<p>{ t('dashboard.questionEditor.validate.hint') }</p>
-				<hr/>
-				
-				<table>
-					<tbody>
-					<tr>
-						<td><i className={ "fi fi-rr-" + (isTitleValid ? "check" : "x") }
-							   style={ { width: "var(--ui-spacing)", textAlign: "center" } }/></td>
-						<td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>{ t('dashboard.questionEditor.validate.checks.title') }</td>
-					</tr>
-					<tr>
-						<td><i className={ "fi fi-rr-" + (isTagsValid ? "check" : "x") }
-							   style={ { width: "var(--ui-spacing)", textAlign: "center" } }/></td>
-						<td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>{ t('dashboard.questionEditor.validate.checks.tags') }</td>
-					</tr>
-					<tr>
-						<td><i className={ "fi fi-rr-" + (isDescriptionValid ? "check" : "x") }
-							   style={ { width: "var(--ui-spacing)", textAlign: "center" } }/></td>
-						<td style={ { paddingLeft: "calc(var(--spacing) / 2)" } }>{ t('dashboard.questionEditor.validate.checks.description') }</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-		</section>
-		
 		<div className={ "container editor-container transparent" } style={ { display: "flex" } }>
 			<div style={ { flex: 1 } }/>
 			<Button buttonStyle={ "primary" } icon={ "fi fi-rr-paper-plane" }
@@ -180,7 +143,7 @@ export default function Editor(props: {}) {
 						
 						setHasBeenSubmitted(false);
 					} }
-					disabled={ !isTitleValid || !isTagsValid || !isDescriptionValid || hasBeenSubmitted }>
+					disabled={ !isTagsValid || hasBeenSubmitted }>
 				{ t('dashboard.questionEditor.submit') }
 			</Button>
 		</div>

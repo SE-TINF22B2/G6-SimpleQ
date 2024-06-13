@@ -76,16 +76,6 @@
 					"hint": "Only Users will be able to upload answers to your question."
 				}
 			},
-			"validate": {
-				"title": "Check your Question",
-				"caption": "Validate",
-				"hint": "Verify that you have created your question correctly.",
-				"checks": {
-					"title": "A valid title",
-					"tags": "At least one tag",
-					"description": "A detailed description of at least 20 words"
-				}
-			},
 			"submit": "Post your Question"
 		},
 		"questionView": {
