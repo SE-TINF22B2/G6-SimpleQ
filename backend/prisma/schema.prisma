@@ -16,7 +16,7 @@ datasource db {
 
 model User {
   userID             String         @id @default(uuid())
-  username           String         @unique
+  username           String         @unique @db.VarChar(20)
   isPro              Boolean        @default(false)
   isAdmin            Boolean        @default(false)
   timeOfRegistration DateTime       @default(now())
@@ -53,7 +53,7 @@ model UserContent {
 model Question {
   userContent   UserContent @relation(fields: [userContentID], references: [userContentID])
   userContentID String      @id
-  title         String
+  title         String      @db.VarChar(50)
 
   @@fulltext([title])
 }
@@ -73,7 +73,7 @@ enum TypeOfAI {
 model Discussion {
   userContent   UserContent   @relation(fields: [userContentID], references: [userContentID])
   userContentID String        @id
-  title         String
+  title         String        @db.VarChar(50)
   isPrivate     Boolean       @default(false)
   userTimeouts  UserTimeout[]
   moderations   Moderation[]
@@ -128,7 +128,7 @@ model Favorite {
 }
 
 model Tag {
-  tagname  String        @id @unique
+  tagname  String        @id @unique @db.VarChar(12)
   experts  Expert[]
   contents UserContent[]
 }

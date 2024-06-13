@@ -134,4 +134,21 @@ export class UserService {
     });
     return result.isPro;
   }
+
+  /**
+   * Check if a given username already exists
+   * @param username
+   * @returns boolean
+   */
+  async checkUsernameExists(username: string) {
+    const usernames = (
+      await this.prisma.user.findMany({
+        where: { username: username },
+        select: {
+          username: true,
+        },
+      })
+    ).map((u) => u.username);
+    return usernames.length != 0;
+  }
 }
