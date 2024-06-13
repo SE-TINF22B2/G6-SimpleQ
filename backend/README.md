@@ -139,3 +139,42 @@ Als Paketmanager wird [_yarn_](https://classic.yarnpkg.com/lang/en/docs/) in der
 | NestJS        | 10      |
 | ory-client    | 1.9     |
 | prisma-client | 5.14    |
+
+
+## Externe API's
+Um den Nutzern der simpleQ Platform die Möglichkeit zu bieten, eine künstlich generierte Antwort zu bekommen. Hier gibt es für mathematische Fragen die Wolfram Alpha Schnittstelle und allgemeine Fragen können von einem Sprachmodell beantwortet werden, welches selbst betrieben wird.
+
+### Wolfram Alpha
+Die Wolfram Aplha KI kann eine mathematische Frage entgegen nehmen und gibt eine Antwort als Bilddatei, da zur Erklärung ebenfalls Diagramme Hilfreich sind.
+
+Das Backend von SimpleQ sendet eine GET Anfrage an diese Schnittstelle und liefert das Bild als Zeichenkette an das Frontend.
+
+Bsp. : Prompt: What is pi
+```
+http://api.wolframalpha.com/v1/simple?appid={appID}&i=What+is+pi
+```
+
+Damit das Backend auch die Anfrage auf Wunsch des Nutzers auch senden kann, muss folgende ENV gesetzt werden. Es gibt keine Authentifizierung für Schutz vor Fremdzugriffen, weshalb die appID nicht auf GitHub gepusht werden sollte:
+
+```
+WOLFRAM_APP_ID="http://api.wolframalpha.com/v1/simple?appid={appID}"
+```
+
+### Sprachmodell
+Das Sprachmodell wird selber auf einem privaten Server gehostet und bietet eine Schnittstelle über einen Python Webserver.
+
+HTTP-METHOD: POST
+HOST: https://model.mybrauni.de
+
+body:
+```json
+{
+	"prompt": ""
+}
+```
+
+header:
+```
+'Authorization': '{base64 encoded "Basic username:password"}'
+'Content-Type': 'application/json'
+```
