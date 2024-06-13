@@ -8,14 +8,12 @@ import i18n from "i18next";
 /* Todo: Make Logo Static */
 import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
 
-import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
+import { Configuration, FrontendApi, Session } from "@ory/client"
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
-import { axiosError } from "../../def/axios-error";
 import { useAlert } from "react-alert";
 import Avatar from "../../components/avatar/Avatar";
 import { animateBlob } from "../../def/cool-blobs";
-import Modal from "react-responsive-modal";
 import Search from "../../components/search/Search";
 
 // ory setup
@@ -48,49 +46,21 @@ export default function Dashboard(props: Props) {
 	const [activeQuestionName, setActiveQuestionName] = useState<string | undefined>();
 	
 	const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-	const [updateUsernamePrompt, setUpdateUsernamePrompt] = useState<string | undefined>(undefined);
 	
+	/*
 	const getId = (identity?: Identity) => identity?.id;
 	
 	const getUserName = (identity?: Identity) =>
 		identity?.traits.email || identity?.traits.username || t('dashboard.anonymous');
+	 */
 	
 	useEffect(() => {
-		const fetchProfile = () => {
-			global.axios.get("profile", { withCredentials: true })
-				  .then(res => {
-					  console.log(res);
-				  })
-				  .catch(err => axiosError(err, alert));
-			
-			setUpdateUsernamePrompt("default username");
-		}
-		
-		const fetchStats = () => {
-			global.axios.get("stats", { withCredentials: true })
-				  .then(res => console.log(res))
-				  .catch(err => axiosError(err, alert));
-			
-			if (window.location.pathname.includes("/question")) {
-				let questionId = window.location.pathname.split("/question/")[1].substring(0, 36);
-				global.axios.get("question/" + questionId + "/title")
-					  .then(res => setActiveQuestionName(res.data.title))
-					  .catch(err => axiosError(err, alert));
-			}
-		}
-		
 		ory.toSession()
 		   .then(({ data }) => {
-			   // Todo: check whether this makes sense
-			   if (localStorage.getItem("consent") === "true")
-				   setSession(data);
-			   
+			   setSession(data);
 			   ory.createBrowserLogoutFlow().then(({ data }) => {
 				   setLogoutUrl(data.logout_url);
 			   });
-			   
-			   fetchProfile();
-			   fetchStats();
 		   })
 		   .catch((err) => {
 			   console.log("error logging in", err);
@@ -143,7 +113,7 @@ export default function Dashboard(props: Props) {
 						 items={ [
 							 {
 								 icon: "fi fi-rr-user",
-								 label: getUserName(session?.identity),
+								 label: "Profile",
 								 shortcut: <span className={ "badge" }>Pro</span>,
 								 onClick: (closeDropdown) => {
 									 navigate("/dashboard/profile");
@@ -224,14 +194,7 @@ export default function Dashboard(props: Props) {
 	}
 	
 	return <div className={ "dashboard" }>
-		
-		
-		<UpdateUsernamePrompt identity={ session?.identity } currentUsername={ updateUsernamePrompt }
-							  closeModal={ () => setUpdateUsernamePrompt(undefined) }/>
-		
-		
 		<Search isOpen={ isSearchModalOpen } closeModal={ () => setIsSearchModalOpen(false) }/>
-		
 		
 		<nav>
 			<div style={ { position: "relative", overflow: "hidden" } }>
@@ -413,19 +376,4 @@ export default function Dashboard(props: Props) {
 			<Outlet/>
 		</main>
 	</div>
-}
-
-/**
- * Todo: do
- */
-function UpdateUsernamePrompt(props: { identity?: Identity, currentUsername?: string, closeModal: () => void }) {
-	const alert = useAlert();
-	
-	return <Modal open={ /* props.currentUsername !== undefined */ false } onClose={ props.closeModal }
-				  classNames={ { overlay: "modal-overlay", modal: "modal-modal", closeButton: "modal-close" } } center>
-		<div style={ { width: "100%", display: "grid", placeItems: "center" } }>
-			<h1>Hello</h1>
-			<p>Current username: { props.currentUsername }</p>
-		</div>
-	</Modal>
 }
