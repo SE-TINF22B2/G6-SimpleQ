@@ -1,6 +1,6 @@
 export interface ProfileDef {
-	// id: string;
+	id: string;
 	name: string;
-	// type: "guest" | "user" | "pro" | "admin" | "ai";
+	type: "guest" | "user" | "pro" | "admin";
 	registrationDate: string;
 }

@@ -8,16 +8,13 @@ import QuestionAnswer from "../../../components/question/QuestionAnswer";
 import Dropdown from "../../../components/dropdown/Dropdown";
 import Button from "../../../components/button/Button";
 import 'react-responsive-modal/styles.css';
-import Modal from "react-responsive-modal";
-import { ProfileDef } from "../../../def/ProfileDef";
-import Skeleton from "react-loading-skeleton";
-import Avatar from "../../../components/avatar/Avatar";
 import QuestionTitle from "../../../components/question/QuestionTitle";
 import Question from "../../../components/question/Question";
 import { QuestionSectionTitle } from "../../../components/question/QuestionSectionTitle";
 import { QuestionPaginationNext, QuestionPaginationPrev } from "../../../components/question/QuestionPagination";
 import QuestionDivider from "../../../components/question/QuestionDivider";
 import QuestionAnswerEditor from "../../../components/question/QuestionAnswerEditor";
+import ActiveProfileModal from "../../../components/ActiveProfileModal";
 
 const ANSWERS_PAGE_SIZE = 5;
 
@@ -165,7 +162,8 @@ export default function QuestionView() {
 	
 	return <div className={ "container transparent" }
 				style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)", alignItems: "flex-start" } }>
-		<ActiveProfileModal activeProfileId={ activeAuthorId } closeModal={ () => setActiveAuthorId(undefined) }/>
+		<ActiveProfileModal activeProfileId={ activeAuthorId } isOwner={ false }
+							closeModal={ () => setActiveAuthorId(undefined) }/>
 		
 		<QuestionTitle question={ question }
 					   toggleFavorite={ toggleFavorite }
@@ -298,36 +296,4 @@ export default function QuestionView() {
 		
 		<div style={ { height: "50vh" } }/>
 	</div>
-}
-
-/**
- * Renders a modal providing relevant information about a given user
- * @param props.activeProfileId the id of the user profile, used for the fetch, may be undefined to close modal
- * @param props.closeModal callback function of closing the modal
- */
-function ActiveProfileModal(props: { activeProfileId: string | undefined, closeModal: () => void }) {
-	const alert = useAlert();
-	
-	const [activeProfile, setActiveProfile] = React.useState<ProfileDef | undefined>(undefined);
-	
-	useEffect(() => {
-		if (!props.activeProfileId) return;
-		
-		setActiveProfile(undefined);
-		
-		global.axios.get<ProfileDef>("profile/" + props.activeProfileId)
-			  .then(res => setActiveProfile(res.data))
-			  .catch(err => axiosError(err, alert));
-	}, [alert, props.activeProfileId]);
-	
-	return <Modal open={ props.activeProfileId !== undefined } onClose={ props.closeModal }
-				  classNames={ { overlay: "modal-overlay", modal: "modal-modal", closeButton: "modal-close" } } center>
-		<div style={ { width: "100%", display: "grid", placeItems: "center" } }>
-			{ activeProfile
-				? <Avatar style={ { height: 100, width: 100 } }/>
-				: <Skeleton height={ 100 } width={ 100 }/>
-			}
-			<h1>{ activeProfile?.name ?? <Skeleton width={ 200 }/> }</h1>
-		</div>
-	</Modal>
 }
