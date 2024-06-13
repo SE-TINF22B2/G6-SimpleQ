@@ -57,7 +57,7 @@ export class FavouritesController {
     if (!(await this.userContentService.checkUserContentIDExists(questionID))) {
       throw new NotFoundException('Question not found!');
     }
-    if (null != (await this.favoriteService.getFavorite(userId, questionID))) {
+    if (await this.favoriteService.isFavouriteOfUser(userId, questionID)) {
       throw new HttpException('Not Modified', HttpStatus.NOT_MODIFIED);
     }
 
@@ -70,26 +70,26 @@ export class FavouritesController {
 
   /**
    * remove favourite from user
-   * @param id
+   * @param questionID
    * @param req
    * @throws NOT MODIFIED, if no question belongs to user
    * @throws Not Found if question does not exist
    * @throws InternalServerError if another error occurs
    */
-  @Delete(':id')
+  @Delete(':questionID')
   async removeFavourite(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Param('questionID', new ParseUUIDPipe()) questionID: string,
     @Req() req: any,
   ): Promise<{ favoriteUserID: string; contentID: string }> {
     const userId = req.userId;
-    if (!(await this.userContentService.checkUserContentIDExists(id))) {
+    if (!(await this.userContentService.checkUserContentIDExists(questionID))) {
       throw new NotFoundException('Question not found!');
     }
-    if (null == (await this.favoriteService.getFavorite(userId, id))) {
+    if (!(await this.favoriteService.isFavouriteOfUser(userId, questionID))) {
       throw new HttpException('Not Modified', HttpStatus.NOT_MODIFIED);
     }
     try {
-      return await this.favoriteService.deleteFavorite(userId, id);
+      return await this.favoriteService.deleteFavorite(userId, questionID);
     } catch (Exception) {
       throw new InternalServerErrorException();
     }

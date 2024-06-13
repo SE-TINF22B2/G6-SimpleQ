@@ -70,6 +70,7 @@ export class QuestionsController {
       id,
       UserContentType.Question,
       request?.userId,
+      true,
     );
   }
 
