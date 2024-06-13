@@ -139,11 +139,11 @@ export class UserContentRequestService {
       ...evaluation,
       created: result.userContent.timeOfCreation,
       opinion: await this.getOpinionToUserContent(userContentId, userId),
-      author: {
-        id: creator ? creator.userID : 'undefined',
-        name: creator?.username ?? 'Guest',
-        type: creator?.isPro ? 'pro' : 'registered' ?? 'guest',
-      },
+      author: await this.parseCreator(
+          creator,
+          type,
+          result.userContent.userContentID,
+       ),
       content: result.userContent.content ?? '--',
     };
 
@@ -459,6 +459,37 @@ export class UserContentRequestService {
   }
 
   /**
+   * Parse creator information to differentiate between guest, registered and ai users
+   * @param creator - the creator of a question
+   * @param type - the UserContentType
+   * @param userContentId - the id of the UserContent
+   * @returns the creator with its id, name and type
+   * */
+  private async parseCreator(
+    creator: any,
+    type: UserContentType,
+    userContentId: string,
+  ) {
+    switch (type) {
+      case 'Answer':
+        const answer = await this.userContentService.getAnswer(userContentId);
+        return {
+          id: answer.answer?.typeOfAI != 'None' ? null : creator.id,
+          name:
+            answer.answer?.typeOfAI != 'None'
+              ? answer?.answer?.typeOfAI
+              : creator.name,
+          type: answer.answer?.typeOfAI != 'None' ? 'ai' : 'Registered',
+        };
+      default:
+        return {
+          id: creator?.userID,
+          name: creator?.username ?? 'Guest',
+          type: creator?.isPro ? 'pro' : 'registered' ?? 'guest',
+        };
+    }
+  }
+  /*
    * set vote for one userContentId for one user,
    * removes the vote if the parameter vote is set to 'none'
    * @param vote

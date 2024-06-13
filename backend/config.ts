@@ -19,6 +19,9 @@ export const TAG_LENGTH: number = 12; //  max chars in tagname
 export const TITLE_LENGTH: number = 50; //  max chars in title
 export const USERNAME_LENGTH: number = 20; //  max chars in username
 
+export const DEFAULT_USER_CONTENT_LIMIT = 10;
+export const DEFAULT_USER_CONTENT_OFFSET = 0;
+
 // sort parameters
 
 export enum SORT_BY {
