@@ -11,12 +11,13 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
+import { UserContent, UserContentType } from '@prisma/client';
 import { UserContentRequestService } from '../user-content-request/user-content-request.service';
+import { AnswerFilter } from './dto/answer-filter.dto';
+import { CreateAnswerDto } from './dto/create-answer.dto';
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
-import { UserContent, UserContentType } from '@prisma/client';
-import { CreateAnswerDto } from './dto/create-answer.dto';
 import { VoteDto } from './dto/vote.dto';
 
 @Controller('question') // prefix: domain/question/...
@@ -69,6 +70,7 @@ export class QuestionsController {
       id,
       UserContentType.Question,
       request?.userId,
+      true,
     );
   }
 
@@ -97,11 +99,12 @@ export class QuestionsController {
    * ]
    * offset: number of questions skipped form start
    * limit: amount of returned questions
+   * enableAI: show ai answer
    */
   @Get(':id/answers')
   async getQuestionAnswers(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Query(new ValidationPipe()) query: QueryParameters,
+    @Query(new ValidationPipe()) query: AnswerFilter,
   ): Promise<object> {
     return this.userContentService.getAnswersOfQuestion(id, query);
   }

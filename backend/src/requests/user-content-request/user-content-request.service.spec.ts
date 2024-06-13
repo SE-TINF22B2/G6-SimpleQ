@@ -8,6 +8,7 @@ import { TagService } from '../../database/tag/tag.service';
 import { UserService } from '../../database/user/user.service';
 import { QuestionsController } from '../questions/questions.controller';
 import { ExternalAPIModule } from '../../externalAPI/externalAPI.module';
+import { FavoriteService } from '../../database/favorite/favorite.service';
 
 describe('UserContentRequestService', () => {
   let service: UserContentRequestService;
@@ -23,6 +24,7 @@ describe('UserContentRequestService', () => {
         TagService,
         UserService,
         QuestionsController,
+        FavoriteService,
       ],
       imports: [ExternalAPIModule],
     }).compile();

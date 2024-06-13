@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import {
@@ -18,6 +19,7 @@ import {
   SORT_BY,
   SORT_DIRECTION,
 } from '../../../config';
+
 
 export type SortOptions = {
   sortBy: SortType;
@@ -263,6 +265,9 @@ export class UserContentService {
     switch (sortOptions.sortBy) {
       case SortType.ldr:
         array.sort((q) => {
+          if(q.likes == 0 && q.dislikes == 0) return 0;
+          if(q.likes == 0) return -1;
+          if(q.dislikes == 0) return 1;          
           return q.likes / q.dislikes;
         });
         break;
@@ -427,6 +432,11 @@ export class UserContentService {
     return this.sortBySortOptions(answersWithRating, sortOptions);
   }
 
+  /**
+   * get Answer of ID
+   * @param answerID
+   * @returns userContent and answer object
+   */
   async getAnswer(
     answerID: string,
   ): Promise<{ userContent: UserContent | null; answer: Answer | null }> {
@@ -440,6 +450,20 @@ export class UserContentService {
       userContent: userContent,
       answer: answer,
     };
+  }
+
+  /**
+   * check if user content does exist
+   * @param userContentID
+   * @returns Promise<boolean>
+   */
+  async checkUserContentIDExists(userContentID: string): Promise<boolean> {
+    const userContent: { userContentID: string } | null =
+      await this.prisma.userContent.findUnique({
+        where: { userContentID: userContentID },
+        select: { userContentID: true },
+      });
+    return userContent != null;
   }
 
   /**

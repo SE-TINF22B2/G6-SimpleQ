@@ -11,6 +11,7 @@ import { BlacklistService } from '../../database/blacklist/blacklist.service';
 import { TagService } from '../../database/tag/tag.service';
 import { UserService } from '../../database/user/user.service';
 import { ExternalAPIModule } from '../../externalAPI/externalAPI.module';
+import { FavoriteService } from '../../database/favorite/favorite.service';
 
 describe('QuestionsController', () => {
   let controller: QuestionsController;
@@ -28,6 +29,7 @@ describe('QuestionsController', () => {
         UserService,
         UserContentService,
         QuestionsController,
+        FavoriteService,
       ],
       imports: [ExternalAPIModule],
     }).compile();
