@@ -17,18 +17,6 @@ export class UserController {
   constructor(private readonly requestsUserService: RequestsUserService) {}
 
   /**
-   * Returns basic information of users, can be used for overviews
-   * and can be _seen by everybody_
-   * @param request
-   * @throws NotFoundException if the user is not found
-   */
-  @Get()
-  async getBasicProfile(@Req() request: any) {
-    const userId = request.userId;
-    return await this.requestsUserService.getProfileWrapper(userId);
-  }
-
-  /**
    * Returns detailed information for one user, can be used for profiles and
    * can be requested by everybody
    * @param userId

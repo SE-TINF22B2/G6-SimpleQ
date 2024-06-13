@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -7,16 +8,12 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { LoginAttempt } from '@prisma/client';
+import { LoginAttempt, User } from '@prisma/client';
 import { ExpertService } from '../../database/expert/expert.service';
 import { LoginAttemptService } from '../../database/login-attempt/login-attempt.service';
 import { UserService } from '../../database/user/user.service';
 import { UpdateUser } from './dto/update-user.dto';
-
-enum Registration { // TODO extract
-  registered = 'registered',
-  proUser = 'proUser',
-}
+import { IExpertTopics, IUser, Registration } from './dto/user.interface';
 
 @Injectable()
 export class RequestsUserService {
@@ -31,23 +28,21 @@ export class RequestsUserService {
    * @returns user if found, object after the defined schema in OpenAPI
    * @throws NotFoundException if no user found with id
    * */
-  async getProfileWrapper(userId: string) {
+  async getProfileWrapper(userId: string): Promise<IUser> {
     const usrProfile = await this.userService.getUser(userId);
     const expertTags = await this.expertService.getExpertTagsForUser(userId);
 
     if (usrProfile === null || expertTags === null) {
       throw new NotFoundException('User does not exist');
     }
-    const accountState: Registration = usrProfile.isPro
-      ? Registration.proUser
-      : Registration.registered;
-    const expertTagList: string[] = expertTags.map((e) => e.tagname);
+    const expertTagList: IExpertTopics[] = expertTags;
 
     return {
-      name: usrProfile.username,
+      userID: usrProfile.userID,
+      username: usrProfile.username,
       profilePicture: null,
       registrationDate: usrProfile.timeOfRegistration,
-      accountState: accountState.toString(),
+      accountState: this.getAccountState(usrProfile),
       expertTopics: expertTagList,
       userStatistics: {
         TODO: null,
@@ -65,15 +60,9 @@ export class RequestsUserService {
    * @throws NotModified if nothing changes
    * @throws NotAcceptableException if the payload is invalid
    * */
-  async updateUser(req: any, data: UpdateUser) {
+  async updateUser(req: any, data: UpdateUser): Promise<IUser | null> {
     const user = await this.userService.getUser(req.userId);
     if (user == null) throw new NotFoundException('No user found with this id');
-
-    if (user.username == data.name || Object.keys(data).length == 0)
-      throw new HttpException(
-        'Nothing will be changed',
-        HttpStatus.NOT_MODIFIED,
-      );
 
     if (!data) {
       throw new NotAcceptableException(
@@ -81,8 +70,40 @@ export class RequestsUserService {
       );
     }
 
+    if (user.username == data.name || Object.keys(data).length == 0)
+      throw new HttpException(
+        'Nothing will be changed',
+        HttpStatus.NOT_MODIFIED,
+      );
+
+    const usernameExists = await this.userService.checkUsernameExists(
+      data.name,
+    );
+    if (usernameExists) {
+      throw new BadRequestException('This username is already taken.');
+    }
+
     try {
-      return await this.userService.updateUser(req.userId, data.name);
+      const updatedUser = await this.userService.updateUser(
+        req.userId,
+        data.name,
+      );
+      if (updatedUser == null) throw new NotFoundException('User not found');
+      const expertTags = await this.expertService.getExpertTagsForUser(
+        req.userId,
+      );
+
+      return {
+        ...updatedUser,
+        profilePicture: null,
+        expertTopics: (expertTags as IExpertTopics[]) ?? [],
+        registrationDate: updatedUser?.timeOfRegistration,
+        accountState: this.getAccountState(updatedUser),
+        userStatistics: {
+          TODO: null,
+        },
+        activityPoints: updatedUser?.activityPoints ?? 0,
+      };
     } catch (e) {
       throw new InternalServerErrorException(e);
     }
@@ -126,5 +147,18 @@ export class RequestsUserService {
       return [];
     }
     return loginRange;
+  }
+
+  /**
+   * Get the state of account for a user
+   * @param usrProfile the object of an user
+   * @returns Registration the type of registration
+   * */
+  getAccountState(usrProfile: Pick<User, 'isPro' | 'isAdmin'>) {
+    if (usrProfile.isAdmin) return Registration.admin;
+
+    if (usrProfile.isPro) return Registration.proUser;
+
+    return Registration.registered;
   }
 }
