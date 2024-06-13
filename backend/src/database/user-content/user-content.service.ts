@@ -159,6 +159,7 @@ export class UserContentService {
    * @returns Array of UserContents, or null if no UserContent contains the query
    */
   async getUserContentsFromQuery(query: string): Promise<UserContent[] | null> {
+    query = this.convertQueryToSearchInput(query);
     return this.prisma.userContent.findMany({
       where: {
         AND: [
@@ -198,6 +199,15 @@ export class UserContentService {
         ],
       },
     });
+  }
+
+  convertQueryToSearchInput(query: string){
+    return query
+      .replaceAll(/[<>@"+\-()~*]/g, '')
+      .replaceAll(/\s+/g, ' ')
+      .split(' ')
+      .map((word) => (word == '' ? '' : `${word}*`))
+      .join(' ');
   }
 
   /**
