@@ -11,12 +11,14 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
+import { UserContent, UserContentType } from '@prisma/client';
 import { UserContentRequestService } from '../user-content-request/user-content-request.service';
+import { AnswerFilter } from './dto/answer-filter.dto';
+import { CreateAnswerDto } from './dto/create-answer.dto';
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
-import { UserContent, UserContentType } from '@prisma/client';
-import { CreateAnswerDto } from './dto/create-answer.dto';
+import { VoteDto } from './dto/vote.dto';
 
 @Controller('question') // prefix: domain/question/...
 export class QuestionsController {
@@ -41,9 +43,7 @@ export class QuestionsController {
    * limit - the limit of questions, defaults to 10
    * */
   @Get('search')
-  getSearch(
-    @Query(new ValidationPipe()) query: SearchQuery,
-  ): Promise<
+  getSearch(@Query(new ValidationPipe()) query: SearchQuery): Promise<
     | (UserContent & {
         likes: number;
         dislikes: number;
@@ -51,6 +51,14 @@ export class QuestionsController {
     | null
   > {
     return this.userContentService.search(query);
+  }
+
+  @Get('my')
+  getMyQuestions(
+    @Req() request: any,
+    @Query(new ValidationPipe()) query: QueryParameters,
+  ): Promise<object[] | null> {
+    return this.userContentService.getQuestionsOfUser(request.userId, query);
   }
 
   @Get(':id')
@@ -62,6 +70,7 @@ export class QuestionsController {
       id,
       UserContentType.Question,
       request?.userId,
+      true,
     );
   }
 
@@ -90,11 +99,12 @@ export class QuestionsController {
    * ]
    * offset: number of questions skipped form start
    * limit: amount of returned questions
+   * enableAI: show ai answer
    */
   @Get(':id/answers')
   async getQuestionAnswers(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Query(new ValidationPipe()) query: QueryParameters,
+    @Query(new ValidationPipe()) query: AnswerFilter,
   ): Promise<object> {
     return this.userContentService.getAnswersOfQuestion(id, query);
   }
@@ -121,5 +131,25 @@ export class QuestionsController {
       id,
       req.userId,
     );
+  }
+  @Post(':id/vote')
+  async voteForQuestion(
+    @Param('id', new ParseUUIDPipe()) userContentId: string,
+    @Req() req: any,
+    @Body(new ValidationPipe()) vote: VoteDto,
+  ) {
+    return await this.userContentService.updateUserVote(
+      vote,
+      userContentId,
+      req.userId,
+    );
+  }
+
+  @Get(':id/vote')
+  async getVoteOfQuestion(
+    @Param('id', new ParseUUIDPipe()) userContentId: string,
+    @Req() req: any,
+  ) {
+    return await this.userContentService.getUserVote(userContentId, req.userId);
   }
 }

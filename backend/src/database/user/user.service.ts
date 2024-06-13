@@ -60,7 +60,7 @@ export class UserService {
     activityPoints?: number,
     email?: string,
   ): Promise<User | null> {
-    const userData = await this.prisma.user.update({
+    return this.prisma.user.update({
       where: { userID: userID },
       data: {
         username: newUsername,
@@ -70,7 +70,6 @@ export class UserService {
         email: email,
       },
     });
-    return userData;
   }
 
   /**
@@ -134,5 +133,22 @@ export class UserService {
       },
     });
     return result.isPro;
+  }
+
+  /**
+   * Check if a given username already exists
+   * @param username
+   * @returns boolean
+   */
+  async checkUsernameExists(username: string) {
+    const usernames = (
+      await this.prisma.user.findMany({
+        where: { username: username },
+        select: {
+          username: true,
+        },
+      })
+    ).map((u) => u.username);
+    return usernames.length != 0;
   }
 }

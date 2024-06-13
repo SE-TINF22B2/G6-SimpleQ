@@ -9,11 +9,11 @@ import mockup from "../../images/macbook-mockup.png";
 import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
 import Button from "../../components/button/Button";
 
-import benni from "../../images/benni.png";
-import joshua from "../../images/joshua.png";
-import leonard from "../../images/leonard.png";
-import manuel from "../../images/manuel.png";
-import tom from "../../images/tom.png";
+import benni from "../../images/benni.jpg";
+import joshua from "../../images/joshua.jpg";
+import leonard from "../../images/leonard.jpg";
+import manuel from "../../images/manuel.jpg";
+import tom from "../../images/tom.jpeg";
 
 export default function Home(props: { updateTheme: (theme: "system" | "dark" | "light") => void }) {
 	let blobs: (HTMLDivElement | null)[] = useMemo(() => [], []);
@@ -188,7 +188,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
+									<a href={ "https://brink.ws/betrug" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -204,7 +204,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
+									<a href={ "https://www.riedbahn.de/home.html" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -220,7 +220,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
+									<a href={ "https://brink.biz/rl" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -235,7 +235,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 									<a href={ "https://github.com/manuelbrs" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
+									<a href={ "https://brink.ws/lokalpolitiker" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -251,7 +251,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "https://joshua.slaar.de" } target={ "_blank" } rel={ "noreferrer" }>
+									<a href={ "https://www.youtube.com/watch?v=wXjhszy2f9w" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>

@@ -7,16 +7,30 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { createSortOptions, UserContentService } from '../../database/user-content/user-content.service';
-import { VoteService } from '../../database/vote/vote.service';
-import { QueryParameters } from '../questions/dto/query-params.dto';
-import { SearchQuery } from '../questions/dto/search.dto';
-import { TypeOfAI, UserContentType } from '@prisma/client';
+import { VOTE_OPTIONS_ENUM } from '../../../config';
 import { BlacklistService } from '../../database/blacklist/blacklist.service';
 import { TagService } from '../../database/tag/tag.service';
-import { CreateQuestion } from '../questions/dto/create-question.dto';
+import {
+  UserContentService,
+  createSortOptions,
+} from '../../database/user-content/user-content.service';
 import { UserService } from '../../database/user/user.service';
+import { VoteService } from '../../database/vote/vote.service';
 import { ExternalAPIService } from '../../externalAPI/externalAPI.service';
+import { AnswerFilter } from '../questions/dto/answer-filter.dto';
+import { CreateQuestion } from '../questions/dto/create-question.dto';
+import { QueryParameters } from '../questions/dto/query-params.dto';
+import { SearchQuery } from '../questions/dto/search.dto';
+import {
+  Question,
+  TypeOfAI,
+  UserContent,
+  UserContentType,
+  Vote,
+} from '@prisma/client';
+import { VoteDto } from '../questions/dto/vote.dto';
+import { FavoriteService } from '../../database/favorite/favorite.service';
+import { IAnswer, IQuestion } from '../questions/dto/user-content-interface';
 
 @Injectable()
 export class UserContentRequestService {
@@ -27,8 +41,15 @@ export class UserContentRequestService {
     private readonly tagService: TagService,
     private readonly userService: UserService,
     private readonly externalAPIService: ExternalAPIService,
+    private readonly favouriteService: FavoriteService,
   ) {}
 
+  /**
+   * Get Trending questions, as specified in openAPI
+   * @param req
+   * @throws NotFoundException
+   *
+   */
   async getTrendingQuestions(req: any) {
     const questions = await this.userContentService.getTrendingQuestions();
     if (null === questions) {
@@ -48,22 +69,57 @@ export class UserContentRequestService {
     return results;
   }
 
+  async getQuestionsOfUser(
+    userId: string,
+    sortOptions: QueryParameters,
+  ): Promise<object[] | null> {
+    if (!userId || !(await this.userService.userIdExists(userId))) {
+      throw new NotFoundException('User id does not exist.');
+    }
+
+    return this.userContentService.getQuestionsOfUser(
+      userId,
+      createSortOptions(
+        sortOptions.sortBy,
+        sortOptions.sortDirection,
+        sortOptions.offset,
+        sortOptions.limit,
+      ),
+    );
+  }
+
   /**
    * Loads User Content
-   * @param id      # UUID
-   * @param type    # UserContentType
-   * @param userId  # UUID
+   * @param userContentId - UUID of user content
+   * @param type - type of UserContentType
+   * @param userId  - UUID of user
+   * @param includeFavouriteTag - switch parameter,
+   * should the object include the property, telling content is favourite?
    * @throws NotFoundException
    */
-  async getUserContent(id: string, type: UserContentType, userId?: string) {
-    const result = await this.userContentService.getQuestion(id);
+  async getUserContent(
+    userContentId: string,
+    type: UserContentType,
+    userId?: string,
+    includeFavouriteTag?: boolean,
+  ): Promise<IQuestion | IAnswer> {
+    const result: {
+      userContent: UserContent | null;
+      question: Question | null;
+    } = await this.userContentService.getQuestion(userContentId);
 
     if (result.userContent == null)
       throw new NotFoundException(
         `No ${type.toLowerCase()} found with this id.`,
       );
 
-    const evaluation =
+    if (!result) {
+      throw new NotFoundException(
+        `No ${type.toLowerCase()} found with this id.`,
+      );
+    }
+
+    const evaluation: { likes: number; dislikes: number } =
       await this.userContentService.getLikesAndDislikesOfUserContent(
         result.userContent?.userContentID as string,
       );
@@ -72,42 +128,42 @@ export class UserContentRequestService {
       await this.userContentService.getNumberOfAnswersFromGroupID(
         result.userContent?.groupID as string,
       );
+
     const creator = await this.userContentService.getAuthorOfUserContent(
       result?.userContent?.userContentID as string,
     );
-    if (result) {
-      const response: object = {
-        id: result.userContent.userContentID,
 
-        numberOfAnswers,
-        ...evaluation,
-        created: result.userContent?.timeOfCreation,
-        opinion: userId
-          ? await this.voteService.getOpinionToUserContent(
-              result.userContent.userContentID,
-              userId,
-            )
-          : 'dislike',
-        author: {
-          id: creator?.userID,
-          name: creator?.username ?? 'Guest',
-          type: creator?.isPro ? 'pro' : 'registered' ?? 'guest',
-        },
-        content: result.userContent.content,
-      };
+    const response: IAnswer | IQuestion = {
+      id: result.userContent.userContentID,
+      numberOfAnswers: numberOfAnswers ?? 0,
+      ...evaluation,
+      created: result.userContent.timeOfCreation,
+      opinion: await this.getOpinionToUserContent(userContentId, userId),
+      author: {
+        id: creator ? creator.userID : 'undefined',
+        name: creator?.username ?? 'Guest',
+        type: creator?.isPro ? 'pro' : 'registered' ?? 'guest',
+      },
+      content: result.userContent.content ?? '--',
+    };
 
-      if (
-        type === UserContentType.Question ||
-        type === UserContentType.Discussion
-      ) {
-        // @ts-ignore
-        response.title = result.question?.title;
-        // @ts-ignore
-        response.tags = await this.userContentService.getTagsOfUserContent(id);
-      }
-      return response;
+    if (
+      type === UserContentType.Question ||
+      type === UserContentType.Discussion
+    ) {
+      const rawTags =
+        await this.userContentService.getTagsOfUserContent(userContentId);
+      (response as IQuestion).tags = rawTags?.map((tag) => tag.tagname) ?? [];
+      (response as IQuestion).title = result.question?.title ?? '--';
     }
-    throw new NotFoundException(`No ${type.toLowerCase()} found with this id.`);
+
+    if (includeFavouriteTag && userId) {
+      response.isFavourite = await this.favouriteService.isFavouriteOfUser(
+        userId,
+        userContentId,
+      );
+    }
+    return response;
   }
 
   /**
@@ -141,7 +197,7 @@ export class UserContentRequestService {
    * @returns the corresponding answers in an array, if they exist
    * @throws NotFoundException if no question is found with that id
    * */
-  async getAnswersOfQuestion(id: string, sortCriteria: QueryParameters) {
+  async getAnswersOfQuestion(id: string, sortCriteria: AnswerFilter) {
     // check question does exist
     const question = await this.userContentService.getQuestion(id);
     if (null === question || null === question.userContent)
@@ -156,7 +212,7 @@ export class UserContentRequestService {
         sortCriteria.offset,
         sortCriteria.limit,
       ),
-      true, // TODO: add enableAI
+      sortCriteria.enableAI,
     );
     if (rawAnswers == null) {
       throw new InternalServerErrorException(
@@ -164,7 +220,7 @@ export class UserContentRequestService {
       );
     }
     // change results to openAPI schema
-    const answers: object[] = [];
+    const answers: IAnswer[] = [];
     for (const answer of rawAnswers) {
       answers.push(
         await this.getUserContent(answer.userContentID, UserContentType.Answer),
@@ -189,7 +245,7 @@ export class UserContentRequestService {
   async createQuestionWrapper(
     data: CreateQuestion,
     userId: string,
-  ): Promise<object> {
+  ): Promise<{ id: string; groupId: string }> {
     const forbiddenWords: string[] =
       await this.blacklistService.getBlacklistArray(); // TODO buffer
 
@@ -297,7 +353,7 @@ export class UserContentRequestService {
     questionId: string,
     userId: string,
     typeOfAI?: TypeOfAI,
-  ): Promise<object> {
+  ): Promise<{ id: string; groupId: string }> {
     const cleaned_typeOfAI: TypeOfAI =
       typeOfAI == null ? TypeOfAI.None : data.typeOfAI;
     if (data.content == null) {
@@ -373,7 +429,7 @@ export class UserContentRequestService {
             userId,
             data.content,
             data.title,
-            [], // TODO: add tags
+            data.tags,
           );
           break;
         case UserContentType.Discussion:
@@ -382,7 +438,7 @@ export class UserContentRequestService {
             data.content,
             data.title,
             data.isPrivate,
-            [], // TODO: add tags
+            data.tags,
           );
           break;
         case UserContentType.Answer:
@@ -400,5 +456,90 @@ export class UserContentRequestService {
     } catch (e) {
       throw new BadRequestException(e);
     }
+  }
+
+  /**
+   * set vote for one userContentId for one user,
+   * removes the vote if the parameter vote is set to 'none'
+   * @param vote
+   * @param userContentId
+   * @param userId
+   *
+   * @throws NotFoundException
+   */
+  async updateUserVote(
+    vote: VoteDto,
+    userContentId: string,
+    userId: string,
+  ): Promise<Vote | null> {
+    // check question exists
+    const author =
+      await this.userContentService.getAuthorOfUserContent(userContentId);
+    if (author == null) {
+      throw new NotFoundException(
+        'User content ' + userContentId + " doesn't exist!",
+      );
+    }
+
+    const oldVote = await this.voteService.getVote(userContentId, userId);
+    if (oldVote) {
+      // old vote exists
+      const oldVoteName = oldVote.isPositive
+        ? VOTE_OPTIONS_ENUM.LIKE
+        : VOTE_OPTIONS_ENUM.DISLIKE;
+      if (vote.id == oldVoteName) return null;
+      // remove the old vote
+      await this.voteService.deleteVote(userContentId, userId);
+      if (vote.id == VOTE_OPTIONS_ENUM.NONE) return null;
+    }
+    // set (new) vote
+    const isPositive = vote.id == VOTE_OPTIONS_ENUM.LIKE;
+    return await this.voteService.createVote(userContentId, userId, isPositive);
+  }
+
+  /**
+   * get the vote for one user-content-item for one user
+   * @param userContentId
+   * @param userId
+   * @throws NotFoundException
+   */
+  async getUserVote(
+    userContentId: string,
+    userId: string,
+  ): Promise<Vote | null> {
+    if (
+      !(await this.userContentService.getAuthorOfUserContent(userContentId))
+    ) {
+      throw new NotFoundException(
+        'User content ' + userContentId + " doesn't exist!",
+      );
+    }
+    return this.voteService.getVote(userContentId, userId);
+  }
+
+  /**
+   * returns Options for a user content of a user,
+   * does convert automatically to the proper type
+   * @param userId
+   * @param userContentId
+   * @private
+   */
+  private async getOpinionToUserContent(
+    userContentId: string,
+    userId?: string,
+  ): Promise<VOTE_OPTIONS_ENUM> {
+    if (userId) {
+      const rawOptions = await this.voteService.getOpinionToUserContent(
+        userContentId,
+        userId,
+      );
+      if (true == rawOptions) {
+        return VOTE_OPTIONS_ENUM.LIKE;
+      }
+      if (false == rawOptions) {
+        return VOTE_OPTIONS_ENUM.DISLIKE;
+      }
+    }
+    return VOTE_OPTIONS_ENUM.NONE;
   }
 }

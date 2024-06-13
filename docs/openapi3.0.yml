@@ -4,7 +4,6 @@ info:
   version: 1.0.0
   description: The API specification for the SimpleQ project
 servers:
-  - url: https://simpleq.local
   - url: http://localhost:3000
 
 components:
@@ -106,10 +105,10 @@ components:
     UpdateUser:
       type: object
       properties:
-        newName:
+        name:
           type: string
           description: 'New name for user'
-          default: false
+          default: ""
         # userStatus TODO
     
     Profile:
@@ -134,9 +133,9 @@ components:
           items:
             type: object
             properties:
-              tagName: 
+              tagname:
                 type: string
-              points: 
+              expertPoints:
                 type: integer
           description: 'list of topics, where the individual user is expert'
         userStatistics:
@@ -148,7 +147,9 @@ components:
               description: TODO
         activityPoints: 
           type: integer
-
+    Vote:
+      type: string
+      enum: ['like', 'dislike','none']
     Quest:
       type: object
       properties:
@@ -204,7 +205,55 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Question'
-  
+  /question/my:
+    get:
+      tags:
+        - questions
+      parameters:
+        - in: query
+          name: sortBy
+          required: false
+          description: Sort the answer by given criteria
+          schema:
+            type: string
+            enum: [ ldr, likes, dislikes, timestamp ]
+            default: ldr
+        - in: query
+          name: sortDirection
+          required: false
+          description: The direction of order, either ASC or DESC
+          schema:
+            type: string
+            enum: [ asc, desc ]
+            default: desc
+        - in: query
+          name: offset
+          required: false
+          description: Ignore x amount of answers
+          schema:
+            type: integer
+            default: 0
+        - in: query
+          name: limit
+          required: false
+          description: Limit the amount of answers
+          schema:
+            type: integer
+            default: 10
+            minimum: 0
+            maximum: 50
+      summary: Get your own questions
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+        '401':
+          description: 'Unauthorized, user needs to be logged in'
   /question/search/:
     get:
       tags:
@@ -275,11 +324,39 @@ paths:
           description: Successfully fetched a single question
           content:
             application/json: 
-              schema: 
-                $ref: '#/components/schemas/Question'
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Question'
+                  - type: object
+                    properties:
+                      isFavourite:
+                        type: boolean
         '404':
           description: Not found
-
+    delete:
+      summary: Delete the content of a single question
+      tags:
+        - questions
+      parameters:
+        - in: path
+          name: questionId
+          required: true
+          description: UUID of a question
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully deleted the content of this question
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: string
+        '404':
+          description: No question found with this id.
+        '401':
+          description: Unauthorized, user must be logged in
   /question/{questionId}/title:
     get: 
       tags:
@@ -303,7 +380,7 @@ paths:
                     type: string
         '404':
           description: Not found
-          
+  
   /question/{questionId}/answers:
     get: 
       tags:
@@ -421,11 +498,45 @@ paths:
           description: 'Unprocessable Entity: Payload is not sufficient'
         '404':
           description: 'Not Found'
-        '403':
+        '401':
           description: 'Forbidden, user needs to be registered'
         '406':
           description: 'Not Acceptable, used forbidden words in request'
 
+  /question/{questionId}/vote:
+    post:
+      tags:
+       - questions
+      summary: Vote for a question
+      parameters:
+        - in: path
+          name: questionId
+          required: true
+          description: UUID of a question
+          schema:
+            type: string
+      requestBody:
+        description: the data that needs to be send
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vote'
+      responses:
+        '200':
+          description: 'Successfully voted for question'
+          content:
+            application/json:
+              schema:
+                properties:
+                  id: 
+                    type: string
+        '422':
+          description: 'Unprocessable Entity: Payload is not sufficient'
+        '404':
+          description: 'Not Found'
+        '401':
+          description: 'Unauthorized, user needs to be registered'
 
   /tags/find:
     get: 
@@ -485,7 +596,7 @@ paths:
         '404':
           description: 'User does not exist'
   /profile/update:
-    put: 
+    post: 
       tags:
         - user
       summary: 'update profile information for this user'

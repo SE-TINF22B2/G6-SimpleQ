@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
 import {
@@ -11,8 +12,8 @@ import {
   UserContentType,
   Vote,
 } from '@prisma/client';
-import { PrismaService } from '../prisma.service';
 import { SORT_BY, SORT_DIRECTION } from '../../../config';
+import { PrismaService } from '../prisma.service';
 
 export type SortOptions = {
   sortBy: SortType;
@@ -216,6 +217,7 @@ export class UserContentService {
     if (null === userContents) {
       return null;
     }
+
     const questionsWithRating =
       await this.addRatingToUserContents(userContents);
     return this.sortBySortOptions(questionsWithRating, sortOptions);
@@ -257,6 +259,9 @@ export class UserContentService {
     switch (sortOptions.sortBy) {
       case SortType.ldr:
         array.sort((q) => {
+          if(q.likes == 0 && q.dislikes == 0) return 0;
+          if(q.likes == 0) return -1;
+          if(q.dislikes == 0) return 1;          
           return q.likes / q.dislikes;
         });
         break;
@@ -426,6 +431,11 @@ export class UserContentService {
     return this.sortBySortOptions(answersWithRating, sortOptions);
   }
 
+  /**
+   * get Answer of ID
+   * @param answerID
+   * @returns userContent and answer object
+   */
   async getAnswer(
     answerID: string,
   ): Promise<{ userContent: UserContent | null; answer: Answer | null }> {
@@ -439,6 +449,20 @@ export class UserContentService {
       userContent: userContent,
       answer: answer,
     };
+  }
+
+  /**
+   * check if user content does exist
+   * @param userContentID
+   * @returns Promise<boolean>
+   */
+  async checkUserContentIDExists(userContentID: string): Promise<boolean> {
+    const userContent: { userContentID: string } | null =
+      await this.prisma.userContent.findUnique({
+        where: { userContentID: userContentID },
+        select: { userContentID: true },
+      });
+    return userContent != null;
   }
 
   /**
@@ -489,8 +513,8 @@ export class UserContentService {
   /**
    * Counts the number of KI generated answers for a user
    * MAX number of KI generated answer for not prime user: 15
-   * @param groupID ID of the group from the Question/Discussion the Answer belongs to
    * @returns number - number of KI generated answers
+   * @param userID
    */
   async countAIAnswersForUser(userID: string): Promise<number> {
     const ownQuestion = await this.prisma.userContent.findMany({
