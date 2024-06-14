@@ -100,7 +100,8 @@
 			},
 			"answerEditor": {
 				"title": "Answer this question",
-				"placeholder": "Answer this question"
+				"placeholder": "Answer this question",
+				"noPermission": "As a guest you are not permitted to submit an answer."
 			}
 		}
 	}

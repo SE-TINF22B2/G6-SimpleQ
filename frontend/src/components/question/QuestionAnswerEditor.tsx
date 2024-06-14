@@ -71,7 +71,7 @@ export default function QuestionAnswerEditor(props: Props) {
 					</Button>
 				</>
 				: <Section>
-					<p>As a guest you are not permitted to submit an answer.</p>
+					<p>{ t('dashboard.questionView.answerEditor.noPermission') }</p>
 				</Section>
 			}
 		</div>
