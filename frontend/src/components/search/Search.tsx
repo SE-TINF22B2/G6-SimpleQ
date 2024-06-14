@@ -99,23 +99,18 @@ export default function Search(props: { isOpen: boolean, closeModal: () => void 
 			{ suggestions.map((suggestion, i) => <div key={ i } className={ "suggestion" } tabIndex={ 0 }>
 				<div className={ "suggestion-main" }>
 					<div className={ "suggestion-title" }>
-						{ suggestion.isDiscussion
-							? <span className={ "badge badge-outline" }>
-									<i className={ "fi fi-rr-comments-question" }
-									   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-									Discussion
-							</span>
-							: <span className={ "badge badge-outline" }>
-									<i className={ "fi fi-rr-interrogation" }
-									   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-									Question
-								</span>
-						}
-						<span className={ "suggestion-title-divider" }/>
 						<h2>{ suggestion.title }</h2>
-						<p className={ "badge" }>Tag2</p>
+						{ suggestion.tags.map((tag, index) => <p className={ "badge" } key={ index }>{ tag }</p>) }
 					</div>
 					<p className={ "caption suggestion-caption" }>
+						<span>
+							<i className={ suggestion.isDiscussion ? "fi fi-rr-comments-question" : "fi fi-rr-interrogation" }/>
+							{ suggestion.isDiscussion
+								? t('components.question.type.discussion')
+								: t('components.question.type.question')
+							}
+						</span>
+						<span>·</span>
 						<span>
 							<i className={ "fi fi-rr-clock" }/>
 							{ formatDate(suggestion.created) }

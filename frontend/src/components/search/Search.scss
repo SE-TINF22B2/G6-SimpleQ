@@ -29,13 +29,6 @@
 				display: flex;
 				align-items: center;
 				gap: var(--spacing);
-
-				.suggestion-title-divider {
-					align-self: stretch;
-					width: var(--outline-width);
-					border-radius: var(--border-radius);
-					background: var(--border-color);
-				}
 			}
 
 			.suggestion-caption {
