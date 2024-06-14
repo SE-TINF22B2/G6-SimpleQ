@@ -15,17 +15,27 @@ import { animateBlob } from "../../def/cool-blobs";
 import Search from "../../components/search/Search";
 import { ProfileDef } from "../../def/ProfileDef";
 import { Session } from "@ory/client";
+import { QuestionDef } from "../../def/QuestionDef";
 
+/**
+ * Props of the dashboard
+ * @param updateTheme Function used to update the theme of the entire app
+ * @param profile Profile of the user that is currently logged in
+ * @param session Session of the user
+ * @param logoutUrl Url to logout
+ * @param activeQuestion the question that is currently or has recently been visited
+ */
 interface Props {
 	updateTheme: (theme: "system" | "dark" | "light") => void,
 	profile?: ProfileDef,
 	session?: Session,
-	logoutUrl?: string
+	logoutUrl?: string,
+	activeQuestion?: QuestionDef
 }
 
 /**
  * Renders the dashboard consisting of a navigation and an outlet for subordinate pages
- * @param props.updateTheme Function used to update the theme of the entire app
+ * @param props Props of the dashboard
  */
 export default function Dashboard(props: Props) {
 	const alert = useAlert();
@@ -85,8 +95,8 @@ export default function Dashboard(props: Props) {
 						 items={ [
 							 {
 								 icon: "fi fi-rr-user",
-								 label: "Profile",
-								 shortcut: <span className={ "badge" }>Pro</span>,
+								 label: props.profile?.name ?? "Profile",
+								 shortcut: <span className={ "badge" }>{ props.profile?.type }</span>,
 								 onClick: (closeDropdown) => {
 									 navigate("/dashboard/profile");
 									 closeDropdown();
@@ -208,14 +218,19 @@ export default function Dashboard(props: Props) {
 				/>
 			</div>
 			
-			{ window.location.pathname.includes("/question") && <>
-                <NavLink to={ window.location.pathname } className={ "active navigate" }
+			{ props.activeQuestion && <>
+                <NavLink to={ "question/" + props.activeQuestion.id } className={ "navigate" }
                          onClick={ (e) => animateBlob(e) }>
                     <i className={ "fi fi-sr-question-square" }/>
-                    <p style={ { display: "flex", flexDirection: "column" } }>
-                        <span className={ "caption" }>{ t('dashboard.nav.question.browsing') }</span>
-                        <span>{ activeQuestionName ?? <Skeleton/> }</span>
-                    </p>
+                    <div className={ "nav-label" } style={ { display: "flex", flexDirection: "column" } }>
+                        <p className={ "caption" }>
+							{ window.location.pathname.includes("/question")
+								? t('dashboard.nav.question.browsing.currently', { type: props.activeQuestion.isDiscussion ? t('components.question.type.discussion') : t('components.question.type.question') })
+								: t('dashboard.nav.question.browsing.recently', { type: props.activeQuestion.isDiscussion ? t('components.question.type.discussion') : t('components.question.type.question') })
+							}
+                        </p>
+                        <p style={ { marginTop: -4 } }>{ props.activeQuestion.title }</p>
+                    </div>
                     <span className={ "button-blob" }/>
                 </NavLink>
                 
@@ -227,49 +242,49 @@ export default function Dashboard(props: Props) {
 			<NavLink to={ "trending" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-file-chart-line" }/>
-					<span>{ t('dashboard.nav.trending') }</span>
+					<span className={ "nav-label" }>{ t('dashboard.nav.trending') }</span>
 					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
 			<NavLink to={ "new" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-edit" }/>
-					<span>{ t('dashboard.nav.question.create') }</span>
+					<span className={ "nav-label" }>{ t('dashboard.nav.question.create') }</span>
 					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
 			<NavLink to={ "activity" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-vertical-history" }/>
-					<span>{ t('dashboard.nav.activity') }</span>
+					<span className={ "nav-label" }>{ t('dashboard.nav.activity') }</span>
 					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
 			<NavLink to={ "my" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-list" }/>
-					<span>{ t('dashboard.nav.my') }</span>
+					<span className={ "nav-label" }>{ t('dashboard.nav.my') }</span>
 					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
 			<NavLink to={ "b" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-star" }/>
-					<span>{ t('dashboard.nav.favorites') }</span>
+					<span className={ "nav-label" }>{ t('dashboard.nav.favorites') }</span>
 					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
 			<NavLink to={ "quests" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-treasure-chest" }/>
-					<span>{ t('dashboard.nav.quests') }</span>
+					<span className={ "nav-label" }>{ t('dashboard.nav.quests') }</span>
 					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
 			<NavLink to={ "d" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
 					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-envelope" }/>
-					<span>{ t('dashboard.nav.inbox') }</span>
+					<span className={ "nav-label" }>{ t('dashboard.nav.inbox') }</span>
 					<span className={ "button-blob" }/>
 					<span className={ "badge" }>3</span>
 				</> }

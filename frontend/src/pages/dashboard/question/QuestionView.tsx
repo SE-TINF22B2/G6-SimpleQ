@@ -19,12 +19,19 @@ import { Session } from "@ory/client";
 
 const ANSWERS_PAGE_SIZE = 5;
 
+/**
+ * The props for the question view
+ * @param session is used to determine user type specific features
+ * @param setActiveQuestion is a function to update the smart menu
+ */
 interface Props {
-	session?: Session
+	session?: Session,
+	setActiveQuestion: (question?: QuestionDef) => void
 }
 
 /**
  * Renders the question view
+ * @param props the props for the question view
  */
 export default function QuestionView(props: Props) {
 	const { id } = useParams();
@@ -69,7 +76,13 @@ export default function QuestionView(props: Props) {
 				  setQuestion(_question);
 			  })
 			  .catch(err => axiosError(err, alert));
-		
+	}, [alert, id]);
+	
+	useEffect(() => {
+		question && props.setActiveQuestion(question);
+	}, [question, props]);
+	
+	useEffect(() => {
 		setAnswersLoading(true);
 		global.axios.get("question/" + encodeURIComponent(id ?? "") + "/answers"
 			+ "?sortBy=" + encodeURIComponent(sortBy)
@@ -93,7 +106,8 @@ export default function QuestionView(props: Props) {
 			  })
 			  .catch(err => axiosError(err, alert))
 			  .finally(() => setAnswersLoading(false));
-	}, [id, navigate, alert, updateQuestion, sortBy, sortDirection, enableAI, answersPage]);
+		
+	}, [alert, answersPage, enableAI, id, sortBy, sortDirection]);
 	
 	const getSortByIcon = () => {
 		switch (sortBy) {

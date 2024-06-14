@@ -4,6 +4,7 @@ import React from "react";
 import Button from "../button/Button";
 import ButtonGroup from "../buttongroup/ButtonGroup";
 import { Session } from "@ory/client";
+import { useTranslation } from "react-i18next";
 
 /**
  * The props of the question title
@@ -24,6 +25,8 @@ interface Props {
  * @param props the props of the question title
  */
 export default function QuestionTitle(props: Props) {
+	const { t } = useTranslation();
+	
 	return <section style={ { width: "100%", display: "flex", flexDirection: "column", alignItems: "stretch" } }>
 		<div style={ {
 			display: "flex",
@@ -67,12 +70,12 @@ export default function QuestionTitle(props: Props) {
 						? <span className={ "badge badge-outline" }>
 							<i className={ "fi fi-rr-comments-question" }
 							   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-							Discussion
+							{ t('components.question.type.discussion') }
 						</span>
 						: <span className={ "badge badge-outline" }>
 							<i className={ "fi fi-rr-interrogation" }
 							   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-							Question
+							{ t('components.question.type.question') }
 						</span>
 					}
 					

@@ -23,6 +23,7 @@ import { ProfileDef } from "../def/ProfileDef";
 import { axiosError } from "../def/axios-error";
 import { useAlert } from "react-alert";
 import { Configuration, FrontendApi, Session } from "@ory/client";
+import { QuestionDef } from "../def/QuestionDef";
 
 // internationalization resources
 const resources = {
@@ -164,6 +165,8 @@ export default function App() {
 		? (themePreference === "light" ? "#f5f5f5" : "#101010")
 		: (theme === "light" ? "#f5f5f5" : "#101010");
 	
+	const [activeQuestion, setActiveQuestion] = React.useState<QuestionDef | undefined>(undefined);
+	
 	return <SkeletonTheme baseColor={ skeletonBaseColor }
 						  highlightColor={ skeletonHighlightColor }>
 		<ConsentBanner/>
@@ -176,13 +179,13 @@ export default function App() {
 			<Route path={ "dashboard" }
 				   element={ <Suspense fallback={ <p>Loading Dashboard..</p> }>
 					   <Dashboard updateTheme={ updateTheme } profile={ profile }
-								  session={ session } logoutUrl={ logoutUrl }/>
+								  session={ session } logoutUrl={ logoutUrl } activeQuestion={ activeQuestion }/>
 				   </Suspense> }>
 				<Route index element={ <Suspense><Navigate to={ "trending" }/></Suspense> }/>
 				<Route path={ "trending" }
 					   element={ <Suspense><Trending/></Suspense> }/>
 				<Route path={ "question/:id" } element={ <Suspense>
-					<QuestionView session={ session }/>
+					<QuestionView session={ session } setActiveQuestion={ setActiveQuestion }/>
 				</Suspense> }/>
 				<Route path={ "profile" }
 					   element={ <Suspense><Profile profile={ profile } setProfile={ setProfile }/></Suspense> }/>

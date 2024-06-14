@@ -13,6 +13,12 @@
 		},
 		"textEditor": {
 			"wordCount": "You have written {{count}} words."
+		},
+		"question": {
+			"type": {
+				"question": "Question",
+				"discussion": "Discussion"
+			}
 		}
 	},
 	"dashboard": {
@@ -20,7 +26,10 @@
 			"trending": "Trending Questions",
 			"question": {
 				"create": "Create Question",
-				"browsing": "Browsing Question / Discussion"
+				"browsing": {
+					"currently": "Browsing {{type}}",
+					"recently": "Recent {{type}}"
+				}
 			},
 			"activity": "Activity",
 			"my": "My Questions",
