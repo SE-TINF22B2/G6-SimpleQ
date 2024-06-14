@@ -56,7 +56,7 @@ export default function QuestionView(props: Props) {
 	const alert = useAlert();
 	
 	useEffect(() => {
-		global.axios.get("question/" + encodeURIComponent(id ?? ""))
+		global.axios.get("question/" + encodeURIComponent(id ?? ""), { withCredentials: true })
 			  .then(res => {
 				  let _question: QuestionDef = {
 					  answers: res.data.numberOfAnswers ?? 0,
@@ -71,7 +71,7 @@ export default function QuestionView(props: Props) {
 					  tags: res.data.tags ?? [],
 					  title: res.data.title ?? "",
 					  updated: res.data.updated ?? "",
-					  isFavorite: res.data.isFavorite ?? false
+					  isFavorite: res.data.isFavourite ?? false
 				  }
 				  setQuestion(_question);
 			  })
