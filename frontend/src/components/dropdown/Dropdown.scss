@@ -4,9 +4,9 @@
 	--dropdown-menu-item-height: 46px;
 	position: relative;
 	transition: var(--transition);
-	z-index: 200;
 
 	&.active {
+		z-index: 200;
 		filter: var(--bleed-shadow);
 
 		> .dropdown-button > * {

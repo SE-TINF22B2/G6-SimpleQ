@@ -2,19 +2,23 @@
 	position: relative;
 	transition: var(--transition);
 	width: 200px;
-	z-index: 200;
 
 	&:focus-within {
+		z-index: 200;
+
 		input {
 			outline-style: solid;
+			z-index: 201;
 		}
 
 		.selection-count {
 			opacity: 0;
+			z-index: 201;
 		}
 
 		.selection-activity {
 			opacity: 1;
+			z-index: 201;
 		}
 	}
 
@@ -48,7 +52,6 @@
 	.selection-activity,
 	.selection-count {
 		height: var(--ui-spacing);
-		z-index: 201;
 	}
 
 	.selection-activity,
