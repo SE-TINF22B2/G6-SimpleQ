@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import mockup from "../../images/macbook-mockup.png";
 
 // Todo: Make logo static!!!
-import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
+import logoTodoMakeStatic from "../../images/logo-transparent-TODO-MAKE-STATIC.png";
 import Button from "../../components/button/Button";
 
 import benni from "../../images/benni.png";
@@ -13,13 +13,17 @@ import joshua from "../../images/joshua.png";
 import leonard from "../../images/leonard.png";
 import manuel from "../../images/manuel.png";
 import tom from "../../images/tom.png";
+import Dropdown from "../../components/dropdown/Dropdown";
+import i18n from "i18next";
+import { useTranslation } from "react-i18next";
+import { capitalizeFirstLetter } from "../../def/converter";
 
 export default function Home(props: { updateTheme: (theme: "system" | "dark" | "light") => void }) {
+	const { t } = useTranslation();
+	
 	let blobs: (HTMLDivElement | null)[] = useMemo(() => [], []);
 	
 	const navigate = useNavigate();
-	const [currentThemeOnlyDisplay, setCurrentThemeOnlyDisplay] =
-		React.useState<"dark" | "light" | "system">((localStorage.getItem("theme") as "dark" | "light" || "system"));
 	
 	useEffect(() => {
 		const animateBlobs = () => {
@@ -69,58 +73,101 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					<a href={ "#plans" }>Plans</a>
 				</div>
 				
-				<Button icon={ "fi fi-rr-sign-in-alt" } onClick={ async () => {
-					window.location.href = "/login";
-				} }>Login</Button>
 				<Button icon={ "fi fi-rr-angle-right" } onClick={ async () => navigate("dashboard") }>Dashboard</Button>
 				
-				<Button
-					icon={ "fi fi-rr-" + (currentThemeOnlyDisplay === "system" ? "insight-alt" : currentThemeOnlyDisplay === "dark" ? "moon" : "sun") }
-					onClick={ async () => {
-						let theme: "dark" | "light" | "system" = (localStorage.getItem("theme") as "dark" | "light" || "system");
-						theme = theme === "dark" ? "light" : theme === "light" ? "system" : "dark";
-						setCurrentThemeOnlyDisplay(theme);
-						props.updateTheme(theme);
-					} }>
-					{ currentThemeOnlyDisplay }
-				</Button>
+				<Dropdown button={ <Button icon={ "fi fi-rr-gears" }>Appearance</Button> }
+						  items={ [
+							  {
+								  icon: "fi fi-rr-language",
+								  label: t('dashboard.appearance.language.language'),
+								  shortcut: i18n.language,
+								  items: [
+									  {
+										  icon: "fi fi-rr-globe",
+										  label: t('dashboard.appearance.language.english'),
+										  onClick: () => i18n.changeLanguage("en"),
+										  shortcut: i18n.language === "en" ?
+											  <i className={ "fi fi-rr-check" }/> : ""
+									  },
+									  {
+										  icon: "fi fi-rr-globe",
+										  label: t('dashboard.appearance.language.german'),
+										  onClick: () => i18n.changeLanguage("de"),
+										  shortcut: i18n.language === "de" ?
+											  <i className={ "fi fi-rr-check" }/> : ""
+									  }
+								  ]
+							  },
+							  {
+								  icon: "fi fi-rr-brush",
+								  label: t('dashboard.appearance.theme.theme'),
+								  shortcut: capitalizeFirstLetter(localStorage.getItem("theme") || "system"),
+								  items: [
+									  {
+										  icon: "fi fi-rr-insight-alt",
+										  label: t('dashboard.appearance.theme.system'),
+										  onClick: () => props.updateTheme("system"),
+										  shortcut: !localStorage.getItem("theme")
+										  || localStorage.getItem("theme") === "system" ?
+											  <i className={ "fi fi-rr-check" }/> : "",
+										  divider: "bottom"
+									  },
+									  {
+										  icon: "fi fi-rr-moon",
+										  label: t('dashboard.appearance.theme.dark'),
+										  onClick: () => props.updateTheme("dark"),
+										  shortcut: localStorage.getItem("theme") === "dark" ?
+											  <i className={ "fi fi-rr-check" }/> : ""
+									  },
+									  {
+										  icon: "fi fi-rr-sun",
+										  label: t('dashboard.appearance.theme.light'),
+										  onClick: () => props.updateTheme("light"),
+										  shortcut: localStorage.getItem("theme") === "light" ?
+											  <i className={ "fi fi-rr-check" }/> : ""
+									  }
+								  ]
+							  }
+						  ] }/>
 			</div>
 		</nav>
 		
 		<main>
 			<section className={ "page" }>
-				<div className={ "home-bg-blob" } ref={ b => blobs.push(b) } style={ {
-					top: "calc(var(--header-height) + 10%)",
-					left: "10%",
-					borderRadius: "47% 53% 67% 33% / 13% 62% 38% 87%",
-					opacity: 0.6,
-					background: "linear-gradient(to right, var(--primary-color), transparent), url(https://grainy-gradients.vercel.app/noise.svg)"
-				} }/>
-				<div className={ "home-bg-blob" } ref={ b => blobs.push(b) } style={ {
-					top: "calc(var(--header-height) + 20%)",
-					left: "30%",
-					borderRadius: "63% 37% 23% 77% / 53% 62% 38% 47%",
-					background: "linear-gradient(to left, var(--background-color-glass-simp), transparent), url(https://grainy-gradients.vercel.app/noise.svg)"
-				} }/>
-				
-				<img src={ mockup } alt={ "Dashboard" }/>
-				
-				<div>
-					<h1 className={ "title" }>
-						Try Our Q&A Platform<br/>
-						powered by <span className={ "highlight" }>AI</span>
-					</h1>
-					<div style={ { display: "flex", gap: "var(--spacing)", alignItems: "center" } }>
-						<h2>You don't believe us?</h2>
-						<Button buttonStyle={ "primary" }>Try Yourself!</Button>
-						<Button icon={ "fi fi-brands-github" }
-								onClick={ async () => {
-									window.open("https://github.com/SE-TINF22B2/G6-SimpleQ", "_blank");
-								} }>
-							Learn More on GitHub
-						</Button>
+				<div className={ "left" }>
+					<div style={ { position: "relative" } }>
+						<div className={ "home-bg-blob" } ref={ b => blobs.push(b) } style={ {
+							top: "-30%",
+							left: "-20%",
+							borderRadius: "47% 53% 67% 33% / 13% 62% 38% 87%",
+							opacity: 0.6,
+							background: "linear-gradient(to right, var(--primary-color), transparent), url(https://grainy-gradients.vercel.app/noise.svg)"
+						} }/>
+						<div className={ "home-bg-blob" } ref={ b => blobs.push(b) } style={ {
+							top: "0%",
+							left: "40%",
+							borderRadius: "63% 37% 23% 77% / 53% 62% 38% 47%",
+							background: "linear-gradient(to left, var(--background-color-glass-simp), transparent), url(https://grainy-gradients.vercel.app/noise.svg)"
+						} }/>
+						
+						<h1 className={ "title" }>
+							Try Our Q&A Platform<br/>
+							powered by <span className={ "highlight" }>AI</span>
+						</h1>
+						<div style={ { display: "flex", gap: "var(--spacing)", alignItems: "center" } }>
+							<h2>You don't believe us?</h2>
+							<Button buttonStyle={ "primary" }>Try Yourself!</Button>
+							<Button icon={ "fi fi-brands-github" }
+									onClick={ async () => {
+										window.open("https://github.com/SE-TINF22B2/G6-SimpleQ", "_blank");
+									} }>
+								Learn More on GitHub
+							</Button>
+						</div>
 					</div>
 				</div>
+				
+				<img src={ mockup } alt={ "Dashboard" }/>
 			</section>
 			
 			<section className={ "page" } id={ "features" }>
@@ -130,7 +177,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					<p className={ "page-summary fade-in" }>
 						We offer a wide range of features to help you with your daily tasks.
 					</p>
-					<Button buttonStyle={ "primary" } className={ "fade-in" }>
+					<Button buttonStyle={ "primary" } className={ "fade-in" }
+							onClick={ async () => navigate("dashboard") }>
 						Try Yourself!
 					</Button>
 					

@@ -16,6 +16,7 @@ import Search from "../../components/search/Search";
 import { ProfileDef } from "../../def/ProfileDef";
 import { Session } from "@ory/client";
 import { QuestionDef } from "../../def/QuestionDef";
+import { capitalizeFirstLetter } from "../../def/converter";
 
 /**
  * Props of the dashboard
@@ -62,10 +63,6 @@ export default function Dashboard(props: Props) {
 		document.addEventListener("keydown", onKeyDown);
 		return () => document.removeEventListener("keydown", onKeyDown);
 	}, [alert]);
-	
-	const capitalizeFirstLetter = (string: string) => {
-		return string.charAt(0).toUpperCase() + string.slice(1);
-	}
 	
 	const getSearchShortcut = () => {
 		let isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;

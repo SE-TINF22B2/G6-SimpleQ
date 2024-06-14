@@ -1,9 +1,8 @@
 .home {
 	nav {
-		background: var(--primary-color);
-		// backdrop-filter: blur(6px);
-		height: var(--header-height);
-		overflow: hidden;
+		background: var(--background-color-glass);
+		backdrop-filter: blur(2px);
+		height: calc(var(--spacing) + var(--ui-spacing));
 		position: fixed;
 		top: 0;
 		width: 100%;
@@ -37,13 +36,13 @@
 
 			.pages a {
 				border-radius: var(--border-radius);
-				color: var(--primary-color-contrast);
+				// color: var(--primary-color-contrast);
 				outline-offset: var(--outline-width);
 				position: relative;
 				text-decoration: none;
 
 				&::after {
-					background: var(--primary-color-contrast);
+					background: var(--border-color);
 					bottom: 0;
 					content: "";
 					height: var(--outline-width);
@@ -71,8 +70,8 @@
 		.home-bg-blob {
 			position: absolute;
 			z-index: -1;
-			height: 40% !important;
-			width: 40% !important;
+			height: 80% !important;
+			width: 80% !important;
 		}
 
 		.page {
@@ -134,19 +133,95 @@
 
 			// first page
 			&:first-child {
+				height: 100vh;
+
 				overflow: hidden;
+
+				display: flex;
+				flex-direction: row;
+				align-items: stretch;
+
+				justify-content: center;
+				margin: 0 !important;
+
 				position: relative;
 
-				img {
+				.left {
+					z-index: 2;
+
+					display: grid;
+					place-items: center;
+					padding-inline: var(--spacing);
+
+					white-space: nowrap;
+
+					*:not(button *) {
+						transform: none !important;
+					}
+
+					position: absolute;
+					width: 70%;
+					top: 50%;
+					transform: translateY(-60%);
+					left: 5%;
+
+					.title {
+						font-size: max(4vw, 4rem);
+						margin-bottom: 8vh;
+						margin-top: 1vh;
+					}
+				}
+
+				> img {
+
+					object-fit: cover;
+					overflow-y: visible;
+					object-position: left center;
+					z-index: -1;
+
+					position: absolute;
+					width: 50%;
+					height: 100%;
+					top: 0;
+					right: 0;
+					padding: calc(var(--spacing) * 4);
+
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+				}
+
+				/*position: relative;
+
+				> .left {
+					position: absolute;
+					width: 50%;
+					height: 100%;
+					left: 100px;
+					padding: calc(var(--spacing) * 4);
+
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+
+					border-radius: 0 !important;
+
+					border: 1px solid red;
+
+				}
+
+				> img:last-child {
+					position: absolute;
 					height: 100%;
 					width: 50%;
 					object-fit: cover;
 					object-position: 0 0;
 					bottom: 0;
-					position: absolute;
 					right: 0;
 					z-index: -2;
-				}
+				}*/
 			}
 
 			.title {
