@@ -13,7 +13,7 @@ export interface IQuestion extends IUserContent {
   title: string;
   tags: string[];
   numberOfAnswers: number;
-  updated: Date;
+  updated: string;
   author: {
     id: string;
     name: string;

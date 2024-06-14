@@ -607,26 +607,4 @@ export class UserContentService {
       discussion: discussion,
     };
   }
-
-  /**
-   * searches the group to the latest element, which was modified
-   * takes the latest element and returns
-   * If nothing is found it return null
-   * @param groupId
-   * @return Date
-   */
-  async getLastUpdate(groupId: string): Promise<Date | null> {
-    const lastDate =  await this.prisma.userContent.findFirst({
-      where: {
-        groupID: groupId
-      },
-      orderBy: {
-        timeOfCreation: 'desc'
-      },
-      select: {
-        timeOfCreation: true,
-      }
-    })
-    return lastDate? lastDate.timeOfCreation: null
-  }
 }

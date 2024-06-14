@@ -153,14 +153,8 @@ export class UserContentRequestService {
     ) {
       const rawTags =
         await this.userContentService.getTagsOfUserContent(userContentId);
-      const lastUpdated: Date =
-        (await this.userContentService.getLastUpdate(
-          result.userContent?.groupID,
-        )) ?? result.userContent.timeOfCreation;
-
       (response as IQuestion).tags = rawTags?.map((tag) => tag.tagname) ?? [];
       (response as IQuestion).title = result.question?.title ?? '--';
-      (response as IQuestion).updated = lastUpdated;
     }
 
     if (includeFavouriteTag && userId) {
