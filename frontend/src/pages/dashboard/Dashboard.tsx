@@ -253,70 +253,73 @@ export default function Dashboard(props: Props) {
 					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "activity" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-vertical-history" }/>
-					<span className={ "nav-label" }>{ t('dashboard.nav.activity') }</span>
-					<span className={ "button-blob" }/>
-				</> }
-			</NavLink>
-			<NavLink to={ "my" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-list" }/>
-					<span className={ "nav-label" }>{ t('dashboard.nav.my') }</span>
-					<span className={ "button-blob" }/>
-				</> }
-			</NavLink>
-			<NavLink to={ "b" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-star" }/>
-					<span className={ "nav-label" }>{ t('dashboard.nav.favorites') }</span>
-					<span className={ "button-blob" }/>
-				</> }
-			</NavLink>
-			<NavLink to={ "quests" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-treasure-chest" }/>
-					<span className={ "nav-label" }>{ t('dashboard.nav.quests') }</span>
-					<span className={ "button-blob" }/>
-				</> }
-			</NavLink>
-			<NavLink to={ "d" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-envelope" }/>
-					<span className={ "nav-label" }>{ t('dashboard.nav.inbox') }</span>
-					<span className={ "button-blob" }/>
-					<span className={ "badge" }>3</span>
-				</> }
-			</NavLink>
 			
-			<div style={ { flex: 1 } }/>
-			<div style={ { paddingInline: "var(--spacing)" } }>
-				<hr/>
-				<p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
-					{ t('dashboard.nav.stats') }
-				</p>
-				<div className={ "stats" }>
-					<div className={ "stats-column" }>
-						<i className={ "fi fi-rr-flame primary-icon" }/>
-						<span>{ undefined ?? <Skeleton width={ 20 }/> }</span>
-					</div>
-					<div className={ "stats-column" }>
-						<i className={ "fi fi-rr-eye primary-icon" }/>
-						<span>{ undefined ?? <Skeleton width={ 20 }/> }</span>
-					</div>
-					<div className={ "stats-column" }>
-						<i className={ "fi fi-rr-social-network primary-icon" }/>
-						<span>{ undefined ?? <Skeleton width={ 20 }/> }</span>
-					</div>
-				</div>
-				
-				<hr/>
-				<p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
-					{ t('dashboard.nav.activeDays') }
-				</p>
-				<BarChart/>
-			</div>
+			{ props.session !== undefined && <>
+                <NavLink to={ "activity" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+					{ ({ isActive }) => <>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-vertical-history" }/>
+						<span className={ "nav-label" }>{ t('dashboard.nav.activity') }</span>
+						<span className={ "button-blob" }/>
+					</> }
+                </NavLink>
+                <NavLink to={ "my" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+					{ ({ isActive }) => <>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-list" }/>
+						<span className={ "nav-label" }>{ t('dashboard.nav.my') }</span>
+						<span className={ "button-blob" }/>
+					</> }
+                </NavLink>
+                <NavLink to={ "b" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+					{ ({ isActive }) => <>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-star" }/>
+						<span className={ "nav-label" }>{ t('dashboard.nav.favorites') }</span>
+						<span className={ "button-blob" }/>
+					</> }
+                </NavLink>
+                <NavLink to={ "quests" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+					{ ({ isActive }) => <>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-treasure-chest" }/>
+						<span className={ "nav-label" }>{ t('dashboard.nav.quests') }</span>
+						<span className={ "button-blob" }/>
+					</> }
+                </NavLink>
+                <NavLink to={ "d" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+					{ ({ isActive }) => <>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-envelope" }/>
+						<span className={ "nav-label" }>{ t('dashboard.nav.inbox') }</span>
+						<span className={ "button-blob" }/>
+						<span className={ "badge" }>3</span>
+					</> }
+                </NavLink>
+                
+                <div style={ { flex: 1 } }/>
+                <div style={ { paddingInline: "var(--spacing)" } }>
+                    <hr/>
+                    <p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
+						{ t('dashboard.nav.stats') }
+                    </p>
+                    <div className={ "stats" }>
+                        <div className={ "stats-column" }>
+                            <i className={ "fi fi-rr-flame primary-icon" }/>
+                            <span>{ undefined ?? <Skeleton width={ 20 }/> }</span>
+                        </div>
+                        <div className={ "stats-column" }>
+                            <i className={ "fi fi-rr-eye primary-icon" }/>
+                            <span>{ undefined ?? <Skeleton width={ 20 }/> }</span>
+                        </div>
+                        <div className={ "stats-column" }>
+                            <i className={ "fi fi-rr-social-network primary-icon" }/>
+                            <span>{ undefined ?? <Skeleton width={ 20 }/> }</span>
+                        </div>
+                    </div>
+                    
+                    <hr/>
+                    <p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
+						{ t('dashboard.nav.activeDays') }
+                    </p>
+                    <BarChart/>
+                </div>
+            </> }
 		</nav>
 		
 		<main>
