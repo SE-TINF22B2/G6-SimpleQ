@@ -72,12 +72,12 @@ export class UserContentRequestService {
   async getQuestionsOfUser(
     userId: string,
     sortOptions: QueryParameters,
-  ): Promise<object[] | null> {
+  ): Promise<IQuestion[] | null> {
     if (!userId || !(await this.userService.userIdExists(userId))) {
       throw new NotFoundException('User id does not exist.');
     }
 
-    return this.userContentService.getQuestionsOfUser(
+    const questions = await this.userContentService.getQuestionsOfUser(
       userId,
       createSortOptions(
         sortOptions.sortBy,
@@ -86,6 +86,22 @@ export class UserContentRequestService {
         sortOptions.limit,
       ),
     );
+
+    if (null === questions) {
+      return [];
+    }
+
+    const results: IQuestion[] = [];
+    for (let i = 0; i < questions.length; i++) {
+      results.push(
+        (await this.getUserContent(
+          questions[i].userContentID,
+          UserContentType.Question,
+          userId,
+        )) as IQuestion,
+      );
+    }
+    return results;
   }
 
   /**
