@@ -94,7 +94,7 @@ export class FavouritesController {
       return {
         contentID: favouriteData.contentID,
         favouriteUserID: favouriteData.favoriteUserID,
-        favouritesLeft,
+        moreFavouritesAllowed: favouritesLeft < 0 ? 0 : favouritesLeft - 1,
       };
     } catch (Exception) {
       throw new InternalServerErrorException();
@@ -143,10 +143,28 @@ export class FavouritesController {
       return {
         contentID: favouriteData.contentID,
         favouriteUserID: favouriteData.favoriteUserID,
-        favouritesLeft,
+        moreFavouritesAllowed: favouritesLeft < 0 ? 0 : favouritesLeft,
       };
     } catch (Exception) {
       throw new InternalServerErrorException();
     }
+  }
+
+  @Get('/remaining')
+  async getQuestion(@Req() req: any) {
+    const userId = req.userId;
+    // authorization
+    if (!(await this.userService.userIdExists(userId))) {
+      throw new UnauthorizedException(
+        'This feature is only for registered or pro users',
+      );
+    }
+    const remaining_raw =
+      FAVOURITE_LIMIT -
+      ((await this.userService.isProUser(userId))
+        ? Number.NaN
+        : await this.favoriteService.getAmountOfFavourites(userId));
+    const remaining = remaining_raw < 0 ? 0 : remaining_raw;
+    return { moreFavouritesAllowed: remaining };
   }
 }

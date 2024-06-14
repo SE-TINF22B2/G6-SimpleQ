@@ -120,7 +120,7 @@ components:
         favouriteUserID:
           type: string
           description: uuid of user
-        favouritesLeft:
+        moreFavouritesAllowed:
           type: integer
           description: amount favourites which can be added by this user
 
@@ -650,6 +650,25 @@ paths:
                   $ref: '#/components/schemas/Question'
         '401':
           description: 'Unauthorized'
+  /favourites/remaining:
+    get:
+      tags:
+        -favourites
+      summary: 'get how many favourites you can add till the maximum is reached. Null represents infinite.'
+      responses:
+        '200':
+          description: 'Ok'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  moreFavouritesAllowed:
+                    type: number
+                    nullable: true
+        '401':
+          description: 'Unauthorized'
+
   /favourites/{questionId}: 
     post: 
       tags:
