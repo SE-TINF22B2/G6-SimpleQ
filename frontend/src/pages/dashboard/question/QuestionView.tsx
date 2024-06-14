@@ -279,9 +279,9 @@ export default function QuestionView(props: Props) {
         </> }
 		
 		{ !answersLoading
-			? answers.map((answer, index) =>
+			? answers.map(answer =>
 				<QuestionAnswer session={ props.session }
-								answer={ answer } key={ index }
+								answer={ answer } key={ answer.id }
 								setActiveProfile={ setActiveAuthorId }
 								postVote={ async (vote) => await submitVote(vote, answer.id) }/>)
 			: <>

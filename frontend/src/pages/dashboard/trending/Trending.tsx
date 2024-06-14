@@ -170,13 +170,13 @@ export default function Trending(props: {}) {
 		
 		{ previewStyle === "normal" && (questions
 				? questions.map((question, index) => <QuestionPreview question={ question } index={ index }
-																	  key={ index }/>)
+																	  key={ question.id }/>)
 				: <QuestionPreviewSkeleton count={ 3 }/>
 		) }
 		
 		{ previewStyle === "small" && <SectionGrid>
 			{ questions
-				? questions.map((question, index) => <QuestionPreviewSmall question={ question } key={ index }/>)
+				? questions.map(question => <QuestionPreviewSmall question={ question } key={ question.id }/>)
 				: <>
 					<QuestionPreviewSmall/>
 					<QuestionPreviewSmall/>
