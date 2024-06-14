@@ -110,6 +110,20 @@ components:
           description: 'New name for user'
           default: ""
         # userStatus TODO
+
+    Favourites:
+      type: object
+      properties:
+        contentID:
+          type: string
+          description: uuid of content
+        favouriteUserID:
+          type: string
+          description: uuid of user
+        favouritesLeft:
+          type: integer
+          description: amount favourites which can be added by this user
+
     
     Profile:
       type: object
@@ -654,7 +668,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Question'
+                $ref: '#/components/schemas/Favourites'
+        '304':
+          description: 'Not Modified'
         '401':
           description: 'Unauthorized'
         '403':
@@ -674,6 +690,12 @@ paths:
       responses:
         '200': 
           description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favourites'
+        '304':
+          description: 'Not Modified'
         '401':
           description: 'Unauthorized'
         '404':

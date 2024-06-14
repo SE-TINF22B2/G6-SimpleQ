@@ -2,18 +2,22 @@ import {
   Controller,
   Delete,
   Get,
-  HttpStatus,
   InternalServerErrorException,
   NotFoundException,
   Param,
   ParseUUIDPipe,
   Post,
   Req,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { FavoriteService } from '../../database/favorite/favorite.service';
 import { Favorite } from '@prisma/client';
 import { UserContentService } from '../../database/user-content/user-content.service';
-import { HttpException } from '@nestjs/common/exceptions/http.exception';
+import { UserService } from '../../database/user/user.service';
+import { FAVOURITE_LIMIT } from '../../../config';
+import { NotModifiedException } from '../exception-handling/NotModifiedException';
+import { PaymentRequiredException } from '../exception-handling/PaymentRequiredException';
+import { IFavouritesInterface } from './favourites-interface';
 
 @Controller('favourites')
 export class FavouritesController {
@@ -21,6 +25,7 @@ export class FavouritesController {
     //     private readonly services
     private readonly favoriteService: FavoriteService,
     private readonly userContentService: UserContentService,
+    private readonly userService: UserService,
   ) {}
 
   /**
@@ -46,23 +51,51 @@ export class FavouritesController {
    * @throws NotFoundException - if question not found
    * @throws NOT MODIFIED - if favourite already exist
    * @throws InternalServerError - if another error occurs
+   * @throws PaymentRequiredException - if favourite limit is reached
    */
   @Post(':questionID')
   async addFavourite(
     @Req() req: any,
     @Param('questionID', new ParseUUIDPipe()) questionID: string,
-  ) {
+  ): Promise<IFavouritesInterface> {
     const userId = req.userId;
-
+    // authorization
+    if (!(await this.userService.userIdExists(userId))) {
+      throw new UnauthorizedException(
+        'This feature is only for registered or pro users',
+      );
+    }
+    // precondition
     if (!(await this.userContentService.checkUserContentIDExists(questionID))) {
       throw new NotFoundException('Question not found!');
     }
     if (await this.favoriteService.isFavouriteOfUser(userId, questionID)) {
-      throw new HttpException('Not Modified', HttpStatus.NOT_MODIFIED);
+      throw new NotModifiedException();
     }
 
+    // Favourite Limit for non-Pro users
+    let favouritesLeft: number;
+    if (!(await this.userService.isProUser(userId))) {
+      favouritesLeft =
+        FAVOURITE_LIMIT -
+        (await this.favoriteService.getAmountOfFavourites(userId));
+      if (0 >= favouritesLeft) {
+        throw new PaymentRequiredException();
+      }
+    } else {
+      favouritesLeft = Number.NaN;
+    }
+    // creation
     try {
-      return await this.favoriteService.createFavorite(userId, questionID);
+      const favouriteData = await this.favoriteService.createFavorite(
+        userId,
+        questionID,
+      );
+      return {
+        contentID: favouriteData.contentID,
+        favouriteUserID: favouriteData.favoriteUserID,
+        favouritesLeft,
+      };
     } catch (Exception) {
       throw new InternalServerErrorException();
     }
@@ -80,16 +113,38 @@ export class FavouritesController {
   async removeFavourite(
     @Param('questionID', new ParseUUIDPipe()) questionID: string,
     @Req() req: any,
-  ): Promise<{ favoriteUserID: string; contentID: string }> {
+  ): Promise<IFavouritesInterface> {
     const userId = req.userId;
+    // authorization
+    if (!(await this.userService.userIdExists(userId))) {
+      throw new UnauthorizedException(
+        'This feature is only for registered or pro users',
+      );
+    }
+    // precondition
     if (!(await this.userContentService.checkUserContentIDExists(questionID))) {
       throw new NotFoundException('Question not found!');
     }
     if (!(await this.favoriteService.isFavouriteOfUser(userId, questionID))) {
-      throw new HttpException('Not Modified', HttpStatus.NOT_MODIFIED);
+      throw new NotModifiedException();
     }
+    // deletion
     try {
-      return await this.favoriteService.deleteFavorite(userId, questionID);
+      const favouriteData = await this.favoriteService.deleteFavorite(
+        userId,
+        questionID,
+      );
+      const favouritesLeft =
+        FAVOURITE_LIMIT -
+        ((await this.userService.isProUser(userId))
+          ? Number.NaN
+          : await this.favoriteService.getAmountOfFavourites(userId));
+
+      return {
+        contentID: favouriteData.contentID,
+        favouriteUserID: favouriteData.favoriteUserID,
+        favouritesLeft,
+      };
     } catch (Exception) {
       throw new InternalServerErrorException();
     }
