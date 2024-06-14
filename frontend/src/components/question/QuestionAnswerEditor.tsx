@@ -3,12 +3,23 @@ import Section from "../section/Section";
 import TextEditor from "../texteditor/TextEditor";
 import Button from "../button/Button";
 import { useTranslation } from "react-i18next";
+import { Session } from "@ory/client";
+
+/**
+ * The props of the question answer editor
+ * @param session used to disable answering a question for guests
+ * @param onSubmit of the text editor
+ */
+interface Props {
+	session?: Session,
+	onSubmit?: (content: string) => Promise<void>
+}
 
 /**
  * Renders the answer editor to be displayed in the question view
- * @param props onSubmit of the text editor
+ * @param props The props of the question answer editor
  */
-export default function QuestionAnswerEditor(props: { onSubmit?: (content: string) => Promise<void> }) {
+export default function QuestionAnswerEditor(props: Props) {
 	const { t } = useTranslation()
 	
 	const [hasBeenSubmitted, setHasBeenSubmitted] = React.useState(false);
@@ -37,18 +48,26 @@ export default function QuestionAnswerEditor(props: { onSubmit?: (content: strin
 				{ t('dashboard.questionView.answerEditor.title') }
 			</h2>
 			
-			<TextEditor placeholder={ t('dashboard.questionView.answerEditor.placeholder') } onInput={ setContent }
-						disabled={ hasBeenSubmitted }/>
-			
-			<div style={ { marginTop: "var(--spacing)" } }/>
-			<Button buttonStyle={ "primary" } icon={ "fi fi-rr-paper-plane" }
-					onClick={ async () => {
-						setHasBeenSubmitted(true);
-						if (props.onSubmit) await props.onSubmit(content);
-						setHasBeenSubmitted(false);
-					} }>
-				Submit
-			</Button>
+			{ props.session?.identity !== undefined
+				? <>
+					<TextEditor placeholder={ t('dashboard.questionView.answerEditor.placeholder') }
+								onInput={ setContent }
+								disabled={ hasBeenSubmitted }/>
+					
+					<div style={ { marginTop: "var(--spacing)" } }/>
+					<Button buttonStyle={ "primary" } icon={ "fi fi-rr-paper-plane" }
+							onClick={ async () => {
+								setHasBeenSubmitted(true);
+								if (props.onSubmit) await props.onSubmit(content);
+								setHasBeenSubmitted(false);
+							} }>
+						Submit
+					</Button>
+				</>
+				: <Section>
+					<p>As a guest you are not permitted to submit an answer.</p>
+				</Section>
+			}
 		</div>
 	</Section>
 }

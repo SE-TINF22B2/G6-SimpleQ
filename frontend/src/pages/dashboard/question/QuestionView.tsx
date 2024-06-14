@@ -15,13 +15,18 @@ import { QuestionPaginationNext, QuestionPaginationPrev } from "../../../compone
 import QuestionDivider from "../../../components/question/QuestionDivider";
 import QuestionAnswerEditor from "../../../components/question/QuestionAnswerEditor";
 import ActiveProfileModal from "../../../components/ActiveProfileModal";
+import { Session } from "@ory/client";
 
 const ANSWERS_PAGE_SIZE = 5;
+
+interface Props {
+	session?: Session
+}
 
 /**
  * Renders the question view
  */
-export default function QuestionView() {
+export default function QuestionView(props: Props) {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	
@@ -165,7 +170,8 @@ export default function QuestionView() {
 		<ActiveProfileModal activeProfileId={ activeAuthorId } isOwner={ false }
 							closeModal={ () => setActiveAuthorId(undefined) }/>
 		
-		<QuestionTitle question={ question }
+		<QuestionTitle session={ props.session }
+					   question={ question }
 					   toggleFavorite={ toggleFavorite }
 					   postVote={ async (vote) => await submitVote(vote) }/>
 		
@@ -260,7 +266,8 @@ export default function QuestionView() {
 		
 		{ !answersLoading
 			? answers.map((answer, index) =>
-				<QuestionAnswer answer={ answer } key={ index }
+				<QuestionAnswer session={ props.session }
+								answer={ answer } key={ index }
 								setActiveProfile={ setActiveAuthorId }
 								postVote={ async (vote) => await submitVote(vote, answer.id) }/>)
 			: <>
@@ -284,7 +291,7 @@ export default function QuestionView() {
         </> }
 		
 		<QuestionSectionTitle/>
-		<QuestionAnswerEditor onSubmit={ async (content) => {
+		<QuestionAnswerEditor session={ props.session } onSubmit={ async (content) => {
 			await global.axios.post("question/" + encodeURIComponent(id ?? "") + "/answer",
 				{ content }, { withCredentials: true })
 						.then(_ => {

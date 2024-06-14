@@ -8,15 +8,27 @@ import { formatDate } from "../../def/converter";
 import sanitizeHtml from 'sanitize-html';
 import ButtonGroup from "../buttongroup/ButtonGroup";
 import Button from "../button/Button";
+import { Session } from "@ory/client";
+
+/**
+ * Props of the answer
+ * @param session to determine whether a user can like / dislike an answer
+ * @param answer holds the answer
+ * @param setActiveProfile function to be executed once the author's name is clicked
+ * @param postVote function to up- or downvote this answer
+ */
+interface Props {
+	session?: Session,
+	answer?: AnswerDef,
+	setActiveProfile?: (authorId: string) => void,
+	postVote?: (vote: "like" | "dislike") => Promise<void>
+}
 
 /**
  * Renders an answer to be displayed in QuestionView
- * @param props holds the answer and a function to be executed once the author's name is clicked
+ * @param props props of the answer
  */
-export default function QuestionAnswer(props: {
-	answer?: AnswerDef, setActiveProfile?: (authorId: string) => void,
-	postVote?: (vote: "like" | "dislike") => Promise<void>
-}) {
+export default function QuestionAnswer(props: Props) {
 	const { t } = useTranslation();
 	
 	return <Section className={ "transparent" } style={ { alignItems: "stretch" } }>
@@ -89,13 +101,15 @@ export default function QuestionAnswer(props: {
 		<ButtonGroup vertical style={ { alignSelf: "flex-end" } }>
 			{ props.answer ? <Button slim icon={ "fi fi-rr-social-network" } style={ { width: 100 } }
 									 buttonStyle={ props.answer?.opinion === "dislike" ? "primary" : "glass" }
-									 onClick={ async () => props.postVote && await props.postVote("like") }>
+									 onClick={ async () => props.postVote && await props.postVote("like") }
+									 disabled={ props.session?.identity === undefined }>
 				{ props.answer?.likes }
 			</Button> : <Skeleton width={ 100 }/> }
 			
 			{ props.answer ? <Button slim icon={ "fi fi-rr-social-network flipY" } style={ { width: 100 } }
 									 buttonStyle={ props.answer?.opinion === "dislike" ? "primary" : "glass" }
-									 onClick={ async () => props.postVote && await props.postVote("dislike") }>
+									 onClick={ async () => props.postVote && await props.postVote("dislike") }
+									 disabled={ props.session?.identity === undefined }>
 				{ props.answer?.dislikes }
 			</Button> : <Skeleton width={ 100 }/> }
 		</ButtonGroup>

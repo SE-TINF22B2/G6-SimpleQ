@@ -7,8 +7,6 @@ import i18n from "i18next";
 
 /* Todo: Make Logo Static */
 import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
-
-import { Configuration, FrontendApi, Session } from "@ory/client"
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
 import { useAlert } from "react-alert";
@@ -16,21 +14,13 @@ import Avatar from "../../components/avatar/Avatar";
 import { animateBlob } from "../../def/cool-blobs";
 import Search from "../../components/search/Search";
 import { ProfileDef } from "../../def/ProfileDef";
-
-// ory setup
-const basePath = "http://localhost:4000"
-const ory = new FrontendApi(
-	new Configuration({
-		basePath,
-		baseOptions: {
-			withCredentials: true,
-		},
-	}),
-)
+import { Session } from "@ory/client";
 
 interface Props {
 	updateTheme: (theme: "system" | "dark" | "light") => void,
-	profile?: ProfileDef
+	profile?: ProfileDef,
+	session?: Session,
+	logoutUrl?: string
 }
 
 /**
@@ -41,11 +31,6 @@ export default function Dashboard(props: Props) {
 	const alert = useAlert();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-	const [session, setSession] = useState<Session | undefined>();
-	const [logoutUrl, setLogoutUrl] = useState<string | undefined>();
-	const [stats, setStats] = useState<{ streak: number, views: number, likes: number } | undefined>();
-	const [history, setHistory] = useState<number[] | undefined>();
-	const [activeQuestionName, setActiveQuestionName] = useState<string | undefined>();
 	
 	const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 	
@@ -57,18 +42,6 @@ export default function Dashboard(props: Props) {
 	 */
 	
 	useEffect(() => {
-		ory.toSession()
-		   .then(({ data }) => {
-			   setSession(data);
-			   ory.createBrowserLogoutFlow().then(({ data }) => {
-				   setLogoutUrl(data.logout_url);
-			   });
-		   })
-		   .catch((err) => {
-			   console.log("error logging in", err);
-			   // window.location.replace(`${ basePath }/ui/login`);
-		   });
-		
 		const onKeyDown = (e: any) => {
 			if ((e.ctrlKey || e.metaKey) && e.key === "k") {
 				setIsSearchModalOpen(_isSearchModalOpen => !_isSearchModalOpen);
@@ -118,23 +91,23 @@ export default function Dashboard(props: Props) {
 									 navigate("/dashboard/profile");
 									 closeDropdown();
 								 },
-								 hidden: session?.identity === undefined
+								 hidden: props.session?.identity === undefined
 							 },
 							 {
 								 icon: "fi fi-rr-sign-in-alt",
 								 label: t('dashboard.login'),
-								 onClick: () => window.location.replace(`${ basePath }/ui/login?return_to=` + encodeURIComponent(window.location.href)),
-								 hidden: session?.identity !== undefined
+								 onClick: () => window.location.replace(`${ import.meta.env.VITE_ORY_URL }/ui/login?return_to=` + encodeURIComponent(window.location.href)),
+								 hidden: props.session?.identity !== undefined
 							 },
 							 {
 								 icon: "fi fi-rr-sign-out-alt",
 								 label: t('dashboard.logout'),
 								 onClick: () => window.location.href = (
-									 logoutUrl
-										 ? (logoutUrl + (logoutUrl.includes("?") ? "&" : "?") + "return_to=" + encodeURIComponent(window.location.href))
+									 props.logoutUrl
+										 ? (props.logoutUrl + (props.logoutUrl.includes("?") ? "&" : "?") + "return_to=" + encodeURIComponent(window.location.href))
 										 : "/"
 								 ),
-								 hidden: session?.identity === undefined
+								 hidden: props.session?.identity === undefined
 							 },
 							 {
 								 icon: "fi fi-rr-language",
@@ -311,15 +284,15 @@ export default function Dashboard(props: Props) {
 				<div className={ "stats" }>
 					<div className={ "stats-column" }>
 						<i className={ "fi fi-rr-flame primary-icon" }/>
-						<span>{ stats?.streak ?? <Skeleton width={ 20 }/> }</span>
+						<span>{ undefined ?? <Skeleton width={ 20 }/> }</span>
 					</div>
 					<div className={ "stats-column" }>
 						<i className={ "fi fi-rr-eye primary-icon" }/>
-						<span>{ stats?.views ?? <Skeleton width={ 20 }/> }</span>
+						<span>{ undefined ?? <Skeleton width={ 20 }/> }</span>
 					</div>
 					<div className={ "stats-column" }>
 						<i className={ "fi fi-rr-social-network primary-icon" }/>
-						<span>{ stats?.likes ?? <Skeleton width={ 20 }/> }</span>
+						<span>{ undefined ?? <Skeleton width={ 20 }/> }</span>
 					</div>
 				</div>
 				
@@ -327,7 +300,7 @@ export default function Dashboard(props: Props) {
 				<p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
 					{ t('dashboard.nav.activeDays') }
 				</p>
-				<BarChart data={ history }/>
+				<BarChart/>
 			</div>
 		</nav>
 		

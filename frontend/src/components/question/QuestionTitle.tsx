@@ -3,16 +3,27 @@ import Skeleton from "react-loading-skeleton";
 import React from "react";
 import Button from "../button/Button";
 import ButtonGroup from "../buttongroup/ButtonGroup";
+import { Session } from "@ory/client";
 
 /**
- * Renders the title section of the question view
- * @param props question
+ * The props of the question title
+ * @param session the session to determine whether to display buttons such as like, dislike, etc.
+ * @param question the question
+ * @param toggleFavorite the function to toggle the favorite label of the question
+ * @param postVote the function to up- or downvote the question
  */
-export default function QuestionTitle(props: {
+interface Props {
+	session?: Session,
 	question?: QuestionDef,
 	toggleFavorite: () => Promise<void>,
 	postVote: (vote: "like" | "dislike") => Promise<void>
-}) {
+}
+
+/**
+ * Renders the title section of the question view
+ * @param props the props of the question title
+ */
+export default function QuestionTitle(props: Props) {
 	return <section style={ { width: "100%", display: "flex", flexDirection: "column", alignItems: "stretch" } }>
 		<div style={ {
 			display: "flex",
@@ -27,19 +38,22 @@ export default function QuestionTitle(props: {
 			{ props.question && <>
                 <Button icon={ props.question?.isFavorite ? "fi fi-sr-star" : "fi fi-rr-star" }
                         iconStyle={ props.question?.isFavorite ? { color: "var(--primary-color)" } : {} }
-                        onClick={ async () => await props.toggleFavorite() }>
+                        onClick={ async () => await props.toggleFavorite() }
+                        disabled={ props.session?.identity === undefined }>
                     Favorite
                 </Button>
                 
                 <ButtonGroup>
                     <Button icon={ "fi fi-rr-social-network" }
                             buttonStyle={ props.question?.opinion === "like" ? "primary" : "glass" }
-                            onClick={ async () => await props.postVote("like") }>
+                            onClick={ async () => await props.postVote("like") }
+                            disabled={ props.session?.identity === undefined }>
 						{ props.question.likes }
                     </Button>
                     <Button icon={ "fi fi-rr-social-network flipY" }
                             buttonStyle={ props.question?.opinion === "dislike" ? "primary" : "glass" }
-                            onClick={ async () => await props.postVote("dislike") }>
+                            onClick={ async () => await props.postVote("dislike") }
+                            disabled={ props.session?.identity === undefined }>
 						{ props.question.dislikes }
                     </Button>
                 </ButtonGroup>

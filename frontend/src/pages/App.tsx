@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import './App.scss';
 import { Navigate, Route, Routes } from "react-router-dom";
 import i18n from "i18next";
@@ -22,6 +22,7 @@ import axios from "axios";
 import { ProfileDef } from "../def/ProfileDef";
 import { axiosError } from "../def/axios-error";
 import { useAlert } from "react-alert";
+import { Configuration, FrontendApi, Session } from "@ory/client";
 
 // internationalization resources
 const resources = {
@@ -47,10 +48,37 @@ axiosInstance.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 axiosInstance.defaults.timeout = 6000;
 global.axios = axiosInstance;
 
+// ory setup
+const ory = new FrontendApi(
+	new Configuration({
+		basePath: import.meta.env.VITE_ORY_URL,
+		baseOptions: {
+			withCredentials: true,
+		},
+	}),
+)
+
 /**
  * Renders the app and takes care of choosing the appropriate language and theme
  */
 export default function App() {
+	const [session, setSession] = useState<Session | undefined>();
+	const [logoutUrl, setLogoutUrl] = useState<string | undefined>();
+	
+	useEffect(() => {
+		ory.toSession()
+		   .then(({ data }) => {
+			   setSession(data);
+			   ory.createBrowserLogoutFlow().then(({ data }) => {
+				   setLogoutUrl(data.logout_url);
+			   });
+		   })
+		   .catch((err) => {
+			   console.log("error logging in", err);
+			   // window.location.replace(`${ basePath }/ui/login`);
+		   });
+	}, []);
+	
 	const alert = useAlert();
 	
 	const prefersDarkTheme = useMediaQuery('(prefers-color-scheme: dark)');
@@ -63,21 +91,6 @@ export default function App() {
 	const [theme, setTheme] = React.useState<"dark" | "light" | "system">(
 		(localStorage.getItem("theme") as "dark" | "light" | "system" || "system") ?? "system"
 	);
-	
-	const [profile, setProfile] = React.useState<ProfileDef | undefined>(undefined);
-	
-	useEffect(() => {
-		global.axios.get<any>("profile", { withCredentials: true })
-			  .then(res => {
-				  setProfile({
-					  id: res.data.userId ?? "",
-					  name: res.data.username ?? "",
-					  type: res.data.accountState ?? "",
-					  registrationDate: res.data.registrationDate ?? ""
-				  });
-			  })
-			  .catch(err => axiosError(err, alert));
-	}, [alert]);
 	
 	useEffect(() => {
 		const updateThemeVariables = () => {
@@ -123,6 +136,21 @@ export default function App() {
 						   .removeEventListener('change', ({ matches }) => updateThemePreference(matches));
 	}, [theme]);
 	
+	const [profile, setProfile] = React.useState<ProfileDef | undefined>(undefined);
+	
+	useEffect(() => {
+		global.axios.get<any>("profile", { withCredentials: true })
+			  .then(res => {
+				  setProfile({
+					  id: res.data.userId ?? "",
+					  name: res.data.username ?? "",
+					  type: res.data.accountState ?? "",
+					  registrationDate: res.data.registrationDate ?? ""
+				  });
+			  })
+			  .catch(err => axiosError(err, alert));
+	}, [alert]);
+	
 	const updateTheme = (theme: "system" | "dark" | "light") => {
 		if (localStorage.getItem("consent") === "true")
 			localStorage.setItem("theme", theme);
@@ -147,12 +175,15 @@ export default function App() {
 			<Route path={ "login" } element={ <Login/> }/>
 			<Route path={ "dashboard" }
 				   element={ <Suspense fallback={ <p>Loading Dashboard..</p> }>
-					   <Dashboard updateTheme={ updateTheme } profile={ profile }/>
+					   <Dashboard updateTheme={ updateTheme } profile={ profile }
+								  session={ session } logoutUrl={ logoutUrl }/>
 				   </Suspense> }>
 				<Route index element={ <Suspense><Navigate to={ "trending" }/></Suspense> }/>
 				<Route path={ "trending" }
 					   element={ <Suspense><Trending/></Suspense> }/>
-				<Route path={ "question/:id" } element={ <Suspense><QuestionView/></Suspense> }/>
+				<Route path={ "question/:id" } element={ <Suspense>
+					<QuestionView session={ session }/>
+				</Suspense> }/>
 				<Route path={ "profile" }
 					   element={ <Suspense><Profile profile={ profile } setProfile={ setProfile }/></Suspense> }/>
 				<Route path={ "new" } element={ <Suspense><Editor/></Suspense> }/>
