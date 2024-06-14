@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
 import { useNavigate } from "react-router-dom";
+import ButtonGroup from "../../../components/buttongroup/ButtonGroup";
 
 /**
  * Renders the editor page used to ask a new question
@@ -20,6 +21,7 @@ export default function Editor(props: {}) {
 	const [tags, setTags] = React.useState<string[]>([]);
 	const [description, setDescription] = React.useState("Describe your question in more detail.");
 	const [questionType, setQuestionType] = React.useState<"simp" | "users">("simp");
+	const [selectedAI, setSelectedAI] = React.useState<"chatgpt" | "wolframalpha">("chatgpt");
 	
 	const [hasBeenSubmitted, setHasBeenSubmitted] = React.useState(false);
 	
@@ -111,6 +113,19 @@ export default function Editor(props: {}) {
 				<i className={ "fi fi-sr-brain icon-test" } style={ { fontSize: "2em" } }/>
 				<h3>{ t('dashboard.questionEditor.type.simp.title') }</h3>
 				<p>{ t('dashboard.questionEditor.type.simp.hint') }</p>
+				
+				<span className={ "caption" }>AI Model</span>
+				
+				<ButtonGroup style={ { marginTop: "calc(var(--spacing) / -2)" } }>
+					<Button buttonStyle={ selectedAI === "chatgpt" ? "primary" : "glass" }
+							onClick={ async () => setSelectedAI("chatgpt") }>
+						ChatGPT
+					</Button>
+					<Button buttonStyle={ selectedAI === "wolframalpha" ? "primary" : "glass" }
+							onClick={ async () => setSelectedAI("wolframalpha") }>
+						Wolfram Alpha
+					</Button>
+				</ButtonGroup>
 			</div>
 			
 			<div className={ "glass editor-question-type-select" + (questionType === "users" ? " selected" : "") }
