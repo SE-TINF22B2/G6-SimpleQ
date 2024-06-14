@@ -47,6 +47,8 @@
 			text-decoration: none;
 			user-select: none;
 
+			outline: none;
+
 			.nav-label {
 				flex: 1;
 
@@ -67,7 +69,8 @@
 			}
 
 			&.active,
-			&:hover {
+			&:hover,
+			&:focus {
 				background: var(--background-color-secondary);
 				position: relative;
 			}
