@@ -11,13 +11,15 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { FavoriteService } from '../../database/favorite/favorite.service';
-import { Favorite } from '@prisma/client';
+import { Favorite, UserContentType } from '@prisma/client';
 import { UserContentService } from '../../database/user-content/user-content.service';
 import { UserService } from '../../database/user/user.service';
 import { FAVOURITE_LIMIT } from '../../../config';
 import { NotModifiedException } from '../exception-handling/NotModifiedException';
 import { PaymentRequiredException } from '../exception-handling/PaymentRequiredException';
 import { IFavouritesInterface } from './favourites-interface';
+import { IQuestion } from '../questions/dto/user-content-interface';
+import { UserContentRequestService } from '../user-content-request/user-content-request.service';
 
 @Controller('favourites')
 export class FavouritesController {
@@ -26,22 +28,40 @@ export class FavouritesController {
     private readonly favoriteService: FavoriteService,
     private readonly userContentService: UserContentService,
     private readonly userService: UserService,
+    private readonly userContentRequestService: UserContentRequestService,
   ) {}
 
   /**
    * Get favourites of the user
    * @param req
-   * @returns Promise<Favorite[]>
+   * @returns Promise<IQuestion[]>
    */
   @Get()
-  async getFavourites(@Req() req: any): Promise<Favorite[]> {
+  async getFavourites(@Req() req: any): Promise<IQuestion[]> {
     const userId = req.userId;
     const userFavorites: Favorite[] | null =
       await this.favoriteService.getAllFavoritesOfUser(userId);
-    if (null === userFavorites) {
+    if (!userFavorites) {
       return [];
     }
-    return userFavorites;
+    const questions = await this.userContentService.getUserContentOfIDList(
+      userFavorites.map((element) => element.contentID),
+    );
+    if (!questions) {
+      return [];
+    }
+
+    const results: any[] = [];
+    for (let i = 0; i < questions.length; i++) {
+      results.push(
+        await this.userContentRequestService.getUserContent(
+          questions[i].userContentID,
+          UserContentType.Question,
+          req?.userId,
+        ),
+      );
+    }
+    return results;
   }
 
   /**
