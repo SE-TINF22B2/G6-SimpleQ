@@ -20,7 +20,7 @@ export default function Question(props: {
 	return <Section className={ "transparent" } style={ { alignItems: "stretch" } }>
 		<div style={ { display: "flex", flexDirection: "column", alignItems: "center" } }>
 			{ props.question
-				? <Avatar userId={ "" }/>
+				? <Avatar userName={ props.question.author.name }/>
 				: <Skeleton height={ "var(--ui-spacing)" } width={ "var(--ui-spacing)" }/>
 			}
 			

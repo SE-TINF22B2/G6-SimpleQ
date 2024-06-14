@@ -217,7 +217,7 @@
 			align-items: center;
 			display: flex;
 			gap: var(--spacing);
-			height: calc(var(--header-height) - var(--spacing));
+			// height: calc(var(--header-height) - var(--spacing));
 			justify-content: space-between;
 			margin-top: var(--spacing);
 
@@ -226,6 +226,10 @@
 				align-items: center;
 				display: flex;
 				height: inherit;
+			}
+
+			> * {
+				height: var(--ui-spacing) !important;
 			}
 
 			> #search-bar {

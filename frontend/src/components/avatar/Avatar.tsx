@@ -1,13 +1,22 @@
 import "./Avatar.scss";
 import React, { CSSProperties } from "react";
+import noUser from "../../images/no-user.svg";
 
-export default function Avatar(props: { userId?: string, style?: CSSProperties }) {
+export default function Avatar(props: { userName?: string, style?: CSSProperties }) {
+	if (props.userName)
+		return <div className={ "avatar" }
+					style={ props.style }>
+			<p>{ props.userName.substring(0, 2).toUpperCase() }</p>
+		</div>
+	
 	return <img className={ "avatar" }
 				style={ props.style }
 				src={ "" }
 				alt={ "Avatar" }
 				onError={ ({ currentTarget }) => {
 					currentTarget.onerror = null; // prevents looping
-					currentTarget.src = "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50";
+					currentTarget.src = noUser;
+					currentTarget.style.padding = "calc(var(--spacing) / 2)";
+					currentTarget.style.background = "var(--background-color-primary)";
 				} }/>
 }

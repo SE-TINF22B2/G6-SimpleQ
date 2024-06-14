@@ -5,4 +5,15 @@
 	object-fit: cover;
 	pointer-events: none;
 	width: var(--ui-spacing);
+
+	display: grid;
+	place-items: center;
+
+	p {
+		width: 100%;
+		text-align: center;
+	}
+
+	background: var(--primary-color);
+	color: var(--primary-color-contrast);
 }

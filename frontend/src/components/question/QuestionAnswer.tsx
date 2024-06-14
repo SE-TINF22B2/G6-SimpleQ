@@ -29,7 +29,7 @@ export default function QuestionAnswer(props: {
 							 color: "var(--primary-color-contrast)",
 							 background: "var(--primary-color)"
 						 } }/>
-					: <Avatar userId={ "" }/>
+					: <Avatar userName={ props.answer.author.name }/>
 				: <Skeleton height={ "var(--ui-spacing)" } width={ "var(--ui-spacing)" }/>
 			}
 			

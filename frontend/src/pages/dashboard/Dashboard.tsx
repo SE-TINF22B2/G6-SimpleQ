@@ -15,6 +15,7 @@ import { useAlert } from "react-alert";
 import Avatar from "../../components/avatar/Avatar";
 import { animateBlob } from "../../def/cool-blobs";
 import Search from "../../components/search/Search";
+import { ProfileDef } from "../../def/ProfileDef";
 
 // ory setup
 const basePath = "http://localhost:4000"
@@ -28,7 +29,8 @@ const ory = new FrontendApi(
 )
 
 interface Props {
-	updateTheme: (theme: "system" | "dark" | "light") => void;
+	updateTheme: (theme: "system" | "dark" | "light") => void,
+	profile?: ProfileDef
 }
 
 /**
@@ -99,16 +101,13 @@ export default function Dashboard(props: Props) {
 	
 	const loggedInDropdown = () => {
 		return <Dropdown button={ <div style={ {
-			aspectRatio: "1",
-			display: "grid",
-			placeItems: "center",
 			userSelect: "none",
 			cursor: "pointer",
 			borderRadius: "50%",
-			boxShadow: "var(--box-shadow)"
+			outlineOffset: "var(--outline-width)"
 		} }
 									   tabIndex={ 0 }>
-			<Avatar userId={ session?.identity?.id }/>
+			<Avatar userName={ props.profile?.name }/>
 		</div> }
 						 items={ [
 							 {

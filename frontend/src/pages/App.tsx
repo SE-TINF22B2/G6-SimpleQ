@@ -19,6 +19,9 @@ import Quests from "./dashboard/quests/Quests";
 import MyQuestions from "./dashboard/MyQuestions";
 import ConsentBanner from "../components/consentbanner/ConsentBanner";
 import axios from "axios";
+import { ProfileDef } from "../def/ProfileDef";
+import { axiosError } from "../def/axios-error";
+import { useAlert } from "react-alert";
 
 // internationalization resources
 const resources = {
@@ -48,6 +51,8 @@ global.axios = axiosInstance;
  * Renders the app and takes care of choosing the appropriate language and theme
  */
 export default function App() {
+	const alert = useAlert();
+	
 	const prefersDarkTheme = useMediaQuery('(prefers-color-scheme: dark)');
 	const prefersLightTheme = useMediaQuery('(prefers-color-scheme: light)');
 	
@@ -58,6 +63,21 @@ export default function App() {
 	const [theme, setTheme] = React.useState<"dark" | "light" | "system">(
 		(localStorage.getItem("theme") as "dark" | "light" | "system" || "system") ?? "system"
 	);
+	
+	const [profile, setProfile] = React.useState<ProfileDef | undefined>(undefined);
+	
+	useEffect(() => {
+		global.axios.get<any>("profile", { withCredentials: true })
+			  .then(res => {
+				  setProfile({
+					  id: res.data.userId ?? "",
+					  name: res.data.username ?? "",
+					  type: res.data.accountState ?? "",
+					  registrationDate: res.data.registrationDate ?? ""
+				  });
+			  })
+			  .catch(err => axiosError(err, alert));
+	}, [alert]);
 	
 	useEffect(() => {
 		const updateThemeVariables = () => {
@@ -127,13 +147,14 @@ export default function App() {
 			<Route path={ "login" } element={ <Login/> }/>
 			<Route path={ "dashboard" }
 				   element={ <Suspense fallback={ <p>Loading Dashboard..</p> }>
-					   <Dashboard updateTheme={ updateTheme }/>
+					   <Dashboard updateTheme={ updateTheme } profile={ profile }/>
 				   </Suspense> }>
 				<Route index element={ <Suspense><Navigate to={ "trending" }/></Suspense> }/>
 				<Route path={ "trending" }
 					   element={ <Suspense><Trending/></Suspense> }/>
 				<Route path={ "question/:id" } element={ <Suspense><QuestionView/></Suspense> }/>
-				<Route path={ "profile" } element={ <Suspense><Profile/></Suspense> }/>
+				<Route path={ "profile" }
+					   element={ <Suspense><Profile profile={ profile } setProfile={ setProfile }/></Suspense> }/>
 				<Route path={ "new" } element={ <Suspense><Editor/></Suspense> }/>
 				<Route path={ "activity" } element={ <Suspense><Activity/></Suspense> }/>
 				<Route path={ "my" } element={ <Suspense><MyQuestions/></Suspense> }/>

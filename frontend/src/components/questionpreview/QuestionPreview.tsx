@@ -97,7 +97,7 @@ export default function QuestionPreview(props: Props) {
 			</div>
 			
 			<div className={ "author" }>
-				<Avatar userId={ props.question.author.id }/>
+				<Avatar userName={ props.question.author.name }/>
 				<p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
 					<span className={ "caption" }>Asked by</span>
 					<span>{ props.question.author.name.substring(0, import.meta.env.VITE_AUTHOR_NAME_MAX_LENGTH) }</span>

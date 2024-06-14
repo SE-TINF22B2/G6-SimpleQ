@@ -138,7 +138,7 @@ export default function Search(props: { isOpen: boolean, closeModal: () => void 
 					</p>
 				</div>
 				
-				<Avatar/>
+				<Avatar userName={ suggestion.author.name }/>
 			</div>) }
 		</div>
 	</Modal>
