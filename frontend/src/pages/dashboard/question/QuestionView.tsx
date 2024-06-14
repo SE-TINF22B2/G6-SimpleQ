@@ -306,13 +306,15 @@ export default function QuestionView(props: Props) {
 		
 		<QuestionSectionTitle/>
 		<QuestionAnswerEditor session={ props.session } onSubmit={ async (content) => {
+			let success = false;
 			await global.axios.post("question/" + encodeURIComponent(id ?? "") + "/answer",
 				{ content }, { withCredentials: true })
 						.then(_ => {
 							setUpdateQuestion(!updateQuestion);
-							alert.success("Answer created!");
+							success = true;
 						})
 						.catch(err => axiosError(err, alert));
+			return success;
 		} }/>
 		
 		<div style={ { height: "50vh" } }/>

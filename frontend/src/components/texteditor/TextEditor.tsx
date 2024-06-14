@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./TextEditor.scss";
 import { useTranslation } from "react-i18next";
 
@@ -6,6 +6,8 @@ interface Props {
 	height?: string;
 	disabled?: boolean;
 	children?: React.ReactNode;
+	shouldClearContent?: boolean;
+	setShouldClearContent?: (b: boolean) => void;
 	onInput?: (value: string) => void;
 	placeholder?: string;
 }
@@ -15,7 +17,10 @@ interface Props {
  * @param props.height Optional height setting (e.g. "200px"), default is auto, a scrollbar will be visible when set
  * @param props.disabled Optional boolean to dísabling manipulation of the text
  * @param props.children Optional ReactNode representing the content of the text editor
+ * @param props.shouldClearContent Optional function to allow the parent to clear the text editor
+ * @param props.setShouldClearContent Optional function to tell the parent that the text editor has been cleared
  * @param props.onInput() Optional function to be executed once the user makes an input
+ * @param props.placeholder Optional string as placeholder for when the text editor is blank
  */
 export default function TextEditor(props: Props) {
 	const { t } = useTranslation();
@@ -23,6 +28,13 @@ export default function TextEditor(props: Props) {
 	const [editorRef, setEditorRef] = React.useState<HTMLParagraphElement | undefined>(undefined);
 	const [wordCount, setWordCount] =
 		React.useState(props.children ? (props.children as string).split(" ").length : 0);
+	
+	useEffect(() => {
+		if (editorRef && props.shouldClearContent && props.setShouldClearContent) {
+			editorRef.innerHTML = "";
+			props.setShouldClearContent(false);
+		}
+	}, [editorRef, props]);
 	
 	return <div className={ "text-editor" } onClick={ _ => editorRef?.focus() }>
 		<div className={ "text-editor-buttons" }>

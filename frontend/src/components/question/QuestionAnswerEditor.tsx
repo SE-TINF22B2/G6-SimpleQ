@@ -12,7 +12,7 @@ import { Session } from "@ory/client";
  */
 interface Props {
 	session?: Session,
-	onSubmit?: (content: string) => Promise<void>
+	onSubmit?: (content: string) => Promise<boolean>
 }
 
 /**
@@ -24,6 +24,7 @@ export default function QuestionAnswerEditor(props: Props) {
 	
 	const [hasBeenSubmitted, setHasBeenSubmitted] = React.useState(false);
 	const [content, setContent] = React.useState("");
+	const [shouldClearContent, setShouldClearContent] = React.useState(false);
 	
 	return <Section className={ "transparent" } style={ { alignItems: "stretch" } }>
 		<div style={ { display: "flex", flexDirection: "column", alignItems: "center" } }>
@@ -51,6 +52,8 @@ export default function QuestionAnswerEditor(props: Props) {
 			{ props.session?.identity !== undefined
 				? <>
 					<TextEditor placeholder={ t('dashboard.questionView.answerEditor.placeholder') }
+								shouldClearContent={ shouldClearContent }
+								setShouldClearContent={ setShouldClearContent }
 								onInput={ setContent }
 								disabled={ hasBeenSubmitted }/>
 					
@@ -58,7 +61,10 @@ export default function QuestionAnswerEditor(props: Props) {
 					<Button buttonStyle={ "primary" } icon={ "fi fi-rr-paper-plane" }
 							onClick={ async () => {
 								setHasBeenSubmitted(true);
-								if (props.onSubmit) await props.onSubmit(content);
+								if (props.onSubmit) {
+									let success = await props.onSubmit(content);
+									if (success) setShouldClearContent(true);
+								}
 								setHasBeenSubmitted(false);
 							} }>
 						Submit
