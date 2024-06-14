@@ -1,4 +1,4 @@
-import { VOTE_OPTIONS_ENUM } from '../../../../config';
+import { VOTE_OPTIONS } from '../../../../config';
 
 export interface IUserContent {
   id: string;
@@ -6,7 +6,7 @@ export interface IUserContent {
   likes: number;
   dislikes: number;
   created: Date;
-  opinion: VOTE_OPTIONS_ENUM;
+  opinion: VOTE_OPTIONS;
   isFavourite?: boolean;
 }
 export interface IQuestion extends IUserContent {

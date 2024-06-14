@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { VOTE_OPTIONS_ENUM } from '../../../config';
+import { VOTE_OPTIONS } from '../../../config';
 import { BlacklistService } from '../../database/blacklist/blacklist.service';
 import { TagService } from '../../database/tag/tag.service';
 import {
@@ -140,10 +140,10 @@ export class UserContentRequestService {
       created: result.userContent.timeOfCreation,
       opinion: await this.getOpinionToUserContent(userContentId, userId),
       author: await this.parseCreator(
-          creator,
-          type,
-          result.userContent.userContentID,
-       ),
+        creator,
+        type,
+        result.userContent.userContentID,
+      ),
       content: result.userContent.content ?? '--',
     };
 
@@ -516,15 +516,15 @@ export class UserContentRequestService {
     if (oldVote) {
       // old vote exists
       const oldVoteName = oldVote.isPositive
-        ? VOTE_OPTIONS_ENUM.LIKE
-        : VOTE_OPTIONS_ENUM.DISLIKE;
+        ? VOTE_OPTIONS.LIKE
+        : VOTE_OPTIONS.DISLIKE;
       if (vote.id == oldVoteName) return null;
       // remove the old vote
       await this.voteService.deleteVote(userContentId, userId);
-      if (vote.id == VOTE_OPTIONS_ENUM.NONE) return null;
+      if (vote.id == VOTE_OPTIONS.NONE) return null;
     }
     // set (new) vote
-    const isPositive = vote.id == VOTE_OPTIONS_ENUM.LIKE;
+    const isPositive = vote.id == VOTE_OPTIONS.LIKE;
     return await this.voteService.createVote(userContentId, userId, isPositive);
   }
 
@@ -558,19 +558,19 @@ export class UserContentRequestService {
   private async getOpinionToUserContent(
     userContentId: string,
     userId?: string,
-  ): Promise<VOTE_OPTIONS_ENUM> {
+  ): Promise<VOTE_OPTIONS> {
     if (userId) {
       const rawOptions = await this.voteService.getOpinionToUserContent(
         userContentId,
         userId,
       );
       if (true == rawOptions) {
-        return VOTE_OPTIONS_ENUM.LIKE;
+        return VOTE_OPTIONS.LIKE;
       }
       if (false == rawOptions) {
-        return VOTE_OPTIONS_ENUM.DISLIKE;
+        return VOTE_OPTIONS.DISLIKE;
       }
     }
-    return VOTE_OPTIONS_ENUM.NONE;
+    return VOTE_OPTIONS.NONE;
   }
 }
