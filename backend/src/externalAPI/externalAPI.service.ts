@@ -36,7 +36,6 @@ export class ExternalAPIService {
    * This function should check the params for the AI functions.
    * @param prompt
    * @param groupID
-   * @param userID
    * @throws The prompt cannot be empty | Group ID not found | The environment variable for AI is undefined | An AI-generated answer with this groupID already exists
    */
   private async checkParams(prompt: string, groupID: string): Promise<boolean> {
@@ -46,7 +45,7 @@ export class ExternalAPIService {
       !(await this.databaseContentService.checkGroupIDExists(groupID))
     ) {
       throw new Error('Group ID not found');
-    } else if (process.env.NODE_ENV === 'dev') {
+    } else if (process.env.DISABLE_AI === 'true') {
       return false;
     } else if (
       process.env.WOLFRAM_APP_ID == undefined ||
@@ -78,21 +77,23 @@ export class ExternalAPIService {
     userID: string,
   ): Promise<string> {
     try {
-      this.checkAllowed(userID);
+      await this.checkAllowed(userID);
       const paramsCheck = await this.checkParams(prompt, groupID);
       if (paramsCheck) {
+        console.log('REQUEST WOLFRAM', prompt);
         const { data } = await firstValueFrom(
           this.httpService
             .get(process.env.WOLFRAM_APP_ID + encodeURIComponent(prompt))
             .pipe(),
         );
         const imageBase64 = Buffer.from(data, 'binary').toString('base64');
-        this.databaseContentService.createAnswer(
+        await this.databaseContentService.createAnswer(
           null,
           groupID,
-          data.output,
+          imageBase64,
           TypeOfAI.WolframAlpha,
         );
+        console.log('Wolfram successful!');
         return imageBase64;
       } else {
         return 'Das ist eine automatisch generierte Antwort um Tokens zu sparen!';
@@ -125,22 +126,24 @@ export class ExternalAPIService {
     };
 
     try {
-      this.checkAllowed(userID);
+      await this.checkAllowed(userID);
       const paramsCheck = await this.checkParams(prompt, groupID);
 
       if (paramsCheck) {
+        console.log('REQUEST GPT');
         const gptURL =
           process.env.GPT_APP_URL != undefined ? process.env.GPT_APP_URL : '';
         const { data } = await firstValueFrom(
           this.httpService.post(gptURL, body, header).pipe(),
         );
         if (data.output != null) {
-          this.databaseContentService.createAnswer(
+          await this.databaseContentService.createAnswer(
             null,
             groupID,
             data.output,
             TypeOfAI.GPT,
           );
+          console.log('GPT successful');
           return data.output;
         } else {
           return 'no output created';
