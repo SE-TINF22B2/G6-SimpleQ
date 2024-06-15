@@ -3,11 +3,21 @@ import Section from "../section/Section";
 import Skeleton from "react-loading-skeleton";
 import { formatDate } from "../../def/converter";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function QuestionPreviewSmall(props: { question?: QuestionDef }) {
+	const navigate = useNavigate();
+	
 	return <Section className={ "glass-hover" }
 					style={ { userSelect: "none", cursor: "pointer", pointerEvents: props.question ? "all" : "none" } }
-					tabIndex={ props.question ? 0 : -1 }>
+					tabIndex={ props.question ? 0 : -1 }
+					onClick={ () => {
+						if (props.question) navigate("/dashboard/question/" + props.question.id);
+					} }
+					onKeyDown={ (e: any) => {
+						if (props.question && e.key === "Enter")
+							navigate("/dashboard/question/" + props.question.id);
+					} }>
 		<div style={ { display: "flex", alignItems: "center", gap: "var(--spacing)" } }>
 			<div style={ { flex: 1 } }>
 				<p className={ "tags" }>

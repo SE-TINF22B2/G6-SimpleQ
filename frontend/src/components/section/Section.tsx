@@ -5,6 +5,8 @@ interface Props {
 	className?: string;
 	style?: React.CSSProperties;
 	tabIndex?: number;
+	onClick?: React.MouseEventHandler<HTMLDivElement>;
+	onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
 }
 
 /**
@@ -17,7 +19,9 @@ interface Props {
 export default function Section(props: Props) {
 	return <section className={ "container" + (props.className ? " " + props.className : "") }
 					style={ props.style }
-					tabIndex={ props.tabIndex }>
+					tabIndex={ props.tabIndex }
+					onClick={ props.onClick }
+					onKeyDown={ props.onKeyDown }>
 		{ props.children }
 	</section>
 }
