@@ -103,6 +103,13 @@
 				"placeholder": "Answer this question",
 				"noPermission": "As a guest you are not permitted to submit an answer."
 			}
+		},
+		"profile": {
+			"auth": {
+				"auth": "Authentication",
+				"description": "We're using an external identity provider (IDP). Therefore, you will have to be redirected to another page in order to view and update your login information. You will also have the possibility of adding other login methods to your current account.",
+				"redirect": "Account Settings"
+			}
 		}
 	}
 }

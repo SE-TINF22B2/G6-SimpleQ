@@ -7,6 +7,7 @@ import { ProfileDef } from "../../../def/ProfileDef";
 import Section from "../../../components/section/Section";
 import Avatar from "../../../components/avatar/Avatar";
 import Skeleton from "react-loading-skeleton";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 	profile?: ProfileDef,
@@ -18,6 +19,7 @@ interface Props {
  */
 export default function Profile(props: Props) {
 	const alert = useAlert();
+	const { t } = useTranslation();
 	
 	const [updateUsernameInputValue, setUpdateUsernameInputValue] = React.useState("");
 	
@@ -72,6 +74,21 @@ export default function Profile(props: Props) {
 			
 			<p className={ "badge" }>{ props.profile?.type ?? <Skeleton width={ 100 }/> }</p>
 			<p>{ props.profile?.registrationDate ?? <Skeleton width={ 200 }/> }</p>
+		</Section>
+		
+		<Section className={ "transparent" }>
+			<h2>{ t('dashboard.profile.auth.auth') }</h2>
+		</Section>
+		<Section>
+			<p>{ t('dashboard.profile.auth.description') }</p>
+			
+			<Button icon={ "fi fi-rr-user-key" }
+					onClick={ async () => {
+						window.location.replace(`${ import.meta.env.VITE_ORY_URL }/ui/settings?return_to=` + encodeURIComponent(window.location.href))
+					} }
+					style={ { marginTop: "var(--spacing)" } }>
+				{ t('dashboard.profile.auth.redirect') }
+			</Button>
 		</Section>
 	</>
 }
