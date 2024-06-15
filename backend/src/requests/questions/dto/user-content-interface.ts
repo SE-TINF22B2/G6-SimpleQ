@@ -13,7 +13,7 @@ export interface IQuestionMetadata extends IUserContent {
   title: string;
   tags: string[];
   numberOfAnswers: number;
-  updated: string;
+  updated: Date;
   author: {
     id: string;
     name: string;

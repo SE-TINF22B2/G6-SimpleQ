@@ -117,6 +117,20 @@ components:
           description: 'New name for user'
           default: ""
         # userStatus TODO
+
+    Favourites:
+      type: object
+      properties:
+        contentID:
+          type: string
+          description: uuid of content
+        favouriteUserID:
+          type: string
+          description: uuid of user
+        moreFavouritesAllowed:
+          type: integer
+          description: amount favourites which can be added by this user
+
     
     Profile:
       type: object
@@ -643,6 +657,25 @@ paths:
                   $ref: '#/components/schemas/QuestionMetadata'
         '401':
           description: 'Unauthorized'
+  /favourites/remaining:
+    get:
+      tags:
+        -favourites
+      summary: 'get how many favourites you can add till the maximum is reached. Null represents infinite.'
+      responses:
+        '200':
+          description: 'Ok'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  moreFavouritesAllowed:
+                    type: number
+                    nullable: true
+        '401':
+          description: 'Unauthorized'
+
   /favourites/{questionId}: 
     post: 
       tags:
@@ -661,7 +694,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Question'
+                $ref: '#/components/schemas/Favourites'
+        '304':
+          description: 'Not Modified'
         '401':
           description: 'Unauthorized'
         '403':
@@ -681,6 +716,12 @@ paths:
       responses:
         '200': 
           description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favourites'
+        '304':
+          description: 'Not Modified'
         '401':
           description: 'Unauthorized'
         '404':

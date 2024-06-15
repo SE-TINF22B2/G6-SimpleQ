@@ -1,17 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
-import {
-  Answer,
-  Discussion,
-  Question,
-  Tag,
-  TypeOfAI,
-  User,
-  UserContent,
-  UserContentType,
-  Vote,
-} from '@prisma/client';
+import { Answer, Discussion, Question, Tag, TypeOfAI, User, UserContent, UserContentType, Vote } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 import {
   DEFAULT_USER_CONTENT_LIMIT,
@@ -87,6 +77,16 @@ export class UserContentService {
       userContent: userContent,
       question: question,
     };
+  }
+
+  async getUserContentOfIDList(
+    questionIDs: string[]
+  ): Promise<UserContent[] | null> {
+    return this.prisma.userContent.findMany({
+      where: {
+        userContentID: { in: questionIDs }
+      }
+    });
   }
 
   /**
@@ -583,5 +583,27 @@ export class UserContentService {
       userContent: userContent,
       discussion: discussion,
     };
+  }
+
+  /**
+   * searches the group to the latest element, which was modified
+   * takes the latest element and returns
+   * If nothing is found it return null
+   * @param groupId
+   * @return Date
+   */
+  async getLastUpdate(groupId: string): Promise<Date | null> {
+    const lastDate =  await this.prisma.userContent.findFirst({
+      where: {
+        groupID: groupId
+      },
+      orderBy: {
+        timeOfCreation: 'desc'
+      },
+      select: {
+        timeOfCreation: true,
+      }
+    })
+    return lastDate? lastDate.timeOfCreation: null
   }
 }
