@@ -18,6 +18,7 @@ import {
   UserTimeout,
   Vote,
 } from '@prisma/client';
+import { UserContentWithRating } from './user-content/user-content-interfaces';
 
 const dateTime = new Date(2024, 1, 1, 11, 59);
 
@@ -69,6 +70,23 @@ export const testUserContentQuestionList: UserContent[] = [
   testUserContentQuestion,
   testUserContentQuestion,
   testUserContentQuestion,
+];
+
+export const testUserContentQuestionWithRating: UserContentWithRating = {
+  userContentID: 'contentID',
+  ownerID: testUser.userID,
+  groupID: 'groupID',
+  content: 'testContent',
+  timeOfCreation: dateTime,
+  type: UserContentType.Question,
+  likes: 0,
+  dislikes: 0,
+};
+
+export const testUserContentQuestionListWithRating: UserContentWithRating[] = [
+  testUserContentQuestionWithRating,
+  testUserContentQuestionWithRating,
+  testUserContentQuestionWithRating,
 ];
 
 export const testUserContentDiscussion: UserContent = {
