@@ -21,11 +21,6 @@ export interface IQuestionMetadata extends IUserContent {
   };
 }
 
-export interface IQuestionMetadataWithRating extends IQuestionMetadata {
-  likes: number;
-  dislikes: number;
-}
-
 export interface IQuestion extends IQuestionMetadata {
   content: string;
 }

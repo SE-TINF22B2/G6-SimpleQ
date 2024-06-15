@@ -33,7 +33,7 @@ import { FavoriteService } from '../../database/favorite/favorite.service';
 import {
   IAnswer,
   IQuestion,
-  IQuestionMetadata, IQuestionMetadataWithRating,
+  IQuestionMetadata,
 } from '../questions/dto/user-content-interface';
 import { UserContentWithRating } from '../../database/user-content/user-content-interfaces';
 
@@ -101,7 +101,7 @@ export class UserContentRequestService {
     if (questions == null) {
       return [];
     }
-    const results: IQuestionMetadataWithRating[] = [];
+    const results: IQuestionMetadata[] = [];
     for (let i = 0; i < questions.length; i++) {
       const question = (await this.getUserContent(
         questions[i].userContentID,
