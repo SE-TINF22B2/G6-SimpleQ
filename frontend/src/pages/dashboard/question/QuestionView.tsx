@@ -80,7 +80,7 @@ export default function QuestionView(props: Props) {
 				  setQuestion(_question);
 			  })
 			  .catch(err => axiosError(err, alert));
-	}, [alert, id]);
+	}, [alert, id, updateQuestion]);
 	
 	useEffect(() => {
 		question && props.setActiveQuestion(question);
@@ -115,7 +115,7 @@ export default function QuestionView(props: Props) {
 			  .catch(err => axiosError(err, alert))
 			  .finally(() => setAnswersLoading(false));
 		
-	}, [alert, answersPage, enableAI, id, sortBy, sortDirection]);
+	}, [alert, answersPage, enableAI, id, sortBy, sortDirection, updateQuestion]);
 	
 	const getSortByIcon = () => {
 		switch (sortBy) {
