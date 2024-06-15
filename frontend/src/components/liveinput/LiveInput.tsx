@@ -65,6 +65,7 @@ export default function LiveInput(props: Props) {
 	
 	return <div className={ "live-input" }>
 		<input type={ "text" } ref={ i => setInput(i) }
+			   maxLength={ 12 }
 			   placeholder={ props.placeholder ?? "" }
 			   onChange={ (event) => {
 				   const input = event.target.value;
