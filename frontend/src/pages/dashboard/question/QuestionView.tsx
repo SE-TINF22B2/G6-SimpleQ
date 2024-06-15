@@ -60,7 +60,11 @@ export default function QuestionView(props: Props) {
 			  .then(res => {
 				  let _question: QuestionDef = {
 					  answers: res.data.numberOfAnswers ?? 0,
-					  author: res.data.author ?? undefined,
+					  author: {
+						  id: res.data.author.id ?? "",
+						  name: res.data.author.name ?? "Anonymous",
+						  type: res.data.author.type ?? "guest"
+					  },
 					  content: res.data.content ?? "",
 					  created: res.data.created ?? "",
 					  dislikes: res.data.dislikes ?? 0,
@@ -99,7 +103,11 @@ export default function QuestionView(props: Props) {
 						  likes: _answer.likes ?? 0,
 						  dislikes: _answer.dislikes ?? 0,
 						  opinion: "none",
-						  author: _answer.author ?? undefined
+						  author: {
+							  id: _answer.author.id ?? "",
+							  name: _answer.author.name ?? "Anonymous",
+							  type: _answer.author.type ?? "guest"
+						  },
 					  }
 				  });
 				  setAnswers(_answers);
