@@ -1,24 +1,9 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
-import {
-  Answer,
-  Discussion,
-  Question,
-  Tag,
-  TypeOfAI,
-  User,
-  UserContent,
-  UserContentType,
-  Vote,
-} from '@prisma/client';
+import { Answer, Discussion, Question, Tag, TypeOfAI, User, UserContent, UserContentType, Vote } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
-import {
-  DEFAULT_USER_CONTENT_LIMIT,
-  DEFAULT_USER_CONTENT_OFFSET,
-  SORT_BY,
-  SORT_DIRECTION,
-} from '../../../config';
+import { DEFAULT_USER_CONTENT_LIMIT, DEFAULT_USER_CONTENT_OFFSET, SORT_BY, SORT_DIRECTION } from '../../../config';
 
 
 export type SortOptions = {
@@ -110,6 +95,16 @@ export class UserContentService {
       userContent: userContent,
       question: question,
     };
+  }
+
+  async getUserContentOfIDList(
+    questionIDs: string[]
+  ): Promise<UserContent[] | null> {
+    return this.prisma.userContent.findMany({
+      where: {
+        userContentID: { in: questionIDs }
+      }
+    });
   }
 
   /**
