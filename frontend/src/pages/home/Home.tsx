@@ -64,7 +64,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 	return <div className={ "home" }>
 		<nav>
 			<div className={ "nav-wrapper" }>
-				<img src={ logoTodoMakeStatic } alt={ "Logo" }/>
+				<img src={ logoTodoMakeStatic } alt={ "Logo" }
+					 style={ { filter: "drop-shadow(0 0 4px white)" } }/>
 				
 				<div className={ "pages" }>
 					<a href={ "#features" }>Features</a>
