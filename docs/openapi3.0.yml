@@ -20,44 +20,10 @@ components:
           type: string
           enum: ["guest", "user", "pro", "ai"]
 
-    TrendingQuestions:
-      type: object
-      properties:
-        id:
-          type: string
-        likes:
-          type: integer
-        dislikes:
-          type: integer
-        created:
-          type: string
-          description: The date, the question was created
-        opinion:
-          type: string
-          enum:
-            - like
-            - dislike
-            - none
-        title:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
-        numberOfAnswers:
-          type: integer
-        updated:
-          type: string
-          description: The date, the question was last updated
-        author:
-          $ref: '#/components/schemas/Author'
-
     UserContent:
       type: object
       properties:
         id:
-          type: string
-        content:
           type: string
         likes:
           type: integer
@@ -73,7 +39,7 @@ components:
             - dislike
             - none
           
-    Question:
+    QuestionMetadata:
       allOf:
         - $ref: '#/components/schemas/UserContent'
         - type: object
@@ -91,12 +57,21 @@ components:
               description: The date, the question was last updated
             author: 
                 $ref: '#/components/schemas/Author'
+    Question:
+      allOf:
+        - $ref: '#/components/schemas/QuestionMetadata'
+        - type: object
+          properties:
+            content:
+              type: string
 
     Answer:
       allOf:
         - $ref: '#/components/schemas/UserContent'
         - type: object
           properties:
+            content:
+              type: string
             author:
               $ref:  '#/components/schemas/Author'
     AItype:
@@ -236,7 +211,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TrendingQuestions'
+                  $ref: '#/components/schemas/QuestionMetadata'
   /question/my:
     get:
       tags:
@@ -283,7 +258,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Question'
+                  $ref: '#/components/schemas/QuestionMetadata'
         '401':
           description: 'Unauthorized, user needs to be logged in'
   /question/search/:
@@ -338,7 +313,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Question'
+                  $ref: '#/components/schemas/QuestionMetadata'
   /question/{questionId}:
     get: 
       tags:
@@ -665,7 +640,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Question'
+                  $ref: '#/components/schemas/QuestionMetadata'
         '401':
           description: 'Unauthorized'
   /favourites/{questionId}: 
