@@ -58,6 +58,8 @@
 		outline: none;
 		overflow-y: scroll;
 
+		word-break: break-all;
+
 		&:empty:not(:focus):before {
 			content: attr(data-placeholder);
 			opacity: 0.8;

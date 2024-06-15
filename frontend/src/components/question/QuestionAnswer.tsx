@@ -91,8 +91,9 @@ export default function QuestionAnswer(props: Props) {
 					background: "var(--background-color-glass" + (props.answer?.author?.type === 'ai' ? "-simp" : "") + ")"
 				} }>
 					{ props.answer?.content
-						? <p dangerouslySetInnerHTML={ { __html: sanitizeHtml(props.answer.content) } }/>
-						: <p><Skeleton style={ { width: "100%" } } count={ 3 }/></p>
+						? <div style={ { wordBreak: "break-all" } }
+							   dangerouslySetInnerHTML={ { __html: sanitizeHtml(props.answer.content) } }/>
+						: <div><Skeleton style={ { width: "100%" } } count={ 3 }/></div>
 					}
 				</div>
 			</div>

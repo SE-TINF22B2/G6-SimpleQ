@@ -71,8 +71,9 @@ export default function Question(props: {
 				background: "var(--background-color-glass)"
 			} }>
 				{ props.question?.content
-					? <p dangerouslySetInnerHTML={ { __html: sanitizeHtml(props.question.content) } }/>
-					: <p><Skeleton style={ { width: "100%" } } count={ 3 }/></p>
+					? <div style={ { wordBreak: "break-all" } }
+						   dangerouslySetInnerHTML={ { __html: sanitizeHtml(props.question.content) } }/>
+					: <div><Skeleton style={ { width: "100%" } } count={ 3 }/></div>
 				}
 			</div>
 		</div>
