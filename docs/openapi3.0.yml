@@ -20,6 +20,38 @@ components:
           type: string
           enum: ["guest", "user", "pro", "ai"]
 
+    TrendingQuestions:
+      type: object
+      properties:
+        id:
+          type: string
+        likes:
+          type: integer
+        dislikes:
+          type: integer
+        created:
+          type: string
+          description: The date, the question was created
+        opinion:
+          type: string
+          enum:
+            - like
+            - dislike
+            - none
+        title:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        numberOfAnswers:
+          type: integer
+        updated:
+          type: string
+          description: The date, the question was last updated
+        author:
+          $ref: '#/components/schemas/Author'
+
     UserContent:
       type: object
       properties:
@@ -198,13 +230,13 @@ paths:
       summary: Get the most upvoted questions of the seven days
       responses:
         '200':
-          description: Successful
+          description: Successful, Result is like Question but without property 'content'
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Question'
+                  $ref: '#/components/schemas/TrendingQuestions'
   /question/my:
     get:
       tags:
