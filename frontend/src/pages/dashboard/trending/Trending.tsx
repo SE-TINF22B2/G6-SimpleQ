@@ -8,7 +8,6 @@ import QuestionPreviewSkeleton from "../../../components/questionpreview/Questio
 import Section from "../../../components/section/Section";
 import { QuestionDef } from "../../../def/QuestionDef";
 import Button from "../../../components/button/Button";
-import { formatDate } from "../../../def/converter";
 import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
 import NoContent from "../../../components/NoContent";
@@ -52,7 +51,7 @@ export default function Trending(props: {}) {
 					  let question: QuestionDef = {
 						  answers: _question.numberOfAnswers ?? 0,
 						  author: _question.author ?? undefined,
-						  created: formatDate(_question.created ?? ""),
+						  created: _question.created ?? "0",
 						  dislikes: _question.dislikes ?? 0,
 						  id: _question.id,
 						  isDiscussion: _question.isDiscussion ?? false,
@@ -60,7 +59,7 @@ export default function Trending(props: {}) {
 						  opinion: _question.opinion ?? "none",
 						  tags: _question.tags ?? [],
 						  title: _question.title ?? "",
-						  updated: formatDate(_question.updated ?? ""),
+						  updated: _question.updated ?? "0",
 						  isFavorite: _question.isFavorite ?? false
 					  }
 					  _questions.push(question);

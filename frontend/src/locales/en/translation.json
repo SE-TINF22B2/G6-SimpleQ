@@ -89,10 +89,11 @@
 		},
 		"questionView": {
 			"question": {
-				"creationDate": "created: {{questionCreationDate}} · last updated: {{questionUpdatedDate}}"
+				"creationDate": "created: {{questionCreationDate}}",
+				"updatedDate": "last updated: {{questionUpdatedDate}}"
 			},
 			"answer": {
-				"creationDate": "replied {{answerCreationDate}}"
+				"creationDate": "replied: {{answerCreationDate}}"
 			},
 			"pagination": {
 				"previous": "Previous Page",

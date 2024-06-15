@@ -94,7 +94,7 @@ export default function QuestionPreviewSmall(props: { question?: QuestionDef }) 
 					<span style={ { marginInline: "calc(var(--spacing) / 2)" } }>·</span>
 					
 					<span style={ { display: "inline-flex" } }>
-						<i className={ "fi fi-rr-user" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+						<i className={ "fi fi-rr-refresh" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
 						Updated: { formatDate(props.question.updated) }
 					</span>
 				</>

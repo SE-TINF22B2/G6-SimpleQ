@@ -57,7 +57,12 @@ export default function Question(props: {
 							<i className={ "fi fi-rr-clock" }
 							   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
 							{ t('dashboard.questionView.question.creationDate', {
-								questionCreationDate: formatDate(props.question.created),
+								questionCreationDate: formatDate(props.question.created)
+							}) }
+							<span style={ { marginInline: "calc(var(--spacing) / 2)" } }>·</span>
+							<i className={ "fi fi-rr-refresh" }
+							   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+							{ t('dashboard.questionView.question.updatedDate', {
 								questionUpdatedDate: formatDate(props.question.updated)
 							}) }
 						</span>

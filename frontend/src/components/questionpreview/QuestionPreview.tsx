@@ -3,6 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { QuestionDef } from "../../def/QuestionDef";
 import Avatar from "../avatar/Avatar";
+import { formatDate } from "../../def/converter";
 
 interface Props {
 	question: QuestionDef;
@@ -49,14 +50,14 @@ export default function QuestionPreview(props: Props) {
 			<p className={ "caption" }>
 				<span style={ { display: "inline-flex" } }>
 					<i className={ "fi fi-rr-clock" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-					Created: { props.question.created }
+					Created: { formatDate(props.question.created) }
 				</span>
 				
 				<span style={ { marginInline: "calc(var(--spacing) / 2)" } }>·</span>
 				
 				<span style={ { display: "inline-flex" } }>
-					<i className={ "fi fi-rr-user" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-					Updated: { props.question.updated }
+					<i className={ "fi fi-rr-refresh" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+					Updated: { formatDate(props.question.updated) }
 				</span>
 			</p>
 		</div>
