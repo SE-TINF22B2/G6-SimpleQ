@@ -30,7 +30,11 @@ import {
 } from '@prisma/client';
 import { VoteDto } from '../questions/dto/vote.dto';
 import { FavoriteService } from '../../database/favorite/favorite.service';
-import { IAnswer, IQuestion } from '../questions/dto/user-content-interface';
+import {
+  IAnswer,
+  IQuestion,
+  ITrendingQuestion,
+} from '../questions/dto/user-content-interface';
 
 @Injectable()
 export class UserContentRequestService {
@@ -50,21 +54,22 @@ export class UserContentRequestService {
    * @throws NotFoundException
    *
    */
-  async getTrendingQuestions(req: any) {
+  async getTrendingQuestions(req: any): Promise<ITrendingQuestion[]> {
     const questions = await this.userContentService.getTrendingQuestions();
     if (null === questions) {
       throw new NotFoundException('No trending questions found.');
     }
 
-    const results: any[] = [];
+    const results: ITrendingQuestion[] = [];
     for (let i = 0; i < questions.length; i++) {
-      results.push(
-        await this.getUserContent(
-          questions[i].userContentID,
-          UserContentType.Question,
-          req?.userId,
-        ),
-      );
+      const question = (await this.getUserContent(
+        questions[i].userContentID,
+        UserContentType.Question,
+        req?.userId,
+      )) as IQuestion;
+      // @ts-ignore
+      delete question.content;
+      results.push(question);
     }
     return results;
   }

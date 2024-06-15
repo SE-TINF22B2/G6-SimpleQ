@@ -27,3 +27,5 @@ export interface IAnswer extends IUserContent {
     type: string;
   };
 }
+
+export type ITrendingQuestion = Omit<IQuestion, 'content'>;
