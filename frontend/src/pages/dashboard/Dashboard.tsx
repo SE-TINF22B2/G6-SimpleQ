@@ -218,7 +218,7 @@ export default function Dashboard(props: Props) {
 			{ props.activeQuestion && <>
                 <NavLink to={ "question/" + props.activeQuestion.id } className={ "navigate" }
                          onClick={ (e) => animateBlob(e) }>
-                    <i className={ "fi fi-sr-question-square" }/>
+                    <i className={ "fi fi-" + (window.location.pathname.includes("/question") ? "s" : "r") + "r-question-square" }/>
                     <div className={ "nav-label" } style={ { display: "flex", flexDirection: "column" } }>
                         <p className={ "caption" }>
 							{ window.location.pathname.includes("/question")
