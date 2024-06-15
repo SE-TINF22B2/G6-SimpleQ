@@ -67,19 +67,19 @@ export default function TextEditor(props: Props) {
 		
 		</div>
 		
-		<p ref={ (_p) => _p && setEditorRef(_p) }
-		   className={ "text-editor-content" }
-		   contentEditable={ !(props.disabled) }
-		   suppressContentEditableWarning={ true }
-		   data-placeholder={ props.placeholder }
-		   onInput={ (e) => {
-			   setWordCount((e.target as HTMLSpanElement).innerText.split(" ").length);
-			   if (props.onInput) props.onInput((e.target as HTMLSpanElement).innerHTML);
-		   } }
-		   style={ { height: props.height ?? "auto" } }
-		   onClick={ (e) => e.stopPropagation() }>
+		<div ref={ (_p) => _p && setEditorRef(_p) }
+			 className={ "text-editor-content" }
+			 contentEditable={ !(props.disabled) }
+			 suppressContentEditableWarning={ true }
+			 data-placeholder={ props.placeholder }
+			 onInput={ (e) => {
+				 setWordCount((e.target as HTMLSpanElement).innerText.split(" ").length);
+				 if (props.onInput) props.onInput((e.target as HTMLSpanElement).innerHTML);
+			 } }
+			 style={ { height: props.height ?? "auto" } }
+			 onClick={ (e) => e.stopPropagation() }>
 			{ props.children }
-		</p>
+		</div>
 		
 		<p className={ "caption text-editor-caption" }>
 			{ t('components.textEditor.wordCount', { count: wordCount }) }
