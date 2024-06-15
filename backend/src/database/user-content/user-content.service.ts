@@ -119,10 +119,10 @@ export class UserContentService {
   async getTrendingQuestions(
     limit: number = 10,
     offset: number = 0,
-  ): Promise<UserContent[] | null> {
+  ): Promise<UserContentWithRating[] | null> {
     const time: Date = new Date();
     time.setDate(time.getDate() - 7);
-    return this.prisma.userContent.findMany({
+    const questions = await this.prisma.userContent.findMany({
       where: {
         type: UserContentType.Question,
         timeOfCreation: { gte: time },
@@ -134,6 +134,7 @@ export class UserContentService {
         question: true,
       },
     });
+    return this.addRatingToUserContents(questions);
   }
 
   /**

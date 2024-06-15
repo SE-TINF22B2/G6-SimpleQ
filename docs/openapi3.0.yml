@@ -660,7 +660,7 @@ paths:
   /favourites/remaining:
     get:
       tags:
-        -favourites
+        - favourites
       summary: 'get how many favourites you can add till the maximum is reached. Null represents infinite.'
       responses:
         '200':

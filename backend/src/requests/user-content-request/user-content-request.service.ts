@@ -60,21 +60,19 @@ export class UserContentRequestService {
     if (null === questions) {
       throw new NotFoundException('No trending questions found.');
     }
-
-    const results: IQuestionMetadata[] = [];
-    for (let i = 0; i < questions.length; i++) {
-      const question = (await this.getUserContent(
-        questions[i].userContentID,
-        UserContentType.Question,
-        req?.userId,
-        false,
-        true,
-      )) as IQuestionMetadata;
-      results.push(question);
-    }
-    return results;
+    return await this.mapDatabaseQuestionsToIQuestionMetadata(
+      questions,
+      req?.userId,
+      true,
+    );
   }
 
+  /**
+   * Get Questions of the user in database format
+   * @param userId
+   * @param sortOptions
+   * @private
+   */
   private async getQuestionsOfUser(
     userId: string,
     sortOptions: QueryParameters,
@@ -93,28 +91,22 @@ export class UserContentRequestService {
     );
   }
 
+  /**
+   * Get question which the user has created in Metadata format
+   * @param userId
+   * @param sortOptions
+   * @return IQuestionMetadata
+   */
   async getMyQuestions(
     userId: string,
     sortOptions: QueryParameters,
   ): Promise<IQuestionMetadata[]> {
     const questions = await this.getQuestionsOfUser(userId, sortOptions);
-    if (questions == null) {
-      return [];
-    }
-    const results: IQuestionMetadata[] = [];
-    for (let i = 0; i < questions.length; i++) {
-      const question = (await this.getUserContent(
-        questions[i].userContentID,
-        UserContentType.Question,
-        userId,
-        false,
-        true,
-      )) as IQuestionMetadata;
-      question.likes = questions[i].likes;
-      question.dislikes = questions[i].dislikes;
-      results.push(question);
-    }
-    return results;
+    return await this.mapDatabaseQuestionsToIQuestionMetadata(
+      questions,
+      userId,
+      true,
+    );
   }
 
   /**
@@ -442,17 +434,27 @@ export class UserContentRequestService {
   /**
    * Fetches the questions for a given search criteria
    * @param query typeof SearchQuery
+   * @param userId
    * @returns the questions meeting the criteria or an empty array
    * */
-  async search(query: SearchQuery) {
-    return await this.userContentService.searchForQuestionsOrDiscussions(
-      query.q,
-      createSortOptions(
-        query.sortBy,
-        query.sortDirection,
-        query.offset,
-        query.limit,
-      ),
+  async search(
+    query: SearchQuery,
+    userId?: string,
+  ): Promise<IQuestionMetadata[]> {
+    const questions =
+      await this.userContentService.searchForQuestionsOrDiscussions(
+        query.q,
+        createSortOptions(
+          query.sortBy,
+          query.sortDirection,
+          query.offset,
+          query.limit,
+        ),
+      );
+    return await this.mapDatabaseQuestionsToIQuestionMetadata(
+      questions,
+      userId,
+      true,
     );
   }
 
@@ -501,7 +503,7 @@ export class UserContentRequestService {
   }
 
   /**
-   * Parse creator information to differentiate between guest, registered and ai users
+   * Parse creator information to differentiate between guest, registered and AI users
    * @param creator - the creator of a question
    * @param type - the UserContentType
    * @param userContentId - the id of the UserContent
@@ -531,6 +533,7 @@ export class UserContentRequestService {
         };
     }
   }
+
   /*
    * set vote for one userContentId for one user,
    * removes the vote if the parameter vote is set to 'none'
@@ -614,5 +617,40 @@ export class UserContentRequestService {
       }
     }
     return VOTE_OPTIONS.NONE;
+  }
+
+  /**
+   * Maps the user content result of the database to IQuestion Metadata as provided in the Interface
+   * @param questions
+   * @param userId
+   * @param mapLikes
+   * @private
+   */
+  private async mapDatabaseQuestionsToIQuestionMetadata(
+    questions: UserContentWithRating[] | UserContent[] | null,
+    userId?: string,
+    mapLikes?: boolean,
+  ): Promise<IQuestionMetadata[]> {
+    if (!questions) {
+      return [];
+    }
+    const results: IQuestionMetadata[] = [];
+    for (let i = 0; i < questions.length; i++) {
+      const question = (await this.getUserContent(
+        questions[i].userContentID,
+        UserContentType.Question,
+        userId,
+        false,
+        true,
+      )) as IQuestionMetadata;
+
+      if (mapLikes) {
+        const userContentWithRating = questions[i] as UserContentWithRating;
+        question.likes = userContentWithRating.likes;
+        question.dislikes = userContentWithRating.dislikes;
+      }
+      results.push(question);
+    }
+    return results;
   }
 }
