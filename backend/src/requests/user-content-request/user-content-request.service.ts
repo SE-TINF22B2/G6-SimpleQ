@@ -33,8 +33,9 @@ import { FavoriteService } from '../../database/favorite/favorite.service';
 import {
   IAnswer,
   IQuestion,
-  ITrendingQuestion,
+  IQuestionMetadata, IQuestionMetadataWithRating,
 } from '../questions/dto/user-content-interface';
+import { UserContentWithRating } from '../../database/user-content/user-content-interfaces';
 
 @Injectable()
 export class UserContentRequestService {
@@ -54,34 +55,33 @@ export class UserContentRequestService {
    * @throws NotFoundException
    *
    */
-  async getTrendingQuestions(req: any): Promise<ITrendingQuestion[]> {
+  async getTrendingQuestions(req: any): Promise<IQuestionMetadata[]> {
     const questions = await this.userContentService.getTrendingQuestions();
     if (null === questions) {
       throw new NotFoundException('No trending questions found.');
     }
 
-    const results: ITrendingQuestion[] = [];
+    const results: IQuestionMetadata[] = [];
     for (let i = 0; i < questions.length; i++) {
       const question = (await this.getUserContent(
         questions[i].userContentID,
         UserContentType.Question,
         req?.userId,
-      )) as IQuestion;
-      // @ts-ignore
-      delete question.content;
+        false,
+        true,
+      )) as IQuestionMetadata;
       results.push(question);
     }
     return results;
   }
 
-  async getQuestionsOfUser(
+  private async getQuestionsOfUser(
     userId: string,
     sortOptions: QueryParameters,
-  ): Promise<object[] | null> {
+  ): Promise<UserContentWithRating[] | null> {
     if (!userId || !(await this.userService.userIdExists(userId))) {
       throw new NotFoundException('User id does not exist.');
     }
-
     return this.userContentService.getQuestionsOfUser(
       userId,
       createSortOptions(
@@ -93,13 +93,38 @@ export class UserContentRequestService {
     );
   }
 
+  async getMyQuestions(
+    userId: string,
+    sortOptions: QueryParameters,
+  ): Promise<IQuestionMetadata[]> {
+    const questions = await this.getQuestionsOfUser(userId, sortOptions);
+    if (questions == null) {
+      return [];
+    }
+    const results: IQuestionMetadataWithRating[] = [];
+    for (let i = 0; i < questions.length; i++) {
+      const question = (await this.getUserContent(
+        questions[i].userContentID,
+        UserContentType.Question,
+        userId,
+        false,
+        true,
+      )) as IQuestionMetadata;
+      question.likes = questions[i].likes;
+      question.dislikes = questions[i].dislikes;
+      results.push(question);
+    }
+    return results;
+  }
+
   /**
    * Loads User Content
    * @param userContentId - UUID of user content
    * @param type - type of UserContentType
    * @param userId  - UUID of user
-   * @param includeFavouriteTag - switch parameter,
+   * @param includeFavouriteTag - switch parameter, normally false
    * should the object include the property, telling content is favourite?
+   * @param isQuestionMetadata - if true it removes the content property
    * @throws NotFoundException
    */
   async getUserContent(
@@ -107,6 +132,7 @@ export class UserContentRequestService {
     type: UserContentType,
     userId?: string,
     includeFavouriteTag?: boolean,
+    isQuestionMetadata?: boolean,
   ): Promise<IQuestion | IAnswer> {
     const result: {
       userContent: UserContent | null;
@@ -160,6 +186,11 @@ export class UserContentRequestService {
         await this.userContentService.getTagsOfUserContent(userContentId);
       (response as IQuestion).tags = rawTags?.map((tag) => tag.tagname) ?? [];
       (response as IQuestion).title = result.question?.title ?? '--';
+
+      if (isQuestionMetadata) {
+        // @ts-ignore
+        delete (response as IQuestionMetadata).content;
+      }
     }
 
     if (includeFavouriteTag && userId) {

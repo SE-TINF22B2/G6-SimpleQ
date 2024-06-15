@@ -58,7 +58,7 @@ export class QuestionsController {
     @Req() request: any,
     @Query(new ValidationPipe()) query: QueryParameters,
   ): Promise<object[] | null> {
-    return this.userContentService.getQuestionsOfUser(request.userId, query);
+    return this.userContentService.getMyQuestions(request.userId, query);
   }
 
   @Get(':id')
