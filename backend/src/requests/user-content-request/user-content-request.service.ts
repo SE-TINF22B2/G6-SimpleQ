@@ -26,9 +26,7 @@ import {
   TypeOfAI,
   UserContent,
   UserContentType,
-  Vote,
 } from '@prisma/client';
-import { VoteDto } from '../questions/dto/vote.dto';
 import { FavoriteService } from '../../database/favorite/favorite.service';
 import { IAnswer, IQuestion } from '../questions/dto/user-content-interface';
 
@@ -59,11 +57,7 @@ export class UserContentRequestService {
     const results: any[] = [];
     for (let i = 0; i < questions.length; i++) {
       results.push(
-        await this.getUserContent(
-          questions[i].userContentID,
-          UserContentType.Question,
-          req?.userId,
-        ),
+        await this.getUserContent(questions[i].userContentID, req?.userId),
       );
     }
     return results;
@@ -96,7 +90,6 @@ export class UserContentRequestService {
       results.push(
         (await this.getUserContent(
           questions[i].userContentID,
-          UserContentType.Question,
           userId,
         )) as IQuestion,
       );
@@ -115,7 +108,6 @@ export class UserContentRequestService {
    */
   async getUserContent(
     userContentId: string,
-    type: UserContentType,
     userId?: string,
     includeFavouriteTag?: boolean,
   ): Promise<IQuestion | IAnswer> {
@@ -124,16 +116,8 @@ export class UserContentRequestService {
       question: Question | null;
     } = await this.userContentService.getQuestion(userContentId);
 
-    if (result.userContent == null)
-      throw new NotFoundException(
-        `No ${type.toLowerCase()} found with this id.`,
-      );
-
-    if (!result) {
-      throw new NotFoundException(
-        `No ${type.toLowerCase()} found with this id.`,
-      );
-    }
+    if (result.userContent == null || !result)
+      throw new NotFoundException(`No userContent found with this id.`);
 
     const evaluation: { likes: number; dislikes: number } =
       await this.userContentService.getLikesAndDislikesOfUserContent(
@@ -151,21 +135,20 @@ export class UserContentRequestService {
 
     const response: IAnswer | IQuestion = {
       id: result.userContent.userContentID,
-      numberOfAnswers: numberOfAnswers ?? 0,
       ...evaluation,
       created: result.userContent.timeOfCreation,
       opinion: await this.getOpinionToUserContent(userContentId, userId),
       author: await this.parseCreator(
         creator,
-        type,
+        result.userContent.type,
         result.userContent.userContentID,
       ),
       content: result.userContent.content ?? '--',
     };
 
     if (
-      type === UserContentType.Question ||
-      type === UserContentType.Discussion
+      result.userContent.type === UserContentType.Question ||
+      result.userContent.type === UserContentType.Discussion
     ) {
       const rawTags =
         await this.userContentService.getTagsOfUserContent(userContentId);
@@ -177,6 +160,7 @@ export class UserContentRequestService {
       (response as IQuestion).tags = rawTags?.map((tag) => tag.tagname) ?? [];
       (response as IQuestion).title = result.question?.title ?? '--';
       (response as IQuestion).updated = lastUpdated;
+      (response as IQuestion).numberOfAnswers = numberOfAnswers ?? 0;
     }
 
     if (includeFavouriteTag && userId) {
@@ -244,9 +228,7 @@ export class UserContentRequestService {
     // change results to openAPI schema
     const answers: IAnswer[] = [];
     for (const answer of rawAnswers) {
-      answers.push(
-        await this.getUserContent(answer.userContentID, UserContentType.Answer),
-      );
+      answers.push(await this.getUserContent(answer.userContentID));
     }
     if (!answers) {
       return [];
@@ -496,11 +478,11 @@ export class UserContentRequestService {
       case 'Answer':
         const answer = await this.userContentService.getAnswer(userContentId);
         return {
-          id: answer.answer?.typeOfAI != 'None' ? null : creator.id,
+          id: answer.answer?.typeOfAI != 'None' ? null : creator.userID,
           name:
             answer.answer?.typeOfAI != 'None'
               ? answer?.answer?.typeOfAI
-              : creator.name,
+              : creator.username,
           type: answer.answer?.typeOfAI != 'None' ? 'ai' : 'Registered',
         };
       default:
@@ -510,64 +492,6 @@ export class UserContentRequestService {
           type: creator?.isPro ? 'pro' : 'registered' ?? 'guest',
         };
     }
-  }
-  /*
-   * set vote for one userContentId for one user,
-   * removes the vote if the parameter vote is set to 'none'
-   * @param vote
-   * @param userContentId
-   * @param userId
-   *
-   * @throws NotFoundException
-   */
-  async updateUserVote(
-    vote: VoteDto,
-    userContentId: string,
-    userId: string,
-  ): Promise<Vote | null> {
-    // check question exists
-    const author =
-      await this.userContentService.getAuthorOfUserContent(userContentId);
-    if (author == null) {
-      throw new NotFoundException(
-        'User content ' + userContentId + " doesn't exist!",
-      );
-    }
-
-    const oldVote = await this.voteService.getVote(userContentId, userId);
-    if (oldVote) {
-      // old vote exists
-      const oldVoteName = oldVote.isPositive
-        ? VOTE_OPTIONS.LIKE
-        : VOTE_OPTIONS.DISLIKE;
-      if (vote.id == oldVoteName) return null;
-      // remove the old vote
-      await this.voteService.deleteVote(userContentId, userId);
-      if (vote.id == VOTE_OPTIONS.NONE) return null;
-    }
-    // set (new) vote
-    const isPositive = vote.id == VOTE_OPTIONS.LIKE;
-    return await this.voteService.createVote(userContentId, userId, isPositive);
-  }
-
-  /**
-   * get the vote for one user-content-item for one user
-   * @param userContentId
-   * @param userId
-   * @throws NotFoundException
-   */
-  async getUserVote(
-    userContentId: string,
-    userId: string,
-  ): Promise<Vote | null> {
-    if (
-      !(await this.userContentService.getAuthorOfUserContent(userContentId))
-    ) {
-      throw new NotFoundException(
-        'User content ' + userContentId + " doesn't exist!",
-      );
-    }
-    return this.voteService.getVote(userContentId, userId);
   }
 
   /**
