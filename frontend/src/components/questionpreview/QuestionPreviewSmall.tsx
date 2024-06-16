@@ -4,12 +4,20 @@ import Skeleton from "react-loading-skeleton";
 import { formatDate } from "../../def/converter";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function QuestionPreviewSmall(props: { question?: QuestionDef }) {
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	
 	return <Section className={ "glass-hover" }
-					style={ { userSelect: "none", cursor: "pointer", pointerEvents: props.question ? "all" : "none" } }
+					style={ {
+						userSelect: "none",
+						cursor: "pointer",
+						pointerEvents: props.question ? "all" : "none",
+						display: "flex",
+						flexDirection: "column"
+					} }
 					tabIndex={ props.question ? 0 : -1 }
 					onClick={ () => {
 						if (props.question) navigate("/dashboard/question/" + props.question.id);
@@ -18,94 +26,77 @@ export default function QuestionPreviewSmall(props: { question?: QuestionDef }) 
 						if (props.question && e.key === "Enter")
 							navigate("/dashboard/question/" + props.question.id);
 					} }>
-		<div style={ { display: "flex", alignItems: "center", gap: "var(--spacing)" } }>
-			<div style={ { flex: 1 } }>
-				<p className={ "tags" }>
-					{ props.question
-						? <>
-							{ props.question.isDiscussion
-								? <span className={ "badge badge-outline" }>
+		<p className={ "tags" }>
+			{ props.question
+				? <>
+					{ props.question.isDiscussion
+						? <span className={ "badge badge-outline" }>
 									<i className={ "fi fi-rr-comments-question" }
 									   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-									Discussion
+							{ t('components.question.type.discussion') }
 							</span>
-								: <span className={ "badge badge-outline" }>
+						: <span className={ "badge badge-outline" }>
 									<i className={ "fi fi-rr-interrogation" }
 									   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-									Question
+							{ t('components.question.type.question') }
 								</span>
-							}
-							
-							<span className={ "tags-divider" }/>
-							
-							{ props.question.tags.map((tag, index) =>
-								<span className={ "badge" } key={ index }>{ tag }</span>) }
-						</>
-						: <Skeleton width={ 150 }/>
 					}
-				</p>
-				
-				<br/>
-				
-				<h2 style={ { marginBlock: "calc(var(--spacing) / 2)" } }>
-					{ props.question?.title ?? <Skeleton width={ 250 }/> }
-				</h2>
-			</div>
-			
-			<div className={ "question-stats" }>
-				{ props.question
-					? <>
-						<div className={ "question-stat" }>
-							<i className={ "fi fi-rr-social-network primary-icon" }/>
-							<span className={ "question-figure" }>1</span>
-						</div>
-						
-						<div className={ "question-stat" }>
-							<i className={ "fi fi-rr-social-network flipY primary-icon" }/>
-							<span className={ "question-figure" }>1</span>
-						</div>
-					</>
-					: <>
-						<Skeleton width={ "var(--ui-spacing)" }/>
-						<Skeleton/>
-					</>
-				}
-			</div>
-			
-			<div className={ "question-stats" }>
-				{ props.question
-					? <>
-						<div className={ "question-stat" }>
-							<i className={ "fi fi-rr-eye primary-icon" }/>
-							<span className={ "question-figure" }>1</span>
-						</div>
-						
-						<div className={ "question-stat" }>
-							<i className={ "fi fi-rr-comment primary-icon" }/>
-							<span className={ "question-figure" }>1</span>
-						</div>
-					</>
-					: <>
-						<Skeleton width={ "var(--ui-spacing)" }/>
-						<Skeleton/>
-					</>
-				}
-			</div>
-		</div>
+					
+					<span className={ "tags-divider" }/>
+					
+					{ props.question.tags.map((tag, index) =>
+						<span className={ "badge" } key={ index }>{ tag }</span>) }
+				</>
+				: <Skeleton width={ 150 }/>
+			}
+		</p>
+		
+		<h2 style={ {
+			flex: 1,
+			marginBlock: "calc(var(--spacing) / 2)",
+			alignSelf: "flex-start",
+			display: "grid",
+			placeItems: "center"
+		} }>
+			{ props.question?.title ?? <Skeleton width={ 250 }/> }
+		</h2>
 		
 		<p className={ "caption" }>
 			{ props.question
 				? <>
 					<span style={ { display: "inline-flex" } }>
 						<i className={ "fi fi-rr-clock" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-						Created: { formatDate(props.question.created) }
+						{ formatDate(props.question.created) }
 					</span>
 					
 					<span style={ { marginInline: "calc(var(--spacing) / 2)" } }>·</span>
 					
 					<span style={ { display: "inline-flex" } }>
 						<i className={ "fi fi-rr-refresh" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-						Updated: { formatDate(props.question.updated) }
+						{ formatDate(props.question.updated) }
+					</span>
+					
+					<span style={ { marginInline: "calc(var(--spacing) / 2)" } }>·</span>
+					
+					<span style={ { display: "inline-flex" } }>
+						<i className={ "fi fi-rr-comment" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+						{ props.question.answers }
+					</span>
+					
+					<span style={ { marginInline: "calc(var(--spacing) / 2)" } }>·</span>
+					
+					<span style={ { display: "inline-flex" } }>
+						<i className={ "fi fi-rr-social-network" }
+						   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+						{ props.question.likes }
+					</span>
+					
+					<span style={ { marginInline: "calc(var(--spacing) / 2)" } }>·</span>
+					
+					<span style={ { display: "inline-flex" } }>
+						<i className={ "fi fi-rr-social-network flipY" }
+						   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+						{ props.question.dislikes }
 					</span>
 				</>
 				: <Skeleton width={ 100 }/> }
