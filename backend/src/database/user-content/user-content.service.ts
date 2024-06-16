@@ -1,17 +1,47 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable } from '@nestjs/common';
-import {
-  Answer,
-  Discussion,
-  Question,
-  Tag,
-  TypeOfAI,
-  User,
-  UserContent,
-  UserContentType,
-  Vote,
-} from '@prisma/client';
+import { Answer, Discussion, Question, Tag, TypeOfAI, User, UserContent, UserContentType, Vote } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
+import { DEFAULT_USER_CONTENT_LIMIT, DEFAULT_USER_CONTENT_OFFSET, SORT_BY, SORT_DIRECTION } from '../../../config';
+
+
+export type SortOptions = {
+  sortBy: SortType;
+  sortDirection: SortDirection;
+  offset: number;
+  limit: number;
+};
+
+export enum SortType {
+  ldr, // like-dislike-ratio
+  likes,
+  dislikes,
+  timestamp,
+}
+export enum SortDirection {
+  desc,
+  asc,
+}
+
+export function createSortOptions(
+  sortBy: string = SORT_BY.LDR,
+  sortDirection: string = SORT_DIRECTION.DESC,
+  offset: number = DEFAULT_USER_CONTENT_OFFSET,
+  limit: number = DEFAULT_USER_CONTENT_LIMIT,
+): SortOptions {
+  return {
+    sortBy: SortType[sortBy],
+    sortDirection: SortDirection[sortDirection],
+    offset: offset,
+    limit: limit,
+  };
+}
+
+type UserContentWithRating = UserContent & {
+  likes: number;
+  dislikes: number;
+};
 
 @Injectable()
 export class UserContentService {
@@ -22,15 +52,19 @@ export class UserContentService {
     ownerID: string | null,
     content: string | null,
     title: string,
-    groupID?: string,
+    tagnames: string[],
   ): Promise<{ userContent: UserContent; question: Question }> {
     return this.prisma.$transaction(async (tx) => {
       const createdContent = await tx.userContent.create({
         data: {
           ownerID: ownerID,
-          groupID: groupID,
           content: content,
           type: UserContentType.Question,
+          tags: {
+            connect: tagnames.map((tag) => {
+              return { tagname: tag };
+            }),
+          },
         },
       });
       const createdQuestion = await tx.question.create({
@@ -63,13 +97,47 @@ export class UserContentService {
     };
   }
 
+  async getUserContentOfIDList(
+    questionIDs: string[]
+  ): Promise<UserContent[] | null> {
+    return this.prisma.userContent.findMany({
+      where: {
+        userContentID: { in: questionIDs }
+      }
+    });
+  }
+
+  /**
+   * Get all questions of a user.
+   * @param userID ID of the user
+   * @param sortOptions Options to sort the returned questions
+   * @returns Array of UserContent objects
+   */
+  async getQuestionsOfUser(
+    userID: string,
+    sortOptions: SortOptions,
+  ): Promise<UserContentWithRating[] | null> {
+    const questions = await this.prisma.userContent.findMany({
+      where: { ownerID: userID },
+    });
+    if (null === questions) {
+      return null;
+    }
+
+    const questionsWithRating = await this.addRatingToUserContents(questions);
+    return this.sortBySortOptions(questionsWithRating, sortOptions);
+  }
+
   /**
    * Get the most voted questions of the last seven days.
-   * @param limit Maximum amount of questions that are returned. Default: 10
+   * @param limit Maximum number of questions that are returned. Default: 10
    * @param offset Number of questions that are skipped. Default: 0
    * @returns Array of UserContents with question
    */
-  async getTrendingQuestions(limit: number = 10, offset: number = 0) {
+  async getTrendingQuestions(
+    limit: number = 10,
+    offset: number = 0,
+  ): Promise<UserContent[] | null> {
     const time: Date = new Date();
     time.setDate(time.getDate() - 7);
     return this.prisma.userContent.findMany({
@@ -77,7 +145,7 @@ export class UserContentService {
         type: UserContentType.Question,
         timeOfCreation: { gte: time },
       },
-      orderBy: { vote: { _count: 'desc' } }, // impossible to order by the last upvoted questions with isPositive=true
+      orderBy: { votes: { _count: SORT_DIRECTION.DESC } }, // impossible to order by the last upvote questions with isPositive=true
       take: limit,
       skip: offset,
       include: {
@@ -87,13 +155,148 @@ export class UserContentService {
   }
 
   /**
-   * Search for questions in the database with given search criteria
-   * @param query typeof SearchQuery described in ./dto/search.dto.ts
-   * */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async search(query: any) {
-    // TODO: This method must be implemented
-    return [];
+   * Get all questions or discussions that contain one of the query words in their content or title.
+   * @param query String to search for
+   * @returns Array of UserContents, or null if no UserContent contains the query
+   */
+  async getUserContentsFromQuery(query: string): Promise<UserContent[] | null> {
+    query = this.convertQueryToSearchInput(query);
+    return this.prisma.userContent.findMany({
+      where: {
+        AND: [
+          {
+            OR: [
+              {
+                type: UserContentType.Question,
+              },
+              {
+                type: UserContentType.Discussion,
+              },
+            ],
+          },
+          {
+            OR: [
+              {
+                content: {
+                  search: query,
+                },
+              },
+              {
+                question: {
+                  title: {
+                    search: query,
+                  },
+                },
+              },
+              {
+                discussion: {
+                  title: {
+                    search: query,
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    });
+  }
+
+  convertQueryToSearchInput(query: string){
+    return query
+      .replaceAll(/[<>@"+\-()~*]/g, '')
+      .replaceAll(/\s+/g, ' ')
+      .split(' ')
+      .map((word) => (word == '' ? '' : `${word}*`))
+      .join(' ');
+  }
+
+  /**
+   * Search for questions or discussions with a query string and searchOptions. The query is a string that
+   * has to be in the title or the content of the question.
+   * @param query String to search for
+   * @param sortOptions Object of type SortOptions
+   * @returns Array of sorted questions, or null if there are no questions containing the query
+   */
+  async searchForQuestionsOrDiscussions(
+    query: string,
+    sortOptions: SortOptions,
+  ): Promise<UserContentWithRating[] | null> {
+    const userContents: UserContent[] | null =
+      await this.getUserContentsFromQuery(query);
+    // if no questions or discussions where found
+    if (null === userContents) {
+      return null;
+    }
+
+    const questionsWithRating =
+      await this.addRatingToUserContents(userContents);
+    return this.sortBySortOptions(questionsWithRating, sortOptions);
+  }
+
+  /**
+   * Adds the number of likes and dislikes to all UserContents in the array.
+   * @param array Array of UserContent objects
+   * @returns Array of objects of type UserContentWithRating
+   */
+  private async addRatingToUserContents(
+    array: UserContent[],
+  ): Promise<UserContentWithRating[]> {
+    return await Promise.all(
+      array.map(async (q) => {
+        const rating = await this.getLikesAndDislikesOfUserContent(
+          q.userContentID,
+        );
+        return {
+          ...q,
+          likes: rating.likes,
+          dislikes: rating.dislikes,
+        };
+      }),
+    );
+  }
+
+  /**
+   * Sorts an array of UserContents by the options provided in sortOptions. The UserContents have to be
+   * UserContentWithRating objects.
+   * @param array Array of objects of type UserContentWithRating
+   * @param sortOptions Options to sort the array
+   * @returns Array of sorted UserContentWithRating objects
+   */
+  sortBySortOptions(
+    array: UserContentWithRating[],
+    sortOptions: SortOptions,
+  ): UserContentWithRating[] {
+    switch (sortOptions.sortBy) {
+      case SortType.ldr:
+        array.sort((q) => {
+          if(q.likes == 0 && q.dislikes == 0) return 0;
+          if(q.likes == 0) return -1;
+          if(q.dislikes == 0) return 1;          
+          return q.likes / q.dislikes;
+        });
+        break;
+      case SortType.likes:
+        array = array.sort((q) => q.likes);
+        break;
+      case SortType.dislikes:
+        array.sort((q) => {
+          return q.likes;
+        });
+        break;
+      case SortType.timestamp:
+        array.sort((q) => {
+          return q.timeOfCreation.getTime();
+        });
+        break;
+    }
+
+    if (sortOptions.sortDirection === SortDirection.desc) {
+      array.reverse();
+    }
+    // Put the "deleted" items inside the array to return the filtered items
+    array = array.splice(sortOptions.offset, sortOptions.limit);
+    return array;
   }
 
   /**
@@ -107,15 +310,15 @@ export class UserContentService {
         await this.prisma.userContent.findUnique({
           where: { userContentID: userContentID },
           select: {
-            tag: true,
+            tags: true,
           },
         })
-      )?.tag || null
+      )?.tags || null
     );
   }
 
   /**
-   * Get the amount of likes and dislikes of an UserContent.
+   * Get the number of likes and dislikes of a UserContent.
    * @param userContentID ID of the UserContent
    * @returns object containing likes and dislikes as numbers
    */
@@ -127,10 +330,10 @@ export class UserContentService {
         await this.prisma.userContent.findUnique({
           where: { userContentID: userContentID },
           select: {
-            vote: true,
+            votes: true,
           },
         })
-      )?.vote || null;
+      )?.votes || null;
     let likes: number = 0;
     let dislikes: number = 0;
     votes?.forEach((vote) => {
@@ -149,7 +352,7 @@ export class UserContentService {
    * @returns number of answers
    */
   async getNumberOfAnswersFromGroupID(groupID: string): Promise<number | null> {
-    return await this.prisma.userContent.count({
+    return this.prisma.userContent.count({
       where: { groupID: groupID, type: UserContentType.Answer },
     });
   }
@@ -204,18 +407,41 @@ export class UserContentService {
   }
 
   /**
-   * Should return all the answers to a corresponding question
-   * @param groupID the groupId of the question
-   * @returns array with answers or an empty one if no anwers exist
+   * Get all the answers of a corresponding question or discussion.
+   * @param groupID String with the groupID of the question or discussion
+   * @param sortOptions
+   * @param enableAI
+   * @returns Array of Answer objects, or null if no answers exist
    * */
   async getAnswersOfGroupID(
-    groupID: string | undefined,
-    sortCriteria: any,
-  ): Promise<object[]> {
-    // TODO: needs to be implemented
-    return [];
+    groupID: string,
+    sortOptions: SortOptions,
+    enableAI: boolean,
+  ): Promise<UserContentWithRating[] | null> {
+    const answers: UserContent[] | null =
+      await this.prisma.userContent.findMany({
+        where: {
+          groupID: groupID,
+          type: UserContentType.Answer,
+          answer: enableAI
+            ? {}
+            : {
+                typeOfAI: TypeOfAI.None,
+              },
+        },
+      });
+    if (null === answers) {
+      return null;
+    }
+    const answersWithRating = await this.addRatingToUserContents(answers);
+    return this.sortBySortOptions(answersWithRating, sortOptions);
   }
 
+  /**
+   * get Answer of ID
+   * @param answerID
+   * @returns userContent and answer object
+   */
   async getAnswer(
     answerID: string,
   ): Promise<{ userContent: UserContent | null; answer: Answer | null }> {
@@ -232,7 +458,21 @@ export class UserContentService {
   }
 
   /**
-   * Check if an UserContent with the given groupID exists.
+   * check if user content does exist
+   * @param userContentID
+   * @returns Promise<boolean>
+   */
+  async checkUserContentIDExists(userContentID: string): Promise<boolean> {
+    const userContent: { userContentID: string } | null =
+      await this.prisma.userContent.findUnique({
+        where: { userContentID: userContentID },
+        select: { userContentID: true },
+      });
+    return userContent != null;
+  }
+
+  /**
+   * Check if a UserContent with the given groupID exists.
    * @param groupID ID of the Group the UserContent should be in
    * @returns true if an UserContent exist
    */
@@ -240,13 +480,11 @@ export class UserContentService {
     const contentExists = await this.prisma.userContent.findFirst({
       where: {
         groupID: groupID,
-        type: UserContentType.Question,
       },
       select: {
         userContentID: true,
       },
     });
-
     return contentExists != null;
   }
 
@@ -278,21 +516,59 @@ export class UserContentService {
     return aiAnswer != null;
   }
 
+  /**
+   * Counts the number of KI generated answers for a user
+   * MAX number of KI generated answer for not prime user: 15
+   * @returns number - number of KI generated answers
+   * @param userID
+   */
+  async countAIAnswersForUser(userID: string): Promise<number> {
+    const ownQuestion = await this.prisma.userContent.findMany({
+      where: {
+        ownerID: userID,
+        type: {
+          in: [UserContentType.Question, UserContentType.Discussion],
+        },
+      },
+      select: {
+        groupID: true,
+      },
+    });
+
+    return this.prisma.userContent.count({
+      where: {
+        groupID: {
+          in: ownQuestion.map((q) => q.groupID),
+        },
+        type: UserContentType.Answer,
+        answer: {
+          typeOfAI: {
+            not: TypeOfAI.None,
+          },
+        },
+      },
+    });
+  }
+
   // Discussion
   async createDiscussion(
     ownerID: string | null,
     content: string | null,
     title: string,
     isPrivate: boolean,
-    groupID?: string,
+    tagnames: string[],
   ): Promise<{ userContent: UserContent; discussion: Discussion }> {
     return this.prisma.$transaction(async (tx) => {
       const createdContent = await tx.userContent.create({
         data: {
           ownerID: ownerID,
-          groupID: groupID,
           content: content,
-          type: UserContentType.Answer,
+          type: UserContentType.Discussion,
+          tags: {
+            connect: tagnames.map((tag) => {
+              return { tagname: tag };
+            }),
+          },
         },
       });
       const createdDiscussion = await tx.discussion.create({
@@ -325,5 +601,27 @@ export class UserContentService {
       userContent: userContent,
       discussion: discussion,
     };
+  }
+
+  /**
+   * searches the group to the latest element, which was modified
+   * takes the latest element and returns
+   * If nothing is found it return null
+   * @param groupId
+   * @return Date
+   */
+  async getLastUpdate(groupId: string): Promise<Date | null> {
+    const lastDate =  await this.prisma.userContent.findFirst({
+      where: {
+        groupID: groupId
+      },
+      orderBy: {
+        timeOfCreation: 'desc'
+      },
+      select: {
+        timeOfCreation: true,
+      }
+    })
+    return lastDate? lastDate.timeOfCreation: null
   }
 }

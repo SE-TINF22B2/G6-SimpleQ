@@ -11,20 +11,21 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
-import {
-  Type,
-  UserContentRequestService,
-} from '../user-content-request/user-content-request.service';
+import { UserContent, UserContentType } from '@prisma/client';
+import { UserContentRequestService } from '../user-content-request/user-content-request.service';
+import { AnswerFilter } from './dto/answer-filter.dto';
+import { CreateAnswerDto } from './dto/create-answer.dto';
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
+import { VoteDto } from './dto/vote.dto';
 
 @Controller('question') // prefix: domain/question/...
 export class QuestionsController {
   constructor(private readonly userContentService: UserContentRequestService) {} //     private readonly services
 
   /*
-   * Get the currently must up voted, questions from the last seven days
+   * Get the currently most upvoted, questions from the last seven days
    * @Returns an array of trending questions
    * */
   @Get('trending')
@@ -42,11 +43,22 @@ export class QuestionsController {
    * limit - the limit of questions, defaults to 10
    * */
   @Get('search')
-  getSearch(
-    @Req() req: any,
-    @Query(new ValidationPipe()) query: SearchQuery,
-  ): Promise<object> {
-    return this.userContentService.search(query, req);
+  getSearch(@Query(new ValidationPipe()) query: SearchQuery): Promise<
+    | (UserContent & {
+        likes: number;
+        dislikes: number;
+      })[]
+    | null
+  > {
+    return this.userContentService.search(query);
+  }
+
+  @Get('my')
+  getMyQuestions(
+    @Req() request: any,
+    @Query(new ValidationPipe()) query: QueryParameters,
+  ): Promise<object[] | null> {
+    return this.userContentService.getQuestionsOfUser(request.userId, query);
   }
 
   @Get(':id')
@@ -56,8 +68,9 @@ export class QuestionsController {
   ): Promise<object> {
     return this.userContentService.getUserContent(
       id,
-      Type.QUESTION,
+      UserContentType.Question,
       request?.userId,
+      true,
     );
   }
 
@@ -68,22 +81,75 @@ export class QuestionsController {
     //@ts-ignore
     return await this.userContentService.getTitleOfQuestion(id);
   }
+
+  /**
+   * get answer of question obtained by question id
+   * @throws NotFoundError
+   * @param id
+   * @param query
+   * sortBy [
+   *  'ldr: like dislike ratio
+   *  'likes': number of likes
+   *  'dislikes': amount of dislikes
+   *  'timestamp': date
+   *  ]
+   * sortDirection [
+   *   'asc': ascending
+   *   'desc': decending
+   * ]
+   * offset: number of questions skipped form start
+   * limit: amount of returned questions
+   * enableAI: show ai answer
+   */
   @Get(':id/answers')
   async getQuestionAnswers(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Query(new ValidationPipe()) query: QueryParameters,
+    @Query(new ValidationPipe()) query: AnswerFilter,
   ): Promise<object> {
     return this.userContentService.getAnswersOfQuestion(id, query);
   }
+
   @Post('create')
   async createNewQuestion(
     @Req() req: any,
     @Body(new ValidationPipe()) createQuestion: CreateQuestion,
   ): Promise<object> {
-    return await this.userContentService.createUserContent(
+    return await this.userContentService.createQuestionWrapper(
       createQuestion,
-      Type.QUESTION,
       req.userId,
     );
+  }
+
+  @Post(':id/answer')
+  async createAnswerToQuestion(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Req() req: any,
+    @Body(new ValidationPipe()) createAnswer: CreateAnswerDto,
+  ): Promise<object> {
+    return await this.userContentService.createAnswerWrapper(
+      createAnswer,
+      id,
+      req.userId,
+    );
+  }
+  @Post(':id/vote')
+  async voteForQuestion(
+    @Param('id', new ParseUUIDPipe()) userContentId: string,
+    @Req() req: any,
+    @Body(new ValidationPipe()) vote: VoteDto,
+  ) {
+    return await this.userContentService.updateUserVote(
+      vote,
+      userContentId,
+      req.userId,
+    );
+  }
+
+  @Get(':id/vote')
+  async getVoteOfQuestion(
+    @Param('id', new ParseUUIDPipe()) userContentId: string,
+    @Req() req: any,
+  ) {
+    return await this.userContentService.getUserVote(userContentId, req.userId);
   }
 }

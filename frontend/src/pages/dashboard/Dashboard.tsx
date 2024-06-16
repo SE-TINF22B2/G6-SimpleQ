@@ -134,6 +134,13 @@ export default function Dashboard(props: Props) {
 										 onClick: () => i18n.changeLanguage("de"),
 										 shortcut: i18n.language === "de" ?
 											 <i className={ "fi fi-rr-check" }/> : ""
+									 },
+									 {
+										 icon: "fi fi-rr-globe",
+										 label: t('dashboard.appearance.language.french'),
+										 onClick: () => i18n.changeLanguage("fr"),
+										 shortcut: i18n.language === "fr" ?
+											 <i className={ "fi fi-rr-check" }/> : ""
 									 }
 								 ],
 								 divider: "top",

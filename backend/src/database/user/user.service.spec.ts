@@ -38,4 +38,10 @@ describe('UserService', () => {
   it('should get a user', async () => {
     await expect(service.getUser(testUser.userID)).resolves.toEqual(testUser);
   });
+
+  it('should update an existing user', async () => {
+    await expect(
+      service.updateUser(testUser.userID, testUser.username),
+    ).resolves.toEqual(testUser);
+  });
 });

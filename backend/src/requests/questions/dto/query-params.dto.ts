@@ -1,23 +1,35 @@
-import { IsIn, IsOptional, IsPositive, IsString } from 'class-validator';
-
-export const SortBy = ['ldr', 'likes', 'dislikes', 'timestamp'];
-export const SortDirection = ['asc', 'desc'];
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+} from 'class-validator';
+import { EXPORT_LIMIT, SORT_BY, SORT_DIRECTION } from '../../../../config';
+import { Type } from 'class-transformer';
 
 export class QueryParameters {
   @IsOptional()
   @IsString()
-  @IsIn(SortBy)
+  @IsEnum(SORT_BY)
   sortBy: string;
 
   @IsOptional()
   @IsString()
-  @IsIn(SortDirection)
+  @IsEnum(SORT_DIRECTION)
   sortDirection: string;
 
   @IsOptional()
-  @IsPositive()
+  @IsNumber()
+  @Type(() => Number)
+  @Min(0)
   offset: number;
 
   @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  @Min(1)
+  @Max(EXPORT_LIMIT)
   limit: number;
 }

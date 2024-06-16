@@ -6,6 +6,13 @@ import { PrismaService } from '../prisma.service';
 export class FavoriteService {
   constructor(private prisma: PrismaService) {}
 
+  /**
+   * create Favourite for user in database
+   * userContent must be checked prior to existence
+   * @param favoriteUserID
+   * @param contentID
+   * @throws Error
+   */
   async createFavorite(
     favoriteUserID: string,
     contentID: string,
@@ -20,34 +27,35 @@ export class FavoriteService {
         },
       },
     });
-  }  async delFavorite(
+  }
+
+  /**
+   * delete Favourite of user in database
+   * It must be checked prior that favourite exists for this user
+   * @param favoriteUserID
+   * @param contentID
+   * @throws Error
+   */
+  async deleteFavorite(
     favoriteUserID: string,
     contentID: string,
   ): Promise<Favorite> {
     return this.prisma.favorite.delete({
       where: {
         contentID_favoriteUserID: {
-          contentID,
-          favoriteUserID,
+          contentID: contentID,
+          favoriteUserID: favoriteUserID,
         },
       },
     });
   }
 
-  async deleteFavorite(
-    favoriteUserID: string,
-    contentID: string,
-  ): Promise<object> {
-    return this.prisma.favorite.delete({
-      where: {
-        contentID_favoriteUserID: {
-          contentID,
-          favoriteUserID,
-        },
-      },
-    });
-  }
-
+  /**
+   * get favourite for one user
+   * returns null if not exist
+   * @param favoriteUserID
+   * @param contentID
+   */
   async getFavorite(
     favoriteUserID: string,
     contentID: string,
@@ -62,7 +70,44 @@ export class FavoriteService {
     });
   }
 
-  async getFavoriteOfUser(favoriteUserID: string) {
+  /**
+   * checks in if favourite exist for one user
+   * returns true if it exists, returns false otherwise
+   * @param favoriteUserID
+   * @param contentID
+   * @returns boolean
+   */
+  async isFavouriteOfUser(
+    favoriteUserID: string,
+    contentID: string,
+  ): Promise<boolean> {
+    return !!(await this.getFavorite(favoriteUserID, contentID));
+  }
+
+  /**
+   * returns the number of favourites the user has
+   * userId must be checked prior
+   * @param favouriteUserID
+   * @return number
+   */
+  async getAmountOfFavourites(favouriteUserID: string): Promise<number> {
+    return (
+      await this.prisma.favorite.aggregate({
+        _count: {
+          favoriteUserID: true,
+        },
+        where: {
+          favoriteUserID: favouriteUserID,
+        },
+      })
+    )._count.favoriteUserID;
+  }
+
+  /**
+   * get all Favourites of one user
+   * @param favoriteUserID
+   */
+  async getAllFavoritesOfUser(favoriteUserID: string) {
     return this.prisma.favorite.findMany({
       where: {
         favoriteUserID: favoriteUserID,

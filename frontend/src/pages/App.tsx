@@ -5,6 +5,8 @@ import i18n from "i18next";
 import detector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 import translationEN from "../locales/en/translation.json";
+import translationDE from "../locales/de/translation.json";
+import translationFR from "../locales/fr/translation.json";
 import { useMediaQuery } from "@react-hook/media-query";
 import { SkeletonTheme } from "react-loading-skeleton";
 import Home from "./home/Home";
@@ -29,6 +31,12 @@ import { QuestionDef } from "../def/QuestionDef";
 const resources = {
 	en: {
 		translation: translationEN
+	},
+	de: {
+		translation: translationDE
+	},
+	fr: {
+		translation: translationFR
 	}
 }
 

@@ -1,93 +1,58 @@
 import {
+  Body,
   Controller,
   ForbiddenException,
   Get,
-  NotFoundException,
-  NotImplementedException,
   Param,
   ParseUUIDPipe,
-  Put,
+  Post,
   Req,
+  ValidationPipe,
 } from '@nestjs/common';
-import { UserService } from '../../database/user/user.service';
-import { ExpertService } from '../../database/expert/expert.service';
+import { UpdateUser } from './dto/update-user.dto';
 import { RequestsUserService } from './requests-user.service';
-
-enum Registration { // TODO extract
-  registered = 'registered',
-  proUser = 'proUser',
-}
 
 @Controller('profile')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly expertService: ExpertService,
-    private readonly requestsUserService: RequestsUserService,
-  ) {}
-
-  /**
-   * Returns basic information of users, can be used for overviews
-   * and can be _seen by everybody_
-   * @param id :string
-   * return 404 if user not found or user object
-   */
-  @Get(':id')
-  async getBasicProfile(@Param('id', new ParseUUIDPipe()) id: string) {
-    const usrProfile = await this.userService.getUser(id);
-    const expertTags = await this.expertService.getExpertTagsForUser(id);
-
-    if (usrProfile === null || expertTags === null) {
-      throw new NotFoundException('User does not exist');
-    }
-    const accountState: Registration = usrProfile.isPro
-      ? Registration.proUser
-      : Registration.registered;
-    const expertTagList: string[] = expertTags.map((e) => e.tagname);
-
-    return {
-      name: usrProfile.username,
-      profilePicture: null,
-      registrationDate: usrProfile.timeOfRegistration,
-      accountState: accountState.toString(),
-      expertTopics: expertTagList,
-    };
-  }
+  constructor(private readonly requestsUserService: RequestsUserService) {}
 
   /**
    * Returns detailed information for one user, can be used for profiles and
    * can be requested by everybody
-   * @param id
-   * returns 404 if id is invalid
+   * @param userId
+   * @throws NotFoundException if the user is not found
    */
-  @Get(':id/profile')
-  async getDetailedProfile(@Param('id', new ParseUUIDPipe()) id: string) {
-    const usrProfile = await this.userService.getUser(id);
-    const expertTags = await this.expertService.getExpertTagsForUser(id);
-
-    if (usrProfile === null || expertTags === null) {
-      throw new NotFoundException('User does not exist');
-    }
-    const accountState = usrProfile.isPro
-      ? Registration.proUser
-      : Registration.registered;
-
-    return {
-      name: usrProfile.username,
-      profilePicture: null,
-      registrationDate: usrProfile.timeOfRegistration,
-      accountState: accountState.toString(),
-      expertTopics: expertTags,
-      userStatistics: {
-        TODO: null,
-      },
-      activityPoints: usrProfile.activityPoints,
-    };
+  @Get(':id')
+  async getDetailedProfile(@Param('id', new ParseUUIDPipe()) userId: string) {
+    return await this.requestsUserService.getProfileWrapper(userId);
   }
 
-  @Put('update')
-  updateProfile() {
-    new NotImplementedException(); // TODO implement
+  /***
+   * Get the logged in user
+   * @param req the request including the users id
+   * @returns user
+   * @throws NotFoundException if the user is not stored in the db
+   * @throws UnauthorizedException if the user is not logged in
+   */
+  @Get()
+  async getAuthorizedUser(@Req() req: any) {
+    return await this.requestsUserService.getProfileWrapper(req.userId);
+  }
+
+  /**
+   * Update specific information of the user (in this case)
+   * @param req the request including the usersId
+   * @param data the payload that updates the user information
+   * @returns the updated user
+   * @throws NotFoundException if the user is not found
+   * @throws UnauthorizedException if the user is not logged in
+   */
+  @Post('update')
+  async updateProfile(
+    @Req() req: any,
+    @Body(new ValidationPipe()) data: UpdateUser,
+  ) {
+    return await this.requestsUserService.updateUser(req, data);
   }
 
   @Get('login/attempts')
