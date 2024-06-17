@@ -3,26 +3,13 @@
 import { Injectable } from '@nestjs/common';
 import { Answer, Discussion, Question, Tag, TypeOfAI, User, UserContent, UserContentType, Vote } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
-import { DEFAULT_USER_CONTENT_LIMIT, DEFAULT_USER_CONTENT_OFFSET, SORT_BY, SORT_DIRECTION } from '../../../config';
-
-
-export type SortOptions = {
-  sortBy: SortType;
-  sortDirection: SortDirection;
-  offset: number;
-  limit: number;
-};
-
-export enum SortType {
-  ldr, // like-dislike-ratio
-  likes,
-  dislikes,
-  timestamp,
-}
-export enum SortDirection {
-  desc,
-  asc,
-}
+import {
+  DEFAULT_USER_CONTENT_LIMIT,
+  DEFAULT_USER_CONTENT_OFFSET,
+  SORT_BY,
+  SORT_DIRECTION,
+} from '../../../config';
+import { SortDirection, SortOptions, SortType, UserContentWithRating } from './user-content-interfaces';
 
 export function createSortOptions(
   sortBy: string = SORT_BY.LDR,
@@ -37,11 +24,6 @@ export function createSortOptions(
     limit: limit,
   };
 }
-
-type UserContentWithRating = UserContent & {
-  likes: number;
-  dislikes: number;
-};
 
 @Injectable()
 export class UserContentService {
@@ -137,10 +119,10 @@ export class UserContentService {
   async getTrendingQuestions(
     limit: number = 10,
     offset: number = 0,
-  ): Promise<UserContent[] | null> {
+  ): Promise<UserContentWithRating[] | null> {
     const time: Date = new Date();
     time.setDate(time.getDate() - 7);
-    return this.prisma.userContent.findMany({
+    const questions = await this.prisma.userContent.findMany({
       where: {
         type: UserContentType.Question,
         timeOfCreation: { gte: time },
@@ -152,6 +134,7 @@ export class UserContentService {
         question: true,
       },
     });
+    return this.addRatingToUserContents(questions);
   }
 
   /**

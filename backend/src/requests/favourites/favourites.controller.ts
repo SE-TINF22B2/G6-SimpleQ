@@ -18,7 +18,7 @@ import { FAVOURITE_LIMIT } from '../../../config';
 import { NotModifiedException } from '../exception-handling/NotModifiedException';
 import { PaymentRequiredException } from '../exception-handling/PaymentRequiredException';
 import { IFavouritesInterface } from './favourites-interface';
-import { IQuestion } from '../questions/dto/user-content-interface';
+import { IQuestionMetadata } from '../questions/dto/user-content-interface';
 import { UserContentRequestService } from '../user-content-request/user-content-request.service';
 
 @Controller('favourites')
@@ -34,10 +34,10 @@ export class FavouritesController {
   /**
    * Get favourites of the user
    * @param req
-   * @returns Promise<IQuestion[]>
+   * @returns Promise<IQuestionMetadata[]>
    */
   @Get()
-  async getFavourites(@Req() req: any): Promise<IQuestion[]> {
+  async getFavourites(@Req() req: any): Promise<IQuestionMetadata[]> {
     const userId = req.userId;
     const userFavorites: Favorite[] | null =
       await this.favoriteService.getAllFavoritesOfUser(userId);
@@ -51,13 +51,15 @@ export class FavouritesController {
       return [];
     }
 
-    const results: any[] = [];
+    const results: IQuestionMetadata[] = [];
     for (let i = 0; i < questions.length; i++) {
       results.push(
-        await this.userContentRequestService.getUserContent(
+        (await this.userContentRequestService.getUserContent(
           questions[i].userContentID,
           req?.userId,
-        ),
+          false,
+          true,
+        )) as IQuestionMetadata,
       );
     }
     return results;

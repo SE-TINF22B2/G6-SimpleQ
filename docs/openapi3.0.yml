@@ -25,8 +25,6 @@ components:
       properties:
         id:
           type: string
-        content:
-          type: string
         likes:
           type: integer
         dislikes:
@@ -41,7 +39,7 @@ components:
             - dislike
             - none
           
-    Question:
+    QuestionMetadata:
       allOf:
         - $ref: '#/components/schemas/UserContent'
         - type: object
@@ -59,12 +57,21 @@ components:
               description: The date, the question was last updated
             author: 
                 $ref: '#/components/schemas/Author'
+    Question:
+      allOf:
+        - $ref: '#/components/schemas/QuestionMetadata'
+        - type: object
+          properties:
+            content:
+              type: string
 
     Answer:
       allOf:
         - $ref: '#/components/schemas/UserContent'
         - type: object
           properties:
+            content:
+              type: string
             author:
               $ref:  '#/components/schemas/Author'
     AItype:
@@ -218,13 +225,13 @@ paths:
       summary: Get the most upvoted questions of the seven days
       responses:
         '200':
-          description: Successful
+          description: Successful, Result is like Question but without property 'content'
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Question'
+                  $ref: '#/components/schemas/QuestionMetadata'
   /question/my:
     get:
       tags:
@@ -271,7 +278,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Question'
+                  $ref: '#/components/schemas/QuestionMetadata'
         '401':
           description: 'Unauthorized, user needs to be logged in'
   /question/search/:
@@ -326,7 +333,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Question'
+                  $ref: '#/components/schemas/QuestionMetadata'
   /question/{questionId}:
     get: 
       tags:
@@ -652,7 +659,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Question'
+                  $ref: '#/components/schemas/QuestionMetadata'
         '401':
           description: 'Unauthorized'
   /favourites/remaining:

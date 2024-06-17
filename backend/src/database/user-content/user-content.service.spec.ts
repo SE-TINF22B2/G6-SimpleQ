@@ -7,7 +7,7 @@ import {
   testUserContentAnswer,
   testUserContentDiscussion,
   testUserContentQuestion,
-  testUserContentQuestionList,
+  testUserContentQuestionListWithRating,
   testVoteList,
 } from '../mockData';
 import { PrismaService } from '../prisma.service';
@@ -57,7 +57,7 @@ describe('UserContentService', () => {
 
   it('should get a list of questions', async () => {
     await expect(service.getTrendingQuestions()).resolves.toEqual(
-      testUserContentQuestionList,
+      testUserContentQuestionListWithRating,
     );
   });
 

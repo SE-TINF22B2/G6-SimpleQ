@@ -11,13 +11,15 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
-import { UserContent, UserContentType } from '@prisma/client';
+import { UserContentType } from '@prisma/client';
 import { UserContentRequestService } from '../user-content-request/user-content-request.service';
 import { AnswerFilter } from './dto/answer-filter.dto';
 import { CreateAnswerDto } from './dto/create-answer.dto';
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
+import { VoteDto } from './dto/vote.dto';
+import { IQuestionMetadata } from './dto/user-content-interface';
 
 @Controller('question') // prefix: domain/question/...
 export class QuestionsController {
@@ -42,14 +44,11 @@ export class QuestionsController {
    * limit - the limit of questions, defaults to 10
    * */
   @Get('search')
-  getSearch(@Query(new ValidationPipe()) query: SearchQuery): Promise<
-    | (UserContent & {
-        likes: number;
-        dislikes: number;
-      })[]
-    | null
-  > {
-    return this.userContentService.search(query);
+  getSearch(
+    @Query(new ValidationPipe()) query: SearchQuery,
+    @Req() req: any,
+  ): Promise<IQuestionMetadata[]> {
+    return this.userContentService.search(query, req.userId);
   }
 
   @Get('my')
@@ -57,7 +56,7 @@ export class QuestionsController {
     @Req() request: any,
     @Query(new ValidationPipe()) query: QueryParameters,
   ): Promise<object[] | null> {
-    return this.userContentService.getQuestionsOfUser(request.userId, query);
+    return this.userContentService.getMyQuestions(request.userId, query);
   }
 
   @Get(':id')
@@ -89,11 +88,11 @@ export class QuestionsController {
    *  ]
    * sortDirection [
    *   'asc': ascending
-   *   'desc': decending
+   *   'desc': descending
    * ]
    * offset: number of questions skipped form start
    * limit: amount of returned questions
-   * enableAI: show ai answer
+   * enableAI: show AI answer
    */
   @Get(':id/answers')
   async getQuestionAnswers(
