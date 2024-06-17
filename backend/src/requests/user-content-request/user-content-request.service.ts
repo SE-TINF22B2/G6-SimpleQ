@@ -11,8 +11,8 @@ import { VOTE_OPTIONS } from '../../../config';
 import { BlacklistService } from '../../database/blacklist/blacklist.service';
 import { TagService } from '../../database/tag/tag.service';
 import {
-  UserContentService,
   createSortOptions,
+  UserContentService,
 } from '../../database/user-content/user-content.service';
 import { UserService } from '../../database/user/user.service';
 import { VoteService } from '../../database/vote/vote.service';
@@ -30,7 +30,12 @@ import {
 } from '@prisma/client';
 import { VoteDto } from '../questions/dto/vote.dto';
 import { FavoriteService } from '../../database/favorite/favorite.service';
-import { IAnswer, IQuestion } from '../questions/dto/user-content-interface';
+import {
+  IAnswer,
+  IQuestion,
+  IQuestionMetadata,
+} from '../questions/dto/user-content-interface';
+import { UserContentWithRating } from '../../database/user-content/user-content-interfaces';
 
 @Injectable()
 export class UserContentRequestService {
@@ -50,33 +55,32 @@ export class UserContentRequestService {
    * @throws NotFoundException
    *
    */
-  async getTrendingQuestions(req: any) {
+  async getTrendingQuestions(req: any): Promise<IQuestionMetadata[]> {
     const questions = await this.userContentService.getTrendingQuestions();
     if (null === questions) {
       throw new NotFoundException('No trending questions found.');
     }
-
-    const results: any[] = [];
-    for (let i = 0; i < questions.length; i++) {
-      results.push(
-        await this.getUserContent(
-          questions[i].userContentID,
-          UserContentType.Question,
-          req?.userId,
-        ),
-      );
-    }
-    return results;
+    return await this.mapDatabaseQuestionsToIQuestionMetadata(
+      questions,
+      req?.userId,
+      true,
+      true,
+    );
   }
 
-  async getQuestionsOfUser(
+  /**
+   * Get question which the user has created in Metadata format
+   * @param userId
+   * @param sortOptions
+   * @return IQuestionMetadata
+   */
+  async getMyQuestions(
     userId: string,
     sortOptions: QueryParameters,
-  ): Promise<IQuestion[] | null> {
+  ): Promise<IQuestionMetadata[]> {
     if (!userId || !(await this.userService.userIdExists(userId))) {
       throw new NotFoundException('User id does not exist.');
     }
-
     const questions = await this.userContentService.getQuestionsOfUser(
       userId,
       createSortOptions(
@@ -86,22 +90,12 @@ export class UserContentRequestService {
         sortOptions.limit,
       ),
     );
-
-    if (null === questions) {
-      return [];
-    }
-
-    const results: IQuestion[] = [];
-    for (let i = 0; i < questions.length; i++) {
-      results.push(
-        (await this.getUserContent(
-          questions[i].userContentID,
-          UserContentType.Question,
-          userId,
-        )) as IQuestion,
-      );
-    }
-    return results;
+    return await this.mapDatabaseQuestionsToIQuestionMetadata(
+      questions,
+      userId,
+      true,
+      true,
+    );
   }
 
   /**
@@ -109,8 +103,9 @@ export class UserContentRequestService {
    * @param userContentId - UUID of user content
    * @param type - type of UserContentType
    * @param userId  - UUID of user
-   * @param includeFavouriteTag - switch parameter,
+   * @param includeFavouriteTag - switch parameter, normally false
    * should the object include the property, telling content is favourite?
+   * @param isQuestionMetadata - if true it removes the content property
    * @throws NotFoundException
    */
   async getUserContent(
@@ -118,6 +113,7 @@ export class UserContentRequestService {
     type: UserContentType,
     userId?: string,
     includeFavouriteTag?: boolean,
+    isQuestionMetadata?: boolean,
   ): Promise<IQuestion | IAnswer> {
     const result: {
       userContent: UserContent | null;
@@ -177,6 +173,11 @@ export class UserContentRequestService {
       (response as IQuestion).tags = rawTags?.map((tag) => tag.tagname) ?? [];
       (response as IQuestion).title = result.question?.title ?? '--';
       (response as IQuestion).updated = lastUpdated;
+
+      if (isQuestionMetadata) {
+        // @ts-ignore
+        delete (response as IQuestionMetadata).content;
+      }
     }
 
     if (includeFavouriteTag && userId) {
@@ -422,17 +423,28 @@ export class UserContentRequestService {
   /**
    * Fetches the questions for a given search criteria
    * @param query typeof SearchQuery
+   * @param userId
    * @returns the questions meeting the criteria or an empty array
    * */
-  async search(query: SearchQuery) {
-    return await this.userContentService.searchForQuestionsOrDiscussions(
-      query.q,
-      createSortOptions(
-        query.sortBy,
-        query.sortDirection,
-        query.offset,
-        query.limit,
-      ),
+  async search(
+    query: SearchQuery,
+    userId?: string,
+  ): Promise<IQuestionMetadata[]> {
+    const questions =
+      await this.userContentService.searchForQuestionsOrDiscussions(
+        query.q,
+        createSortOptions(
+          query.sortBy,
+          query.sortDirection,
+          query.offset,
+          query.limit,
+        ),
+      );
+    return await this.mapDatabaseQuestionsToIQuestionMetadata(
+      questions,
+      userId,
+      true,
+      true,
     );
   }
 
@@ -481,7 +493,7 @@ export class UserContentRequestService {
   }
 
   /**
-   * Parse creator information to differentiate between guest, registered and ai users
+   * Parse creator information to differentiate between guest, registered and AI users
    * @param creator - the creator of a question
    * @param type - the UserContentType
    * @param userContentId - the id of the UserContent
@@ -511,6 +523,7 @@ export class UserContentRequestService {
         };
     }
   }
+
   /*
    * set vote for one userContentId for one user,
    * removes the vote if the parameter vote is set to 'none'
@@ -594,5 +607,48 @@ export class UserContentRequestService {
       }
     }
     return VOTE_OPTIONS.NONE;
+  }
+
+  /**
+   * Maps the user content result of the database to IQuestion Metadata as provided in the Interface
+   * @param questions
+   * @param userId
+   * @param mapLikes // expects questions to be of type UserContentWithRating
+   * @param includeFavourite
+   * @private
+   */
+  private async mapDatabaseQuestionsToIQuestionMetadata(
+    questions: UserContentWithRating[] | UserContent[] | null,
+    userId?: string,
+    mapLikes?: boolean,
+    includeFavourite?: boolean,
+  ): Promise<IQuestionMetadata[]> {
+    if (!questions) {
+      return [];
+    }
+    return await Promise.all(
+      questions.map(
+        async (
+          userContent: UserContentWithRating | UserContent,
+        ): Promise<IQuestionMetadata> => {
+          // create basic question object
+          const question: IQuestionMetadata = (await this.getUserContent(
+            userContent.userContentID,
+            UserContentType.Question,
+            userId,
+            includeFavourite ?? false,
+            true,
+          )) as IQuestionMetadata;
+
+          // extend the question object with user rating
+          if (mapLikes) {
+            const userContentWithRating = userContent as UserContentWithRating;
+            question.likes = userContentWithRating.likes;
+            question.dislikes = userContentWithRating.dislikes;
+          }
+          return question;
+        },
+      ),
+    );
   }
 }
