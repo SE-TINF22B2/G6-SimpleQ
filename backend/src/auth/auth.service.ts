@@ -8,6 +8,7 @@ import { UserService } from '../database/user/user.service';
 import { Session } from '@ory/client';
 import { User } from '@prisma/client';
 import { generateUsername } from 'unique-username-generator';
+import { USERNAME_LENGTH } from '../../config';
 
 @Injectable()
 export class AuthService {
@@ -78,9 +79,9 @@ export class AuthService {
    * @private this method is only used in the auth service
    */
   private async generateUsername(): Promise<string> {
-    let username = generateUsername('', 0, 15);
+    let username = generateUsername('', 0, USERNAME_LENGTH);
     while (await this.userService.checkUsernameExists(username)) {
-      username = generateUsername('', 0, 20);
+      username = generateUsername('', 0, USERNAME_LENGTH);
     }
     return username;
   }
