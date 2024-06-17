@@ -138,6 +138,18 @@
 				"description": "We're using an external identity provider (IDP). Therefore, you will have to be redirected to another page in order to view and update your login information. You will also have the possibility of adding other login methods to your current account.",
 				"redirect": "Account Settings"
 			}
+		},
+		"trending": {
+			"title": "Trending Questions",
+			"caption": "Here are some of the most popular questions on our platform right now."
+		},
+		"myQuestions": {
+			"title": "My Questions",
+			"caption": "Here are all the questions you have posted on our platform."
+		},
+		"favorites": {
+			"title": "Favorites",
+			"caption": "Here are all the questions you have favorited on our platform."
 		}
 	}
 }

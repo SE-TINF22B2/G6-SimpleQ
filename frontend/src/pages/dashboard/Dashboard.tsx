@@ -271,7 +271,7 @@ export default function Dashboard(props: Props) {
 						<span className={ "button-blob" }/>
 					</> }
                 </NavLink>
-                <NavLink to={ "b" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+                <NavLink to={ "favorites" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 					{ ({ isActive }) => <>
 						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-star" }/>
 						<span className={ "nav-label" }>{ t('dashboard.nav.favorites') }</span>

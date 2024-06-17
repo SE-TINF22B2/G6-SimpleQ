@@ -26,6 +26,7 @@ import { axiosError } from "../def/axios-error";
 import { useAlert } from "react-alert";
 import { Configuration, FrontendApi, Session } from "@ory/client";
 import { QuestionDef } from "../def/QuestionDef";
+import Favorites from "./dashboard/Favorites";
 
 // internationalization resources
 const resources = {
@@ -200,6 +201,7 @@ export default function App() {
 				<Route path={ "new" } element={ <Suspense><Editor/></Suspense> }/>
 				<Route path={ "activity" } element={ <Suspense><Activity/></Suspense> }/>
 				<Route path={ "my" } element={ <Suspense><MyQuestions/></Suspense> }/>
+				<Route path={ "favorites" } element={ <Suspense><Favorites/></Suspense> }/>
 				<Route path={ "quests" } element={ <Suspense><Quests/></Suspense> }/>
 				
 				<Route path={ "*" } element={ <Navigate to={ "" }/> }/>

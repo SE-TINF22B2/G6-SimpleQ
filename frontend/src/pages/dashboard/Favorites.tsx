@@ -1,14 +1,10 @@
+import Section from "../../components/section/Section";
 import React from "react";
-import "./Trending.scss";
-import QuestionList from "../../../components/QuestionList";
-import Section from "../../../components/section/Section";
-import thinking from "../../../illustrations/thinking.svg";
 import { useTranslation } from "react-i18next";
+import favorites from "../../illustrations/like-post.svg";
+import QuestionList from "../../components/QuestionList";
 
-/**
- * Renders the trending page, currently static
- */
-export default function Trending(props: {}) {
+export default function Favorites(props: {}) {
 	const { t } = useTranslation();
 	
 	const header = (filters: any) => {
@@ -18,20 +14,20 @@ export default function Trending(props: {}) {
 				<div style={ { flex: 1 } }>
 					<h1>
 						<i className={ "fi fi-sr-analyse" }/>
-						{ t('dashboard.trending.title') }
+						{ t('dashboard.favorites.title') }
 					</h1>
-					<p>{ t('dashboard.trending.caption') }</p>
+					<p>{ t('dashboard.favorites.caption') }</p>
 					
 					<div style={ { marginTop: "var(--spacing)" } }>
 						{ filters }
 					</div>
 				</div>
 				
-				<img src={ thinking } alt={ "Thinking" }
+				<img src={ favorites } alt={ "Favorites" }
 					 style={ { height: "120px", alignSelf: "center", userSelect: "none", pointerEvents: "none" } }/>
 			</div>
 		</Section>
 	}
 	
-	return <QuestionList url={ "question/trending" } header={ header }/>
+	return <QuestionList url={ "favourites" } header={ header }/>
 }
