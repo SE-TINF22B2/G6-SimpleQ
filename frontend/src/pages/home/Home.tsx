@@ -158,7 +158,10 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						</h1>
 						<div style={ { display: "flex", gap: "var(--spacing)", alignItems: "center" } }>
 							<h2>You don't believe us?</h2>
-							<Button buttonStyle={ "primary" }>Try Yourself!</Button>
+							<Button buttonStyle={ "primary" }
+									onClick={ async () => navigate("dashboard") }>
+								Try Yourself!
+							</Button>
 							<Button icon={ "fi fi-brands-github" }
 									onClick={ async () => {
 										window.open("https://github.com/SE-TINF22B2/G6-SimpleQ", "_blank");
@@ -244,7 +247,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "https://www.riedbahn.de/home.html" } target={ "_blank" } rel={ "noreferrer" }>
+									<a href={ "https://www.riedbahn.de/home.html" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -275,7 +279,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 									<a href={ "https://github.com/manuelbrs" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "https://brink.ws/lokalpolitiker" } target={ "_blank" } rel={ "noreferrer" }>
+									<a href={ "https://brink.ws/lokalpolitiker" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -291,7 +296,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "https://www.youtube.com/watch?v=wXjhszy2f9w" } target={ "_blank" } rel={ "noreferrer" }>
+									<a href={ "https://www.youtube.com/watch?v=wXjhszy2f9w" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
