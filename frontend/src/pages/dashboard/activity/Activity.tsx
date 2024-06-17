@@ -14,7 +14,7 @@ export default function Activity(props: {}) {
 			<div style={ { display: "flex", gap: "var(--spacing)" } }>
 				<div style={ { flex: 1 } }>
 					<h1>
-						<i className={ "fi fi-sr-rectangle-vertical-history" }/>
+						<i className={ "fi fi-sr-list-timeline" }/>
 						Activity
 					</h1>
 					<p>Something happened today</p>

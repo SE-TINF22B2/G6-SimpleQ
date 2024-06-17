@@ -75,7 +75,7 @@ export default function Trending(props: {}) {
 			<div style={ { display: "flex", gap: "var(--spacing)" } }>
 				<div style={ { flex: 1 } }>
 					<h1>
-						<i className={ "fi fi-sr-file-chart-line" }/>
+						<i className={ "fi fi-sr-analyse" }/>
 						Browse Questions
 					</h1>
 					<p>See what's trending on our platform.</p>

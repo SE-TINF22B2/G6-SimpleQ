@@ -261,7 +261,7 @@ export default function Dashboard(props: Props) {
 			{ props.session !== undefined && <>
                 <NavLink to={ "activity" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 					{ ({ isActive }) => <>
-						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-vertical-history" }/>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-list-timeline" }/>
 						<span className={ "nav-label" }>{ t('dashboard.nav.activity') }</span>
 						<span className={ "button-blob" }/>
 					</> }
