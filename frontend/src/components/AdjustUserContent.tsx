@@ -15,7 +15,14 @@ export enum SortDirectionDef {
 	desc = "desc"
 }
 
+export enum PreviewStyleDef {
+	normal = "normal",
+	small = "small"
+}
+
 interface Props {
+	previewStyle?: PreviewStyleDef;
+	setPreviewStyle?: (previewStyle: PreviewStyleDef) => void;
 	sortBy?: SortByDef;
 	setSortBy?: (sortBy: SortByDef) => void;
 	sortDirection?: SortDirectionDef;
@@ -30,6 +37,32 @@ export default function AdjustUserContent(props: Props) {
 	
 	const items = useMemo(() => {
 		let items = [];
+		
+		if (props.previewStyle !== undefined && props.setPreviewStyle !== undefined) {
+			items.push({
+				icon: "fi fi-rr-rectangles-mixed",
+				label: t('components.adjustUserContent.previewStyle.label'),
+				items: [
+					{
+						icon: "fi fi-rr-columns-3 rotateLeft",
+						label: t('components.adjustUserContent.previewStyle.normal'),
+						shortcut: props.previewStyle === PreviewStyleDef.normal ?
+							<i className={ "fi fi-rr-check" }/> : undefined,
+						onClick: () => props.setPreviewStyle!(PreviewStyleDef.normal)
+					},
+					{
+						icon: "fi fi-rr-apps",
+						label: t('components.adjustUserContent.previewStyle.small'),
+						shortcut: props.previewStyle === PreviewStyleDef.small ?
+							<i className={ "fi fi-rr-check" }/> : undefined,
+						onClick: () => props.setPreviewStyle!(PreviewStyleDef.small)
+					}
+				],
+				shortcut: props.previewStyle === PreviewStyleDef.normal ?
+					<i className={ "fi fi-rr-columns-3 rotateLeft" }/> :
+					<i className={ "fi fi-rr-apps" }/>
+			});
+		}
 		
 		if (props.sortBy !== undefined && props.setSortBy !== undefined) {
 			const getIcon = () => {
@@ -123,7 +156,7 @@ export default function AdjustUserContent(props: Props) {
 		}
 		
 		return items;
-	}, [props.enableAI, props.setEnableAI, props.setSortBy, props.setSortDirection, props.sortBy, props.sortDirection]);
+	}, [t, props.previewStyle, props.setPreviewStyle, props.sortBy, props.setSortBy, props.sortDirection, props.setSortDirection, props.enableAI, props.setEnableAI]);
 	
 	return <Dropdown button={ <Button icon={ "fi fi-rr-filter" }>{ t('components.adjustUserContent.button') }</Button> }
 					 direction={ props.direction } items={ items }/>

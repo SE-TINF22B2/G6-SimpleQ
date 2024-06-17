@@ -222,6 +222,18 @@ export default function Dashboard(props: Props) {
 				/>
 			</div>
 			
+			<NavLink to={ "new" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+				{ ({ isActive }) => <>
+					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-edit" }/>
+					<span className={ "nav-label" }>{ t('dashboard.nav.question.create') }</span>
+					<span className={ "button-blob" }/>
+				</> }
+			</NavLink>
+			
+			<div style={ { paddingInline: "var(--spacing)" } }>
+				<hr style={ { marginBlock: 0 } }/>
+			</div>
+			
 			{ props.activeQuestion && <>
                 <NavLink to={ "question/" + props.activeQuestion.id } className={ "navigate" }
                          onClick={ (e) => animateBlob(e) }>
@@ -250,22 +262,8 @@ export default function Dashboard(props: Props) {
 					<span className={ "button-blob" }/>
 				</> }
 			</NavLink>
-			<NavLink to={ "new" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-edit" }/>
-					<span className={ "nav-label" }>{ t('dashboard.nav.question.create') }</span>
-					<span className={ "button-blob" }/>
-				</> }
-			</NavLink>
 			
 			{ props.session !== undefined && <>
-                <NavLink to={ "activity" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-					{ ({ isActive }) => <>
-						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-list-timeline" }/>
-						<span className={ "nav-label" }>{ t('dashboard.nav.activity') }</span>
-						<span className={ "button-blob" }/>
-					</> }
-                </NavLink>
                 <NavLink to={ "my" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 					{ ({ isActive }) => <>
 						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-introduction" }/>
@@ -280,10 +278,22 @@ export default function Dashboard(props: Props) {
 						<span className={ "button-blob" }/>
 					</> }
                 </NavLink>
+                
+                <div style={ { paddingInline: "var(--spacing)" } }>
+                    <hr style={ { marginBlock: 0 } }/>
+                </div>
+                
                 <NavLink to={ "quests" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 					{ ({ isActive }) => <>
 						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-treasure-chest" }/>
 						<span className={ "nav-label" }>{ t('dashboard.nav.quests') }</span>
+						<span className={ "button-blob" }/>
+					</> }
+                </NavLink>
+                <NavLink to={ "activity" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+					{ ({ isActive }) => <>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-list-timeline" }/>
+						<span className={ "nav-label" }>{ t('dashboard.nav.activity') }</span>
 						<span className={ "button-blob" }/>
 					</> }
                 </NavLink>

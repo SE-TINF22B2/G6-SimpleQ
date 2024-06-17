@@ -22,6 +22,11 @@
 		},
 		"adjustUserContent": {
 			"button": "Adjust view",
+			"previewStyle": {
+				"label": "Style",
+				"normal": "Normal",
+				"small": "Small"
+			},
 			"sortBy": {
 				"label": "Sort by",
 				"ldr": "Like-Dislike Ratio",

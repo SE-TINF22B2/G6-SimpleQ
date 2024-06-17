@@ -1,19 +1,16 @@
 import React, { useEffect } from "react";
 import "./Trending.scss";
 import thinking from "../../../illustrations/thinking.svg";
-import LiveInput from "../../../components/liveinput/LiveInput";
 import QuestionPreview from "../../../components/questionpreview/QuestionPreview";
 import QuestionPreviewSkeleton from "../../../components/questionpreview/QuestionPreviewSkeleton";
 import Section from "../../../components/section/Section";
 import { QuestionDef } from "../../../def/QuestionDef";
-import Button from "../../../components/button/Button";
 import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
 import NoContent from "../../../components/NoContent";
 import SectionGrid from "../../../components/section/SectionGrid";
 import QuestionPreviewSmall from "../../../components/questionpreview/QuestionPreviewSmall";
-import ButtonGroup from "../../../components/buttongroup/ButtonGroup";
-import AdjustUserContent, { SortByDef, SortDirectionDef } from "../../../components/AdjustUserContent";
+import AdjustUserContent, { PreviewStyleDef, SortByDef, SortDirectionDef } from "../../../components/AdjustUserContent";
 
 /**
  * Renders the trending page, currently static
@@ -21,8 +18,7 @@ import AdjustUserContent, { SortByDef, SortDirectionDef } from "../../../compone
 export default function Trending(props: {}) {
 	const alert = useAlert();
 	
-	const [tab, setTab] = React.useState<"trending" | "favorites" | "my">("trending");
-	const [previewStyle, setPreviewStyle] = React.useState<"normal" | "small">("normal");
+	const [previewStyle, setPreviewStyle] = React.useState<PreviewStyleDef>(PreviewStyleDef.normal);
 	
 	const [sortBy, setSortBy] = React.useState<SortByDef>(SortByDef.ldr);
 	const [sortDirection, setSortDirection] = React.useState<SortDirectionDef>(SortDirectionDef.desc);
@@ -32,18 +28,7 @@ export default function Trending(props: {}) {
 	useEffect(() => {
 		setQuestions(undefined);
 		
-		const fetchUrl = () => {
-			switch (tab) {
-				case "trending":
-					return "question/trending?sortBy=" + sortBy + "&sortDirection=" + sortDirection;
-				case "favorites":
-					return "favourites";
-				case "my":
-					return "question/my";
-			}
-		}
-		
-		global.axios.get(fetchUrl(), { withCredentials: true })
+		global.axios.get("question/trending?sortBy=" + sortBy + "&sortDirection=" + sortDirection, { withCredentials: true })
 			  .then(res => {
 				  let _questions: QuestionDef[] = [];
 				  res.data.forEach((_question: any) => {
@@ -68,7 +53,7 @@ export default function Trending(props: {}) {
 				  setQuestions(_questions);
 			  })
 			  .catch(err => axiosError(err, alert));
-	}, [alert, tab, sortBy, sortDirection]);
+	}, [alert, sortBy, sortDirection]);
 	
 	return <>
 		<Section className={ "transparent" } style={ { flexDirection: "column", alignItems: "stretch", gap: 0 } }>
@@ -80,54 +65,16 @@ export default function Trending(props: {}) {
 					</h1>
 					<p>See what's trending on our platform.</p>
 					
-					<div style={ {
-						display: "flex",
-						gap: "var(--spacing)",
-						alignItems: "center",
-						marginTop: "var(--spacing)"
-					} }>
-						<ButtonGroup>
-							<Button buttonStyle={ tab === "trending" ? "primary" : "glass" }
-									onClick={ async () => setTab("trending") }>
-								Trending
-							</Button>
-							<Button buttonStyle={ tab === "favorites" ? "primary" : "glass" }
-									onClick={ async () => setTab("favorites") }>
-								Favorites
-							</Button>
-							<Button buttonStyle={ tab === "my" ? "primary" : "glass" }
-									onClick={ async () => setTab("my") }>
-								My Questions
-							</Button>
-						</ButtonGroup>
-						
-						<ButtonGroup>
-							<Button buttonStyle={ previewStyle === "normal" ? "primary" : "glass" }
-									icon={ previewStyle === "normal" ? "fi fi-sr-table-rows" : "fi fi-rr-table-rows" }
-									onClick={ async () => setPreviewStyle("normal") }>
-								Normal
-							</Button>
-							<Button buttonStyle={ previewStyle === "small" ? "primary" : "glass" }
-									icon={ previewStyle === "small" ? "fi fi-sr-apps" : "fi fi-rr-apps" }
-									onClick={ async () => setPreviewStyle("small") }>
-								Small
-							</Button>
-						</ButtonGroup>
+					<div style={ { marginTop: "var(--spacing)" } }>
+						<AdjustUserContent previewStyle={ previewStyle } setPreviewStyle={ setPreviewStyle }
+										   sortBy={ sortBy } setSortBy={ setSortBy }
+										   sortDirection={ sortDirection } setSortDirection={ setSortDirection }
+										   direction={ "right" }/>
 					</div>
 				</div>
 				
 				<img src={ thinking } alt={ "Thinking" }
 					 style={ { height: "120px", alignSelf: "center", userSelect: "none", pointerEvents: "none" } }/>
-			</div>
-			
-			<hr style={ { marginBottom: 0 } }/>
-			
-			<div style={ { marginTop: "var(--spacing)", display: "flex", gap: "var(--spacing)" } }>
-				<AdjustUserContent sortBy={ sortBy } setSortBy={ setSortBy }
-								   sortDirection={ sortDirection } setSortDirection={ setSortDirection }
-								   direction={ "right" }/>
-				
-				<LiveInput placeholder={ "Filter tags" }/>
 			</div>
 		</Section>
 		

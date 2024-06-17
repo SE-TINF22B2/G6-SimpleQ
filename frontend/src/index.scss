@@ -203,6 +203,10 @@ i {
 	transform: scaleY(-1);
 }
 
+.rotateLeft {
+	transform: rotate(-90deg);
+}
+
 a {
 	color: var(--primary-color);
 }
