@@ -1,7 +1,7 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
+  InternalServerErrorException, Logger,
   NotAcceptableException,
   NotFoundException,
   UnauthorizedException,
@@ -308,6 +308,11 @@ export class UserContentRequestService {
     if (data.useAI && userExist) {
       const isPro = await this.userService.isProUser(userId);
       this.requestAI(data.content, question.groupId, userId, isPro).then();
+    } else if (data.useAI && !userExist){
+      Logger.log(
+        'AI-request SKIPPED, user does not exist or is guest',
+        'USER-CONTENT-REQUEST-SERVICE',
+      );
     }
     return question;
   }
@@ -319,12 +324,14 @@ export class UserContentRequestService {
     isPro: boolean,
   ): Promise<void> {
     try {
-      this.externalAPIService.requestGPT(text, groupId, userId).then();
+      await this.externalAPIService.requestGPT(text, groupId, userId);
       if (isPro) {
-        this.externalAPIService.requestWolfram(text, groupId, userId).then();
+        await this.externalAPIService.requestWolfram(text, groupId, userId);
       }
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      // Logger.log("External API request failed.", '');
+      // dangerous, because ServerException will crash server
+      // throw new InternalServerErrorException(error);
     }
   }
 
