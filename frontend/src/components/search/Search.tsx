@@ -5,9 +5,10 @@ import { useTranslation } from "react-i18next";
 import React, { useEffect, useState } from "react";
 import { axiosError } from "../../def/axios-error";
 import Modal from "react-responsive-modal";
-import { QuestionDef } from "../../def/QuestionDef";
+import { parseQuestion, QuestionDef } from "../../def/QuestionDef";
 import Avatar from "../avatar/Avatar";
 import { formatDate } from "../../def/converter";
+import { useNavigate } from "react-router-dom";
 
 let cancelToken: CancelTokenSource;
 
@@ -18,6 +19,7 @@ let cancelToken: CancelTokenSource;
  */
 export default function Search(props: { isOpen: boolean, closeModal: () => void }) {
 	const alert = useAlert();
+	const navigate = useNavigate();
 	const { t } = useTranslation();
 	
 	const [suggestions, setSuggestions] = useState<QuestionDef[]>([]);
@@ -34,24 +36,7 @@ export default function Search(props: { isOpen: boolean, closeModal: () => void 
 		})
 			  .then(res => {
 				  let _suggestions: QuestionDef[] = [];
-				  res.data.forEach((_question: any) => _suggestions.push({
-					  answers: 0,
-					  author: {
-						  id: "def",
-						  name: "anonymous",
-						  type: "guest"
-					  },
-					  created: "0",
-					  dislikes: _question.dislikes ?? 0,
-					  id: "abc",
-					  isDiscussion: false,
-					  isFavorite: false,
-					  likes: _question.likes ?? 0,
-					  opinion: "none",
-					  tags: ["tag1", "tag2"],
-					  title: "title",
-					  updated: "0"
-				  }));
+				  res.data.forEach((_question: any) => _suggestions.push(parseQuestion(_question)));
 				  setSuggestions(_suggestions);
 			  })
 			  .catch(err => {
@@ -96,13 +81,23 @@ export default function Search(props: { isOpen: boolean, closeModal: () => void 
 				<span className={ "caption" }>{ t('dashboard.search.info') }</span>
 			</p>
 			
-			{ suggestions.map((suggestion, i) => <div key={ i } className={ "suggestion" } tabIndex={ 0 }>
-				<div className={ "suggestion-main" }>
-					<div className={ "suggestion-title" }>
-						<h2>{ suggestion.title }</h2>
-						{ suggestion.tags.map((tag, index) => <p className={ "badge" } key={ index }>{ tag }</p>) }
-					</div>
-					<p className={ "caption suggestion-caption" }>
+			{ suggestions.map((suggestion, i) =>
+				<div key={ i } className={ "suggestion" } tabIndex={ 0 }
+					 onClick={ () => {
+						 navigate("/dashboard/question/" + suggestion.id);
+						 props.closeModal();
+					 } }
+					 onKeyDown={ (e: any) => {
+						 if (e.key !== "Enter") return;
+						 navigate("/dashboard/question/" + suggestion.id);
+						 props.closeModal();
+					 } }>
+					<div className={ "suggestion-main" }>
+						<div className={ "suggestion-title" }>
+							<h2>{ suggestion.title }</h2>
+							{ suggestion.tags.map((tag, index) => <p className={ "badge" } key={ index }>{ tag }</p>) }
+						</div>
+						<p className={ "caption suggestion-caption" }>
 						<span>
 							<i className={ suggestion.isDiscussion ? "fi fi-rr-comments-question" : "fi fi-rr-interrogation" }/>
 							{ suggestion.isDiscussion
@@ -110,31 +105,32 @@ export default function Search(props: { isOpen: boolean, closeModal: () => void 
 								: t('components.question.type.question')
 							}
 						</span>
-						<span>·</span>
-						<span>
+							<span>·</span>
+							<span>
 							<i className={ "fi fi-rr-clock" }/>
-							{ formatDate(suggestion.created) }
+								{ formatDate(suggestion.created) }
 						</span>
-						<span>·</span>
-						<span>
+							<span>·</span>
+							<span>
 							<i className={ "fi fi-rr-refresh" }/>
-							{ formatDate(suggestion.updated) }
+								{ formatDate(suggestion.updated) }
 						</span>
-						<span>·</span>
-						<span>
+							<span>·</span>
+							<span>
 							<i className={ "fi fi-rr-social-network" }/>
-							{ suggestion.likes }
+								{ suggestion.likes }
 						</span>
-						<span>·</span>
-						<span>
+							<span>·</span>
+							<span>
 							<i className={ "fi fi-rr-social-network flipY" }/>
-							{ suggestion.dislikes }
+								{ suggestion.dislikes }
 						</span>
-					</p>
+						</p>
+					</div>
+					
+					<Avatar userName={ suggestion.author.name }/>
 				</div>
-				
-				<Avatar userName={ suggestion.author.name }/>
-			</div>) }
+			) }
 		</div>
 	</Modal>
 }

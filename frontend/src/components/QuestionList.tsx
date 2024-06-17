@@ -1,7 +1,7 @@
 import { useAlert } from "react-alert";
 import React, { useEffect } from "react";
 import AdjustUserContent, { PreviewStyleDef, SortByDef, SortDirectionDef } from "./AdjustUserContent";
-import { QuestionDef } from "../def/QuestionDef";
+import { parseQuestion, QuestionDef } from "../def/QuestionDef";
 import { axiosError } from "../def/axios-error";
 import NoContent from "./NoContent";
 import QuestionPreview from "./questionpreview/QuestionPreview";
@@ -27,22 +27,7 @@ export default function QuestionList(props: { url: string, header: (filters: any
 				  let _questions: QuestionDef[] = [];
 				  res.data.forEach((_question: any) => {
 					  if (!_question.id) return null;
-					  
-					  let question: QuestionDef = {
-						  answers: _question.numberOfAnswers ?? 0,
-						  author: _question.author ?? undefined,
-						  created: _question.created ?? "0",
-						  dislikes: _question.dislikes ?? 0,
-						  id: _question.id,
-						  isDiscussion: _question.isDiscussion ?? false,
-						  likes: _question.likes ?? 0,
-						  opinion: _question.opinion ?? "none",
-						  tags: _question.tags ?? [],
-						  title: _question.title ?? "",
-						  updated: _question.updated ?? "0",
-						  isFavorite: _question.isFavorite ?? false
-					  }
-					  _questions.push(question);
+					  _questions.push(parseQuestion(_question));
 				  });
 				  setQuestions(_questions);
 			  })
