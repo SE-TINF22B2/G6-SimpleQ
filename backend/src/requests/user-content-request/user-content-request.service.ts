@@ -11,8 +11,8 @@ import { VOTE_OPTIONS } from '../../../config';
 import { BlacklistService } from '../../database/blacklist/blacklist.service';
 import { TagService } from '../../database/tag/tag.service';
 import {
-  UserContentService,
   createSortOptions,
+  UserContentService,
 } from '../../database/user-content/user-content.service';
 import { UserService } from '../../database/user/user.service';
 import { VoteService } from '../../database/vote/vote.service';
@@ -64,30 +64,7 @@ export class UserContentRequestService {
       questions,
       req?.userId,
       true,
-    );
-  }
-
-  /**
-   * Get Questions of the user in database format
-   * @param userId
-   * @param sortOptions
-   * @private
-   */
-  private async getQuestionsOfUser(
-    userId: string,
-    sortOptions: QueryParameters,
-  ): Promise<UserContentWithRating[] | null> {
-    if (!userId || !(await this.userService.userIdExists(userId))) {
-      throw new NotFoundException('User id does not exist.');
-    }
-    return this.userContentService.getQuestionsOfUser(
-      userId,
-      createSortOptions(
-        sortOptions.sortBy,
-        sortOptions.sortDirection,
-        sortOptions.offset,
-        sortOptions.limit,
-      ),
+      true,
     );
   }
 
@@ -101,10 +78,22 @@ export class UserContentRequestService {
     userId: string,
     sortOptions: QueryParameters,
   ): Promise<IQuestionMetadata[]> {
-    const questions = await this.getQuestionsOfUser(userId, sortOptions);
+    if (!userId || !(await this.userService.userIdExists(userId))) {
+      throw new NotFoundException('User id does not exist.');
+    }
+    const questions = await this.userContentService.getQuestionsOfUser(
+      userId,
+      createSortOptions(
+        sortOptions.sortBy,
+        sortOptions.sortDirection,
+        sortOptions.offset,
+        sortOptions.limit,
+      ),
+    );
     return await this.mapDatabaseQuestionsToIQuestionMetadata(
       questions,
       userId,
+      true,
       true,
     );
   }
@@ -455,6 +444,7 @@ export class UserContentRequestService {
       questions,
       userId,
       true,
+      true,
     );
   }
 
@@ -623,34 +613,42 @@ export class UserContentRequestService {
    * Maps the user content result of the database to IQuestion Metadata as provided in the Interface
    * @param questions
    * @param userId
-   * @param mapLikes
+   * @param mapLikes // expects questions to be of type UserContentWithRating
+   * @param includeFavourite
    * @private
    */
   private async mapDatabaseQuestionsToIQuestionMetadata(
     questions: UserContentWithRating[] | UserContent[] | null,
     userId?: string,
     mapLikes?: boolean,
+    includeFavourite?: boolean,
   ): Promise<IQuestionMetadata[]> {
     if (!questions) {
       return [];
     }
-    const results: IQuestionMetadata[] = [];
-    for (let i = 0; i < questions.length; i++) {
-      const question = (await this.getUserContent(
-        questions[i].userContentID,
-        UserContentType.Question,
-        userId,
-        false,
-        true,
-      )) as IQuestionMetadata;
+    return await Promise.all(
+      questions.map(
+        async (
+          userContent: UserContentWithRating | UserContent,
+        ): Promise<IQuestionMetadata> => {
+          // create basic question object
+          const question: IQuestionMetadata = (await this.getUserContent(
+            userContent.userContentID,
+            UserContentType.Question,
+            userId,
+            includeFavourite ?? false,
+            true,
+          )) as IQuestionMetadata;
 
-      if (mapLikes) {
-        const userContentWithRating = questions[i] as UserContentWithRating;
-        question.likes = userContentWithRating.likes;
-        question.dislikes = userContentWithRating.dislikes;
-      }
-      results.push(question);
-    }
-    return results;
+          // extend the question object with user rating
+          if (mapLikes) {
+            const userContentWithRating = userContent as UserContentWithRating;
+            question.likes = userContentWithRating.likes;
+            question.dislikes = userContentWithRating.dislikes;
+          }
+          return question;
+        },
+      ),
+    );
   }
 }
