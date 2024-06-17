@@ -11,14 +11,12 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
-import { UserContentType } from '@prisma/client';
 import { UserContentRequestService } from '../user-content-request/user-content-request.service';
 import { AnswerFilter } from './dto/answer-filter.dto';
 import { CreateAnswerDto } from './dto/create-answer.dto';
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
-import { VoteDto } from './dto/vote.dto';
 import { IQuestionMetadata } from './dto/user-content-interface';
 
 @Controller('question') // prefix: domain/question/...

@@ -64,7 +64,6 @@ export class UserContentRequestService {
       true,
       true,
     );
-
   }
 
   /**
@@ -89,7 +88,7 @@ export class UserContentRequestService {
         sortOptions.limit,
       ),
     );
-      
+
     return await this.mapDatabaseQuestionsToIQuestionMetadata(
       questions,
       userId,
@@ -101,7 +100,6 @@ export class UserContentRequestService {
   /**
    * Loads User Content
    * @param userContentId - UUID of user content
-   * @param type - type of UserContentType
    * @param userId  - UUID of user
    * @param includeFavouriteTag - switch parameter, normally false
    * should the object include the property, telling content is favourite?
