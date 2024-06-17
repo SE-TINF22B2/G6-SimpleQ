@@ -429,8 +429,7 @@ export class UserContentRequestService {
           query.limit,
         ),
       );
-    return await this.
-    DatabaseQuestionsToIQuestionMetadata(
+    return await this.mapDatabaseQuestionsToIQuestionMetadata(
       questions,
       userId,
       true,
