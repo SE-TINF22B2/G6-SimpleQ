@@ -39,21 +39,21 @@ export default function QuestionTitle(props: Props) {
 			</h1>
 			
 			{ props.question && <>
-                <Button icon={ props.question?.isFavorite ? "fi fi-sr-star" : "fi fi-rr-star" }
-                        iconStyle={ props.question?.isFavorite ? { color: "var(--primary-color)" } : {} }
+                <Button iconLeft={ props.question?.isFavorite ? "fi fi-sr-star" : "fi fi-rr-star" }
+                        iconLeftStyle={ props.question?.isFavorite ? { color: "var(--primary-color)" } : {} }
                         onClick={ async () => await props.toggleFavorite() }
                         disabled={ props.session?.identity === undefined }>
                     Favorite
                 </Button>
                 
                 <ButtonGroup>
-                    <Button icon={ "fi fi-rr-social-network" }
+                    <Button iconLeft={ "fi fi-rr-social-network" }
                             buttonStyle={ props.question?.opinion === "like" ? "primary" : "glass" }
                             onClick={ async () => await props.postVote("like") }
                             disabled={ props.session?.identity === undefined }>
 						{ props.question.likes }
                     </Button>
-                    <Button icon={ "fi fi-rr-social-network flipY" }
+                    <Button iconLeft={ "fi fi-rr-social-network flipY" }
                             buttonStyle={ props.question?.opinion === "dislike" ? "primary" : "glass" }
                             onClick={ async () => await props.postVote("dislike") }
                             disabled={ props.session?.identity === undefined }>

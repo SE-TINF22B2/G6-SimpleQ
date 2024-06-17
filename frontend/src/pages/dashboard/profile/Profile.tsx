@@ -67,7 +67,7 @@ export default function Profile(props: Props) {
 								 } }/>
 						: <h1><Skeleton width={ 400 }/></h1>
 					}
-					{ props.profile && <Button icon={ "fi fi-rr-refresh" }
+					{ props.profile && <Button iconLeft={ "fi fi-rr-refresh" }
                                                disabled={ updateUsernameInputValue === props.profile.name || updateUsernameInputValue.length < 4 || updateUsernameInputValue.length > 20 }
                                                onClick={ async () => {
 												   await global.axios.post("/profile/update", { name: updateUsernameInputValue }, { withCredentials: true })
@@ -104,7 +104,7 @@ export default function Profile(props: Props) {
 		<Section>
 			<p>{ t('dashboard.profile.auth.description') }</p>
 			
-			<Button icon={ "fi fi-rr-user-key" }
+			<Button iconLeft={ "fi fi-rr-user-key" }
 					onClick={ async () => {
 						window.location.replace(`${ import.meta.env.VITE_ORY_URL }/ui/settings?return_to=` + encodeURIComponent(window.location.href))
 					} }

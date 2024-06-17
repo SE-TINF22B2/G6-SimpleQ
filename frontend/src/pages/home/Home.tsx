@@ -75,9 +75,10 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					<a href={ "#plans" }>Plans</a>
 				</div>
 				
-				<Button icon={ "fi fi-rr-angle-right" } onClick={ async () => navigate("dashboard") }>Dashboard</Button>
+				<Button iconLeft={ "fi fi-rr-angle-right" }
+						onClick={ async () => navigate("dashboard") }>Dashboard</Button>
 				
-				<Dropdown button={ <Button icon={ "fi fi-rr-gears" }>Appearance</Button> }
+				<Dropdown button={ <Button iconLeft={ "fi fi-rr-gears" }>Appearance</Button> }
 						  items={ [
 							  {
 								  icon: "fi fi-rr-language",
@@ -162,7 +163,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 									onClick={ async () => navigate("dashboard") }>
 								Try Yourself!
 							</Button>
-							<Button icon={ "fi fi-brands-github" }
+							<Button iconLeft={ "fi fi-brands-github" }
 									onClick={ async () => {
 										window.open("https://github.com/SE-TINF22B2/G6-SimpleQ", "_blank");
 									} }>

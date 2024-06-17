@@ -25,7 +25,7 @@ export default function Activity(props: {}) {
 						alignItems: "center",
 						marginTop: "var(--spacing)"
 					} }>
-						<Dropdown button={ <Button icon={ "fi fi-rr-filter" }>Filter</Button> }
+						<Dropdown button={ <Button iconLeft={ "fi fi-rr-filter" }>Filter</Button> }
 								  direction={ "right" }
 								  items={ [
 									  {

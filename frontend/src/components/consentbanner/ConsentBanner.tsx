@@ -39,10 +39,10 @@ export default function ConsentBanner(props: {}) {
 					{ t("components.consentBanner.content") }
 				</p>
 				<div className={ "consent-banner-buttons" }>
-					<Button icon={ "fi fi-rr-social-network" } buttonStyle={ "primary" } onClick={ giveConsent }>
+					<Button iconLeft={ "fi fi-rr-social-network" } buttonStyle={ "primary" } onClick={ giveConsent }>
 						{ t("components.consentBanner.accept") }
 					</Button>
-					<Button icon={ "fi fi-rr-social-network flipY" } onClick={ revokeConsent }>
+					<Button iconLeft={ "fi fi-rr-social-network flipY" } onClick={ revokeConsent }>
 						{ t("components.consentBanner.decline") }
 					</Button>
 				</div>

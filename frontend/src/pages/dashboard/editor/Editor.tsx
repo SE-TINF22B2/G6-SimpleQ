@@ -141,7 +141,7 @@ export default function Editor(props: {}) {
 		
 		<div className={ "container editor-container transparent" } style={ { display: "flex" } }>
 			<div style={ { flex: 1 } }/>
-			<Button buttonStyle={ "primary" } icon={ "fi fi-rr-paper-plane" }
+			<Button buttonStyle={ "primary" } iconLeft={ "fi fi-rr-paper-plane" }
 					onClick={ async () => {
 						setHasBeenSubmitted(true);
 						

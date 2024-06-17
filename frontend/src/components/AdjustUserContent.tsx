@@ -20,6 +20,18 @@ export enum PreviewStyleDef {
 	small = "small"
 }
 
+/**
+ * AdjustUserContent component
+ * @param props.previewStyle style of the preview, default is "normal"
+ * @param props.setPreviewStyle set the style of the preview
+ * @param props.sortBy sort by, default is "ldr"
+ * @param props.setSortBy set the sort by
+ * @param props.sortDirection sort direction, default is "desc"
+ * @param props.setSortDirection set the sort direction
+ * @param props.enableAI enable AI, default is false
+ * @param props.setEnableAI set the enable AI
+ * @param props.direction direction of the dropdown, default is "right"
+ */
 interface Props {
 	previewStyle?: PreviewStyleDef;
 	setPreviewStyle?: (previewStyle: PreviewStyleDef) => void;
@@ -158,6 +170,10 @@ export default function AdjustUserContent(props: Props) {
 		return items;
 	}, [t, props.previewStyle, props.setPreviewStyle, props.sortBy, props.setSortBy, props.sortDirection, props.setSortDirection, props.enableAI, props.setEnableAI]);
 	
-	return <Dropdown button={ <Button icon={ "fi fi-rr-filter" }>{ t('components.adjustUserContent.button') }</Button> }
-					 direction={ props.direction } items={ items }/>
+	return <Dropdown
+		button={ <Button iconLeft={ "fi fi-rr-filter" } iconRight={ "fi-rr-angle-down" }
+						 iconRightStyle={ { fontSize: "0.8em", marginTop: 2 } }>
+			{ t('components.adjustUserContent.button') }
+		</Button> }
+		direction={ props.direction } items={ items }/>
 }

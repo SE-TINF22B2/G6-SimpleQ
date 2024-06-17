@@ -5,30 +5,32 @@ import { animateBlob } from "../../def/cool-blobs";
 interface Props {
 	buttonStyle?: "primary" | "glass",
 	slim?: boolean,
-	icon?: string,
+	iconLeft?: string,
+	iconLeftStyle?: CSSProperties,
+	iconRight?: string,
+	iconRightStyle?: CSSProperties,
 	onClick?: () => Promise<void>,
 	children?: React.ReactNode,
 	disabled?: boolean,
-	placeIconRight?: boolean,
 	type?: "button" | "reset" | "submit",
 	className?: string,
-	style?: CSSProperties,
-	iconStyle?: CSSProperties
+	style?: CSSProperties
 }
 
 /**
  * Renders a button
  * @param props.buttonStyle style of the button, default is "glass"
  * @param props.slim make the button slim
- * @param props.icon icon of the button, optional
+ * @param props.iconLeft left icon of the button, optional
+ * @param props.iconLeftStyle optionally add custom inline styles for the left icon
+ * @param props.iconRight right icon of the button, optional
+ * @param props.iconRightStyle optionally add custom inline styles for the right icon
  * @param props.onClick() function to be executed once the button is pressed
  * @param props.children ReactNode as child of the button, automatically wrapped in <span></span>, used to render a text inside the button
  * @param props.disabled optionally disable clicking the button
- * @param props.placeIconRight optionally change the icon placement to the right side of the button
  * @param props.type optionally set the html button type
  * @param props.className optionally add classes to the button
  * @param props.style optionally add custom inline styles for the whole button component
- * @param props.iconStyle optionally add custom inline styles for the icon
  * */
 export default function Button(props: Props) {
 	const [isLoading, setIsLoading] = React.useState(false);
@@ -54,11 +56,11 @@ export default function Button(props: Props) {
 					
 					setIsLoading(false);
 				} }>
-			{ props.icon && !props.placeIconRight && <i className={ isLoading ? "fi fi-rr-spinner spin" : props.icon }
-                                                        style={ { ...{ marginLeft: "calc(var(--spacing) * -0.75)" }, ...props.iconStyle } }/> }
+			{ props.iconLeft && <i className={ isLoading ? "fi fi-rr-spinner spin" : props.iconLeft }
+                                   style={ { ...{ marginLeft: "calc(var(--spacing) * -1)" }, ...props.iconLeftStyle } }/> }
 			<span>{ props.children }</span>
-			{ props.icon && props.placeIconRight && <i className={ isLoading ? "fi fi-rr-spinner spin" : props.icon }
-                                                       style={ { ...{ marginRight: "calc(var(--spacing) * -0.75)" }, ...props.iconStyle } }/> }
+			{ props.iconRight && <i className={ isLoading ? "fi fi-rr-spinner spin" : props.iconRight }
+                                    style={ { ...{ marginRight: "calc(var(--spacing) * -1)" }, ...props.iconRightStyle } }/> }
 			
 			<span className={ "button-blob" }/>
 		</button>

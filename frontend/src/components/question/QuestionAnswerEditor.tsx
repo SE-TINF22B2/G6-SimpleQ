@@ -58,7 +58,7 @@ export default function QuestionAnswerEditor(props: Props) {
 								disabled={ hasBeenSubmitted }/>
 					
 					<div style={ { marginTop: "var(--spacing)" } }/>
-					<Button buttonStyle={ "primary" } icon={ "fi fi-rr-paper-plane" }
+					<Button buttonStyle={ "primary" } iconLeft={ "fi fi-rr-paper-plane" }
 							onClick={ async () => {
 								setHasBeenSubmitted(true);
 								if (props.onSubmit) {

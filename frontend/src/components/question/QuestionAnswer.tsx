@@ -100,14 +100,14 @@ export default function QuestionAnswer(props: Props) {
 		</div>
 		
 		<ButtonGroup vertical style={ { alignSelf: "flex-end" } }>
-			{ props.answer ? <Button slim icon={ "fi fi-rr-social-network" } style={ { width: 100 } }
+			{ props.answer ? <Button slim iconLeft={ "fi fi-rr-social-network" } style={ { width: 100 } }
 									 buttonStyle={ props.answer?.opinion === "dislike" ? "primary" : "glass" }
 									 onClick={ async () => props.postVote && await props.postVote("like") }
 									 disabled={ props.session?.identity === undefined }>
 				{ props.answer?.likes }
 			</Button> : <Skeleton width={ 100 }/> }
 			
-			{ props.answer ? <Button slim icon={ "fi fi-rr-social-network flipY" } style={ { width: 100 } }
+			{ props.answer ? <Button slim iconLeft={ "fi fi-rr-social-network flipY" } style={ { width: 100 } }
 									 buttonStyle={ props.answer?.opinion === "dislike" ? "primary" : "glass" }
 									 onClick={ async () => props.postVote && await props.postVote("dislike") }
 									 disabled={ props.session?.identity === undefined }>
