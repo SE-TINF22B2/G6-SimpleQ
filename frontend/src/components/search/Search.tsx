@@ -9,6 +9,7 @@ import { parseQuestion, QuestionDef } from "../../def/QuestionDef";
 import Avatar from "../avatar/Avatar";
 import { formatDate } from "../../def/converter";
 import { useNavigate } from "react-router-dom";
+import searching from "../../illustrations/searching.svg";
 
 let cancelToken: CancelTokenSource;
 
@@ -80,6 +81,12 @@ export default function Search(props: { isOpen: boolean, closeModal: () => void 
 			<p style={ { textAlign: "center", background: "var(--background-color-primary)" } }>
 				<span className={ "caption" }>{ t('dashboard.search.info') }</span>
 			</p>
+			
+			{ suggestions.length === 0 &&
+                <div style={ { padding: "var(--spacing)", display: "grid", placeItems: "center" } }>
+                    <img src={ searching } alt={ "Searching" } style={ { maxHeight: "40vh" } }/>
+                </div>
+			}
 			
 			{ suggestions.map((suggestion, i) =>
 				<div key={ i } className={ "suggestion" } tabIndex={ 0 }
