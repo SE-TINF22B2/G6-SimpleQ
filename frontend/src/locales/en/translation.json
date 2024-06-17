@@ -19,6 +19,24 @@
 				"question": "Question",
 				"discussion": "Discussion"
 			}
+		},
+		"adjustUserContent": {
+			"button": "Adjust view",
+			"sortBy": {
+				"label": "Sort by",
+				"ldr": "Like-Dislike Ratio",
+				"likes": "Likes",
+				"dislikes": "Dislikes",
+				"timestamp": "Timestamp"
+			},
+			"sortDirection": {
+				"label": "Direction",
+				"asc": "Ascending",
+				"desc": "Descending"
+			},
+			"enableAI": {
+				"label": "Enable AI"
+			}
 		}
 	},
 	"dashboard": {

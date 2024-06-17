@@ -5,8 +5,6 @@ import { AnswerDef, QuestionDef } from "../../../def/QuestionDef";
 import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
 import QuestionAnswer from "../../../components/question/QuestionAnswer";
-import Dropdown from "../../../components/dropdown/Dropdown";
-import Button from "../../../components/button/Button";
 import 'react-responsive-modal/styles.css';
 import QuestionTitle from "../../../components/question/QuestionTitle";
 import Question from "../../../components/question/Question";
@@ -16,6 +14,7 @@ import QuestionDivider from "../../../components/question/QuestionDivider";
 import QuestionAnswerEditor from "../../../components/question/QuestionAnswerEditor";
 import ActiveProfileModal from "../../../components/ActiveProfileModal";
 import { Session } from "@ory/client";
+import AdjustUserContent, { SortByDef, SortDirectionDef } from "../../../components/AdjustUserContent";
 
 const ANSWERS_PAGE_SIZE = 5;
 
@@ -41,8 +40,8 @@ export default function QuestionView(props: Props) {
 	const [answers, setAnswers] = React.useState<AnswerDef[]>([]);
 	const [answersLoading, setAnswersLoading] = React.useState(true);
 	
-	const [sortBy, setSortBy] = React.useState<"ldr" | "likes" | "dislikes" | "timestamp">("ldr");
-	const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">("desc");
+	const [sortBy, setSortBy] = React.useState<SortByDef>(SortByDef.ldr);
+	const [sortDirection, setSortDirection] = React.useState<SortDirectionDef>(SortDirectionDef.desc);
 	const [enableAI, setEnableAI] = React.useState(true);
 	
 	const [answersPage, setAnswersPage] = React.useState(0);
@@ -116,19 +115,6 @@ export default function QuestionView(props: Props) {
 			  .finally(() => setAnswersLoading(false));
 		
 	}, [alert, answersPage, enableAI, id, sortBy, sortDirection, updateQuestion]);
-	
-	const getSortByIcon = () => {
-		switch (sortBy) {
-			case "ldr":
-				return "fi fi-rr-equality";
-			case "likes":
-				return "fi fi-rr-social-network";
-			case "dislikes":
-				return "fi fi-rr-social-network flipY";
-			case "timestamp":
-				return "fi fi-rr-time-past";
-		}
-	}
 	
 	const toggleFavorite = async () => {
 		if (!question) return;
@@ -208,80 +194,10 @@ export default function QuestionView(props: Props) {
             <QuestionPaginationPrev setAnswersPage={ () => setAnswersPage(answersPage - 1) }
                                     enabled={ answersPage > 0 }
                                     inlineElement={
-										<Dropdown button={ <Button icon={ "fi fi-rr-filter" }>
-											Adjust answers
-										</Button> }
-												  direction={ "left" }
-												  items={ [
-													  {
-														  icon: "fi fi-rr-sort",
-														  label: "Sort by",
-														  items: [
-															  {
-																  icon: "fi fi-rr-equality",
-																  label: "Like-Dislike Ratio",
-																  shortcut: sortBy === "ldr" ?
-																	  <i className={ "fi fi-rr-check" }/> : undefined,
-																  onClick: () => setSortBy("ldr")
-															  },
-															  {
-																  icon: "fi fi-rr-social-network",
-																  label: "Most likes",
-																  shortcut: sortBy === "likes" ?
-																	  <i className={ "fi fi-rr-check" }/> : undefined,
-																  onClick: () => setSortBy("likes")
-															  },
-															  {
-																  icon: "fi fi-rr-social-network flipY",
-																  label: "Most dislikes",
-																  shortcut: sortBy === "dislikes" ?
-																	  <i className={ "fi fi-rr-check" }/> : undefined,
-																  onClick: () => setSortBy("dislikes")
-															  },
-															  {
-																  icon: "fi fi-rr-time-past",
-																  label: "Timestamp",
-																  shortcut: sortBy === "timestamp" ?
-																	  <i className={ "fi fi-rr-check" }/> : undefined,
-																  onClick: () => setSortBy("timestamp")
-															  }
-														  ],
-														  shortcut: <i className={ getSortByIcon() }/>
-													  },
-													  {
-														  icon: "fi fi-rr-sort-amount-down",
-														  label: "Direction",
-														  items: [
-															  {
-																  icon: "fi fi-rr-arrow-trend-up",
-																  label: "Ascending",
-																  shortcut: sortDirection === "asc" ?
-																	  <i className={ "fi fi-rr-check" }/> : undefined,
-																  onClick: () => setSortDirection("asc")
-															  },
-															  {
-																  icon: "fi fi-rr-arrow-trend-down",
-																  label: "Descending",
-																  shortcut: sortDirection === "desc" ?
-																	  <i className={ "fi fi-rr-check" }/> : undefined,
-																  onClick: () => setSortDirection("desc")
-															  }
-														  ],
-														  shortcut: <i
-															  className={ "fi fi-rr-arrow-trend-" + (sortDirection === "asc" ? "up" : "down") }/>
-													  },
-													  {
-														  icon: "fi fi-rr-brain",
-														  label: "Enable AI",
-														  shortcut: <input type={ "checkbox" }
-																		   style={ {
-																			   userSelect: "none",
-																			   pointerEvents: "none"
-																		   } }
-																		   checked={ enableAI } tabIndex={ -1 }/>,
-														  onClick: () => setEnableAI(!enableAI)
-													  }
-												  ] }/>
+										<AdjustUserContent sortBy={ sortBy } setSortBy={ setSortBy }
+														   sortDirection={ sortDirection }
+														   setSortDirection={ setSortDirection }
+														   enableAI={ enableAI } setEnableAI={ setEnableAI }/>
 									}/>
             <QuestionDivider/>
         </> }
