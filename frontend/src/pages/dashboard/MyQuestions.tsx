@@ -6,7 +6,7 @@ export default function MyQuestions(props: {}) {
 	return <>
 		<Section>
 			<h1>
-				<i className={ "fi fi-sr-rectangle-list" }/>
+				<i className={ "fi fi-sr-introduction" }/>
 				My Questions
 			</h1>
 			<p>Here you can see all the questions you have asked.</p>

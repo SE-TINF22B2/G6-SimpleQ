@@ -245,7 +245,7 @@ export default function Dashboard(props: Props) {
 			
 			<NavLink to={ "trending" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-file-chart-line" }/>
+					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-analyse" }/>
 					<span className={ "nav-label" }>{ t('dashboard.nav.trending') }</span>
 					<span className={ "button-blob" }/>
 				</> }
@@ -268,7 +268,7 @@ export default function Dashboard(props: Props) {
                 </NavLink>
                 <NavLink to={ "my" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 					{ ({ isActive }) => <>
-						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-list" }/>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-introduction" }/>
 						<span className={ "nav-label" }>{ t('dashboard.nav.my') }</span>
 						<span className={ "button-blob" }/>
 					</> }
