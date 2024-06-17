@@ -29,18 +29,11 @@ export default function QuestionPreviewSmall(props: { question?: QuestionDef }) 
 		<p className={ "tags" }>
 			{ props.question
 				? <>
-					{ props.question.isDiscussion
-						? <span className={ "badge badge-outline" }>
-									<i className={ "fi fi-rr-comments-question" }
-									   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-							{ t('components.question.type.discussion') }
-							</span>
-						: <span className={ "badge badge-outline" }>
-									<i className={ "fi fi-rr-interrogation" }
-									   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-							{ t('components.question.type.question') }
-								</span>
-					}
+					<span className={ "badge badge-outline" }>
+						<i className={ props.question.isDiscussion ? "fi fi-rr-comments-question" : "fi fi-rr-interrogation" }
+						   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+						{ props.question.isDiscussion ? t('components.question.type.discussion') : t('components.question.type.question') }
+					</span>
 					
 					<span className={ "tags-divider" }/>
 					

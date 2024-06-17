@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { QuestionDef } from "../../def/QuestionDef";
 import Avatar from "../avatar/Avatar";
 import { formatDate } from "../../def/converter";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 	question: QuestionDef;
@@ -17,6 +18,7 @@ interface Props {
  */
 export default function QuestionPreview(props: Props) {
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	
 	return <div className={ "container questions-question focus-indicator glass-hover" }
 				tabIndex={ 0 }
@@ -30,12 +32,11 @@ export default function QuestionPreview(props: Props) {
 				} }>
 		<div className={ "question" }>
 			<p className={ "tags" }>
-				{ props.question.isDiscussion
-					? <span className={ "badge badge-outline" }><i className={ "fi fi-rr-comments-question" }
-																   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>Discussion</span>
-					: <span className={ "badge badge-outline" }><i className={ "fi fi-rr-interrogation" }
-																   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>Question</span>
-				}
+				<span className={ "badge badge-outline" }>
+					<i className={ props.question.isDiscussion ? "fi fi-rr-comments-question" : "fi fi-rr-interrogation" }
+					   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+					{ props.question.isDiscussion ? t('components.question.type.discussion') : t('components.question.type.question') }
+				</span>
 				
 				<span className={ "tags-divider" }/>
 				
@@ -50,14 +51,14 @@ export default function QuestionPreview(props: Props) {
 			<p className={ "caption" }>
 				<span style={ { display: "inline-flex" } }>
 					<i className={ "fi fi-rr-clock" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-					Created: { formatDate(props.question.created) }
+					{ formatDate(props.question.created) }
 				</span>
 				
 				<span style={ { marginInline: "calc(var(--spacing) / 2)" } }>·</span>
 				
 				<span style={ { display: "inline-flex" } }>
 					<i className={ "fi fi-rr-refresh" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-					Updated: { formatDate(props.question.updated) }
+					{ formatDate(props.question.updated) }
 				</span>
 			</p>
 		</div>
