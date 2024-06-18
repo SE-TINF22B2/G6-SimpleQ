@@ -169,8 +169,12 @@ components:
         activityPoints: 
           type: integer
     Vote:
-      type: string
-      enum: ['like', 'dislike','none']
+      type: object
+      properties:
+        vote:
+          type: string
+          enum: [ 'like', 'dislike','none' ]
+
     Quest:
       type: object
       properties:
@@ -197,6 +201,8 @@ components:
 tags:
   - name: questions
     description: All information in the questions
+  - name: vote
+    description: All information about voting for user contents
   - name: user
     description: All information related to users
   - name: tag
@@ -523,17 +529,16 @@ paths:
           description: 'Forbidden, user needs to be registered'
         '406':
           description: 'Not Acceptable, used forbidden words in request'
-
-  /question/{questionId}/vote:
+  /vote:
     post:
       tags:
-       - questions
-      summary: Vote for a question
+        - vote
+      summary: Vote for a userContentId (question, answer, discussion)
       parameters:
         - in: path
-          name: questionId
+          name: userContentId
           required: true
-          description: UUID of a question
+          description: UUID of a userContent
           schema:
             type: string
       requestBody:
@@ -550,7 +555,7 @@ paths:
             application/json:
               schema:
                 properties:
-                  id: 
+                  id:
                     type: string
         '422':
           description: 'Unprocessable Entity: Payload is not sufficient'

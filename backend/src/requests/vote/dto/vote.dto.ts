@@ -5,5 +5,5 @@ export class VoteDto {
   @IsNotEmpty()
   @IsString()
   @IsEnum(VOTE_OPTIONS)
-  id: string;
+  vote: string;
 }

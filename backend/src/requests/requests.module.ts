@@ -24,6 +24,8 @@ import { UserController } from './user/user.controller';
 import { RequestsUserService } from './user/requests-user.service';
 import { ExternalAPIModule } from '../externalAPI/externalAPI.module';
 import { UserQuestService } from '../database/user-quest/user-quest.service';
+import { VoteController } from './vote/vote.controller';
+import { VoteRequestService } from './vote/vote-request.service';
 
 @Module({})
 export class RequestsModule {
@@ -36,6 +38,7 @@ export class RequestsModule {
       SpecialController,
       TagController,
       UserController,
+      VoteController,
     ];
 
     const providers: any[] = [
@@ -57,6 +60,7 @@ export class RequestsModule {
       RequestsUserService,
       DevelopmentService,
       UserContentRequestService,
+      VoteRequestService,
     ];
     if (process.env.NODE_ENV === 'dev') {
       Logger.log('Dev: DevelopmentController is loaded.', 'RequestModule');

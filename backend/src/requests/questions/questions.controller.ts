@@ -11,14 +11,12 @@ import {
   Req,
   ValidationPipe,
 } from '@nestjs/common';
-import { UserContentType } from '@prisma/client';
 import { UserContentRequestService } from '../user-content-request/user-content-request.service';
 import { AnswerFilter } from './dto/answer-filter.dto';
 import { CreateAnswerDto } from './dto/create-answer.dto';
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
-import { VoteDto } from './dto/vote.dto';
 import { IQuestionMetadata } from './dto/user-content-interface';
 
 @Controller('question') // prefix: domain/question/...
@@ -64,12 +62,7 @@ export class QuestionsController {
     @Req() request: any,
     @Param('id', new ParseUUIDPipe()) id: string,
   ): Promise<object> {
-    return this.userContentService.getUserContent(
-      id,
-      UserContentType.Question,
-      request?.userId,
-      true,
-    );
+    return this.userContentService.getUserContent(id, request?.userId, true);
   }
 
   @Get(':id/title')
@@ -129,25 +122,5 @@ export class QuestionsController {
       id,
       req.userId,
     );
-  }
-  @Post(':id/vote')
-  async voteForQuestion(
-    @Param('id', new ParseUUIDPipe()) userContentId: string,
-    @Req() req: any,
-    @Body(new ValidationPipe()) vote: VoteDto,
-  ) {
-    return await this.userContentService.updateUserVote(
-      vote,
-      userContentId,
-      req.userId,
-    );
-  }
-
-  @Get(':id/vote')
-  async getVoteOfQuestion(
-    @Param('id', new ParseUUIDPipe()) userContentId: string,
-    @Req() req: any,
-  ) {
-    return await this.userContentService.getUserVote(userContentId, req.userId);
   }
 }

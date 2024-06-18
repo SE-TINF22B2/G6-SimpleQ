@@ -11,7 +11,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { FavoriteService } from '../../database/favorite/favorite.service';
-import { Favorite, UserContentType } from '@prisma/client';
+import { Favorite } from '@prisma/client';
 import { UserContentService } from '../../database/user-content/user-content.service';
 import { UserService } from '../../database/user/user.service';
 import { FAVOURITE_LIMIT } from '../../../config';
@@ -56,7 +56,6 @@ export class FavouritesController {
       results.push(
         (await this.userContentRequestService.getUserContent(
           questions[i].userContentID,
-          UserContentType.Question,
           req?.userId,
           false,
           true,
