@@ -1,97 +1,47 @@
 .search {
-	align-items: flex-start;
-	display: none;
-	height: 100%;
-	justify-content: center;
-	opacity: 0;
-	pointer-events: none;
-	position: absolute;
-	transition: all var(--transition);
-	width: 100%;
-	border-radius: 0;
-
-	z-index: 2000;
-
-	backdrop-filter: none;
-
-	&.active {
-		opacity: 1;
-		pointer-events: all;
-		backdrop-filter: blur(2px);
-	}
-
-	> .search-container {
-		background: var(--background-color-primary);
-
-		border-radius: var(--border-radius);
+	.suggestion {
 		display: flex;
-		filter: drop-shadow(0 0 600px var(--primary-color));
-		flex-direction: column;
-		margin-block: 100px;
-		max-width: 600px;
+		align-items: center;
+		gap: var(--spacing);
+		padding-inline: var(--spacing);
+		padding-block: calc(var(--spacing) / 2);
 
-		transform: scale(125%);
-		width: 90%;
-
-		> div:first-child {
-			position: relative;
-
-			--icon-width: 24px;
-
-			i {
-				display: grid;
-				height: 100%;
-				left: var(--spacing);
-				place-items: center;
-				pointer-events: none;
-				position: absolute;
-				width: var(--icon-width);
-			}
-
-			input {
-				background: var(--background-color-primary);
-				border: none;
-				border-radius: var(--border-radius) var(--border-radius) 0 0;
-				font-size: 1.2em;
-				height: 100%;
-				padding: var(--spacing) var(--spacing) var(--spacing) calc(var(--spacing) * 1.5 + var(--icon-width));
-				width: 100%;
-			}
+		&:last-child {
+			border-bottom-left-radius: var(--border-radius);
+			border-bottom-right-radius: var(--border-radius);
 		}
 
-		.search-info {
-			background: var(--background-color-secondary);
-			font-size: 0.8em;
-			padding: 0.2em var(--spacing);
+		cursor: pointer;
+		transition: background-color var(--transition);
+
+		&:hover,
+		&:focus {
+			background: var(--background-color-primary);
 		}
 
-		.search-result {
-			align-items: center;
-			border-bottom: 1px solid var(--border-color);
-			cursor: pointer;
+		.suggestion-main {
+			flex: 1;
 			display: flex;
-			justify-content: space-between;
+			flex-direction: column;
+			gap: calc(var(--spacing) / 4);
 
-			padding: calc(var(--spacing) / 2) var(--spacing);
-
-			:nth-child(2) {
-				flex: 1;
-				padding-left: var(--spacing);
+			.suggestion-title {
+				display: flex;
+				align-items: center;
+				gap: var(--spacing);
 			}
 
-			:nth-child(3),
-			:nth-child(4) {
-				text-align: center;
-				width: 25%;
-			}
+			.suggestion-caption {
+				display: flex;
+				align-items: center;
+				gap: calc(var(--spacing) / 2);
 
-			&:last-child {
-				border-bottom: none;
+				> span {
+					display: inline-flex;
+					align-items: center;
+					gap: calc(var(--spacing) / 2);
+				}
 			}
-		}
-
-		> :last-child {
-			border-radius: 0 0 var(--border-radius) var(--border-radius);
 		}
 	}
 }

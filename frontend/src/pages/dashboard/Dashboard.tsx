@@ -7,142 +7,62 @@ import i18n from "i18next";
 
 /* Todo: Make Logo Static */
 import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
-
-import { Configuration, FrontendApi, Identity, Session } from "@ory/client"
 import { useTranslation } from "react-i18next";
 import Skeleton from "react-loading-skeleton";
-import Search from "../../components/search/Search";
-import { axiosError } from "../../def/axios-error";
 import { useAlert } from "react-alert";
 import Avatar from "../../components/avatar/Avatar";
 import { animateBlob } from "../../def/cool-blobs";
+import Search from "../../components/search/Search";
+import { ProfileDef } from "../../def/ProfileDef";
+import { Session } from "@ory/client";
+import { QuestionDef } from "../../def/QuestionDef";
+import { capitalizeFirstLetter } from "../../def/converter";
 
-// ory setup
-const basePath = "http://localhost:4000"
-const ory = new FrontendApi(
-	new Configuration({
-		basePath,
-		baseOptions: {
-			withCredentials: true,
-		},
-	}),
-)
-
+/**
+ * Props of the dashboard
+ * @param updateTheme Function used to update the theme of the entire app
+ * @param profile Profile of the user that is currently logged in
+ * @param session Session of the user
+ * @param logoutUrl Url to logout
+ * @param activeQuestion the question that is currently or has recently been visited
+ */
 interface Props {
-	updateTheme: (theme: "system" | "dark" | "light") => void;
+	updateTheme: (theme: "system" | "dark" | "light") => void,
+	profile?: ProfileDef,
+	session?: Session,
+	logoutUrl?: string,
+	activeQuestion?: QuestionDef
 }
 
 /**
  * Renders the dashboard consisting of a navigation and an outlet for subordinate pages
- * @param props.updateTheme Function used to update the theme of the entire app
+ * @param props Props of the dashboard
  */
 export default function Dashboard(props: Props) {
 	const alert = useAlert();
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-	const [session, setSession] = useState<Session | undefined>();
-	const [logoutUrl, setLogoutUrl] = useState<string | undefined>();
-	const [stats, setStats] = useState<{ streak: number, views: number, likes: number } | undefined>();
-	const [history, setHistory] = useState<number[] | undefined>();
-	const [activeQuestionName, setActiveQuestionName] = useState<string | undefined>();
+	
+	const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+	
+	/*
+	const getId = (identity?: Identity) => identity?.id;
 	
 	const getUserName = (identity?: Identity) =>
 		identity?.traits.email || identity?.traits.username || t('dashboard.anonymous');
+	 */
 	
 	useEffect(() => {
-		const fetchStats = () => {
-			global.axios.get("stats", { withCredentials: true })
-				  .then(res => console.log(res))
-				  .catch(err => axiosError(err, alert));
-			
-			if (window.location.pathname.includes("/question")) {
-				let questionId = window.location.pathname.split("/question/")[1].substring(0, 36);
-				global.axios.get("question/" + questionId + "/title")
-					  .then(res => setActiveQuestionName(res.data.title))
-					  .catch(err => axiosError(err, alert));
-			}
-		}
-		
-		ory.toSession()
-		   .then(({ data }) => {
-			   // Todo: check whether this makes sense
-			   if (localStorage.getItem("consent") === "true")
-				   setSession(data);
-			   
-			   ory.createBrowserLogoutFlow().then(({ data }) => {
-				   setLogoutUrl(data.logout_url);
-			   });
-			   
-			   fetchStats();
-		   })
-		   .catch((err) => {
-			   console.log("error logging in", err);
-			   // window.location.replace(`${ basePath }/ui/login`);
-		   });
-		
 		const onKeyDown = (e: any) => {
 			if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-				toggleSearch();
+				setIsSearchModalOpen(_isSearchModalOpen => !_isSearchModalOpen);
 				e.preventDefault();
-			}
-			
-			if (e.key === "Escape") {
-				const search = document.querySelector(".search");
-				if (search && search.classList.contains("active")) {
-					toggleSearch();
-				}
 			}
 		}
 		
 		document.addEventListener("keydown", onKeyDown);
 		return () => document.removeEventListener("keydown", onKeyDown);
 	}, [alert]);
-	
-	const capitalizeFirstLetter = (string: string) => {
-		return string.charAt(0).toUpperCase() + string.slice(1);
-	}
-	
-	const toggleSearch = () => {
-		const search = document.querySelector(".search");
-		if (search) {
-			let isActive = search.classList.contains("active");
-			search.classList.toggle("active");
-			
-			let keyframes = [
-				{ transform: "scale(125%)" },
-				{ transform: "scale(100%)" }
-			]
-			
-			let duration = 200;
-			let easing = "ease-in-out";
-			
-			if (isActive) {
-				search.querySelector("div.search-container")!.animate(keyframes.reverse(), {
-					duration,
-					easing,
-					fill: "both"
-				}).onfinish = () => {
-					// @ts-ignore
-					search.style.display = "none"
-				};
-				
-				const searchBar = document.getElementById("search-bar");
-				if (searchBar) searchBar.focus();
-			} else {
-				// @ts-ignore
-				search.style.display = "flex";
-				
-				search.querySelector("div.search-container")!.animate(keyframes, {
-					duration,
-					easing,
-					fill: "both"
-				});
-				
-				const input = search.querySelector("input");
-				if (input) input.focus();
-			}
-		}
-	}
 	
 	const getSearchShortcut = () => {
 		let isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
@@ -161,43 +81,40 @@ export default function Dashboard(props: Props) {
 	
 	const loggedInDropdown = () => {
 		return <Dropdown button={ <div style={ {
-			aspectRatio: "1",
-			display: "grid",
-			placeItems: "center",
 			userSelect: "none",
 			cursor: "pointer",
 			borderRadius: "50%",
-			boxShadow: "var(--box-shadow)"
+			outlineOffset: "var(--outline-width)"
 		} }
 									   tabIndex={ 0 }>
-			<Avatar userId={ session?.identity?.id }/>
+			<Avatar userName={ props.profile?.name }/>
 		</div> }
 						 items={ [
 							 {
 								 icon: "fi fi-rr-user",
-								 label: getUserName(session?.identity),
-								 shortcut: <span className={ "badge" }>Pro</span>,
+								 label: props.profile?.name ?? "Profile",
+								 shortcut: <span className={ "badge" }>{ props.profile?.type }</span>,
 								 onClick: (closeDropdown) => {
 									 navigate("/dashboard/profile");
 									 closeDropdown();
 								 },
-								 hidden: session?.identity === undefined
+								 hidden: props.session?.identity === undefined
 							 },
 							 {
 								 icon: "fi fi-rr-sign-in-alt",
 								 label: t('dashboard.login'),
-								 onClick: () => window.location.replace(`${ basePath }/ui/login?return_to=` + encodeURIComponent(window.location.href)),
-								 hidden: session?.identity !== undefined
+								 onClick: () => window.location.replace(`${ import.meta.env.VITE_ORY_URL }/ui/login?return_to=` + encodeURIComponent(window.location.href)),
+								 hidden: props.session?.identity !== undefined
 							 },
 							 {
 								 icon: "fi fi-rr-sign-out-alt",
 								 label: t('dashboard.logout'),
 								 onClick: () => window.location.href = (
-									 logoutUrl
-										 ? (logoutUrl + (logoutUrl.includes("?") ? "&" : "?") + "return_to=" + encodeURIComponent(window.location.href))
+									 props.logoutUrl
+										 ? (props.logoutUrl + (props.logoutUrl.includes("?") ? "&" : "?") + "return_to=" + encodeURIComponent(window.location.href))
 										 : "/"
 								 ),
-								 hidden: session?.identity === undefined
+								 hidden: props.session?.identity === undefined
 							 },
 							 {
 								 icon: "fi fi-rr-language",
@@ -263,6 +180,8 @@ export default function Dashboard(props: Props) {
 	}
 	
 	return <div className={ "dashboard" }>
+		<Search isOpen={ isSearchModalOpen } closeModal={ () => setIsSearchModalOpen(false) }/>
+		
 		<nav>
 			<div style={ { position: "relative", overflow: "hidden" } }>
 				<NavLink to={ "/" }
@@ -303,14 +222,31 @@ export default function Dashboard(props: Props) {
 				/>
 			</div>
 			
-			{ window.location.pathname.includes("/question") && <>
-                <NavLink to={ window.location.pathname } className={ "active navigate" }
+			<NavLink to={ "new" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+				{ ({ isActive }) => <>
+					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-edit" }/>
+					<span className={ "nav-label" }>{ t('dashboard.nav.question.create') }</span>
+					<span className={ "button-blob" }/>
+				</> }
+			</NavLink>
+			
+			<div style={ { paddingInline: "var(--spacing)" } }>
+				<hr style={ { marginBlock: 0 } }/>
+			</div>
+			
+			{ props.activeQuestion && <>
+                <NavLink to={ "question/" + props.activeQuestion.id } className={ "navigate" }
                          onClick={ (e) => animateBlob(e) }>
-                    <i className={ "fi fi-sr-question-square" }/>
-                    <p style={ { display: "flex", flexDirection: "column" } }>
-                        <span className={ "caption" }>{ t('dashboard.nav.question.browsing') }</span>
-                        <span>{ activeQuestionName ?? <Skeleton/> }</span>
-                    </p>
+                    <i className={ "fi fi-" + (window.location.pathname.includes("/question") ? "s" : "r") + "r-question-square" }/>
+                    <div className={ "nav-label" } style={ { display: "flex", flexDirection: "column" } }>
+                        <p className={ "caption" }>
+							{ window.location.pathname.includes("/question")
+								? t('dashboard.nav.question.browsing.currently', { type: props.activeQuestion.isDiscussion ? t('components.question.type.discussion') : t('components.question.type.question') })
+								: t('dashboard.nav.question.browsing.recently', { type: props.activeQuestion.isDiscussion ? t('components.question.type.discussion') : t('components.question.type.question') })
+							}
+                        </p>
+                        <p style={ { marginTop: -4 } }>{ props.activeQuestion.title }</p>
+                    </div>
                     <span className={ "button-blob" }/>
                 </NavLink>
                 
@@ -321,82 +257,83 @@ export default function Dashboard(props: Props) {
 			
 			<NavLink to={ "trending" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
 				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-file-chart-line" }/>
-					<span>{ t('dashboard.nav.trending') }</span>
+					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-analyse" }/>
+					<span className={ "nav-label" }>{ t('dashboard.nav.trending') }</span>
 					<span className={ "button-blob" }/>
-				</> }
-			</NavLink>
-			<NavLink to={ "new" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-edit" }/>
-					<span>{ t('dashboard.nav.question.create') }</span>
-					<span className={ "button-blob" }/>
-				</> }
-			</NavLink>
-			<NavLink to={ "activity" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-vertical-history" }/>
-					<span>{ t('dashboard.nav.activity') }</span>
-					<span className={ "button-blob" }/>
-				</> }
-			</NavLink>
-			<NavLink to={ "my" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-rectangle-list" }/>
-					<span>{ t('dashboard.nav.my') }</span>
-					<span className={ "button-blob" }/>
-				</> }
-			</NavLink>
-			<NavLink to={ "b" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-star" }/>
-					<span>{ t('dashboard.nav.favorites') }</span>
-					<span className={ "button-blob" }/>
-				</> }
-			</NavLink>
-			<NavLink to={ "quests" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-treasure-chest" }/>
-					<span>{ t('dashboard.nav.quests') }</span>
-					<span className={ "button-blob" }/>
-				</> }
-			</NavLink>
-			<NavLink to={ "d" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
-				{ ({ isActive }) => <>
-					<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-envelope" }/>
-					<span>{ t('dashboard.nav.inbox') }</span>
-					<span className={ "button-blob" }/>
-					<span className={ "badge" }>3</span>
 				</> }
 			</NavLink>
 			
-			<div style={ { flex: 1 } }/>
-			<div style={ { paddingInline: "var(--spacing)" } }>
-				<hr/>
-				<p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
-					{ t('dashboard.nav.stats') }
-				</p>
-				<div className={ "stats" }>
-					<div className={ "stats-column" }>
-						<i className={ "fi fi-rr-flame primary-icon" }/>
-						<span>{ stats?.streak ?? <Skeleton width={ 20 }/> }</span>
-					</div>
-					<div className={ "stats-column" }>
-						<i className={ "fi fi-rr-eye primary-icon" }/>
-						<span>{ stats?.views ?? <Skeleton width={ 20 }/> }</span>
-					</div>
-					<div className={ "stats-column" }>
-						<i className={ "fi fi-rr-social-network primary-icon" }/>
-						<span>{ stats?.likes ?? <Skeleton width={ 20 }/> }</span>
-					</div>
-				</div>
-				
-				<hr/>
-				<p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
-					{ t('dashboard.nav.activeDays') }
-				</p>
-				<BarChart data={ history }/>
-			</div>
+			{ props.session !== undefined && <>
+                <NavLink to={ "my" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+					{ ({ isActive }) => <>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-introduction" }/>
+						<span className={ "nav-label" }>{ t('dashboard.nav.my') }</span>
+						<span className={ "button-blob" }/>
+					</> }
+                </NavLink>
+                <NavLink to={ "favorites" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+					{ ({ isActive }) => <>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-star" }/>
+						<span className={ "nav-label" }>{ t('dashboard.nav.favorites') }</span>
+						<span className={ "button-blob" }/>
+					</> }
+                </NavLink>
+                
+                <div style={ { paddingInline: "var(--spacing)" } }>
+                    <hr style={ { marginBlock: 0 } }/>
+                </div>
+                
+                <NavLink to={ "quests" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+					{ ({ isActive }) => <>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-treasure-chest" }/>
+						<span className={ "nav-label" }>{ t('dashboard.nav.quests') }</span>
+						<span className={ "button-blob" }/>
+					</> }
+                </NavLink>
+                <NavLink to={ "activity" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+					{ ({ isActive }) => <>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-list-timeline" }/>
+						<span className={ "nav-label" }>{ t('dashboard.nav.activity') }</span>
+						<span className={ "button-blob" }/>
+					</> }
+                </NavLink>
+                <NavLink to={ "d" } className={ "navigate" } onClick={ (e) => animateBlob(e) }>
+					{ ({ isActive }) => <>
+						<i className={ "fi fi-" + (isActive ? "s" : "r") + "r-envelope" }/>
+						<span className={ "nav-label" }>{ t('dashboard.nav.inbox') }</span>
+						<span className={ "button-blob" }/>
+						<span className={ "badge" }>3</span>
+					</> }
+                </NavLink>
+                
+                <div style={ { flex: 1 } }/>
+                <div style={ { paddingInline: "var(--spacing)" } }>
+                    <hr/>
+                    <p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
+						{ t('dashboard.nav.stats') }
+                    </p>
+                    <div className={ "stats" }>
+                        <div className={ "stats-column" }>
+                            <i className={ "fi fi-rr-flame primary-icon" }/>
+                            <span>{ undefined ?? <Skeleton width={ 20 }/> }</span>
+                        </div>
+                        <div className={ "stats-column" }>
+                            <i className={ "fi fi-rr-eye primary-icon" }/>
+                            <span>{ undefined ?? <Skeleton width={ 20 }/> }</span>
+                        </div>
+                        <div className={ "stats-column" }>
+                            <i className={ "fi fi-rr-social-network primary-icon" }/>
+                            <span>{ undefined ?? <Skeleton width={ 20 }/> }</span>
+                        </div>
+                    </div>
+                    
+                    <hr/>
+                    <p className={ "caption" } style={ { textAlign: "center", marginBottom: "var(--spacing)" } }>
+						{ t('dashboard.nav.activeDays') }
+                    </p>
+                    <BarChart/>
+                </div>
+            </> }
 		</nav>
 		
 		<main>
@@ -423,11 +360,11 @@ export default function Dashboard(props: Props) {
 				
 				<p className={ "glass" }
 				   onKeyDown={ (e) => {
-					   if (e.key === "Enter") toggleSearch();
+					   if (e.key === "Enter") setIsSearchModalOpen(true);
 				   } }
 				   id={ "search-bar" }
 				   tabIndex={ 0 }
-				   onClick={ () => toggleSearch() }>
+				   onClick={ () => setIsSearchModalOpen(true) }>
 					<i className={ "fi fi-rr-search" }/>
 					<span style={ {
 						display: "flex",
@@ -438,11 +375,9 @@ export default function Dashboard(props: Props) {
 				{ loggedInDropdown() }
 			</div>
 			
-			<hr style={ { marginBlock: "0" } }/>
+			<hr style={ { marginBlock: "0", zIndex: 1 } }/>
 			
 			<Outlet/>
 		</main>
-		
-		<Search toggleSearch={ toggleSearch }/>
 	</div>
 }

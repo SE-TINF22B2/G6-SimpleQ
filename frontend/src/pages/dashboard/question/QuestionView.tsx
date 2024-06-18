@@ -1,48 +1,71 @@
 import React, { useEffect } from "react";
-import "./Question.scss";
-import Dropdown from "../../../components/dropdown/Dropdown";
-import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css';
 import { useNavigate, useParams } from "react-router-dom";
-import SplitSection from "../../../components/section/SplitSection";
-import TextEditor from "../../../components/texteditor/TextEditor";
-import Button from "../../../components/button/Button";
-import { Answer, Question } from "../../../def/Question";
-import { formatDate } from "../../../def/converter";
+import { AnswerDef, QuestionDef } from "../../../def/QuestionDef";
 import { useAlert } from "react-alert";
 import { axiosError } from "../../../def/axios-error";
-import NoContent from "../../../components/NoContent";
-import QuestionStats from "./QuestionStats";
-import QuestionAnswerSkeleton from "./QuestionAnswerSkeleton";
-import QuestionAnswer from "../../../components/questionpreview/QuestionAnswer";
-import Avatar from "../../../components/avatar/Avatar";
+import QuestionAnswer from "../../../components/question/QuestionAnswer";
+import 'react-responsive-modal/styles.css';
+import QuestionTitle from "../../../components/question/QuestionTitle";
+import Question from "../../../components/question/Question";
+import { QuestionSectionTitle } from "../../../components/question/QuestionSectionTitle";
+import { QuestionPaginationNext, QuestionPaginationPrev } from "../../../components/question/QuestionPagination";
+import QuestionDivider from "../../../components/question/QuestionDivider";
+import QuestionAnswerEditor from "../../../components/question/QuestionAnswerEditor";
+import ActiveProfileModal from "../../../components/ActiveProfileModal";
+import { Session } from "@ory/client";
+import AdjustUserContent, { SortByDef, SortDirectionDef } from "../../../components/AdjustUserContent";
+
+const ANSWERS_PAGE_SIZE = 5;
 
 /**
- * Renders the question page
+ * The props for the question view
+ * @param session is used to determine user type specific features
+ * @param setActiveQuestion is a function to update the smart menu
  */
-export default function QuestionView() {
+interface Props {
+	session?: Session,
+	setActiveQuestion: (question?: QuestionDef) => void
+}
+
+/**
+ * Renders the question view
+ * @param props the props for the question view
+ */
+export default function QuestionView(props: Props) {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	
-	const [question, setQuestion] = React.useState<Question | undefined>(undefined);
-	const [answers, setAnswers] = React.useState<Answer[]>([]);
+	const [question, setQuestion] = React.useState<QuestionDef | undefined>(undefined);
+	const [answers, setAnswers] = React.useState<AnswerDef[]>([]);
 	const [answersLoading, setAnswersLoading] = React.useState(true);
-	const [sortBy, setSortBy] = React.useState<"ldr" | "likes" | "dislikes" | "timestamp">("ldr");
-	const [sortDirection, setSortDirection] = React.useState<"asc" | "desc">("desc");
+	
+	const [sortBy, setSortBy] = React.useState<SortByDef>(SortByDef.ldr);
+	const [sortDirection, setSortDirection] = React.useState<SortDirectionDef>(SortDirectionDef.desc);
 	const [enableAI, setEnableAI] = React.useState(true);
+	
+	const [answersPage, setAnswersPage] = React.useState(0);
+	
+	const [updateQuestion, setUpdateQuestion] = React.useState(false);
+	
+	const [activeAuthorId, setActiveAuthorId] = React.useState<string | undefined>(undefined);
 	
 	if (id === undefined) navigate("");
 	
 	const alert = useAlert();
 	
 	useEffect(() => {
-		global.axios.get("question/" + encodeURIComponent(id ?? ""))
+		global.axios.get("question/" + encodeURIComponent(id ?? ""), { withCredentials: true })
 			  .then(res => {
-				  let _question: Question = {
+				  let _question: QuestionDef = {
 					  answers: res.data.numberOfAnswers ?? 0,
-					  author: res.data.author ?? undefined,
+					  author: {
+						  id: res.data.author.id ?? "",
+						  name: res.data.author.name ?? "Anonymous",
+						  type: res.data.author.type ?? "guest"
+					  },
 					  content: res.data.content ?? "",
-					  created: formatDate(res.data.created ?? ""),
+					  created: res.data.created ?? "",
 					  dislikes: res.data.dislikes ?? 0,
 					  id: id ?? "",
 					  isDiscussion: res.data.isDiscussion ?? false,
@@ -50,204 +73,143 @@ export default function QuestionView() {
 					  opinion: res.data.opinion ?? "none",
 					  tags: res.data.tags ?? [],
 					  title: res.data.title ?? "",
-					  updated: formatDate(res.data.updated ?? "")
+					  updated: res.data.updated ?? "",
+					  isFavorite: res.data.isFavourite ?? false
 				  }
 				  setQuestion(_question);
 			  })
 			  .catch(err => axiosError(err, alert));
-		
-		global.axios.get("question/" + encodeURIComponent(id ?? "") + "/answers")
+	}, [alert, id, updateQuestion]);
+	
+	useEffect(() => {
+		question && props.setActiveQuestion(question);
+	}, [question, props]);
+	
+	useEffect(() => {
+		setAnswersLoading(true);
+		global.axios.get("question/" + encodeURIComponent(id ?? "") + "/answers"
+			+ "?sortBy=" + encodeURIComponent(sortBy)
+			+ "&sortDirection=" + encodeURIComponent(sortDirection)
+			+ "&enableAI=" + encodeURIComponent(enableAI)
+			+ "&limit=" + encodeURIComponent(ANSWERS_PAGE_SIZE)
+			+ "&offset=" + encodeURIComponent(answersPage * ANSWERS_PAGE_SIZE))
 			  .then(res => {
-				  let _answers: Answer[] = res.data.map((_answer: any) => {
+				  let _answers: AnswerDef[] = res.data.map((_answer: any) => {
 					  return {
 						  id: _answer.id ?? "",
 						  content: _answer.content ?? "",
-						  created: formatDate(_answer.created ?? ""),
+						  created: _answer.created ?? "",
 						  likes: _answer.likes ?? 0,
 						  dislikes: _answer.dislikes ?? 0,
-						  rating: "none",
-						  author: _answer.author ?? undefined
+						  opinion: "none",
+						  author: {
+							  id: _answer.author.id ?? "",
+							  name: _answer.author.name ?? "Anonymous",
+							  type: _answer.author.type ?? "guest"
+						  },
 					  }
 				  });
 				  setAnswers(_answers);
 			  })
 			  .catch(err => axiosError(err, alert))
 			  .finally(() => setAnswersLoading(false));
-	}, [id, navigate, alert]);
+		
+	}, [alert, answersPage, enableAI, id, sortBy, sortDirection, updateQuestion]);
 	
-	const getSortByIcon = () => {
-		switch (sortBy) {
-			case "ldr":
-				return "fi fi-rr-equality";
-			case "likes":
-				return "fi fi-rr-social-network";
-			case "dislikes":
-				return "fi fi-rr-social-network flipY";
-			case "timestamp":
-				return "fi fi-rr-time-past";
-		}
+	const toggleFavorite = async () => {
+		if (!question) return;
+		
+		if (question.isFavorite)
+			await global.axios.delete("favourites/" + id, { withCredentials: true })
+						.then(_ => setQuestion({ ...question, ...{ isFavorite: false } }))
+						.catch(err => axiosError(err, alert));
+		else
+			await global.axios.post("favourites/" + id, {}, { withCredentials: true })
+						.then(_ => setQuestion({ ...question, ...{ isFavorite: true } }))
+						.catch(err => axiosError(err, alert));
 	}
 	
-	return <SplitSection className={ "question-main" }>
-		<div style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)", flexGrow: 1 } }>
-			<section className={ "glass question-content" }>
-				{ question ? <p className={ "tags" }>
-					{ question.tags.map((tag: string, index: number) =>
-						<span key={ index } className={ "badge" }>{ tag }</span>) }
-				</p> : <Skeleton className={ "tags" } style={ { width: "60%" } }/> }
-				
-				<h2 className={ "question-title" }>{ question?.title ?? <Skeleton style={ { width: "200px" } }/> }</h2>
-				
-				<p>{ question?.content ?? <Skeleton count={ 5 }/> }</p>
-				
-				<hr/>
-				
-				{ question ? <span className={ "caption" }>
-                        created: { question.created } · last updated: { question.updated }
-                    </span> : <Skeleton/> }
-				
-				{ question && <i className={ "fi fi-rr-star add-favorite" } tabIndex={ 0 }/> }
-			</section>
-			
-			<hr style={ { margin: 0 } }/>
-			
-			<section className={ "glass focus-indicator" }>
-				<h3>Answer this question</h3>
-				<TextEditor placeholder={ "Write your answer here..." }/>
-			</section>
-			
-			<hr style={ { margin: 0 } }/>
-			
-			{ !answersLoading
-				? answers.length > 0
-					? answers.map((answer, index) => <QuestionAnswer answer={ answer } index={ index }/>)
-					: <NoContent/>
-				: <QuestionAnswerSkeleton count={ 2 }/> }
-			
-			<div style={ {
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "flex-end",
-				gap: "var(--spacing)"
-			} }>
-				<Button icon={ "fi fi-rr-arrow-left" } onClick={ async () => {
-				} }>
-					Previous
-				</Button>
-				
-				<p>Page 1 of 10</p>
-				
-				<Button icon={ "fi fi-rr-arrow-right" } onClick={ async () => {
-				} } placeIconRight={ true }>
-					Next
-				</Button>
-			</div>
-		</div>
+	const submitVote = async (opinion: "like" | "dislike" | "none", _id?: string) => {
+		if (!question || !id) return;
 		
-		<div style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)" } }>
-			<section className={ "glass" }>
-				<div className={ "question-author" } tabIndex={ 0 }>
-					{ question
-						? <Avatar userId={ question.author.id }/>
-						: <Skeleton height={ 40 } width={ 40 }/> }
-					
-					<div className={ "question-author-info" }>
-						<span className={ "caption" }>asked by</span>
-						
-						<p>
-							{ question ? <>
-								<span>
-									{ question.author.name.substring(0, import.meta.env.VITE_AUTHOR_NAME_MAX_LENGTH) }
-								</span>
-								
-								{ question.author.type !== "user" &&
-                                    <span className={ "badge" }>{ question.author.type.toUpperCase() }</span> }
-							</> : <Skeleton width={ 120 }/> }
-						</p>
-					</div>
-				</div>
-				
-				<hr style={ { marginBlock: "calc(var(--spacing) / 2)" } }/>
-				
-				<QuestionStats question={ question }/>
-				
-				<hr style={ { marginBottom: "calc(var(--spacing) / 2)" } }/>
-				
-				<button className={ "question-report" }>
-					<i className={ "fi fi-rr-flag" }/>
-					Report question
-				</button>
-			</section>
-			
-			<Dropdown button={ <Button icon={ "fi fi-rr-filter" }>
-				Adjust answers
-			</Button> } items={ [
-				{
-					icon: "fi fi-rr-sort",
-					label: "Sort by",
-					items: [
-						{
-							icon: "fi fi-rr-equality",
-							label: "Like-Dislike Ratio",
-							shortcut: sortBy === "ldr" ?
-								<i className={ "fi fi-rr-check" }/> : undefined,
-							onClick: () => setSortBy("ldr")
-						},
-						{
-							icon: "fi fi-rr-social-network",
-							label: "Most likes",
-							shortcut: sortBy === "likes" ?
-								<i className={ "fi fi-rr-check" }/> : undefined,
-							onClick: () => setSortBy("likes")
-						},
-						{
-							icon: "fi fi-rr-social-network flipY",
-							label: "Most dislikes",
-							shortcut: sortBy === "dislikes" ?
-								<i className={ "fi fi-rr-check" }/> : undefined,
-							onClick: () => setSortBy("dislikes")
-						},
-						{
-							icon: "fi fi-rr-time-past",
-							label: "Timestamp",
-							shortcut: sortBy === "timestamp" ?
-								<i className={ "fi fi-rr-check" }/> : undefined,
-							onClick: () => setSortBy("timestamp")
-						}
-					],
-					shortcut: <i className={ getSortByIcon() }/>
-				},
-				{
-					icon: "fi fi-rr-sort-amount-down",
-					label: "Direction",
-					items: [
-						{
-							icon: "fi fi-rr-arrow-trend-up",
-							label: "Ascending",
-							shortcut: sortDirection === "asc" ?
-								<i className={ "fi fi-rr-check" }/> : undefined,
-							onClick: () => setSortDirection("asc")
-						},
-						{
-							icon: "fi fi-rr-arrow-trend-down",
-							label: "Descending",
-							shortcut: sortDirection === "desc" ?
-								<i className={ "fi fi-rr-check" }/> : undefined,
-							onClick: () => setSortDirection("desc")
-						}
-					],
-					shortcut: <i
-						className={ "fi fi-rr-arrow-trend-" + (sortDirection === "asc" ? "up" : "down") }/>
-				},
-				{
-					icon: "fi fi-rr-brain",
-					label: "Enable AI",
-					shortcut: <input type={ "checkbox" }
-									 style={ { userSelect: "none", pointerEvents: "none" } }
-									 checked={ enableAI } tabIndex={ -1 }/>,
-					onClick: () => setEnableAI(!enableAI)
-				}
-			] }/>
-		</div>
-	</SplitSection>
+		if (!_id) await global.axios.post("vote/" + encodeURIComponent(id),
+			{ vote: opinion }, { withCredentials: true })
+							  .then(_ => setUpdateQuestion(!updateQuestion))
+							  .catch(err => axiosError(err, alert));
+		else await global.axios.post("vote/" + encodeURIComponent(_id),
+			{ vote: opinion }, { withCredentials: true })
+						 .then(_ => setUpdateQuestion(!updateQuestion))
+						 .catch(err => axiosError(err, alert));
+	}
+	
+	return <div className={ "container transparent" }
+				style={ { display: "flex", flexDirection: "column", gap: "var(--spacing)", alignItems: "flex-start" } }>
+		<ActiveProfileModal activeProfileId={ activeAuthorId } isOwner={ false }
+							closeModal={ () => setActiveAuthorId(undefined) }/>
+		
+		<QuestionTitle session={ props.session }
+					   question={ question }
+					   toggleFavorite={ toggleFavorite }
+					   postVote={ async (vote) => await submitVote(vote) }/>
+		
+		<hr style={ { margin: 0 } }/>
+		
+		<Question question={ question } setActiveProfile={ setActiveAuthorId }/>
+		
+		{ /* <QuestionStats question={ question }/> */ }
+		
+		{ (question?.answers ?? 1) > 0 && <>
+            <QuestionSectionTitle/>
+            <QuestionPaginationPrev setAnswersPage={ () => setAnswersPage(answersPage - 1) }
+                                    enabled={ answersPage > 0 }
+                                    inlineElement={
+										<AdjustUserContent sortBy={ sortBy } setSortBy={ setSortBy }
+														   sortDirection={ sortDirection }
+														   setSortDirection={ setSortDirection }
+														   enableAI={ enableAI } setEnableAI={ setEnableAI }/>
+									}/>
+            <QuestionDivider/>
+        </> }
+		
+		{ !answersLoading
+			? answers.map(answer =>
+				<QuestionAnswer session={ props.session }
+								answer={ answer } key={ answer.id }
+								setActiveProfile={ setActiveAuthorId }
+								postVote={ async (vote) => await submitVote(vote, answer.id) }/>)
+			: <>
+				<QuestionAnswer/>
+				<QuestionAnswer/>
+				<QuestionAnswer/>
+			</> }
+		
+		{ (question?.answers ?? 1) > 0 && <>
+            <QuestionDivider/>
+            <QuestionPaginationNext setAnswersPage={ () => setAnswersPage(answersPage + 1) }
+                                    enabled={ (answersPage + 1) * ANSWERS_PAGE_SIZE < (question?.answers ?? 0) }
+                                    inlineElement={
+										<p className={ "caption" } style={ { alignSelf: "flex-start" } }>
+											Showing
+											answers { answersPage * ANSWERS_PAGE_SIZE + 1 } to { (answersPage + 1) * ANSWERS_PAGE_SIZE + " " }
+											(page { answersPage + 1 + " " }
+											of { Math.ceil((question?.answers ?? 0) / ANSWERS_PAGE_SIZE) })
+										</p>
+									}/>
+        </> }
+		
+		<QuestionSectionTitle/>
+		<QuestionAnswerEditor session={ props.session } onSubmit={ async (content) => {
+			let success = false;
+			await global.axios.post("question/" + encodeURIComponent(id ?? "") + "/answer",
+				{ content }, { withCredentials: true })
+						.then(_ => {
+							setUpdateQuestion(!updateQuestion);
+							success = true;
+						})
+						.catch(err => axiosError(err, alert));
+			return success;
+		} }/>
+		
+		<div style={ { height: "50vh" } }/>
+	</div>
 }

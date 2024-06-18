@@ -1,17 +1,24 @@
 .text-editor {
 	border-radius: var(--border-radius);
+	border: var(--outline-width) solid var(--border-color);
+	background: var(--background-color-glass);
+	transition: background-color var(--transition);
 
 	&:focus-within {
 		outline: var(--outline-width) solid var(--primary-color);
+		background: var(--background-color-primary);
 	}
 
 	.text-editor-buttons {
 		align-items: center;
 		background: var(--background-color-secondary);
-		border-radius: var(--border-radius) var(--border-radius) 0 0;
+		border-radius: var(--border-radius);
 		display: flex;
 		gap: calc(var(--spacing) / 2);
 		padding: calc(var(--spacing) / 2);
+
+		margin: calc(var(--spacing) / 2);
+		height: var(--ui-spacing);
 
 		button {
 			background: transparent;
@@ -35,6 +42,9 @@
 			height: 1em;
 			margin-inline: calc(var(--spacing) / 2);
 			width: var(--outline-width);
+
+			user-select: none;
+			pointer-events: none;
 		}
 
 		.active {
@@ -43,11 +53,12 @@
 	}
 
 	.text-editor-content {
-		border-inline: var(--outline-width) solid var(--border-color);
 		padding: calc(var(--spacing) / 2);
 		width: 100%;
 		outline: none;
 		overflow-y: scroll;
+
+		word-break: break-all;
 
 		&:empty:not(:focus):before {
 			content: attr(data-placeholder);
@@ -67,8 +78,16 @@
 	}
 
 	.text-editor-caption {
-		border-radius: 0 0 var(--border-radius) var(--border-radius);
+		border-radius: var(--border-radius);
 		background: var(--background-color-secondary);
 		padding: var(--spacing);
+		display: flex;
+		align-items: center;
+
+		margin: calc(var(--spacing) / 2);
+		height: var(--ui-spacing);
+
+		user-select: none;
+		pointer-events: none;
 	}
 }

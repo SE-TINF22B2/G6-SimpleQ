@@ -39,8 +39,8 @@ export default class Login extends Component<{}, {}> {
 				</div>
 				
 				<div className={ "login-social" }>
-					<Button icon={ "fi fi-brands-apple" }>Apple</Button>
-					<Button icon={ "fi fi-brands-google" }>Google</Button>
+					<Button iconLeft={ "fi fi-brands-apple" }>Apple</Button>
+					<Button iconLeft={ "fi fi-brands-google" }>Google</Button>
 				</div>
 			</main>
 		</div>

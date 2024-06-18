@@ -4,6 +4,10 @@
 	font-size: 0.9em;
 	height: var(--form-element-height);
 
+	&.btn-slim {
+		height: var(--form-element-height-slim);
+	}
+
 	align-items: center;
 	border: none;
 	cursor: pointer;
@@ -14,10 +18,13 @@
 	user-select: none;
 	white-space: nowrap;
 
+	i {
+		width: var(--ui-spacing);
+	}
+
 	&.btn-primary {
 		background: var(--primary-color);
 		color: var(--primary-color-contrast);
-		font-weight: 600;
 		outline-offset: var(--outline-width);
 
 		overflow: hidden;
@@ -61,7 +68,6 @@
 
 	&.btn-glass {
 		background: var(--background-color-glass);
-		border: var(--outline-width) solid var(--border-color);
 		box-shadow: var(--box-shadow);
 
 		&:focus-within {

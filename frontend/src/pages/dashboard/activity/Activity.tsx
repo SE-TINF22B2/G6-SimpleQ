@@ -14,7 +14,7 @@ export default function Activity(props: {}) {
 			<div style={ { display: "flex", gap: "var(--spacing)" } }>
 				<div style={ { flex: 1 } }>
 					<h1>
-						<i className={ "fi fi-sr-rectangle-vertical-history" }/>
+						<i className={ "fi fi-sr-list-timeline" }/>
 						Activity
 					</h1>
 					<p>Something happened today</p>
@@ -25,7 +25,7 @@ export default function Activity(props: {}) {
 						alignItems: "center",
 						marginTop: "var(--spacing)"
 					} }>
-						<Dropdown button={ <Button icon={ "fi fi-rr-filter" }>Filter</Button> }
+						<Dropdown button={ <Button iconLeft={ "fi fi-rr-filter" }>Filter</Button> }
 								  direction={ "right" }
 								  items={ [
 									  {

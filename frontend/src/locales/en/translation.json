@@ -13,6 +13,35 @@
 		},
 		"textEditor": {
 			"wordCount": "You have written {{count}} words."
+		},
+		"question": {
+			"type": {
+				"question": "Question",
+				"discussion": "Discussion"
+			}
+		},
+		"adjustUserContent": {
+			"button": "Adjust view",
+			"previewStyle": {
+				"label": "Style",
+				"normal": "Normal",
+				"small": "Small"
+			},
+			"sortBy": {
+				"label": "Sort by",
+				"ldr": "Like-Dislike Ratio",
+				"likes": "Likes",
+				"dislikes": "Dislikes",
+				"timestamp": "Timestamp"
+			},
+			"sortDirection": {
+				"label": "Direction",
+				"asc": "Ascending",
+				"desc": "Descending"
+			},
+			"enableAI": {
+				"label": "Enable AI"
+			}
 		}
 	},
 	"dashboard": {
@@ -20,7 +49,10 @@
 			"trending": "Trending Questions",
 			"question": {
 				"create": "Create Question",
-				"browsing": "Browsing Question / Discussion"
+				"browsing": {
+					"currently": "Browsing {{type}}",
+					"recently": "Recent {{type}}"
+				}
 			},
 			"activity": "Activity",
 			"my": "My Questions",
@@ -54,8 +86,7 @@
 		"questionEditor": {
 			"title": {
 				"caption": "Title",
-				"placeholder": "New Question",
-				"hint": "What's your programming question? Be specific."
+				"placeholder": "New Question"
 			},
 			"tags": {
 				"title": "Tags",
@@ -64,41 +95,62 @@
 				"hint": "Add up to 5 tags to describe what your question is about."
 			},
 			"description": {
-				"title": "Description",
 				"caption": "Description",
-				"placeholder": "Describe your question in detail.",
-				"hint": "Include all the information someone would need to answer your question."
+				"placeholder": "Describe your question in detail."
 			},
 			"type": {
 				"caption": "Customize Answers",
 				"simp": {
 					"title": "Enable Simp",
-					"hint": "Users, as well as our in-house AI chatbot will be able to reply to your question to help provide you with the best help possible."
+					"hint": "Users, as well as our in-house AI chatbot will be able to reply to your question to help provide you with the best help possible.",
+					"model": "AI Model"
 				},
 				"users": {
 					"title": "Only Users",
 					"hint": "Only Users will be able to upload answers to your question."
 				}
 			},
-			"validate": {
-				"title": "Check your Question",
-				"caption": "Validate",
-				"hint": "Verify that you have created your question correctly.",
-				"checks": {
-					"title": "A valid title",
-					"tags": "At least one tag",
-					"description": "A detailed description of at least 20 words"
-				}
-			},
 			"submit": "Post your Question"
 		},
 		"questionView": {
+			"question": {
+				"creationDate": "created: {{questionCreationDate}}",
+				"updatedDate": "last updated: {{questionUpdatedDate}}"
+			},
 			"answer": {
-				"creationDate": "replied {{answerCreationDate}}",
-				"likes": "likes",
-				"dislikes": "dislikes",
-				"report": "Report answer"
+				"creationDate": "replied: {{answerCreationDate}}"
+			},
+			"pagination": {
+				"previous": "Previous Page",
+				"next": "Next Page"
+			},
+			"answerEditor": {
+				"title": "Answer this question",
+				"placeholder": "Answer this question",
+				"noPermission": "As a guest you are not permitted to submit an answer."
 			}
+		},
+		"profile": {
+			"info": {
+				"registrationDate": "Registered since: {{registrationDate}}"
+			},
+			"auth": {
+				"auth": "Authentication",
+				"description": "We're using an external identity provider (IDP). Therefore, you will have to be redirected to another page in order to view and update your login information. You will also have the possibility of adding other login methods to your current account.",
+				"redirect": "Account Settings"
+			}
+		},
+		"trending": {
+			"title": "Trending Questions",
+			"caption": "Here are some of the most popular questions on our platform right now."
+		},
+		"myQuestions": {
+			"title": "My Questions",
+			"caption": "Here are all the questions you have posted on our platform."
+		},
+		"favorites": {
+			"title": "Favorites",
+			"caption": "Here are all the questions you have favorited on our platform."
 		}
 	}
 }

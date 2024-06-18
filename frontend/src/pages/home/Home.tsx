@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo } from "react";
 import "./Home.scss";
 import { useNavigate } from "react-router-dom";
-import { InView } from "react-intersection-observer";
 
 import mockup from "../../images/macbook-mockup.png";
 
 // Todo: Make logo static!!!
-import logoTodoMakeStatic from "../../images/logo-TODO-MAKE-STATIC.png";
+import logoTodoMakeStatic from "../../images/logo-transparent-TODO-MAKE-STATIC.png";
 import Button from "../../components/button/Button";
 
 import benni from "../../images/benni.jpg";
@@ -15,21 +14,17 @@ import leonard from "../../images/leonard.jpg";
 import manuel from "../../images/manuel.jpg";
 import tom from "../../images/tom.jpeg";
 
+import Dropdown from "../../components/dropdown/Dropdown";
+import i18n from "i18next";
+import { useTranslation } from "react-i18next";
+import { capitalizeFirstLetter } from "../../def/converter";
+
 export default function Home(props: { updateTheme: (theme: "system" | "dark" | "light") => void }) {
+	const { t } = useTranslation();
+	
 	let blobs: (HTMLDivElement | null)[] = useMemo(() => [], []);
 	
 	const navigate = useNavigate();
-	const [currentThemeOnlyDisplay, setCurrentThemeOnlyDisplay] =
-		React.useState<"dark" | "light" | "system">((localStorage.getItem("theme") as "dark" | "light" || "system"));
-	
-	const inViewOnChange = (inView: any, entry: any) => {
-		entry.target.querySelectorAll(".fade-in").forEach((el: any, i: any) => {
-			setTimeout(() => {
-				if (inView) el.classList.add("fade-in-visible");
-				else el.classList.remove("fade-in-visible");
-			}, (i + 1) * 100);
-		});
-	}
 	
 	useEffect(() => {
 		const animateBlobs = () => {
@@ -70,7 +65,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 	return <div className={ "home" }>
 		<nav>
 			<div className={ "nav-wrapper" }>
-				<img src={ logoTodoMakeStatic } alt={ "Logo" }/>
+				<img src={ logoTodoMakeStatic } alt={ "Logo" }
+					 style={ { filter: "drop-shadow(0 0 4px white)" } }/>
 				
 				<div className={ "pages" }>
 					<a href={ "#features" }>Features</a>
@@ -79,68 +75,116 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 					<a href={ "#plans" }>Plans</a>
 				</div>
 				
-				<Button icon={ "fi fi-rr-sign-in-alt" } onClick={ async () => {
-					window.location.href = "/login";
-				} }>Login</Button>
-				<Button icon={ "fi fi-rr-angle-right" } onClick={ async () => navigate("dashboard") }>Dashboard</Button>
+				<Button iconLeft={ "fi fi-rr-angle-right" }
+						onClick={ async () => navigate("dashboard") }>Dashboard</Button>
 				
-				<Button
-					icon={ "fi fi-rr-" + (currentThemeOnlyDisplay === "system" ? "insight-alt" : currentThemeOnlyDisplay === "dark" ? "moon" : "sun") }
-					onClick={ async () => {
-						let theme: "dark" | "light" | "system" = (localStorage.getItem("theme") as "dark" | "light" || "system");
-						theme = theme === "dark" ? "light" : theme === "light" ? "system" : "dark";
-						setCurrentThemeOnlyDisplay(theme);
-						props.updateTheme(theme);
-					} }>
-					{ currentThemeOnlyDisplay }
-				</Button>
+				<Dropdown button={ <Button iconLeft={ "fi fi-rr-gears" }>Appearance</Button> }
+						  items={ [
+							  {
+								  icon: "fi fi-rr-language",
+								  label: t('dashboard.appearance.language.language'),
+								  shortcut: i18n.language,
+								  items: [
+									  {
+										  icon: "fi fi-rr-globe",
+										  label: t('dashboard.appearance.language.english'),
+										  onClick: () => i18n.changeLanguage("en"),
+										  shortcut: i18n.language === "en" ?
+											  <i className={ "fi fi-rr-check" }/> : ""
+									  },
+									  {
+										  icon: "fi fi-rr-globe",
+										  label: t('dashboard.appearance.language.german'),
+										  onClick: () => i18n.changeLanguage("de"),
+										  shortcut: i18n.language === "de" ?
+											  <i className={ "fi fi-rr-check" }/> : ""
+									  }
+								  ]
+							  },
+							  {
+								  icon: "fi fi-rr-brush",
+								  label: t('dashboard.appearance.theme.theme'),
+								  shortcut: capitalizeFirstLetter(localStorage.getItem("theme") || "system"),
+								  items: [
+									  {
+										  icon: "fi fi-rr-insight-alt",
+										  label: t('dashboard.appearance.theme.system'),
+										  onClick: () => props.updateTheme("system"),
+										  shortcut: !localStorage.getItem("theme")
+										  || localStorage.getItem("theme") === "system" ?
+											  <i className={ "fi fi-rr-check" }/> : "",
+										  divider: "bottom"
+									  },
+									  {
+										  icon: "fi fi-rr-moon",
+										  label: t('dashboard.appearance.theme.dark'),
+										  onClick: () => props.updateTheme("dark"),
+										  shortcut: localStorage.getItem("theme") === "dark" ?
+											  <i className={ "fi fi-rr-check" }/> : ""
+									  },
+									  {
+										  icon: "fi fi-rr-sun",
+										  label: t('dashboard.appearance.theme.light'),
+										  onClick: () => props.updateTheme("light"),
+										  shortcut: localStorage.getItem("theme") === "light" ?
+											  <i className={ "fi fi-rr-check" }/> : ""
+									  }
+								  ]
+							  }
+						  ] }/>
 			</div>
 		</nav>
 		
 		<main>
 			<section className={ "page" }>
-				<div className={ "home-bg-blob" } ref={ b => blobs.push(b) } style={ {
-					top: "calc(var(--header-height) + 10%)",
-					left: "10%",
-					borderRadius: "47% 53% 67% 33% / 13% 62% 38% 87%",
-					opacity: 0.6,
-					background: "linear-gradient(to right, var(--primary-color), transparent), url(https://grainy-gradients.vercel.app/noise.svg)"
-				} }/>
-				<div className={ "home-bg-blob" } ref={ b => blobs.push(b) } style={ {
-					top: "calc(var(--header-height) + 20%)",
-					left: "30%",
-					borderRadius: "63% 37% 23% 77% / 53% 62% 38% 47%",
-					background: "linear-gradient(to left, var(--background-color-glass-simp), transparent), url(https://grainy-gradients.vercel.app/noise.svg)"
-				} }/>
-				
-				<img src={ mockup } alt={ "Dashboard" }/>
-				
-				<div>
-					<h1 className={ "title" }>
-						Try Our Q&A Platform<br/>
-						powered by <span className={ "highlight" }>AI</span>
-					</h1>
-					<div style={ { display: "flex", gap: "var(--spacing)", alignItems: "center" } }>
-						<h2>You don't believe us?</h2>
-						<Button buttonStyle={ "primary" }>Try Yourself!</Button>
-						<Button icon={ "fi fi-brands-github" }
-								onClick={ async () => {
-									window.open("https://github.com/SE-TINF22B2/G6-SimpleQ", "_blank");
-								} }>
-							Learn More on GitHub
-						</Button>
+				<div className={ "left" }>
+					<div style={ { position: "relative" } }>
+						<div className={ "home-bg-blob" } ref={ b => blobs.push(b) } style={ {
+							top: "-30%",
+							left: "-20%",
+							borderRadius: "47% 53% 67% 33% / 13% 62% 38% 87%",
+							opacity: 0.6,
+							background: "linear-gradient(to right, var(--primary-color), transparent), url(https://grainy-gradients.vercel.app/noise.svg)"
+						} }/>
+						<div className={ "home-bg-blob" } ref={ b => blobs.push(b) } style={ {
+							top: "0%",
+							left: "40%",
+							borderRadius: "63% 37% 23% 77% / 53% 62% 38% 47%",
+							background: "linear-gradient(to left, var(--background-color-glass-simp), transparent), url(https://grainy-gradients.vercel.app/noise.svg)"
+						} }/>
+						
+						<h1 className={ "title" }>
+							Try Our Q&A Platform<br/>
+							powered by <span className={ "highlight" }>AI</span>
+						</h1>
+						<div style={ { display: "flex", gap: "var(--spacing)", alignItems: "center" } }>
+							<h2>You don't believe us?</h2>
+							<Button buttonStyle={ "primary" }
+									onClick={ async () => navigate("dashboard") }>
+								Try Yourself!
+							</Button>
+							<Button iconLeft={ "fi fi-brands-github" }
+									onClick={ async () => {
+										window.open("https://github.com/SE-TINF22B2/G6-SimpleQ", "_blank");
+									} }>
+								Learn More on GitHub
+							</Button>
+						</div>
 					</div>
 				</div>
+				
+				<img src={ mockup } alt={ "Dashboard" }/>
 			</section>
 			
 			<section className={ "page" } id={ "features" }>
-				<InView as={ "div" } onChange={ inViewOnChange }>
+				<div>
 					<h2 className={ "page-title fade-in" }>Features</h2>
 					<h1 className={ "page-subtitle fade-in" }>What We Offer</h1>
 					<p className={ "page-summary fade-in" }>
 						We offer a wide range of features to help you with your daily tasks.
 					</p>
-					<Button buttonStyle={ "primary" }>
+					<Button buttonStyle={ "primary" } className={ "fade-in" }
+							onClick={ async () => navigate("dashboard") }>
 						Try Yourself!
 					</Button>
 					
@@ -166,11 +210,11 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 							<p>Stay Active.</p>
 						</div>
 					</div>
-				</InView>
+				</div>
 			</section>
 			
-			<section className={ "page" } id={ "developers" }>
-				<InView as={ "div" } onChange={ inViewOnChange }>
+			<section className={ "page bg-secondary" } id={ "developers" }>
+				<div>
 					<h2 className={ "page-title fade-in" }>Developers</h2>
 					<h1 className={ "page-subtitle fade-in" }>Meet our Team</h1>
 					<p className={ "page-summary fade-in" }>
@@ -204,7 +248,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "https://www.riedbahn.de/home.html" } target={ "_blank" } rel={ "noreferrer" }>
+									<a href={ "https://www.riedbahn.de/home.html" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -235,7 +280,8 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 									<a href={ "https://github.com/manuelbrs" } target={ "_blank" } rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "https://brink.ws/lokalpolitiker" } target={ "_blank" } rel={ "noreferrer" }>
+									<a href={ "https://brink.ws/lokalpolitiker" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
@@ -251,18 +297,19 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-github" }/>
 									</a>
-									<a href={ "https://www.youtube.com/watch?v=wXjhszy2f9w" } target={ "_blank" } rel={ "noreferrer" }>
+									<a href={ "https://www.youtube.com/watch?v=wXjhszy2f9w" } target={ "_blank" }
+									   rel={ "noreferrer" }>
 										<i className={ "fi fi-brands-discord" }/>
 									</a>
 								</div>
 							</div>
 						</div>
 					</div>
-				</InView>
+				</div>
 			</section>
 			
 			<section className={ "page" } id={ "development" }>
-				<InView as={ "div" } onChange={ inViewOnChange }>
+				<div>
 					<h2 className={ "page-title fade-in" }>Development</h2>
 					<h1 className={ "page-subtitle fade-in" }>Follow and take part in the process</h1>
 					<p className={ "page-summary fade-in" }>
@@ -316,11 +363,11 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 						<i className={ "fi fi-rr-arrow-right" } style={ { marginRight: "var(--spacing)" } }/>
 						<span>For further information, please have a look at the Wiki linked in our GitHub Repository.</span>
 					</a>
-				</InView>
+				</div>
 			</section>
 			
-			<section className={ "page" } id={ "plans" }>
-				<InView as={ "div" } onChange={ inViewOnChange }>
+			<section className={ "page bg-secondary" } id={ "plans" }>
+				<div>
 					<h2 className={ "page-title fade-in" }>Meet our Plans</h2>
 					<h1 className={ "page-subtitle fade-in" }>Take the next step</h1>
 					<p className={ "page-summary fade-in" }>Take a look at our convenient plans that intend to improve
@@ -333,7 +380,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 								flexDirection: "row",
 								alignItems: "center",
 								gap: "var(--spacing)",
-								background: "var(--background-color-secondary)",
+								background: "var(--background-color-primary)",
 								margin: "calc(var(--spacing) * -1)",
 								padding: "var(--spacing)"
 							} }>
@@ -366,7 +413,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 								flexDirection: "row",
 								alignItems: "center",
 								gap: "var(--spacing)",
-								background: "var(--background-color-secondary)",
+								background: "var(--background-color-primary)",
 								margin: "calc(var(--spacing) * -1)",
 								padding: "var(--spacing)"
 							} }>
@@ -409,7 +456,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 								flexDirection: "row",
 								alignItems: "center",
 								gap: "var(--spacing)",
-								background: "var(--background-color-secondary)",
+								background: "var(--background-color-primary)",
 								margin: "calc(var(--spacing) * -1)",
 								padding: "var(--spacing)"
 							} }>
@@ -444,7 +491,7 @@ export default function Home(props: { updateTheme: (theme: "system" | "dark" | "
 							</h2>
 						</div>
 					</div>
-				</InView>
+				</div>
 			</section>
 			
 			<section className={ "page" }>

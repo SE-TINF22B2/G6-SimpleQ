@@ -15,10 +15,10 @@ export const axiosError = (err: any, alert: AlertContainer) => {
 		<span style={ { fontWeight: "bold" } }>{ err.message }</span>
 		{ Array.isArray(backendMessage)
 			? backendMessage.map((m: string) => {
-				return <>
+				return <span key={ m }>
 					<br/>
 					{ m }
-				</>
+				</span>
 			})
 			: <>
 				<br/>

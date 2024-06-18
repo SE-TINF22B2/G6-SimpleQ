@@ -1,11 +1,13 @@
 import "./QuestionPreview.scss";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Question } from "../../def/Question";
+import { QuestionDef } from "../../def/QuestionDef";
 import Avatar from "../avatar/Avatar";
+import { formatDate } from "../../def/converter";
+import { useTranslation } from "react-i18next";
 
 interface Props {
-	question: Question;
+	question: QuestionDef;
 	index: number;
 }
 
@@ -16,6 +18,7 @@ interface Props {
  */
 export default function QuestionPreview(props: Props) {
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	
 	return <div className={ "container questions-question focus-indicator glass-hover" }
 				tabIndex={ 0 }
@@ -29,12 +32,11 @@ export default function QuestionPreview(props: Props) {
 				} }>
 		<div className={ "question" }>
 			<p className={ "tags" }>
-				{ props.question.isDiscussion
-					? <span className={ "badge badge-outline" }><i className={ "fi fi-rr-comments-question" }
-																   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>Discussion</span>
-					: <span className={ "badge badge-outline" }><i className={ "fi fi-rr-interrogation" }
-																   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>Question</span>
-				}
+				<span className={ "badge badge-outline" }>
+					<i className={ props.question.isDiscussion ? "fi fi-rr-comments-question" : "fi fi-rr-interrogation" }
+					   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+					{ props.question.isDiscussion ? t('components.question.type.discussion') : t('components.question.type.question') }
+				</span>
 				
 				<span className={ "tags-divider" }/>
 				
@@ -49,14 +51,14 @@ export default function QuestionPreview(props: Props) {
 			<p className={ "caption" }>
 				<span style={ { display: "inline-flex" } }>
 					<i className={ "fi fi-rr-clock" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-					Created: { props.question.created }
+					{ formatDate(props.question.created) }
 				</span>
 				
 				<span style={ { marginInline: "calc(var(--spacing) / 2)" } }>·</span>
 				
 				<span style={ { display: "inline-flex" } }>
-					<i className={ "fi fi-rr-user" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-					Updated: { props.question.updated }
+					<i className={ "fi fi-rr-refresh" } style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+					{ formatDate(props.question.updated) }
 				</span>
 			</p>
 		</div>
@@ -97,7 +99,7 @@ export default function QuestionPreview(props: Props) {
 			</div>
 			
 			<div className={ "author" }>
-				<Avatar userId={ props.question.author.id }/>
+				<Avatar userName={ props.question.author.name }/>
 				<p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
 					<span className={ "caption" }>Asked by</span>
 					<span>{ props.question.author.name.substring(0, import.meta.env.VITE_AUTHOR_NAME_MAX_LENGTH) }</span>

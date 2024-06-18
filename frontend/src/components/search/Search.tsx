@@ -2,29 +2,43 @@ import "./Search.scss";
 import axios, { CancelTokenSource } from "axios";
 import { useAlert } from "react-alert";
 import { useTranslation } from "react-i18next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { axiosError } from "../../def/axios-error";
+import Modal from "react-responsive-modal";
+import { parseQuestion, QuestionDef } from "../../def/QuestionDef";
+import Avatar from "../avatar/Avatar";
+import { formatDate } from "../../def/converter";
+import { useNavigate } from "react-router-dom";
+import searching from "../../illustrations/searching.svg";
 
 let cancelToken: CancelTokenSource;
 
-export default function Search(props: { toggleSearch: () => void }) {
+/**
+ * Todo: Do
+ * @param props
+ * @constructor
+ */
+export default function Search(props: { isOpen: boolean, closeModal: () => void }) {
 	const alert = useAlert();
+	const navigate = useNavigate();
 	const { t } = useTranslation();
 	
-	const [suggestions, setSuggestions] = useState<any[]>([]);
+	const [suggestions, setSuggestions] = useState<QuestionDef[]>([]);
 	
 	const updateSuggestions = (query: string) => {
 		if (cancelToken) cancelToken.cancel("Operation canceled due to new request.");
 		cancelToken = axios.CancelToken.source();
 		
-		global.axios.get("question/search", {
+		global.axios.get<any>("question/search", {
 			params: {
 				q: query
 			},
 			cancelToken: cancelToken.token
 		})
 			  .then(res => {
-				  setSuggestions(res.data);
+				  let _suggestions: QuestionDef[] = [];
+				  res.data.forEach((_question: any) => _suggestions.push(parseQuestion(_question)));
+				  setSuggestions(_suggestions);
 			  })
 			  .catch(err => {
 				  if (err.message.includes('new request')) return;
@@ -33,34 +47,97 @@ export default function Search(props: { toggleSearch: () => void }) {
 			  });
 	}
 	
-	return <div className={ "search glass" }
-				onClick={ props.toggleSearch }
-				onBlur={ (e: any) => {
-					let isFocusWithin = e.currentTarget.contains(e.relatedTarget);
-					if (!isFocusWithin) props.toggleSearch();
-				} }>
-		<div className={ "search-container" }>
-			<div onClick={ (e: any) => e.stopPropagation() }>
-				<i className={ "fi fi-rr-search" }/>
-				<input type={ "text" } placeholder={ t('dashboard.search.search') } onInput={ e => {
-					const value = (e.target as HTMLInputElement).value.trim();
-					if (value.length > 0) updateSuggestions(value);
-					else setSuggestions([]);
-				} }/>
-			</div>
+	useEffect(() => {
+		setSuggestions([]);
+	}, [props.isOpen]);
+	
+	return <Modal open={ props.isOpen } onClose={ props.closeModal }
+				  classNames={ {
+					  overlay: "modal-overlay",
+					  modal: "modal-modal modal-no-padding search",
+					  closeButton: "modal-close"
+				  } }
+				  styles={ { modal: { marginTop: "var(--spacing)" } } }>
+		<div style={ { width: "100%", display: "flex", flexDirection: "column", alignItems: "stretch" } }>
+			<input type={ "text" } placeholder={ t('dashboard.search.search') }
+				   style={ {
+					   padding: "var(--spacing)",
+					   paddingRight: "calc(var(--spacing) * 3)",
+					   borderRadius: "var(--border-radius) var(--border-radius) 0 0",
+					   border: "none",
+					   background: "var(--background-color-primary)",
+					   fontSize: "2em",
+					   fontWeight: 700
+				   } }
+				   onInput={ e => {
+					   const value = (e.target as HTMLInputElement).value.trim();
+					   if (value.length > 0) updateSuggestions(value);
+					   else setSuggestions([]);
+				   } }
+				   spellCheck={ false }/>
 			
-			<p className={ "search-info" }>
-				{ t('dashboard.search.info') }
+			<div style={ { height: "var(--outline-width)" } }/>
+			
+			<p style={ { textAlign: "center", background: "var(--background-color-primary)" } }>
+				<span className={ "caption" }>{ t('dashboard.search.info') }</span>
 			</p>
 			
-			<p className={ "search-result" } tabIndex={ 0 }>
-				<i className={ "fi fi-rr-question badge" }/>
-				<span>How to use React? - { suggestions.length }</span>
-				<i className={ "fi fi-rr-user" }
-				   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-				<span>Benni Loidl</span>
-				<span>Yesterday</span>
-			</p>
+			{ suggestions.length === 0 &&
+                <div style={ { padding: "var(--spacing)", display: "grid", placeItems: "center" } }>
+                    <img src={ searching } alt={ "Searching" } style={ { maxHeight: "40vh" } }/>
+                </div>
+			}
+			
+			{ suggestions.map((suggestion, i) =>
+				<div key={ i } className={ "suggestion" } tabIndex={ 0 }
+					 onClick={ () => {
+						 navigate("/dashboard/question/" + suggestion.id);
+						 props.closeModal();
+					 } }
+					 onKeyDown={ (e: any) => {
+						 if (e.key !== "Enter") return;
+						 navigate("/dashboard/question/" + suggestion.id);
+						 props.closeModal();
+					 } }>
+					<div className={ "suggestion-main" }>
+						<div className={ "suggestion-title" }>
+							<h2>{ suggestion.title }</h2>
+							{ suggestion.tags.map((tag, index) => <p className={ "badge" } key={ index }>{ tag }</p>) }
+						</div>
+						<p className={ "caption suggestion-caption" }>
+						<span>
+							<i className={ suggestion.isDiscussion ? "fi fi-rr-comments-question" : "fi fi-rr-interrogation" }/>
+							{ suggestion.isDiscussion
+								? t('components.question.type.discussion')
+								: t('components.question.type.question')
+							}
+						</span>
+							<span>·</span>
+							<span>
+							<i className={ "fi fi-rr-clock" }/>
+								{ formatDate(suggestion.created) }
+						</span>
+							<span>·</span>
+							<span>
+							<i className={ "fi fi-rr-refresh" }/>
+								{ formatDate(suggestion.updated) }
+						</span>
+							<span>·</span>
+							<span>
+							<i className={ "fi fi-rr-social-network" }/>
+								{ suggestion.likes }
+						</span>
+							<span>·</span>
+							<span>
+							<i className={ "fi fi-rr-social-network flipY" }/>
+								{ suggestion.dislikes }
+						</span>
+						</p>
+					</div>
+					
+					<Avatar userName={ suggestion.author.name }/>
+				</div>
+			) }
 		</div>
-	</div>
+	</Modal>
 }

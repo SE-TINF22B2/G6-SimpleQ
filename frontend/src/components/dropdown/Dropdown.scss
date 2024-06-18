@@ -4,13 +4,13 @@
 	--dropdown-menu-item-height: 46px;
 	position: relative;
 	transition: var(--transition);
-	z-index: 200;
 
 	&.active {
+		z-index: 200;
 		filter: var(--bleed-shadow);
 
 		> .dropdown-button > * {
-			background: var(--background-color-secondary);
+			background: var(--background-color-primary);
 		}
 	}
 
@@ -116,6 +116,7 @@
 			> i:first-child {
 				text-align: center;
 				width: 20px;
+				font-size: 1.2em;
 			}
 
 			> span:first-of-type {

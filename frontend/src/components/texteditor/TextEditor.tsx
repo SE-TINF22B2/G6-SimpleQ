@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./TextEditor.scss";
 import { useTranslation } from "react-i18next";
 
@@ -6,6 +6,8 @@ interface Props {
 	height?: string;
 	disabled?: boolean;
 	children?: React.ReactNode;
+	shouldClearContent?: boolean;
+	setShouldClearContent?: (b: boolean) => void;
 	onInput?: (value: string) => void;
 	placeholder?: string;
 }
@@ -15,15 +17,26 @@ interface Props {
  * @param props.height Optional height setting (e.g. "200px"), default is auto, a scrollbar will be visible when set
  * @param props.disabled Optional boolean to dísabling manipulation of the text
  * @param props.children Optional ReactNode representing the content of the text editor
+ * @param props.shouldClearContent Optional function to allow the parent to clear the text editor
+ * @param props.setShouldClearContent Optional function to tell the parent that the text editor has been cleared
  * @param props.onInput() Optional function to be executed once the user makes an input
+ * @param props.placeholder Optional string as placeholder for when the text editor is blank
  */
 export default function TextEditor(props: Props) {
 	const { t } = useTranslation();
 	
+	const [editorRef, setEditorRef] = React.useState<HTMLParagraphElement | undefined>(undefined);
 	const [wordCount, setWordCount] =
 		React.useState(props.children ? (props.children as string).split(" ").length : 0);
 	
-	return <div className={ "text-editor" }>
+	useEffect(() => {
+		if (editorRef && props.shouldClearContent && props.setShouldClearContent) {
+			editorRef.innerHTML = "";
+			props.setShouldClearContent(false);
+		}
+	}, [editorRef, props]);
+	
+	return <div className={ "text-editor" } onClick={ _ => editorRef?.focus() }>
 		<div className={ "text-editor-buttons" }>
 			<button title={ "Bold" } onClick={ () => document.execCommand("bold", false) }>
 				<i className={ "fi fi-rr-bold" }/></button>
@@ -33,14 +46,6 @@ export default function TextEditor(props: Props) {
 				<i className={ "fi fi-rr-underline" }/></button>
 			<button title={ "Strikethrough" } onClick={ () => document.execCommand("strikeThrough", false) }>
 				<i className={ "fi fi-rr-strikethrough" }/></button>
-			
-			<span/>
-			
-			<button title={ "Insert Ordered List" } onClick={ () => document.execCommand("insertOrderedList", false) }>
-				<i className={ "fi fi-rr-list" }/></button>
-			<button title={ "Insert Unordered List" }
-					onClick={ () => document.execCommand("insertUnorderedList", false) }>
-				<i className={ "fi fi-rr-bars-sort" }/></button>
 			
 			<span/>
 			
@@ -62,17 +67,19 @@ export default function TextEditor(props: Props) {
 		
 		</div>
 		
-		<p className={ "text-editor-content" }
-		   contentEditable={ !(props.disabled) }
-		   suppressContentEditableWarning={ true }
-		   data-placeholder={ props.placeholder }
-		   onInput={ (e) => {
-			   setWordCount((e.target as HTMLSpanElement).innerText.split(" ").length);
-			   if (props.onInput) props.onInput((e.target as HTMLSpanElement).innerHTML);
-		   } }
-		   style={ { height: props.height ?? "auto" } }>
+		<div ref={ (_p) => _p && setEditorRef(_p) }
+			 className={ "text-editor-content" }
+			 contentEditable={ !(props.disabled) }
+			 suppressContentEditableWarning={ true }
+			 data-placeholder={ props.placeholder }
+			 onInput={ (e) => {
+				 setWordCount((e.target as HTMLSpanElement).innerText.split(" ").length);
+				 if (props.onInput) props.onInput((e.target as HTMLSpanElement).innerHTML);
+			 } }
+			 style={ { height: props.height ?? "auto" } }
+			 onClick={ (e) => e.stopPropagation() }>
 			{ props.children }
-		</p>
+		</div>
 		
 		<p className={ "caption text-editor-caption" }>
 			{ t('components.textEditor.wordCount', { count: wordCount }) }

@@ -1,8 +1,8 @@
 import Skeleton from "react-loading-skeleton";
 import React from "react";
-import { Question } from "../../../def/Question";
+import { QuestionDef } from "../../../def/QuestionDef";
 
-export default function QuestionStats(props: {question?: Question}) {
+export default function QuestionStats(props: { question?: QuestionDef }) {
 	return <>
 		<span className={ "caption" }>Question Stats</span>
 		<div className={ "question-stats" }>

@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import './App.scss';
 import { Navigate, Route, Routes } from "react-router-dom";
 import i18n from "i18next";
@@ -21,6 +21,12 @@ import Quests from "./dashboard/quests/Quests";
 import MyQuestions from "./dashboard/MyQuestions";
 import ConsentBanner from "../components/consentbanner/ConsentBanner";
 import axios from "axios";
+import { ProfileDef } from "../def/ProfileDef";
+import { axiosError } from "../def/axios-error";
+import { useAlert } from "react-alert";
+import { Configuration, FrontendApi, Session } from "@ory/client";
+import { QuestionDef } from "../def/QuestionDef";
+import Favorites from "./dashboard/Favorites";
 
 // internationalization resources
 const resources = {
@@ -52,10 +58,39 @@ axiosInstance.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 axiosInstance.defaults.timeout = 6000;
 global.axios = axiosInstance;
 
+// ory setup
+const ory = new FrontendApi(
+	new Configuration({
+		basePath: import.meta.env.VITE_ORY_URL,
+		baseOptions: {
+			withCredentials: true,
+		},
+	}),
+)
+
 /**
  * Renders the app and takes care of choosing the appropriate language and theme
  */
 export default function App() {
+	const [session, setSession] = useState<Session | undefined>();
+	const [logoutUrl, setLogoutUrl] = useState<string | undefined>();
+	
+	useEffect(() => {
+		ory.toSession()
+		   .then(({ data }) => {
+			   setSession(data);
+			   ory.createBrowserLogoutFlow().then(({ data }) => {
+				   setLogoutUrl(data.logout_url);
+			   });
+		   })
+		   .catch((err) => {
+			   console.log("error logging in", err);
+			   // window.location.replace(`${ basePath }/ui/login`);
+		   });
+	}, []);
+	
+	const alert = useAlert();
+	
 	const prefersDarkTheme = useMediaQuery('(prefers-color-scheme: dark)');
 	const prefersLightTheme = useMediaQuery('(prefers-color-scheme: light)');
 	
@@ -80,7 +115,6 @@ export default function App() {
 				"--border-color",
 				"--box-shadow",
 				"--box-shadow-elevated",
-				"--bleed-shadow",
 				"--background-bleed-opacity"
 			];
 			
@@ -112,6 +146,21 @@ export default function App() {
 						   .removeEventListener('change', ({ matches }) => updateThemePreference(matches));
 	}, [theme]);
 	
+	const [profile, setProfile] = React.useState<ProfileDef | undefined>(undefined);
+	
+	useEffect(() => {
+		global.axios.get<any>("profile", { withCredentials: true })
+			  .then(res => {
+				  setProfile({
+					  id: res.data.userId ?? "",
+					  name: res.data.username ?? "",
+					  type: res.data.accountState ?? "",
+					  registrationDate: res.data.registrationDate ?? ""
+				  });
+			  })
+			  .catch(err => axiosError(err, alert));
+	}, [alert]);
+	
 	const updateTheme = (theme: "system" | "dark" | "light") => {
 		if (localStorage.getItem("consent") === "true")
 			localStorage.setItem("theme", theme);
@@ -125,6 +174,8 @@ export default function App() {
 		? (themePreference === "light" ? "#f5f5f5" : "#101010")
 		: (theme === "light" ? "#f5f5f5" : "#101010");
 	
+	const [activeQuestion, setActiveQuestion] = React.useState<QuestionDef | undefined>(undefined);
+	
 	return <SkeletonTheme baseColor={ skeletonBaseColor }
 						  highlightColor={ skeletonHighlightColor }>
 		<ConsentBanner/>
@@ -136,16 +187,21 @@ export default function App() {
 			<Route path={ "login" } element={ <Login/> }/>
 			<Route path={ "dashboard" }
 				   element={ <Suspense fallback={ <p>Loading Dashboard..</p> }>
-					   <Dashboard updateTheme={ updateTheme }/>
+					   <Dashboard updateTheme={ updateTheme } profile={ profile }
+								  session={ session } logoutUrl={ logoutUrl } activeQuestion={ activeQuestion }/>
 				   </Suspense> }>
 				<Route index element={ <Suspense><Navigate to={ "trending" }/></Suspense> }/>
 				<Route path={ "trending" }
 					   element={ <Suspense><Trending/></Suspense> }/>
-				<Route path={ "question/:id" } element={ <Suspense><QuestionView/></Suspense> }/>
-				<Route path={ "profile" } element={ <Suspense><Profile/></Suspense> }/>
+				<Route path={ "question/:id" } element={ <Suspense>
+					<QuestionView session={ session } setActiveQuestion={ setActiveQuestion }/>
+				</Suspense> }/>
+				<Route path={ "profile" }
+					   element={ <Suspense><Profile profile={ profile } setProfile={ setProfile }/></Suspense> }/>
 				<Route path={ "new" } element={ <Suspense><Editor/></Suspense> }/>
 				<Route path={ "activity" } element={ <Suspense><Activity/></Suspense> }/>
 				<Route path={ "my" } element={ <Suspense><MyQuestions/></Suspense> }/>
+				<Route path={ "favorites" } element={ <Suspense><Favorites/></Suspense> }/>
 				<Route path={ "quests" } element={ <Suspense><Quests/></Suspense> }/>
 				
 				<Route path={ "*" } element={ <Navigate to={ "" }/> }/>

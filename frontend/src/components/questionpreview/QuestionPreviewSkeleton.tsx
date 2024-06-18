@@ -43,7 +43,7 @@ export default function QuestionPreviewSkeleton(props: { count?: number }) {
 				</div>
 				
 				<div className={ "author" }>
-					<Skeleton circle width={ 40 } height={ 40 }/>
+					<Skeleton circle width={ "var(--ui-spacing)" } height={ "var(--ui-spacing)" }/>
 					
 					<p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
 						<Skeleton width={ 80 } height={ 12 }/>
