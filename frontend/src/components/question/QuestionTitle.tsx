@@ -17,7 +17,7 @@ interface Props {
 	session?: Session,
 	question?: QuestionDef,
 	toggleFavorite: () => Promise<void>,
-	postVote: (vote: "like" | "dislike") => Promise<void>
+	postVote: (vote: "like" | "dislike" | "none") => Promise<void>
 }
 
 /**
@@ -49,13 +49,13 @@ export default function QuestionTitle(props: Props) {
                 <ButtonGroup>
                     <Button iconLeft={ "fi fi-rr-social-network" }
                             buttonStyle={ props.question?.opinion === "like" ? "primary" : "glass" }
-                            onClick={ async () => await props.postVote("like") }
+                            onClick={ async () => await props.postVote(props.question?.opinion === "like" ? "none" : "like") }
                             disabled={ props.session?.identity === undefined }>
 						{ props.question.likes }
                     </Button>
                     <Button iconLeft={ "fi fi-rr-social-network flipY" }
                             buttonStyle={ props.question?.opinion === "dislike" ? "primary" : "glass" }
-                            onClick={ async () => await props.postVote("dislike") }
+                            onClick={ async () => await props.postVote(props.question?.opinion === "dislike" ? "none" : "dislike") }
                             disabled={ props.session?.identity === undefined }>
 						{ props.question.dislikes }
                     </Button>

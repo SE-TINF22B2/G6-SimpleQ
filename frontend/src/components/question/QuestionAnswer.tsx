@@ -21,7 +21,7 @@ interface Props {
 	session?: Session,
 	answer?: AnswerDef,
 	setActiveProfile?: (authorId: string) => void,
-	postVote?: (vote: "like" | "dislike") => Promise<void>
+	postVote?: (vote: "like" | "dislike" | "none") => Promise<void>
 }
 
 /**
@@ -88,14 +88,14 @@ export default function QuestionAnswer(props: Props) {
 				{ props.answer && <ButtonGroup style={ { marginBottom: "calc(var(--spacing) / 2)" } }>
                     <Button slim iconLeft={ "fi fi-rr-social-network" }
                             buttonStyle={ props.answer?.opinion === "dislike" ? "primary" : "glass" }
-                            onClick={ async () => props.postVote && await props.postVote("like") }
+                            onClick={ async () => props.postVote && await props.postVote(props.answer?.opinion === "like" ? "none" : "like") }
                             disabled={ props.session?.identity === undefined }>
 						{ props.answer?.likes }
                     </Button>
                     
                     <Button slim iconLeft={ "fi fi-rr-social-network flipY" }
                             buttonStyle={ props.answer?.opinion === "dislike" ? "primary" : "glass" }
-                            onClick={ async () => props.postVote && await props.postVote("dislike") }
+                            onClick={ async () => props.postVote && await props.postVote(props.answer?.opinion === "dislike" ? "none" : "dislike") }
                             disabled={ props.session?.identity === undefined }>
 						{ props.answer?.dislikes }
                     </Button>

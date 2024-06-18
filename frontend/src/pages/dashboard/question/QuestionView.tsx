@@ -129,48 +129,17 @@ export default function QuestionView(props: Props) {
 						.catch(err => axiosError(err, alert));
 	}
 	
-	const submitVote = async (_opinion: "like" | "dislike", _id?: string) => {
+	const submitVote = async (opinion: "like" | "dislike" | "none", _id?: string) => {
 		if (!question || !id) return;
 		
-		let __opinion: "like" | "dislike" | "none" = question.opinion === _opinion ? "none" : _opinion;
-		
-		if (!_id)
-			await global.axios.post("vote/" + encodeURIComponent(id),
-				{ body: { vote: _opinion } }, { withCredentials: true })
-						.then(_ => {
-							let likes = question.likes;
-							let dislikes = question.dislikes;
-							
-							if (__opinion === "like") question.likes++;
-							else if (__opinion === "dislike") question.dislikes++;
-							else if (_opinion === "like") question.likes--;
-							else question.dislikes--;
-							
-							setQuestion({
-								...question,
-								...{ opinion: __opinion, likes, dislikes }
-							});
-							alert.success("Vote updated!");
-						})
-						.catch(err => axiosError(err, alert));
-		else
-			await global.axios.post("vote/" + encodeURIComponent(_id),
-				{ body: { vote: _opinion } }, { withCredentials: true })
-						.then(_ => {
-							let _answers = answers.map(answer => {
-								if (answer.id === _id) {
-									answer.opinion = __opinion;
-									if (__opinion === "like") answer.likes++;
-									else if (__opinion === "dislike") answer.dislikes++;
-									else if (_opinion === "like") answer.likes--;
-									else answer.dislikes--;
-								}
-								return answer;
-							});
-							setAnswers(_answers);
-							alert.success("Vote updated!");
-						})
-						.catch(err => axiosError(err, alert));
+		if (!_id) await global.axios.post("vote/" + encodeURIComponent(id),
+			{ vote: opinion }, { withCredentials: true })
+							  .then(_ => setUpdateQuestion(!updateQuestion))
+							  .catch(err => axiosError(err, alert));
+		else await global.axios.post("vote/" + encodeURIComponent(_id),
+			{ vote: opinion }, { withCredentials: true })
+						 .then(_ => setUpdateQuestion(!updateQuestion))
+						 .catch(err => axiosError(err, alert));
 	}
 	
 	return <div className={ "container transparent" }
