@@ -21,7 +21,7 @@ export default function Editor(props: {}) {
 	const [tags, setTags] = React.useState<string[]>([]);
 	const [description, setDescription] = React.useState("Describe your question in more detail.");
 	const [questionType, setQuestionType] = React.useState<"simp" | "users">("simp");
-	const [selectedAI, setSelectedAI] = React.useState<"chatgpt" | "wolframAlpha">("chatgpt");
+	const [selectedAI, setSelectedAI] = React.useState<"gpt" | "wolframAlpha">("chatgpt");
 	
 	const [hasBeenSubmitted, setHasBeenSubmitted] = React.useState(false);
 	
@@ -117,8 +117,8 @@ export default function Editor(props: {}) {
 				<span className={ "caption" }>{ t('dashboard.questionEditor.type.simp.model') }</span>
 				
 				<ButtonGroup style={ { marginTop: "calc(var(--spacing) / -2)" } }>
-					<Button buttonStyle={ selectedAI === "chatgpt" ? "primary" : "glass" }
-							onClick={ async () => setSelectedAI("chatgpt") }>
+					<Button buttonStyle={ selectedAI === "gpt" ? "primary" : "glass" }
+							onClick={ async () => setSelectedAI("gpt") }>
 						ChatGPT
 					</Button>
 					<Button buttonStyle={ selectedAI === "wolframAlpha" ? "primary" : "glass" }
