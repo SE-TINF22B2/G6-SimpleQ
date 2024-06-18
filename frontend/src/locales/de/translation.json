@@ -2,15 +2,46 @@
   "components": {
     "consentBanner": {
       "title": "Wir verwenden Cookies",
-      "content": "Wir verwenden Cookies und lokale Speicherung, um sicherzustellen, dass Sie das beste Erlebnis auf unserer Website haben. ",
+      "content": "Wir verwenden Cookies und lokale Speicherung, um sicherzustellen, dass du das beste Erlebnis auf unserer Website hast. ",
       "accept": "Akzeptieren",
       "decline": "Ablehnen"
     },
     "liveInput": {
-      "empty": "Bitte beginnen Sie mit der Eingabe."
+      "empty": "Bitte beginne mit der Eingabe.",
+      "selected": "Ausgewählt",
+      "suggestions": "Vorschläge"
     },
     "textEditor": {
-      "wordCount": "Du hast {{count}} Wörter geschrieben."
+      "wordCount": "Du hast geschrieben {{count}} Wörter."
+    },
+    "question": {
+      "type": {
+        "question": "Frage",
+        "discussion": "Diskussion"
+      }
+    },
+    "adjustUserContent": {
+      "button": "Ansicht anpassen",
+      "previewStyle": {
+        "label": "Stil",
+        "normal": "Normal",
+        "small": "Klein"
+      },
+      "sortBy": {
+        "label": "Sortiere nach",
+        "ldr": "Like-Dislike-Verhältnis",
+        "likes": "Likes",
+        "dislikes": "Dislikes",
+        "timestamp": "Erstelldatum"
+      },
+      "sortDirection": {
+        "label": "Richtung",
+        "asc": "Aufsteigend",
+        "desc": "Absteigend"
+      },
+      "enableAI": {
+        "label": "KI aktivieren"
+      }
     }
   },
   "dashboard": {
@@ -18,7 +49,10 @@
       "trending": "Trendfragen",
       "question": {
         "create": "Frage erstellen",
-        "browsing": "Frage/Diskussion durchsuchen"
+        "browsing": {
+          "currently": "{{type}} durchsuchen",
+          "recently": "Kürzlich erstellte {{type}}"
+        }
       },
       "activity": "Aktivität",
       "my": "Meine Fragen",
@@ -30,7 +64,7 @@
     },
     "search": {
       "search": "Suchen..",
-      "info": "Navigieren Sie mit ↑ und ↓ oder ↹. "
+      "info": "Navigieren mit ↑ und ↓ oder ↹. Auswahl mit ↵"
     },
     "login": "Anmeldung",
     "logout": "Ausloggen",
@@ -46,57 +80,77 @@
         "theme": "Thema",
         "system": "System",
         "dark": "Dunkel",
-        "light": "Licht"
+        "light": "Hell"
       }
     },
     "questionEditor": {
       "title": {
         "caption": "Titel",
-        "placeholder": "Neue Frage",
-        "hint": "Was ist Ihre Frage? "
+        "placeholder": "Neue Frage erstellen"
       },
       "tags": {
-        "title": "Stichworte",
-        "caption": "Stichworte",
-        "placeholder": "Füge einen Tag hinzu",
-        "hint": "Fügen Sie bis zu 5 Tags hinzu, um zu beschreiben, worum es in Ihrer Frage geht."
+        "title": "Tags",
+        "caption": "Tags",
+        "placeholder": "Tags auswählen",
+        "hint": "Es können bis zu 5 Tags hinzugefügt werden, um zu beschreiben, worum es in der Frage geht."
       },
       "description": {
-        "title": "Beschreibung",
         "caption": "Beschreibung",
-        "placeholder": "Beschreiben Sie Ihre Frage ausführlich.",
-        "hint": "Geben Sie alle Informationen an, die jemand zur Beantwortung Ihrer Frage benötigen würde."
+        "placeholder": "Beschreibe die Frage ausführlich."
       },
       "type": {
-        "caption": "Passen Sie die Antworten an",
+        "caption": "Antwortmöglichkeiten anpassen",
         "simp": {
-          "title": "Vereinfachung aktivieren",
-          "hint": "Unser hauseigener KI-Chatbot kann auf Ihre Frage antworten, um Ihnen die bestmögliche Hilfe zu bieten."
+          "title": "Generierte Antworten aktivieren",
+          "hint": "Angemeldete Personen, und unsere automatischen Services können auf deine Frage antworten, damit bestmöglich Hilfe geboten werden kann.",
+          "model": "Serviceauswahl"
         },
         "users": {
-          "title": "Nur für angemeldete",
-          "hint": "Nur angemeldete Benutzende dürfen Antworten auf Ihre Frage hochladen."
+          "title": "Nur Benutzer",
+          "hint": "Nur Benutzer können auf deine Frage Antworten."
         }
       },
-      "validate": {
-        "title": "Überprüfen Sie Ihre Frage",
-        "caption": "Bestätigen",
-        "hint": "Stellen Sie sicher, dass Sie Ihre Frage korrekt erstellt haben.",
-        "checks": {
-          "title": "Ein gültiger Titel",
-          "tags": "Mindestens ein Tag",
-          "description": "Eine ausführliche Beschreibung von mindestens 20 Wörtern"
-        }
-      },
-      "submit": "Posten Sie Ihre Frage"
+      "submit": "Posten deine Frage"
     },
-  "questionView": {
-    "answer": {
-      "creationDate": "geantwortet am {{answerCreationDate}}",
-      "likes": "Likes",
-      "dislikes": "mag nicht",
-      "report": "Antwort melden"
+    "questionView": {
+      "question": {
+        "creationDate": "Erstellt am: {{questionCreationDate}}",
+        "updatedDate": "Letzte Aktualisierung: {{questionUpdatedDate}}"
+      },
+      "answer": {
+        "creationDate": "Geantwortet am: {{answerCreationDate}}"
+      },
+      "pagination": {
+        "previous": "Vorherige Seite",
+        "next": "Nächste Seite"
+      },
+      "answerEditor": {
+        "title": "Beantworte diese Frage",
+        "placeholder": "Beantworte diese Frage",
+        "noPermission": "Gäste können keine Antwort erstellen."
       }
+    },
+    "profile": {
+      "info": {
+        "registrationDate": "Mitglied seit: {{registrationDate}}"
+      },
+      "auth": {
+        "auth": "Authentifizierung",
+        "description": "Wir verwenden einen externen Identitätsanbieter (IDP). ",
+        "redirect": "Account Einstellungen"
+      }
+    },
+    "trending": {
+      "title": "Trendfragen",
+      "caption": "Hier findest du die beliebtesten Fragen unserer Plattform."
+    },
+    "myQuestions": {
+      "title": "Meine Fragen",
+      "caption": "Hier findest du alle Fragen, die du auf unserer Plattform gestellt hast."
+    },
+    "favorites": {
+      "title": "Favoriten",
+      "caption": "Hier finden du alle Fragen, die du als Favorit markiert hast."
     }
   }
 }
