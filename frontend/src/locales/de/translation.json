@@ -12,7 +12,7 @@
       "suggestions": "Vorschläge"
     },
     "textEditor": {
-      "wordCount": "Du hast geschrieben {{count}} Wörter."
+      "wordCount": "Du hast {{count}} Wörter geschrieben."
     },
     "question": {
       "type": {
@@ -106,8 +106,8 @@
           "model": "Serviceauswahl"
         },
         "users": {
-          "title": "Nur Benutzer",
-          "hint": "Nur Benutzer können auf deine Frage Antworten."
+          "title": "Nur Personen",
+          "hint": "Nur Personen können auf deine Frage Antworten."
         }
       },
       "submit": "Posten deine Frage"
