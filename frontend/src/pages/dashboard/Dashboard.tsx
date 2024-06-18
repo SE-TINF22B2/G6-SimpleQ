@@ -375,7 +375,7 @@ export default function Dashboard(props: Props) {
 				{ loggedInDropdown() }
 			</div>
 			
-			<hr style={ { marginBlock: "0" } }/>
+			<hr style={ { marginBlock: "0", zIndex: 1 } }/>
 			
 			<Outlet/>
 		</main>
