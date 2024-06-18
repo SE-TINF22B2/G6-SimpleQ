@@ -4,7 +4,7 @@
       "title": "Nous utilisons des cookies",
       "content": "Nous utilisons des cookies et un stockage local pour vous garantir la meilleure expérience sur notre site Web. ",
       "accept": "Accepter",
-      "decline": "Déclin"
+      "decline": "Refuser"
     },
     "liveInput": {
       "empty": "Veuillez commencer à taper..",
@@ -32,7 +32,7 @@
         "ldr": "Ratio J’aime/Je n’aime pas",
         "likes": "Aime",
         "dislikes": "Je n'aime pas",
-        "timestamp": "Horodatage"
+        "timestamp": "Date de création"
       },
       "sortDirection": {
         "label": "Direction",
@@ -50,8 +50,8 @@
       "question": {
         "create": "Créer une question",
         "browsing": {
-          "currently": "Navigation {{type}}",
-          "recently": "Récent {{type}}"
+          "currently": "recherche {{type}}",
+          "recently": "Créé récemment {{type}}"
         }
       },
       "activity": "Activité",
@@ -60,11 +60,11 @@
       "quests": "Quêtes hebdomadaires",
       "inbox": "Boîte de réception",
       "stats": "Statistiques",
-      "activeDays": "Activité récente"
+      "activeDays": "Dernière Activité"
     },
     "search": {
-      "search": "Recherche..",
-      "info": "Naviguez en utilisant ↑ et ↓ ou ↹. "
+      "search": "Chercher..",
+      "info": "Naviguez avec ↑ et ↓ ou ↹. "
     },
     "login": "Se connecter",
     "logout": "Se déconnecter",
@@ -80,45 +80,45 @@
         "theme": "Thème",
         "system": "Système",
         "dark": "Sombre",
-        "light": "Lumière"
+        "light": "Clair"
       }
     },
     "questionEditor": {
       "title": {
         "caption": "Titre",
-        "placeholder": "Nouvelle question"
+        "placeholder": "Créer une nouvelle question"
       },
       "tags": {
-        "title": "Mots clés",
-        "caption": "Mots clés",
-        "placeholder": "Sélectionnez les balises",
-        "hint": "Ajoutez jusqu'à 5 balises pour décrire le sujet de votre question."
+        "title": "Tags",
+        "caption": "Tags",
+        "placeholder": "Sélectionnez les tags",
+        "hint": "Jusqu'à 5 tags peuvent être ajoutées pour décrire le sujet de la question."
       },
       "description": {
         "caption": "Description",
-        "placeholder": "Décrivez votre question en détail."
+        "placeholder": "Décrivez ton question en détail."
       },
       "type": {
-        "caption": "Personnaliser les réponses",
+        "caption": "Ajuster les options de réponse",
         "simp": {
-          "title": "Activer SIMP",
-          "hint": "Les utilisateurs, ainsi que notre chatbot IA interne, pourront répondre à votre question pour vous fournir la meilleure aide possible.",
-          "model": "Modèle d'IA"
+          "title": "Activer les réponses générées",
+          "hint": "Les personnes inscrites et nos services automatisés peuvent répondre à votre question afin que nous puissions vous apporter la meilleure aide possible.",
+          "model": "Sélection des services"
         },
         "users": {
-          "title": "Uniquement les utilisateurs",
-          "hint": "Seuls les utilisateurs pourront télécharger des réponses à votre question."
+          "title": "Utilisateurs uniquement",
+          "hint": "Seuls les utilisateurs peuvent répondre à votre question."
         }
       },
       "submit": "Postez votre question"
     },
     "questionView": {
       "question": {
-        "creationDate": "créé: {{questionCreationDate}}",
-        "updatedDate": "dernière mise à jour: {{questionUpdatedDate}}"
+        "creationDate": "Créé sur: {{questionCreationDate}}",
+        "updatedDate": "Dernière mise à jour: {{questionUpdatedDate}}"
       },
       "answer": {
-        "creationDate": "a répondu : {{answerCreationDate}}"
+        "creationDate": "Répondu le : {{answerCreationDate}}"
       },
       "pagination": {
         "previous": "Page précédente",
@@ -127,12 +127,12 @@
       "answerEditor": {
         "title": "Répond a cette question",
         "placeholder": "Répond a cette question",
-        "noPermission": "En tant qu'invité, vous n'êtes pas autorisé à soumettre une réponse."
+        "noPermission": "Les invités ne peuvent pas créer de réponse."
       }
     },
     "profile": {
       "info": {
-        "registrationDate": "Inscrit depuis : {{registrationDate}}"
+        "registrationDate": "Membre depuis: {{registrationDate}}"
       },
       "auth": {
         "auth": "Authentification",
@@ -142,15 +142,15 @@
     },
     "trending": {
       "title": "Questions tendances",
-      "caption": "Voici quelques-unes des questions les plus populaires sur notre plateforme en ce moment."
+      "caption": "Vous trouverez ici les questions les plus populaires sur notre plateforme."
     },
     "myQuestions": {
       "title": "Mes questions",
-      "caption": "Voici toutes les questions que vous avez postées sur notre plateforme."
+      "caption": "Vous trouverez ici toutes les questions que vous avez posées sur notre plateforme."
     },
     "favorites": {
       "title": "Favoris",
-      "caption": "Voici toutes les questions que vous avez mises en favoris sur notre plateforme."
+      "caption": "Vous trouverez ici toutes les questions que vous avez marquées comme favorites."
     }
   }
 }
