@@ -15,7 +15,9 @@ export interface IExpertTopics {
 }
 
 export enum Registration {
-  registered = 'registered',
-  proUser = 'proUser',
+  guest = 'guest',
+  user = 'user',
+  pro = 'pro',
   admin = 'admin',
+  ai = 'ai',
 }
