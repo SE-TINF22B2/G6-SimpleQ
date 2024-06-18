@@ -32,3 +32,9 @@ export enum SORT_DIRECTION {
   ASC = 'asc',
   DESC = 'desc',
 }
+
+export enum AI_OPTIONS {
+  WOLFRAM = 'wolframAlpha',
+  GPT = 'gpt',
+  NONE = 'none',
+}

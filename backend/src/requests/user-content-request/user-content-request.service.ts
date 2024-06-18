@@ -2,12 +2,13 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotAcceptableException,
   NotFoundException,
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { VOTE_OPTIONS } from '../../../config';
+import { AI_OPTIONS, VOTE_OPTIONS } from '../../../config';
 import { BlacklistService } from '../../database/blacklist/blacklist.service';
 import { TagService } from '../../database/tag/tag.service';
 import {
@@ -293,9 +294,15 @@ export class UserContentRequestService {
     );
 
     // generate AI answer
-    if (data.useAI && userExist) {
+    if (data.useAI && data.useAI != AI_OPTIONS.NONE && userExist) {
       const isPro = await this.userService.isProUser(userId);
-      this.requestAI(data.content, question.groupId, userId, isPro).then();
+      this.requestAI(
+        data.content,
+        question.groupId,
+        userId,
+        isPro,
+        data.useAI,
+      ).then();
     }
     return question;
   }
@@ -305,14 +312,32 @@ export class UserContentRequestService {
     groupId: string,
     userId: string,
     isPro: boolean,
+    useAI: AI_OPTIONS,
   ): Promise<void> {
-    try {
-      this.externalAPIService.requestGPT(text, groupId, userId).then();
-      if (isPro) {
-        this.externalAPIService.requestWolfram(text, groupId, userId).then();
+    switch (useAI) {
+      case AI_OPTIONS.GPT: {
+        try {
+          await this.externalAPIService.requestGPT(text, groupId, userId);
+        } catch (error) {
+          Logger.warn(error, 'GPT: user-content-request-service');
+        }
+        break;
       }
-    } catch (error) {
-      throw new InternalServerErrorException(error);
+      case AI_OPTIONS.WOLFRAM: {
+        if (isPro) {
+          try {
+            await this.externalAPIService.requestWolfram(text, groupId, userId);
+          } catch (error) {
+            Logger.warn(error, 'Wolfram: user-content-request-service');
+          }
+        } else {
+          Logger.log(
+            `User >${userId}< is no ProUser, and requested Wolfram`,
+            'user-content-request-service',
+          );
+        }
+        break;
+      }
     }
   }
 
