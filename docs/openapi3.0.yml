@@ -97,9 +97,13 @@ components:
           type: string
           nullable: false
         useAI:
-          type: boolean
+          type: string
+          enum:
+            - wolframAlpha
+            - gpt
+            - none
           description: Will be validated in the backend for user permission
-          default: false
+          default: none
 
     CreateAnswer:
       type: object
