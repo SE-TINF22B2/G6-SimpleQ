@@ -4,11 +4,11 @@ import { useTranslation } from "react-i18next";
 import Section from "../section/Section";
 import Avatar from "../avatar/Avatar";
 import Skeleton from "react-loading-skeleton";
-import { formatDate } from "../../def/converter";
 import sanitizeHtml from 'sanitize-html';
 import ButtonGroup from "../buttongroup/ButtonGroup";
 import Button from "../button/Button";
 import { Session } from "@ory/client";
+import { formatDate } from "../../def/converter";
 
 /**
  * Props of the answer
@@ -55,33 +55,51 @@ export default function QuestionAnswer(props: Props) {
 		</div>
 		
 		<div style={ { flex: 1 } }>
-			<p style={ { display: "flex", alignItems: "center", gap: "calc(var(--spacing) / 2)" } }>
-				{ props.answer?.author
-					? <span className={ "inline-link" } tabIndex={ 0 }
-							onClick={ () => props.answer?.author && props.setActiveProfile && props.setActiveProfile(props.answer.author.id) }
-							onKeyUp={ (e) => e.key === 'Enter' && props.answer?.author && props.setActiveProfile && props.setActiveProfile(props.answer.author.id) }>
-						{ props.answer.author.name }
+			<p style={ { display: "flex", alignItems: "flex-end", gap: "var(--spacing)" } }>
+				<div style={ { flex: 1 } }>
+					<div style={ { display: "flex", alignItems: "center", gap: "calc(var(--spacing) / 2)" } }>
+						{ props.answer?.author
+							? <span className={ "inline-link" } tabIndex={ 0 }
+									onClick={ () => props.answer?.author && props.setActiveProfile && props.setActiveProfile(props.answer.author.id) }
+									onKeyUp={ (e) => e.key === 'Enter' && props.answer?.author && props.setActiveProfile && props.setActiveProfile(props.answer.author.id) }>
+								{ props.answer.author.name }
+							</span>
+							: <Skeleton width={ 120 }/>
+						}
+						
+						{ props.answer?.author?.type
+							? props.answer.author.type !== 'user' &&
+                            <span className={ "badge" }>{ props.answer.author.type }</span>
+							: <Skeleton width={ "var(--ui-spacing)" }/> }
+					</div>
+					
+					<span className={ "caption" }>
+						{ props.answer
+							? <span style={ { display: "inline-flex" } }>
+								<i className={ "fi fi-rr-clock" }
+								   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
+								{ t('dashboard.questionView.answer.creationDate', { answerCreationDate: formatDate(props.answer.created) }) }
+							</span>
+							: <Skeleton width={ 80 }/>
+						}
 					</span>
-					: <Skeleton width={ 120 }/>
-				}
+				</div>
 				
-				{ props.answer?.author?.type
-					? props.answer.author.type !== 'user' &&
-                    <span className={ "badge" }>{ props.answer.author.type }</span>
-					: <Skeleton width={ "var(--ui-spacing)" }/> }
-				
-				<span style={ { flex: 1 } }/>
-				
-				<span className={ "caption" }>
-					{ props.answer
-						? <span style={ { display: "inline-flex" } }>
-							<i className={ "fi fi-rr-clock" }
-							   style={ { marginRight: "calc(var(--spacing) / 2)" } }/>
-							{ t('dashboard.questionView.answer.creationDate', { answerCreationDate: formatDate(props.answer.created) }) }
-						</span>
-						: <Skeleton width={ 80 }/>
-					}
-				</span>
+				{ props.answer && <ButtonGroup style={ { marginBottom: "calc(var(--spacing) / 2)" } }>
+                    <Button slim iconLeft={ "fi fi-rr-social-network" }
+                            buttonStyle={ props.answer?.opinion === "dislike" ? "primary" : "glass" }
+                            onClick={ async () => props.postVote && await props.postVote("like") }
+                            disabled={ props.session?.identity === undefined }>
+						{ props.answer?.likes }
+                    </Button>
+                    
+                    <Button slim iconLeft={ "fi fi-rr-social-network flipY" }
+                            buttonStyle={ props.answer?.opinion === "dislike" ? "primary" : "glass" }
+                            onClick={ async () => props.postVote && await props.postVote("dislike") }
+                            disabled={ props.session?.identity === undefined }>
+						{ props.answer?.dislikes }
+                    </Button>
+                </ButtonGroup> }
 			</p>
 			
 			<div style={ { display: "flex" } }>
@@ -91,28 +109,12 @@ export default function QuestionAnswer(props: Props) {
 					background: "var(--background-color-glass" + (props.answer?.author?.type === 'ai' ? "-simp" : "") + ")"
 				} }>
 					{ props.answer?.content
-						? <div style={ { wordBreak: "break-all" } }
+						? <div style={ { wordBreak: "break-word", textWrap: "pretty" } }
 							   dangerouslySetInnerHTML={ { __html: sanitizeHtml(props.answer.content) } }/>
 						: <div><Skeleton style={ { width: "100%" } } count={ 3 }/></div>
 					}
 				</div>
 			</div>
 		</div>
-		
-		<ButtonGroup vertical style={ { alignSelf: "flex-end" } }>
-			{ props.answer ? <Button slim iconLeft={ "fi fi-rr-social-network" } style={ { width: 100 } }
-									 buttonStyle={ props.answer?.opinion === "dislike" ? "primary" : "glass" }
-									 onClick={ async () => props.postVote && await props.postVote("like") }
-									 disabled={ props.session?.identity === undefined }>
-				{ props.answer?.likes }
-			</Button> : <Skeleton width={ 100 }/> }
-			
-			{ props.answer ? <Button slim iconLeft={ "fi fi-rr-social-network flipY" } style={ { width: 100 } }
-									 buttonStyle={ props.answer?.opinion === "dislike" ? "primary" : "glass" }
-									 onClick={ async () => props.postVote && await props.postVote("dislike") }
-									 disabled={ props.session?.identity === undefined }>
-				{ props.answer?.dislikes }
-			</Button> : <Skeleton width={ 100 }/> }
-		</ButtonGroup>
 	</Section>
 }
