@@ -21,7 +21,7 @@ export default function Editor(props: {}) {
 	const [tags, setTags] = React.useState<string[]>([]);
 	const [description, setDescription] = React.useState("Describe your question in more detail.");
 	const [questionType, setQuestionType] = React.useState<"simp" | "users">("simp");
-	const [selectedAI, setSelectedAI] = React.useState<"chatgpt" | "wolframalpha">("chatgpt");
+	const [selectedAI, setSelectedAI] = React.useState<"chatgpt" | "wolframAlpha">("chatgpt");
 	
 	const [hasBeenSubmitted, setHasBeenSubmitted] = React.useState(false);
 	
@@ -121,8 +121,8 @@ export default function Editor(props: {}) {
 							onClick={ async () => setSelectedAI("chatgpt") }>
 						ChatGPT
 					</Button>
-					<Button buttonStyle={ selectedAI === "wolframalpha" ? "primary" : "glass" }
-							onClick={ async () => setSelectedAI("wolframalpha") }>
+					<Button buttonStyle={ selectedAI === "wolframAlpha" ? "primary" : "glass" }
+							onClick={ async () => setSelectedAI("wolframAlpha") }>
 						Wolfram Alpha
 					</Button>
 				</ButtonGroup>
@@ -149,7 +149,7 @@ export default function Editor(props: {}) {
 							title: title,
 							tags: tags,
 							content: description,
-							useAI: questionType === "simp"
+							useAI: questionType === "simp" ? selectedAI : undefined
 						}, {
 							withCredentials: true
 						})
