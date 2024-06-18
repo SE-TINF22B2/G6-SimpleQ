@@ -102,7 +102,8 @@
 				"caption": "Customize Answers",
 				"simp": {
 					"title": "Enable Simp",
-					"hint": "Users, as well as our in-house AI chatbot will be able to reply to your question to help provide you with the best help possible."
+					"hint": "Users, as well as our in-house AI chatbot will be able to reply to your question to help provide you with the best help possible.",
+					"model": "AI Model"
 				},
 				"users": {
 					"title": "Only Users",

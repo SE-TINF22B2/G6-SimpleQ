@@ -114,7 +114,7 @@ export default function Editor(props: {}) {
 				<h3>{ t('dashboard.questionEditor.type.simp.title') }</h3>
 				<p>{ t('dashboard.questionEditor.type.simp.hint') }</p>
 				
-				<span className={ "caption" }>AI Model</span>
+				<span className={ "caption" }>{ t('dashboard.questionEditor.type.simp.model') }</span>
 				
 				<ButtonGroup style={ { marginTop: "calc(var(--spacing) / -2)" } }>
 					<Button buttonStyle={ selectedAI === "chatgpt" ? "primary" : "glass" }
