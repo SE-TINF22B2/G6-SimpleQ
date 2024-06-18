@@ -18,7 +18,13 @@
       "type": {
         "question": "Frage",
         "discussion": "Diskussion"
-      }
+      },
+      "rating": {
+        "likes": "Likes",
+        "dislikes": "Dislikes"
+      },
+      "answers": "Antworten",
+      "askedBy": "Gefragt von"
     },
     "adjustUserContent": {
       "button": "Ansicht anpassen",

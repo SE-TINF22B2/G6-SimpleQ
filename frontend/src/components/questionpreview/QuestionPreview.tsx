@@ -70,7 +70,7 @@ export default function QuestionPreview(props: Props) {
 					<i className={ "fi fi-rr-social-network primary-icon" }/>
 					<span
 						className={ "question-figure" }>{ props.question.likes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-					<span className={ "question-unit" }>likes</span>
+					<span className={ "question-unit" }>{t('components.question.rating.likes')}</span>
 				</div>
 				
 				<div
@@ -78,7 +78,7 @@ export default function QuestionPreview(props: Props) {
 					<i className={ "fi fi-rr-social-network primary-icon flipY" }/>
 					<span
 						className={ "question-figure" }>{ props.question.dislikes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-					<span className={ "question-unit" }>dislikes</span>
+					<span className={ "question-unit" }>{t('components.question.rating.dislikes')}</span>
 				</div>
 			</div>
 			
@@ -94,14 +94,14 @@ export default function QuestionPreview(props: Props) {
 					<i className={ "fi fi-rr-comment-dots primary-icon" }/>
 					<span
 						className={ "question-figure" }>{ props.question.answers.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") }</span>
-					<span className={ "question-unit" }>answers</span>
+					<span className={ "question-unit" }>{t('components.question.answers')}</span>
 				</div>
 			</div>
 			
 			<div className={ "author" }>
 				<Avatar userName={ props.question.author.name }/>
 				<p style={ { margin: 0, display: "flex", flexDirection: "column" } }>
-					<span className={ "caption" }>Asked by</span>
+					<span className={ "caption" }>{t('components.question.askedBy')}</span>
 					<span>{ props.question.author.name.substring(0, import.meta.env.VITE_AUTHOR_NAME_MAX_LENGTH) }</span>
 				</p>
 			</div>
