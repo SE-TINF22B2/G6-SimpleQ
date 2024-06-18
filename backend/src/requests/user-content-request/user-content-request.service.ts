@@ -302,12 +302,13 @@ export class UserContentRequestService {
         userId,
         isPro,
         data.useAI,
-      ).then();
-    }else if (data.useAI && !userExist){
+      ).catch((error) => Logger.error(error, 'EXTERNAL_API'));
+    } else if (data.useAI && !userExist) {
       Logger.log(
         'AI-request SKIPPED, user does not exist or is guest',
         'USER-CONTENT-REQUEST-SERVICE',
       );
+    }
     return question;
   }
 
@@ -320,20 +321,12 @@ export class UserContentRequestService {
   ): Promise<void> {
     switch (useAI) {
       case AI_OPTIONS.GPT: {
-        try {
-          await this.externalAPIService.requestGPT(text, groupId, userId);
-        } catch (error) {
-          Logger.warn(error, 'GPT: user-content-request-service');
-        }
+        await this.externalAPIService.requestGPT(text, groupId, userId);
         break;
       }
       case AI_OPTIONS.WOLFRAM: {
         if (isPro) {
-          try {
-            await this.externalAPIService.requestWolfram(text, groupId, userId);
-          } catch (error) {
-            Logger.warn(error, 'Wolfram: user-content-request-service');
-          }
+          await this.externalAPIService.requestWolfram(text, groupId, userId);
         } else {
           Logger.log(
             `User >${userId}< is no ProUser, and requested Wolfram`,

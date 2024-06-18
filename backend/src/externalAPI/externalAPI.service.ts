@@ -24,11 +24,7 @@ export class ExternalAPIService {
   private async checkAllowed(userID: string) {
     const user: User | null = await this.databaseUserService.getUser(userID);
     if (user == null) {
-      throw new AIException(
-        'GENERAL',
-        'External API',
-        `User ID >${user}< not found`,
-      );
+      throw new AIException('GENERAL', `User ID >${user}< not found`);
     } else if (
       user.isPro == false &&
       (await this.databaseContentService.countAIAnswersForUser(userID)) >=
@@ -36,7 +32,6 @@ export class ExternalAPIService {
     ) {
       throw new AIException(
         'GENERAL',
-        'External API',
         `User >${user}< has reached the limit for free AI responses`,
       );
     }
@@ -50,29 +45,22 @@ export class ExternalAPIService {
    */
   private async checkParams(prompt: string, groupID: string): Promise<boolean> {
     if (prompt === '') {
-      throw new AIException(
-        'GENERAL',
-        'External API',
-        'The prompt cannot be empty',
-      );
+      throw new AIException('GENERAL', 'The prompt cannot be empty');
     } else if (
       !(await this.databaseContentService.checkGroupIDExists(groupID))
     ) {
-      throw new AIException(
-        'GENERAL',
-        'External API',
-        `Group ID >${groupID}< not found`,
-      );
+      throw new AIException('GENERAL', `Group ID >${groupID}< not found`);
     } else if (process.env.DISABLE_AI === 'true') {
       return false;
     } else if (
-      process.env.WOLFRAM_APP_ID == undefined ||
-      process.env.GPT_APP_URL == undefined
+      process.env.WOLFRAM_URL == undefined ||
+      process.env.GPT_APP_URL == undefined ||
+      process.env.GPT_APP_TOKEN == undefined ||
+      process.env.WOLFRAM_APP_ID == undefined
     ) {
       throw new AIException(
         'GENERAL',
-        'External API',
-        `The environment variable "DISABLE_AI" for AI is undefined`,
+        `At least one environment variable for external API is missing`,
       );
     } else if (
       await this.databaseContentService.checkAIAnswerExists(groupID, [
@@ -82,7 +70,6 @@ export class ExternalAPIService {
     ) {
       throw new AIException(
         'GENERAL',
-        'External API',
         `An AI-generated answer with the groupID >${groupID}< already exists`,
       );
     } else {
@@ -103,16 +90,29 @@ export class ExternalAPIService {
     prompt: string,
     groupID: string,
     userID: string,
-  ): Promise<string> {
+  ): Promise<void> {
     await this.checkAllowed(userID);
     const paramsCheck = await this.checkParams(prompt, groupID);
     if (paramsCheck) {
       Logger.log(`REQUEST WOLFRAM >${prompt}<`, 'EXTERNAL API');
-      const { data } = await firstValueFrom(
-        this.httpService
-          .get(process.env.WOLFRAM_APP_ID + encodeURIComponent(prompt))
-          .pipe(),
-      );
+      let data: any;
+      try {
+        data = (
+          await firstValueFrom(
+            this.httpService
+              .get(
+                `${process.env.WOLFRAM_URL}?appid=${process.env.WOLFRAM_APP_ID}&i=${encodeURIComponent(prompt)}`,
+              )
+              .pipe(),
+          )
+        ).data;
+      } catch (error) {
+        Logger.warn(
+          `WOLFRAM, Cannot reach server at >${process.env.WOLFRAM_URL}< or input cannot be understood`,
+          `EXTERNAL_API`,
+        );
+        return;
+      }
       const imageBase64 = Buffer.from(data, 'binary').toString('base64');
       await this.databaseContentService.createAnswer(
         null,
@@ -121,12 +121,10 @@ export class ExternalAPIService {
         TypeOfAI.WolframAlpha,
       );
       Logger.log('Wolfram generation successful!', 'EXTERNAL API');
-      return imageBase64;
     } else {
-      throw new AIException(
-        'WOLFRAM',
+      Logger.log(
+        'AI generation skipped; DISABLE_AI is true in config.ts',
         'EXTERNAL API',
-        'Das ist eine automatisch generierte Antwort um Tokens zu sparen!',
       );
     }
   }
@@ -142,7 +140,7 @@ export class ExternalAPIService {
     prompt: string,
     groupID: string,
     userID: string,
-  ): Promise<string> {
+  ): Promise<void> {
     const body = {
       prompt: prompt,
     };
@@ -160,9 +158,16 @@ export class ExternalAPIService {
       Logger.log(`REQUEST GPT, >${prompt}<`, 'EXTERNAL API');
       const gptURL =
         process.env.GPT_APP_URL != undefined ? process.env.GPT_APP_URL : '';
-      const { data } = await firstValueFrom(
-        this.httpService.post(gptURL, body, header).pipe(),
-      );
+      let data: any;
+      try {
+        data = (
+          await firstValueFrom(
+            this.httpService.post(gptURL, body, header).pipe(),
+          )
+        ).data;
+      } catch (error) {
+        throw new AIException('GPT', `Cannot reach server at >${gptURL}<`);
+      }
       if (data.output != null) {
         await this.databaseContentService.createAnswer(
           null,
@@ -173,13 +178,12 @@ export class ExternalAPIService {
         Logger.log('GPT successful', 'EXTERNAL API');
         return data.output;
       } else {
-        throw new AIException('GPT', 'EXTERNAL API', 'No output created!');
+        throw new AIException('GPT', 'No output created!');
       }
     } else {
-      throw new AIException(
-        'GPT',
+      Logger.log(
+        'AI generation skipped; DISABLE_AI is true in config.ts',
         'EXTERNAL API',
-        'Das ist eine automatisch generierte Antwort um Tokens zu sparen!',
       );
     }
   }
