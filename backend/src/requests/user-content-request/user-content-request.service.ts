@@ -303,7 +303,11 @@ export class UserContentRequestService {
         isPro,
         data.useAI,
       ).then();
-    }
+    }else if (data.useAI && !userExist){
+      Logger.log(
+        'AI-request SKIPPED, user does not exist or is guest',
+        'USER-CONTENT-REQUEST-SERVICE',
+      );
     return question;
   }
 
