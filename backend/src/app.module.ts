@@ -41,7 +41,6 @@ import {
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     // Include every request in the AuthMiddleware
-    // Some are excluded within the middleware itself.
     consumer.apply(AuthMiddleware).forRoutes('*');
   }
 }

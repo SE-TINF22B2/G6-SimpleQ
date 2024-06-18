@@ -18,7 +18,7 @@ import {
   UserTimeout,
   Vote,
 } from '@prisma/client';
-import { UserContentWithRating } from './user-content/user-content-interfaces';
+import { UserContentWithRating } from '../interfaces/user-content.interface';
 
 const dateTime = new Date(2024, 1, 1, 11, 59);
 

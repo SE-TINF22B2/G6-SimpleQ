@@ -1,4 +1,5 @@
-import { VOTE_OPTIONS } from '../../../../config';
+import { VOTE_OPTIONS } from '../../config';
+import { UserContent } from '@prisma/client';
 
 export interface IUserContent {
   id: string;
@@ -33,3 +34,27 @@ export interface IAnswer extends IUserContent {
     type: string;
   };
 }
+
+export type SortOptions = {
+  sortBy: SortType;
+  sortDirection: SortDirection;
+  offset: number;
+  limit: number;
+};
+
+// Sorting the user content
+
+export enum SortType {
+  ldr, // like-dislike-ratio
+  likes,
+  dislikes,
+  timestamp,
+}
+export enum SortDirection {
+  desc,
+  asc,
+}
+export type UserContentWithRating = UserContent & {
+  likes: number;
+  dislikes: number;
+};

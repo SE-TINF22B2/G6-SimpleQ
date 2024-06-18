@@ -17,8 +17,8 @@ import { UserService } from '../../database/user/user.service';
 import { FAVOURITE_LIMIT } from '../../../config';
 import { NotModifiedException } from '../exception-handling/NotModifiedException';
 import { PaymentRequiredException } from '../exception-handling/PaymentRequiredException';
-import { IFavouritesInterface } from './favourites-interface';
-import { IQuestionMetadata } from '../questions/dto/user-content-interface';
+import { IFavouritesInterface } from '../../interfaces/favourites.interface';
+import { IQuestionMetadata } from '../../interfaces/user-content.interface';
 import { UserContentRequestService } from '../user-content-request/user-content-request.service';
 
 @Controller('favourites')

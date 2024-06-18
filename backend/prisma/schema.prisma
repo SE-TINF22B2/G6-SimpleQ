@@ -16,7 +16,7 @@ datasource db {
 
 model User {
   userID             String         @id @default(uuid())
-  username           String         @unique @db.VarChar(20)
+  username           String         @unique @db.VarChar(40)
   isPro              Boolean        @default(false)
   isAdmin            Boolean        @default(false)
   timeOfRegistration DateTime       @default(now())

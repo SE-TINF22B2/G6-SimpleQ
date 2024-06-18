@@ -9,7 +9,7 @@ import {
   SORT_BY,
   SORT_DIRECTION,
 } from '../../../config';
-import { SortDirection, SortOptions, SortType, UserContentWithRating } from './user-content-interfaces';
+import { SortDirection, SortOptions, SortType, UserContentWithRating } from '../../interfaces/user-content.interface';
 
 export function createSortOptions(
   sortBy: string = SORT_BY.LDR,
