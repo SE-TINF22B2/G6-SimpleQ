@@ -135,8 +135,8 @@ export default function QuestionView(props: Props) {
 		let __opinion: "like" | "dislike" | "none" = question.opinion === _opinion ? "none" : _opinion;
 		
 		if (!_id)
-			await global.axios.post("question/" + encodeURIComponent(id) + "/vote",
-				{ body: _opinion }, { withCredentials: true })
+			await global.axios.post("vote/" + encodeURIComponent(id),
+				{ body: { vote: _opinion } }, { withCredentials: true })
 						.then(_ => {
 							let likes = question.likes;
 							let dislikes = question.dislikes;
@@ -154,8 +154,8 @@ export default function QuestionView(props: Props) {
 						})
 						.catch(err => axiosError(err, alert));
 		else
-			await global.axios.post("question/" + encodeURIComponent(_id) + "/vote",
-				{ body: _opinion }, { withCredentials: true })
+			await global.axios.post("vote/" + encodeURIComponent(_id),
+				{ body: { vote: _opinion } }, { withCredentials: true })
 						.then(_ => {
 							let _answers = answers.map(answer => {
 								if (answer.id === _id) {
