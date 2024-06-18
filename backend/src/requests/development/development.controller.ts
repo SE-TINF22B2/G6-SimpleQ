@@ -1,10 +1,21 @@
-import { Controller, Get, NotFoundException, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  NotFoundException,
+  Post,
+  Req,
+  Res,
+  ValidationPipe,
+} from '@nestjs/common';
 import { DevelopmentService } from './development.service';
 import { AuthService } from '../../auth/auth.service';
 import { UserService } from '../../database/user/user.service';
 import { TagService } from '../../database/tag/tag.service';
 import { UserContentService } from '../../database/user-content/user-content.service';
 import { UserContent } from '@prisma/client';
+import { BlacklistService } from '../../database/blacklist/blacklist.service';
+import { BlacklistWord } from './dto/development.dto';
 
 @Controller()
 export class DevelopmentController {
@@ -15,6 +26,7 @@ export class DevelopmentController {
     private readonly userService: UserService,
     private readonly tagService: TagService,
     private readonly userContentService: UserContentService,
+    private readonly blacklistServie: BlacklistService,
   ) {}
 
   /**
@@ -89,5 +101,10 @@ export class DevelopmentController {
   @Get('/cookie')
   async getCookie(@Req() req: any, @Res() res: any): Promise<any> {
     return await this.authService.getCookie(req, res);
+  }
+
+  @Post('/blacklist')
+  async setBlacklist(@Body(new ValidationPipe()) data: BlacklistWord) {
+    return await this.blacklistServie.createBlacklistItem(data.name);
   }
 }
