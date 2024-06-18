@@ -100,7 +100,12 @@ export class UserContentService {
     sortOptions: SortOptions,
   ): Promise<UserContentWithRating[] | null> {
     const questions = await this.prisma.userContent.findMany({
-      where: { ownerID: userID },
+      where: {
+        ownerID: userID,
+        type : {
+          not: UserContentType.Answer
+        }
+      },
     });
     if (null === questions) {
       return null;
@@ -124,7 +129,9 @@ export class UserContentService {
     time.setDate(time.getDate() - 7);
     const questions = await this.prisma.userContent.findMany({
       where: {
-        type: UserContentType.Question,
+        type: {
+          not: UserContentType.Answer
+        },
         timeOfCreation: { gte: time },
       },
       orderBy: { votes: { _count: SORT_DIRECTION.DESC } }, // impossible to order by the last upvote questions with isPositive=true

@@ -6,6 +6,7 @@ import { UserService } from '../../database/user/user.service';
 import { PrismaService } from '../../database/prisma.service';
 import { TagService } from '../../database/tag/tag.service';
 import { UserContentService } from '../../database/user-content/user-content.service';
+import { BlacklistService } from '../../database/blacklist/blacklist.service';
 
 describe('DevelopmentController', () => {
   let controller: DevelopmentController;
@@ -20,6 +21,7 @@ describe('DevelopmentController', () => {
         PrismaService,
         TagService,
         UserContentService,
+        BlacklistService,
       ],
     }).compile();
 
