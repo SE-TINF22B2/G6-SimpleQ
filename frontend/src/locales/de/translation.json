@@ -144,6 +144,11 @@
         "auth": "Authentifizierung",
         "description": "Wir verwenden einen externen Identitätsanbieter (IDP). ",
         "redirect": "Account Einstellungen"
+      },
+      "more": {
+        "more": "Weitere Produkte von SimplePeople",
+        "description": "Erlebe weitere Services von uns!",
+        "link": "Probiere unsere App SimpleChat"
       }
     },
     "trending": {
