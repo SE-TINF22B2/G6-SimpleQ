@@ -76,6 +76,7 @@ export class QuestionsController {
   /**
    * get answer of question obtained by question id
    * @throws NotFoundError
+   * @param request
    * @param id
    * @param query
    * sortBy [
@@ -94,10 +95,15 @@ export class QuestionsController {
    */
   @Get(':id/answers')
   async getQuestionAnswers(
+    @Req() request: any,
     @Param('id', new ParseUUIDPipe()) id: string,
     @Query(new ValidationPipe()) query: AnswerFilter,
   ): Promise<object> {
-    return this.userContentService.getAnswersOfQuestion(id, query);
+    return this.userContentService.getAnswersOfQuestion(
+      id,
+      query,
+      request.userId,
+    );
   }
 
   @Post('create')

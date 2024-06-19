@@ -139,7 +139,10 @@ export class UserContentRequestService {
       id: result.userContent.userContentID,
       ...evaluation,
       created: result.userContent.timeOfCreation,
-      opinion: await this.getOpinionToUserContent(userContentId, userId),
+      opinion: await this.getOpinionToUserContent(
+        result.userContent.userContentID,
+        userId,
+      ),
       author: await this.parseCreator(
         creator,
         result.userContent.type,
@@ -207,10 +210,15 @@ export class UserContentRequestService {
    * Fetch all answers of a single question
    * @param id the id of the question
    * @param sortCriteria the sorting criteria of the answers
+   * @param userId userId to get opinion
    * @returns the corresponding answers in an array, if they exist
    * @throws NotFoundException if no question is found with that id
    * */
-  async getAnswersOfQuestion(id: string, sortCriteria: AnswerFilter) {
+  async getAnswersOfQuestion(
+    id: string,
+    sortCriteria: AnswerFilter,
+    userId: string,
+  ) {
     // check question does exist
     const question = await this.userContentService.getQuestion(id);
     if (null === question || null === question.userContent)
@@ -235,7 +243,7 @@ export class UserContentRequestService {
     // change results to openAPI schema
     const answers: IAnswer[] = [];
     for (const answer of rawAnswers) {
-      answers.push(await this.getUserContent(answer.userContentID));
+      answers.push(await this.getUserContent(answer.userContentID, userId));
     }
     if (!answers) {
       return [];
