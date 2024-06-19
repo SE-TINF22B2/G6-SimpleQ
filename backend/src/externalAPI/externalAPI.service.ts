@@ -169,10 +169,14 @@ export class ExternalAPIService {
         throw new AIException('GPT', `Cannot reach server at >${gptURL}<`);
       }
       if (data.output != null) {
+        const striped_data = data.output
+          .replace(/^(\\n|\n|#|\s|\t)+/g, '')
+          .replace(/(\\n|\n)+$/g, '');
+        const mod_data = striped_data.replace(/(\\n|\n)/, '<br/>');
         await this.databaseContentService.createAnswer(
           null,
           groupID,
-          data.output,
+          mod_data,
           TypeOfAI.GPT,
         );
         Logger.log('GPT successful', 'EXTERNAL API');
