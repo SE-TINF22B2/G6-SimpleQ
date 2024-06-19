@@ -224,6 +224,9 @@ export class UserContentRequestService {
     if (null === question || null === question.userContent)
       throw new NotFoundException('No question found with this id.');
 
+    // @ts-ignore // sometimes a boolean is not a boolean
+    const enableAI = sortCriteria.enableAI == 'true';
+
     // fetch answers
     const rawAnswers = await this.userContentService.getAnswersOfGroupID(
       question.userContent.groupID,
@@ -233,7 +236,7 @@ export class UserContentRequestService {
         sortCriteria.offset,
         sortCriteria.limit,
       ),
-      sortCriteria.enableAI,
+      enableAI,
     );
     if (rawAnswers == null) {
       throw new InternalServerErrorException(
