@@ -17,7 +17,7 @@ import { CreateAnswerDto } from './dto/create-answer.dto';
 import { CreateQuestion } from './dto/create-question.dto';
 import { QueryParameters } from './dto/query-params.dto';
 import { SearchQuery } from './dto/search.dto';
-import { IQuestionMetadata } from './dto/user-content-interface';
+import { IQuestionMetadata } from '../../interfaces/user-content.interface';
 
 @Controller('question') // prefix: domain/question/...
 export class QuestionsController {

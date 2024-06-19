@@ -13,7 +13,11 @@ import { ExpertService } from '../../database/expert/expert.service';
 import { LoginAttemptService } from '../../database/login-attempt/login-attempt.service';
 import { UserService } from '../../database/user/user.service';
 import { UpdateUser } from './dto/update-user.dto';
-import { IExpertTopics, IUser, Registration } from './dto/user.interface';
+import {
+  IExpertTopics,
+  IUser,
+  Registration,
+} from '../../interfaces/user.interface';
 
 @Injectable()
 export class RequestsUserService {
@@ -157,8 +161,8 @@ export class RequestsUserService {
   getAccountState(usrProfile: Pick<User, 'isPro' | 'isAdmin'>) {
     if (usrProfile.isAdmin) return Registration.admin;
 
-    if (usrProfile.isPro) return Registration.proUser;
+    if (usrProfile.isPro) return Registration.pro;
 
-    return Registration.registered;
+    return Registration.user;
   }
 }

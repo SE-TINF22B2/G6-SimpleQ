@@ -33,8 +33,8 @@ import {
   IAnswer,
   IQuestion,
   IQuestionMetadata,
-} from '../questions/dto/user-content-interface';
-import { UserContentWithRating } from '../../database/user-content/user-content-interfaces';
+} from '../../interfaces/user-content.interface';
+import { UserContentWithRating } from '../../interfaces/user-content.interface';
 
 @Injectable()
 export class UserContentRequestService {

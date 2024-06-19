@@ -5,7 +5,7 @@
 const allowedRequests = [
   'question/search',
   'question/trending',
-  '^/question/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(?:/answers|/title|/?)?$',
+  'question/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}(?:/answers|/title|/?)?$',
   'question/create',
   'tags/find',
   'profile/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',

@@ -5,7 +5,7 @@ import { VoteDto } from './dto/vote.dto';
 import { VOTE_OPTIONS } from '../../../config';
 import { VoteService } from '../../database/vote/vote.service';
 import { UserContentRequestService } from '../user-content-request/user-content-request.service';
-import { IAnswer, IQuestion } from '../questions/dto/user-content-interface';
+import { IAnswer, IQuestion } from '../../interfaces/user-content.interface';
 
 @Injectable()
 export class VoteRequestService {
