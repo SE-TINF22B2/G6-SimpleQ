@@ -144,6 +144,11 @@
 				"auth": "Authentication",
 				"description": "We're using an external identity provider (IDP). Therefore, you will have to be redirected to another page in order to view and update your login information. You will also have the possibility of adding other login methods to your current account.",
 				"redirect": "Account Settings"
+			},
+			"more": {
+				"more": "Plus de produits de SimplePeople",
+				"description": "Nous avons d'autres produits à explorer !",
+				"link": "Testez notre application de chat SimpleChat"
 			}
 		},
 		"trending": {

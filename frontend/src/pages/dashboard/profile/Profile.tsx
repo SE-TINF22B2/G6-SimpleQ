@@ -9,6 +9,7 @@ import Avatar from "../../../components/avatar/Avatar";
 import Skeleton from "react-loading-skeleton";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "../../../def/converter";
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
 	profile?: ProfileDef,
@@ -21,6 +22,7 @@ interface Props {
 export default function Profile(props: Props) {
 	const alert = useAlert();
 	const { t } = useTranslation();
+	const navigate = useNavigate();
 	
 	const [updateUsernameInputValue, setUpdateUsernameInputValue] = React.useState("");
 	
@@ -110,6 +112,20 @@ export default function Profile(props: Props) {
 					} }
 					style={ { marginTop: "var(--spacing)" } }>
 				{ t('dashboard.profile.auth.redirect') }
+			</Button>
+
+		</Section><Section className={ "transparent" }>
+			<h2>{ t('dashboard.profile.more.more') }</h2>
+		</Section>
+		<Section>
+			<p>{ t('dashboard.profile.more.description') }</p>
+
+			<Button iconLeft={ "fi fi-rr-user-key" }
+					onClick={ async () => {
+						window.open( import.meta.env.VITE_SIMPLE_CHAT_URL, "_blank")
+					} }
+					style={ { marginTop: "var(--spacing)" } }>
+				{t('dashboard.profile.more.link')}
 			</Button>
 		</Section>
 	</>
