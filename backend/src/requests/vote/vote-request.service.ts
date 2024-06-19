@@ -46,8 +46,8 @@ export class VoteRequestService {
       if (vote.vote == oldVoteName) return null;
       // remove the old vote
       await this.voteService.deleteVote(userContentId, userId);
-      if (vote.vote == VOTE_OPTIONS.NONE) return null;
     }
+    if (vote.vote == VOTE_OPTIONS.NONE) return null;
     // set (new) vote
     const isPositive = vote.vote == VOTE_OPTIONS.LIKE;
     const createdVote = await this.voteService.createVote(
