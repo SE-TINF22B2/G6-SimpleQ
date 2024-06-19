@@ -259,24 +259,30 @@ export class UserContentService {
   ): UserContentWithRating[] {
     switch (sortOptions.sortBy) {
       case SortType.ldr:
-        array.sort((q) => {
-          if(q.likes == 0 && q.dislikes == 0) return 0;
-          if(q.likes == 0) return -1;
-          if(q.dislikes == 0) return 1;          
+        const calculateLDR = (q:UserContentWithRating) => {
+          if (q.likes == 0 && q.dislikes == 0) return 0;
+          if (q.likes == 0) return q.dislikes;
+          if (q.dislikes == 0) return q.likes;
           return q.likes / q.dislikes;
+        }
+        array = array.sort((q1, q2) => {
+
+          return calculateLDR(q1) - calculateLDR(q2);
         });
         break;
       case SortType.likes:
-        array = array.sort((q) => q.likes);
+        array = array.sort((q1, q2) => {
+          return q1.likes - q2.likes;
+        });
         break;
       case SortType.dislikes:
-        array.sort((q) => {
-          return q.likes;
+        array = array.sort((q1, q2) => {
+          return q1.dislikes - q2.dislikes;
         });
         break;
       case SortType.timestamp:
-        array.sort((q) => {
-          return q.timeOfCreation.getTime();
+        array = array.sort((q1, q2) => {
+          return  (q1.timeOfCreation.getTime() - q2.timeOfCreation.getTime());
         });
         break;
     }
