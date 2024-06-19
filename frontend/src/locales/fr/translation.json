@@ -4,13 +4,50 @@
       "title": "Nous utilisons des cookies",
       "content": "Nous utilisons des cookies et un stockage local pour vous garantir la meilleure expérience sur notre site Web. ",
       "accept": "Accepter",
-      "decline": "Déclin"
+      "decline": "Refuser"
     },
     "liveInput": {
-      "empty": "Veuillez commencer à taper.."
+      "empty": "Veuillez commencer à taper..",
+      "selected": "Choisi",
+      "suggestions": "Suggestions"
     },
     "textEditor": {
       "wordCount": "Vous avez écrit {{count}} mots."
+    },
+    "question": {
+      "type": {
+        "question": "Question",
+        "discussion": "Discussion"
+      },
+      "rating": {
+        "likes": "Aime",
+        "dislikes": "N'aime pas"
+      },
+      "answers": "Réponses",
+      "askedBy": "Demandé par"
+    },
+    "adjustUserContent": {
+      "button": "Ajuster la vue",
+      "previewStyle": {
+        "label": "Style",
+        "normal": "Normale",
+        "small": "Petit"
+      },
+      "sortBy": {
+        "label": "Trier par",
+        "ldr": "Ratio J’aime/Je n’aime pas",
+        "likes": "Aime",
+        "dislikes": "Je n'aime pas",
+        "timestamp": "Date de création"
+      },
+      "sortDirection": {
+        "label": "Direction",
+        "asc": "Ascendant",
+        "desc": "Descendant"
+      },
+      "enableAI": {
+        "label": "Activer l'IA"
+      }
     }
   },
   "dashboard": {
@@ -18,7 +55,10 @@
       "trending": "Questions tendances",
       "question": {
         "create": "Créer une question",
-        "browsing": "Navigation dans les questions/discussions"
+        "browsing": {
+          "currently": "recherche {{type}}",
+          "recently": "Créé récemment {{type}}"
+        }
       },
       "activity": "Activité",
       "my": "Mes questions",
@@ -26,11 +66,11 @@
       "quests": "Quêtes hebdomadaires",
       "inbox": "Boîte de réception",
       "stats": "Statistiques",
-      "activeDays": "Activité récente"
+      "activeDays": "Dernière Activité"
     },
     "search": {
-      "search": "Recherche..",
-      "info": "Naviguez en utilisant ↑ et ↓ ou ↹. "
+      "search": "Chercher..",
+      "info": "Naviguez avec ↑ et ↓ ou ↹. "
     },
     "login": "Se connecter",
     "logout": "Se déconnecter",
@@ -40,63 +80,83 @@
         "language": "Langue",
         "english": "Anglais",
         "german": "Allemand",
-        "french": "Francais"
+        "french": "Français"
       },
       "theme": {
         "theme": "Thème",
         "system": "Système",
         "dark": "Sombre",
-        "light": "Lumière"
+        "light": "Clair"
       }
     },
     "questionEditor": {
       "title": {
         "caption": "Titre",
-        "placeholder": "Nouvelle question",
-        "hint": "Quelle est votre question de programmation ? "
+        "placeholder": "Créer une nouvelle question"
       },
       "tags": {
-        "title": "Mots clés",
-        "caption": "Mots clés",
-        "placeholder": "Ajouter une balise",
-        "hint": "Ajoutez jusqu'à 5 balises pour décrire le sujet de votre question."
+        "title": "Tags",
+        "caption": "Tags",
+        "placeholder": "Sélectionnez les tags",
+        "hint": "Jusqu'à 5 tags peuvent être ajoutées pour décrire le sujet de la question."
       },
       "description": {
-        "title": "Description",
         "caption": "Description",
-        "placeholder": "Décrivez votre question en détail.",
-        "hint": "Incluez toutes les informations dont quelqu’un aurait besoin pour répondre à votre question."
+        "placeholder": "Décrivez ton question en détail."
       },
       "type": {
-        "caption": "Personnaliser les réponses",
+        "caption": "Ajuster les options de réponse",
         "simp": {
-          "title": "Activer SIMP",
-          "hint": "Les utilisateurs, ainsi que notre chatbot IA interne, pourront répondre à votre question pour vous fournir la meilleure aide possible."
+          "title": "Activer les réponses générées",
+          "hint": "Les personnes inscrites et nos services automatisés peuvent répondre à votre question afin que nous puissions vous apporter la meilleure aide possible.",
+          "model": "Sélection des services"
         },
         "users": {
-          "title": "Uniquement les utilisateurs",
-          "hint": "Seuls les utilisateurs pourront télécharger des réponses à votre question."
-        }
-      },
-      "validate": {
-        "title": "Vérifiez votre question",
-        "caption": "Valider",
-        "hint": "Vérifiez que vous avez créé correctement votre question.",
-        "checks": {
-          "title": "Un titre valide",
-          "tags": "Au moins une balise",
-          "description": "Une description détaillée d'au moins 20 mots"
+          "title": "Utilisateurs uniquement",
+          "hint": "Seuls les utilisateurs peuvent répondre à votre question."
         }
       },
       "submit": "Postez votre question"
     },
     "questionView": {
+      "question": {
+        "creationDate": "Créé sur: {{questionCreationDate}}",
+        "updatedDate": "Dernière mise à jour: {{questionUpdatedDate}}"
+      },
       "answer": {
-        "creationDate": "a répondu {{answerCreationDate}}",
-        "likes": "aime",
-        "dislikes": "n'aime pas",
-        "report": "Signaler la réponse"
+        "creationDate": "Répondu le : {{answerCreationDate}}"
+      },
+      "pagination": {
+        "previous": "Page précédente",
+        "next": "Page suivante"
+      },
+      "answerEditor": {
+        "title": "Répond a cette question",
+        "placeholder": "Répond a cette question",
+        "noPermission": "Les invités ne peuvent pas créer de réponse."
       }
+    },
+    "profile": {
+      "info": {
+        "registrationDate": "Membre depuis: {{registrationDate}}"
+      },
+      "auth": {
+        "auth": "Authentification",
+        "description": "Nous utilisons un fournisseur d'identité externe (IDP). ",
+        "redirect": "Paramètres du compte"
+      }
+    },
+    "trending": {
+      "title": "Questions tendances",
+      "caption": "Vous trouverez ici les questions les plus populaires sur notre plateforme."
+    },
+    "myQuestions": {
+      "title": "Mes questions",
+      "caption": "Vous trouverez ici toutes les questions que vous avez posées sur notre plateforme."
+    },
+    "favorites": {
+      "title": "Favoris",
+      "caption": "Vous trouverez ici toutes les questions que vous avez marquées comme favorites."
     }
   }
 }
