@@ -1,13 +1,14 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException, Logger,
+  InternalServerErrorException,
+  Logger,
   NotAcceptableException,
   NotFoundException,
   UnauthorizedException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { VOTE_OPTIONS } from '../../../config';
+import { AI_OPTIONS, VOTE_OPTIONS } from '../../../config';
 import { BlacklistService } from '../../database/blacklist/blacklist.service';
 import { TagService } from '../../database/tag/tag.service';
 import {
@@ -293,10 +294,16 @@ export class UserContentRequestService {
     );
 
     // generate AI answer
-    if (data.useAI && userExist) {
+    if (data.useAI && data.useAI != AI_OPTIONS.NONE && userExist) {
       const isPro = await this.userService.isProUser(userId);
-      this.requestAI(data.content, question.groupId, userId, isPro).then();
-    } else if (data.useAI && !userExist){
+      this.requestAI(
+        data.content,
+        question.groupId,
+        userId,
+        isPro,
+        data.useAI,
+      ).catch((error) => Logger.error(error, 'EXTERNAL_API'));
+    } else if (data.useAI && !userExist) {
       Logger.log(
         'AI-request SKIPPED, user does not exist or is guest',
         'USER-CONTENT-REQUEST-SERVICE',
@@ -310,16 +317,24 @@ export class UserContentRequestService {
     groupId: string,
     userId: string,
     isPro: boolean,
+    useAI: AI_OPTIONS,
   ): Promise<void> {
-    try {
-      await this.externalAPIService.requestGPT(text, groupId, userId);
-      if (isPro) {
-        await this.externalAPIService.requestWolfram(text, groupId, userId);
+    switch (useAI) {
+      case AI_OPTIONS.GPT: {
+        await this.externalAPIService.requestGPT(text, groupId, userId);
+        break;
       }
-    } catch (error) {
-      // Logger.log("External API request failed.", '');
-      // dangerous, because ServerException will crash server
-      // throw new InternalServerErrorException(error);
+      case AI_OPTIONS.WOLFRAM: {
+        if (isPro) {
+          await this.externalAPIService.requestWolfram(text, groupId, userId);
+        } else {
+          Logger.log(
+            `User >${userId}< is no ProUser, and requested Wolfram`,
+            'user-content-request-service',
+          );
+        }
+        break;
+      }
     }
   }
 

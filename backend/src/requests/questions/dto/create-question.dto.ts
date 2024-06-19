@@ -2,12 +2,13 @@ import {
   ArrayMaxSize,
   ArrayNotEmpty,
   IsArray,
-  IsBoolean,
+  IsEnum,
   IsNotEmpty,
   IsString,
   MaxLength,
 } from 'class-validator';
 import {
+  AI_OPTIONS,
   TAG_LENGTH,
   TAG_LIMIT,
   TEXT_LENGTH,
@@ -33,7 +34,8 @@ export class CreateQuestion {
   @MaxLength(TAG_LENGTH, { each: true })
   tags: string[];
 
-  @IsBoolean()
+  @IsString()
   @IsNotEmpty()
-  useAI: boolean;
+  @IsEnum(AI_OPTIONS)
+  useAI: AI_OPTIONS;
 }
