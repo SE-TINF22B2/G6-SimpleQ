@@ -1426,10 +1426,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@ory/client@^1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@ory/client/-/client-1.9.0.tgz#a4ee292e3a3cebdeb3934a67ae4e6bf0633b78ce"
-  integrity sha512-O4a1ijgJtMNIA+ZmWUmCodxX13ID72hOaCB0b9FQGQBzuFgF2x/Yq5D43nrMYZaDtvDvja8J1XIXhUkjz1TDOw==
+"@ory/client@^1.12.1":
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/@ory/client/-/client-1.12.1.tgz#e236ccc7fef81eab91ebf79e05159c3dd6b1f10e"
+  integrity sha512-YprtPQAPnvhtYPvRY1aSE7SOUOA142SnBe3HgbhK2EpVWZbRSSJ9Az1vBJmhImMfygN2+xGE5BCXWei4zLZ68w==
   dependencies:
     axios "^1.6.1"
 
